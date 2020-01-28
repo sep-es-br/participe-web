@@ -1,0 +1,346 @@
+body {
+    .ui-widget-content {
+        p {
+            line-height: 1.5;
+            margin: 0;
+        }
+    }
+
+    .ui-panel {
+        padding: 0;
+        border: 0 none;
+
+        .ui-panel-titlebar {
+            border: $panelHeaderBorder;
+            padding: $panelHeaderPadding;
+            background-color: $panelHeaderBgColor;
+            color: $panelHeaderTextColor;
+            @include border-radius-top($borderRadius);
+            @include border-radius-bottom(0);
+
+            .ui-panel-title {
+                vertical-align: middle;
+                font-weight: $panelHeaderFontWeight;
+            }
+
+            .ui-panel-titlebar-icon {
+                margin: 0;
+                position: relative;
+                font-size: $fontSize;
+                color: $panelHeaderIconColor;
+                border: 1px solid transparent;
+                @include transition($panelHeaderIconTransition);
+
+                &:hover {
+                    color: $panelHeaderIconHoverColor;
+                }
+            }
+        }
+
+        .ui-panel-content {
+            padding: $panelContentPadding;
+            border: $panelContentBorder;
+            background-color: $panelContentBgColor;
+            color: $panelContentTextColor;
+            border-top: 0 none;
+        }
+
+        .ui-panel-footer {
+            padding: $panelFooterPadding;
+            border: $panelFooterBorder;
+            background-color: $panelFooterBgColor;
+            color: $panelFooterTextColor;
+            border-top: 0 none;
+            margin: 0;
+        }
+    }
+
+    .ui-fieldset {
+        border: $panelContentBorder;
+        background-color: $panelContentBgColor;
+        color: $panelContentTextColor;
+
+        .ui-fieldset-legend {
+            a {
+                padding: $panelHeaderPadding;
+                border: $panelHeaderBorder;
+                color: $panelHeaderTextColor;
+                background-color: $panelHeaderBgColor;
+                @include border-radius($borderRadius);
+                @include transition($clickablePanelHeaderTransition);
+
+                .ui-fieldset-toggler {
+                    float: none;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: .5em;
+                }
+    
+                .ui-fieldset-legend-text{
+                    padding: 0;
+                    font-weight: $panelHeaderFontWeight;
+                }
+            }
+        }
+
+        &.ui-fieldset-toggleable {
+            .ui-fieldset-legend {
+                a {
+                    &:hover {
+                        background-color: $clickablePanelHeaderHoverBgColor;
+                        border: $clickablePanelHeaderHoverBorder;
+                        color: $clickablePanelHeaderHoverTextColor;
+    
+                        .ui-fieldset-toggler {
+                            color: $clickablePanelHeaderHoverIconColor;
+                        }
+                    }
+                }
+            }
+        }
+
+        .ui-fieldset-content {
+            padding: 0;
+        }
+    }
+
+    .ui-accordion {
+        .ui-accordion-header {
+            margin-bottom: $accordionSpacing;
+
+            a {
+                padding: $clickablePanelHeaderPadding;
+                border: $clickablePanelHeaderBorder;
+                color: $clickablePanelHeaderTextColor;
+                background-color: $clickablePanelHeaderBgColor;
+                font-weight: $clickablePanelHeaderFontWeight;
+                border-radius: $borderRadius;
+                @include transition($clickablePanelHeaderTransition);
+
+                .ui-accordion-toggle-icon {
+                    color: $clickablePanelHeaderIconColor;
+
+                    &.pi-caret-right {
+                        @include icon_override("\e901");
+                    }
+        
+                    &.pi-caret-down {
+                        @include icon_override("\e902");
+                    }
+                }
+
+                .ui-accordion-toggle-icon,
+                .ui-accordion-header-text {
+                    vertical-align: inherit;
+                }
+            }
+
+            &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                a {
+                    background-color: $clickablePanelHeaderHoverBgColor;
+                    border: $clickablePanelHeaderHoverBorder;
+                    color: $clickablePanelHeaderHoverTextColor;
+
+                    .ui-accordion-toggle-icon {
+                        color: $clickablePanelHeaderHoverIconColor;
+                    }
+                }
+            }
+
+            &:not(.ui-state-disabled).ui-state-active {
+                a {
+                    background-color: $clickablePanelHeaderActiveBgColor;
+                    border: $clickablePanelHeaderActiveBorder;
+                    color: $clickablePanelHeaderActiveTextColor;
+                    
+                    .ui-accordion-toggle-icon {
+                        color: $clickablePanelHeaderActiveIconColor;
+                    }
+                }
+
+                &:hover {
+                    a {
+                        border: $clickablePanelHeaderActiveHoverBorder;
+                        background-color: $clickablePanelHeaderActiveHoverBgColor;
+                        color: $clickablePanelHeaderActiveHoverTextColor;
+                        
+                        .ui-accordion-toggle-icon {
+                            color: $clickablePanelHeaderActiveHoverIconColor;
+                        }
+                    }
+                }
+            }
+        }
+
+        .ui-accordion-content {
+            padding: $panelContentPadding;
+            border: $panelContentBorder;
+            background-color: $panelContentBgColor;
+            color: $panelContentTextColor;
+        }
+    }
+
+    .ui-tabview {
+        &.ui-tabview-top,
+        &.ui-tabview-bottom,
+        &.ui-tabview-left,
+        &.ui-tabview-right {
+            border: 0 none;
+
+            .ui-tabview-nav {
+                padding: 0;
+                background: $tabsNavBgColor;
+                border: $tabsNavBorder;
+
+                li {
+                    border: $clickablePanelHeaderBorder;
+                    background-color: $clickablePanelHeaderBgColor;
+                    @include transition($clickablePanelHeaderTransition);
+
+                    a {
+                        float: none;
+                        display: inline-block;
+                        color: $clickablePanelHeaderTextColor;
+                        padding: $clickablePanelHeaderPadding;
+                        font-weight: $clickablePanelHeaderFontWeight;
+                        outline: 0 none;
+
+                        .ui-tabview-left-icon {
+                            margin-right: $inlineSpacing;
+                        }
+
+                        .ui-tabview-right-icon {
+                            margin-left: $inlineSpacing;
+                        }
+                    }
+
+                    .ui-tabview-close {
+                        color: $clickablePanelHeaderIconColor;
+                        margin: 0 $inlineSpacing 0 0;
+                        vertical-align: middle;
+                    }
+
+                    &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                        background-color: $clickablePanelHeaderHoverBgColor;
+                        border: $clickablePanelHeaderHoverBorder;
+                        
+                        a {
+                            color: $clickablePanelHeaderHoverTextColor;
+                        }
+
+                        .ui-tabview-close {
+                            color: $clickablePanelHeaderHoverIconColor;
+                        }
+                    }
+
+                    &.ui-state-active {
+                        background-color: $clickablePanelHeaderActiveBgColor;
+                        border: $clickablePanelHeaderActiveBorder;
+
+                        a {
+                            color: $clickablePanelHeaderActiveTextColor;
+                        }
+
+                        .ui-tabview-close {
+                            color: $clickablePanelHeaderActiveIconColor;
+                        }
+
+                        &:hover {
+                            border: $clickablePanelHeaderActiveHoverBorder;
+                            background-color: $clickablePanelHeaderActiveHoverBgColor;
+
+                            a {
+                                color: $clickablePanelHeaderActiveHoverTextColor;
+                                
+                                .ui-tabview-left-icon, .ui-tabview-right-icon{
+                                    color: $clickablePanelHeaderActiveHoverIconColor;
+                                }
+                            }
+                        }
+                    }
+
+                    &.ui-tabview-selected {
+                        a {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.ui-tabview-top {
+            .ui-tabview-nav {
+                margin-bottom: -1px;
+
+                li {
+                    margin-right: $tabHeaderSpacing;
+                }
+            }
+        }
+
+        &.ui-tabview-bottom {
+            .ui-tabview-nav {
+                margin-top: -1px;
+
+                li {
+                    margin-right: $tabHeaderSpacing;
+                }
+            }
+        }
+
+        &.ui-tabview-left {
+            .ui-tabview-nav {
+                margin-right: -1px;
+
+                li {
+                    margin-bottom: $tabHeaderSpacing;
+                }
+            }
+        }
+
+        &.ui-tabview-right {
+            .ui-tabview-nav {
+                margin-right: -1px;
+
+                li {
+                    margin-bottom: $tabHeaderSpacing;
+                }
+            }
+        }     
+
+        .ui-tabview-panels {
+            background-color: $panelContentBgColor;
+            padding: $panelContentPadding;
+            border: $panelContentBorder;
+            color: $panelContentTextColor;
+
+            .ui-tabview-panel {
+                padding: $panelContentPadding;
+                line-height: $panelContentLineHeight;
+            }
+        }
+    }
+
+    .ui-toolbar {
+        background-color: $panelHeaderBgColor;
+        border: $panelHeaderBorder;
+        padding: $panelHeaderPadding;
+        color: $panelHeaderTextColor;
+
+        button {
+            vertical-align: middle;
+        }
+
+        .ui-toolbar-separator {
+            vertical-align: middle;
+            color: $panelHeaderIconColor;
+            margin: 0 $inlineSpacing;
+        }
+    }
+
+    .ui-card {
+        background-color: $panelContentBgColor;
+        color: $panelContentTextColor;
+        @include shadow($cardShadow);
+    } 
+}

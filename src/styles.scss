@@ -1,0 +1,45 @@
+body {
+  padding: 0;
+}
+
+a:focus,
+button:focus {
+  outline: none;
+}
+
+input.ng-invalid.ng-touched,
+p-dropdown.ng-invalid.ng-touched > div,
+p-autocomplete.ng-invalid.ng-touched > span > input {
+  border: 1.3px solid #f44336 !important;
+}
+
+input.ng-invalid.ng-touched:focus,
+p-dropdown.ng-invalid.ng-touched:focus > div,
+p-autocomplete.ng-invalid.ng-touched:focus > span > input {
+  box-shadow: 0 1px 0 0 #f47f6a !important;
+}
+
+input.ng-valid.ng-touched.ng-dirty,
+p-dropdown.ng-valid.ng-touched.ng-dirty > div,
+p-autocomplete.ng-valid.ng-touched.ng-dirty > span > input {
+  border: 1.3px solid #549c3d !important;
+}
+
+input.ng-valid.ng-touched.ng-dirty:focus,
+p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
+p-autocomplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
+  box-shadow: 0 1px 0 0 #6d9c5f !important;
+}
+
+.tree-column table {
+  border-bottom: 1px solid #e0e0e0 !important;
+  th:last-child{
+    width: 20% !important;
+  }
+  td {
+    border: 0 !important;
+    border-left: 1px solid #e0e0e0 !important;
+    border-right: 1px solid #e0e0e0 !important;
+  }
+
+}

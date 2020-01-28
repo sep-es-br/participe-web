@@ -1,0 +1,25 @@
+<div class="layout-wrapper" (click)="onLayoutClick()"
+     [ngClass]="{'layout-menu-overlay': isOverlay(),
+                'layout-menu-overlay-active': overlayMenuActive,
+                'layout-menu-horizontal': isHorizontal(),
+                'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
+
+    <p-toast position="top-right"></p-toast>
+
+    <app-topbar></app-topbar>
+
+    <app-menu [reset]="resetMenu"></app-menu>
+
+    <app-actionbar></app-actionbar>
+
+    <div class="layout-content">
+      <ng-content></ng-content>
+    </div>
+
+    <app-footer></app-footer>
+
+    <div class="layout-mask"></div>
+
+    <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
+
+</div>

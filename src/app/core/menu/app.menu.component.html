@@ -1,0 +1,16 @@
+<div class="layout-menu-container" (click)="template.onMenuClick($event)">
+  <div class="overlay-menu-button" (click)="template.onMenuButtonClick($event)">
+    <div class="overlay-menu-button-bars">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="overlay-menu-button-times">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div class="layout-menu-wrapper fadeInDown">
+    <ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"></ul>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+/* Utils */
+.clearfix:after {
+    content:" ";
+    display:block;
+    clear:both;
+}
+
+.card {
+    border-radius: $borderRadius;
+    background: $cardBgColor;
+    border: $cardBorder;     
+    padding: 1em;
+    @include border-radius($borderRadius);
+    
+    &.card-w-title {
+        padding-bottom: 1em;
+    }
+    
+    &.no-gutter {
+        margin-bottom: 0;
+    }
+    
+    h1 {
+        font-size: 18px;
+        font-weight: 500;
+        
+        &:first-child {
+            margin-top: 0px;
+        }
+    }
+    
+    h2 {
+        font-size: 16px;
+        font-weight: 500;
+
+        &:first-child {
+            margin-top: 0px;
+        }
+    }
+    
+    h3 {
+        font-size: 14px;
+        font-weight: 500;
+
+        &:first-child {
+            margin-top: 0px;
+        }
+    }
+    
+    h4 {
+        font-size: 13px;
+        font-weight: 500;
+
+        &:first-child {
+            margin-top: 0px;
+        }
+    }
+}
+
+.nopad {
+    padding: 0;
+    
+    .ui-panel-content {
+        padding: 0;
+    }
+}
+
+@-webkit-keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@-webkit-keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+}
+
+@keyframes fadeinmask {
+    from { opacity: 0; }
+    to   { opacity: .8; }
+}
+
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+}
+
+.fadeOutUp {
+    -webkit-animation-name: fadeOutUp;
+    animation-name: fadeOutUp;
+}
+
+.ui-g {
+    -ms-flex-wrap: wrap;
+}
+
+.layout-wrapper {
+    .layout-ajax-loader {
+        position: fixed;
+        right: 15px;
+        bottom: 70px;
+    
+        .layout-ajax-loader-icon {
+            color: $spinnerColor;
+            font-size: 32px;
+        }
+    }
+}

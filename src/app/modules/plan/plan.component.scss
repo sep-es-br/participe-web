@@ -1,0 +1,94 @@
+.actions {
+  margin-bottom: 14px;
+}
+
+.pesquisar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    font-size: 16px;
+  }
+}
+
+form {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  margin-top: 14px;
+
+  * + * {
+    margin-left: 14px;
+  }
+}
+
+.column-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  * + * {
+    margin-left: 10px;
+  }
+}
+
+.search {
+  cursor: pointer;
+  text-align: right;
+}
+
+.search-form {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+@media only screen and (max-width: 600px) {
+  .column-actions {
+    flex-direction: column;
+    padding: 10px 0 !important;
+
+    * + * {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    * + * {
+      margin-left: 0px;
+      margin-top: 14px;
+    }
+  }
+}
+
+:host ::ng-deep .priority-2,
+:host ::ng-deep .priority-3,
+:host ::ng-deep .visibility-sm {
+    display: none;
+}
+
+@media screen and (max-width: 39.938em) {
+    :host ::ng-deep .visibility-sm {
+        display: inline;
+    }
+}
+
+@media screen and (min-width: 40em) {
+    :host ::ng-deep .priority-2 {
+        display: table-cell;
+    }
+}
+
+@media screen and (min-width: 64em) {
+    :host ::ng-deep .priority-3 {
+        display: table-cell;
+    }
+}

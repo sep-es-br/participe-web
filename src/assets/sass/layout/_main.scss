@@ -1,0 +1,85 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: $fontFamily;
+    font-size: $fontSize;
+    font-weight: 400;
+    color: $textColor;
+    -webkit-font-smoothing: antialiased;
+    padding: $bodyPadding; 
+    margin: 0;
+    min-height: 100%;
+    letter-spacing:.2px;
+    z-index: 1;
+    @if variable-exists(backgroundImage) {
+        background-image: url("../images/layout/#{$backgroundImage}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    @else {
+        @include background-gradient-left2right($backgroundLeftColor,$backgroundRightColor);
+    }
+
+    &.blocked-scroll{
+        overflow: auto;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+.layout-mask {
+    display: none;
+    background-color: $maskBgColor;
+    position: fixed;
+    z-index: 1000001;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0.9;
+    animation-name: fadeinmask;
+    animation-duration: $transitionDuration;
+    @include opacity(.8);
+    cursor: pointer;
+}  
+
+@media screen and (max-width: $responsiveLayoutBreakpoint )  {
+    body {
+        padding: $mobileBodyPadding;
+
+        @if variable-exists(backgroundImage) {
+            background: none;
+        }
+
+        &.blocked-scroll {
+            overflow: hidden;
+        }
+
+        &:not(.exception-body):not(.login-body):before {
+            @if variable-exists(backgroundImage) {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                z-index: -99999;
+                content: '';
+                background-image: url("../images/layout/#{$backgroundImage}");
+                background-size: cover;
+                background-repeat: no-repeat;
+            }
+        }
+    }
+}
+
