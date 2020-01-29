@@ -1,0 +1,113 @@
+<app-template>
+  <div class="p-grid ui-fluid">
+    <div class="p-col-12 p-lg-12">
+      <div class="card card-w-title">
+        <section *ngIf="!showStructureForm && !showStructureItemForm">
+          <div class="p-grid ui-fluid actions">
+            <div class="p-md-1">
+              <button pButton type="button" label="New" (click)="showCreateStructure()">
+                <img src="assets/layout/images/icons/triangule_plus.png" />
+              </button>
+            </div>
+            <div class="ui-g-2 ui-md-10"></div>
+            <div class="ui-g-5 ui-md-1 search">
+              <a class="search" (click)="toogleSearch()">{{ search ? 'Hide' : 'Search' }}</a>
+            </div>
+          </div>
+          <div class="search-form" *ngIf="search">
+            <form [formGroup]="searchForm" (submit)="searchStructures(searchForm.value)">
+              <div class="p-grid ui-fluid">
+                <div class="ui-g-12 ui-md-6">
+                  <input pInputText placeholder="Structure name" formControlName="query">
+                </div>
+                <div class="ui-g-12 ui-md-1">
+                  <button pButton icon="pi pi-search" type="submit" label="Search"></button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <p-treeTable #tt [value]="structureTree" selectionMode="single" class="tree-column">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Name</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+              <tr>
+                <td>
+                  <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                  <span style="vertical-align: middle">{{rowData.name}}</span>
+                </td>
+                <td class="column-actions">
+                  <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                    [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
+                    (click)="showCreateStructureItem(rowNode)">
+                    <img src="assets/layout/images/icons/triangule_plus.png" />
+                  </button>
+                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
+                    (click)="showEdit(rowNode)"></button>
+                  <button pButton icon="pi pi-trash" type="button" [disabled]="disableBtnDelete(rowNode)"
+                    (click)="delete(rowNode)"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-treeTable>
+        </section>
+        <section class="p-grid ui-fluid" *ngIf="showStructureForm">
+          <form [formGroup]="structureForm" (submit)="saveStructure(structureForm.value)">
+            <div class="p-col-12 p-md-6">
+              <input pInputText placeholder="Structure name" formControlName="name">
+              <tt-input-message [form]="structureForm" field="name"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-6">
+              <div class="form-actions">
+                <button pButton icon="pi pi-check" [disabled]="disableBtnSave" type="submit" label="Save"></button>
+                <button pButton icon="pi pi-ban" type="button" label="Cancel"
+                  (click)="clearStructureForm(null)"></button>
+              </div>
+            </div>
+          </form>
+        </section>
+        <section class="p-grid ui-fluid" *ngIf="showStructureItemForm">
+          <form [formGroup]="structureItemForm" (submit)="saveStructureItem(structureItemForm.value)">
+            <div class="p-col-12 p-md-6">
+              {{ structureItemBreadcrumb }}
+            </div>
+            <div class="p-col-12 p-md-6">
+              <input pInputText placeholder="Structure name" formControlName="name">
+              <tt-input-message [form]="structureItemForm" field="name"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-logo">Logo</label>
+              <p-inputSwitch id="input-switch-logo" formControlName="logo">
+              </p-inputSwitch>
+            </div>
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-locality">Locality</label>
+              <p-inputSwitch id="input-switch-logo" formControlName="locality">
+              </p-inputSwitch>
+            </div>
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-votes">Votes</label>
+              <p-inputSwitch id="input-switch-votes" formControlName="votes">
+              </p-inputSwitch>
+            </div>
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-comments">Comments</label>
+              <p-inputSwitch id="input-switch-comments" formControlName="comments">
+              </p-inputSwitch>
+            </div>
+            <div class="p-col-12 p-md-6">
+              <div class="form-actions">
+                <button pButton icon="pi pi-check" type="submit" [disabled]="disableBtnSave" label="Save"></button>
+                <button pButton icon="pi pi-ban" type="button" label="Cancel" (click)="cancelStructureItem()"></button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+  <p-confirmDialog header="Delete Structure" icon="pi pi-exclamation-triangle" key="deleteStructure"></p-confirmDialog>
+</app-template>

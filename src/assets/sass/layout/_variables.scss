@@ -1,0 +1,48 @@
+@import '../_variables';
+
+$bodyPadding:25px 50px;
+$mobileBodyPadding:5px 15px;
+$contentBgColor:#f2f2f2;
+$responsiveLayoutBreakpoint:991px;
+$maskBgColor:#24262e;
+
+/* horizontal menu */
+$horizontalMenuItemActiveBgColor: #ffffff;
+$horizontalMenuItemActiveTextColor: #1b1c1e;
+
+/* overlay menu */
+$overlayMenuBgColor:#ffffff;
+$overlayMenuShadow:0 2px 4px 0 rgba(0, 0, 0, 0.3);
+$overlayMenuItemTextColor:#313842;
+$overlayMenuItemBorderRadius:3px;
+
+/* mobile menu */
+$mobileMenuBgColor:#24262e;
+$mobileMenuItemBgColor: rgba(255, 255, 255, 0.2);
+$mobileMenuItemHoverBgColor: rgba(255,255,255, 0.4);
+$mobileMenuItemActiveBgColor:#ffffff;
+$mobileMenuItemTextColor:rgba(255,255,255,0.72);
+$mobileMenuItemActiveTextColor:#1b1c1e;
+
+/* tooltip */
+$tooltipBgColor:#313842;
+$tooltipColor:#ffffff;
+
+/* user profile menu */
+$userProfileMenuInfoBgColor:#f9fafc;
+$userProfileMenuInfoNameTextColor:#646a74;
+$userProfileMenuInfoRoleTextColor:#313842;
+$userProfileMenuLinkIconColor:#9ba8b8;
+$userProfileMenuLinkItemTitleColor:#313842;
+$userProfileMenuLinkItemSubTitleColor:#457fca;
+
+//actionbar
+$actionBarBgColor:#ffffff;
+$breadcrumbSeparatorColor:rgba(176, 186, 196, 0.4);
+$breadcrumbItemTextColor:#313842;
+$breadcrumbLinkTextColor:#b0bac4;
+$breadcrumbLinkHoverTextColor:#3ca4e7;
+
+//misc
+$cardBgColor:#ffffff;
+$cardBorder:solid 1px #dfe6ee;

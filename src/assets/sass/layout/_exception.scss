@@ -1,0 +1,123 @@
+.exception-body {
+
+    &.notfound {
+        background: url("../../layout/images/pages/bg-404.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+
+        .top-border {
+            background:linear-gradient(to right, #3ca4e7, #3c71dd);
+        }
+    }
+
+    &.error {
+        background: url("../../layout/images/pages/bg-error.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+
+        .top-border {
+            background:linear-gradient(to right, #e73c3c, #c62020);
+        }
+    }
+
+    &.accessdenied {
+        background: url("../../layout/images/pages/bg-access.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+
+        .top-border {
+            background:linear-gradient(to right, #e7983c, #ef7b14);
+        }
+    }
+
+    .mobile-banner {
+        width: 100%;
+        text-align: center;
+        display: none;
+    }
+
+    .exception-panel {
+        position: fixed;
+        text-align:center;
+        height: 100%;
+        width: 90px;
+        left: 0;
+        top: 0;
+        opacity: 0.9;
+        background: radial-gradient(circle at 50% 3%, #f3f4f9, #d7dbe8);
+
+        .logo {
+              margin-top: 40px;
+        }
+    }
+
+    .exception-card {
+        position: fixed;
+        left: 180px;
+        top: 40%;
+        width: 25%;
+        min-width: 475px;;
+        opacity: 0.9;
+        border-radius: 2px;
+        background: radial-gradient(circle at 50% 3%, #f3f4f9, #d7dbe8);
+
+        .top-border {
+            height:20px;
+            opacity: 1;
+
+        }
+
+        .exception-content {
+            padding: 20px 60px;
+
+            h1 {
+                color: #1b1c1e;
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 30px;
+            }
+
+            p {
+                color: #313842;
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 50px;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 30px
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 40em) {
+    .exception-body {
+        background-position: right;
+
+        .mobile-banner {
+            display: block;
+        }
+
+        .exception-panel {
+           display: none;
+        }
+
+        .exception-card {
+            width: 100%;
+            min-width: 100%;           
+            left: 0;
+            bottom: 0;
+            top: auto;
+            height: 70%;
+
+            .exception-content{
+                padding: 30px 30px;
+            }
+        }
+    }    
+}

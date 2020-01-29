@@ -1,0 +1,130 @@
+.login-body{
+    background: url("../images/pages/bg-login.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;  
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    height: 100%;
+    padding: 0;
+
+    .mobile-banner {
+        width: 100%;
+        text-align: center;
+        display: none;
+        margin: 25px 0;
+    }
+
+    .login-panel {
+        position: fixed;
+        text-align:center;
+        height: 100%;
+        width: 90px;
+        opacity: 0.9;
+        background: radial-gradient(circle at 50% 3%, #f3f4f9, #d7dbe8); 
+
+        .logo {
+              margin-top: 40px; 
+        }
+    }
+
+    .login-card {   
+        align-self: center;  
+        margin-left: calc(10% + 90px);
+        width: 25%;
+        min-width: 420px;
+        opacity: 0.9;
+        border-radius: 2px;
+        background: radial-gradient(circle at 50% 3%, #f3f4f9, #d7dbe8);
+
+        .top-border {
+            height:20px;
+            opacity: 1;
+            
+        }
+
+        .login-content {
+            padding: 20px 50px;
+
+            h1 {
+                color: #1b1c1e;
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 30px;  
+            }
+
+            p {
+                color: #313842;
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 40px;    
+            }
+
+            label {
+                font-size: 16px;
+                color: #313842;
+                margin-bottom: 15px;
+            }
+
+            .login-input {
+                margin-top: 15px;
+                margin-bottom: 15px;
+
+                input {
+                    width: 100%;
+                }
+            }
+          
+            .forgetpassword-container {               
+                text-align: right;
+                margin-bottom: 40px;
+                color: #3ca4e7;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 60px;
+            }         
+        }  
+    }
+} 
+
+@media screen and (max-width: 40em) {
+
+    .login-body {
+        background-position: right; 
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+
+        .mobile-banner {
+            display: block;
+        }
+
+        .top-border {
+            display: none;
+        }
+
+        .login-panel {
+           display: none;
+        }
+
+        .login-card {
+            width: 100%;
+            min-width: 100%;
+            margin-left: 0;
+            height: 100%;
+
+            .login-content {
+                padding: 30px 30px;
+            }
+        }
+    }    
+}

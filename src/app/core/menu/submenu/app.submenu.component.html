@@ -1,0 +1,25 @@
+<ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
+  <li [ngClass]="{'active-rootmenuitem': isActive(i) && template.isHorizontal(),
+  'active-menuitem': ((routeItems && child.label === routeItems[0].label && template.isHorizontal())
+  || (isActive(i) && !template.isHorizontal()))}"
+      [class]="child.badgeStyleClass" *ngIf="child.visible === false ? false : true">
+    <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" (mouseenter)="onMouseEnter(i)"
+      *ngIf="!child.routerLink" [ngClass]="child.styleClass"
+      [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target">
+      <fa-icon [icon]="child.icon"></fa-icon>
+      <span class="layout-menuitem-text">{{child.label}}</span>
+      <i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="child.items"></i>
+    </a>
+    <a (click)="itemClick($event,child,i)" (mouseenter)="onMouseEnter(i)" *ngIf="child.routerLink"
+      [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink" [fragment]="child.fragment"
+      [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target">
+      <fa-icon [icon]="child.icon" class="layout-menuitem-icon"></fa-icon>
+      <span class="layout-menuitem-text">{{child.label}}</span>
+      <i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="child.items"></i>
+    </a>
+    <ul app-submenu [item]="child" *ngIf="child.items" [visible]="isActive(i)" [reset]="reset"
+      [parentActive]="isActive(i)" [ngStyle]="{'padding':isActive(i) && root ? '':'0'}"
+      [@children]="(template.isHorizontal())&&root ? isActive(i) ?
+      'visible' : 'hidden' : isActive(i) ? 'visibleAnimated' : 'hiddenAnimated'"></ul>
+  </li>
+</ng-template>

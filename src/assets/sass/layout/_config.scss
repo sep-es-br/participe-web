@@ -1,0 +1,245 @@
+.layout-config-button {
+    display: block;
+    position: fixed;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    background-color: #fafafa;
+    text-align: center;
+    top: 230px;
+    right: 0;
+    z-index: 1000000;
+    cursor: pointer;
+    @include border-radius-left($borderRadius);
+    @include transition(background-color $transitionDuration);
+    @include multi-shadow(0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 5px 22px 4px rgba(0, 0, 0, 0.12), 0 12px 17px 2px rgba(0, 0, 0, 0.14));
+
+    i {
+        font-size: 32px;
+        color: $primaryTextColor;
+        line-height: inherit;
+        cursor: pointer;
+    }
+
+    &:hover {
+        background-color: #e0e0e0;
+    }
+}
+
+.layout-config {
+    z-index: 1000002;
+    position: fixed;
+    padding: 0;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #ffffff;
+    width: 52vw;
+    height: 70%;
+    @include overlay-content-shadow();
+
+    .layout-config-content {
+        padding: 1em;
+        position: relative;
+        height: 100%;
+
+        > form {
+            height: 100%;
+        }
+    }
+
+    .layout-config-close {
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        right: -18px;
+        top: -18px;
+        background-color: #E91E63;
+        @include border-radius(50%);
+        @include transition(background-color $transitionDuration);
+
+        i {
+            color: #ffffff;
+            line-height: inherit;
+            font-size: 24px;
+        }
+
+        &:hover {
+            background-color: #D81B60;
+        }
+    }
+
+    &.layout-config-enter {
+        display: block;
+        opacity: 0;
+        transform: translateX(-50%) translateY(-50%) scale(0.7);
+    }
+    
+    &.layout-config-enter-active {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-50%) scale(1);
+        transition: all 150ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    
+    &.layout-config-enter-done {
+        display: block;
+    }
+
+    &.layout-config-exit {
+        opacity: 1;
+        display: block;
+    }
+    
+    &.layout-config-exit-active {
+        opacity: 0;
+        transform:  translateX(-50%) translateY(-50%);
+        transition: all 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    &.layout-config-exit-done {
+        display: none;
+    }
+
+    .layout-config-option {
+        max-width: 100px;
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        overflow: hidden;
+        text-align: center;
+        display: inline-block;
+        position: relative;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        @include transition(transform $transitionDuration);
+
+        i {
+            line-height: inherit;
+            font-size: 48px;
+            color: #ffffff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -24px;
+            margin-top: -40px;
+        }
+
+        &:hover {
+            @include scale(1.1);
+        }
+
+        &.layout-config-option-light {
+            i {
+                color: #000000;
+            }
+        }
+    }
+
+    .p-col {
+        text-align: center;
+    }
+
+    .ui-tabview {
+        border: 0 none;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        height: 100%;
+
+        &.ui-tabview-top > .ui-tabview-nav {
+            li {
+                vertical-align: bottom;
+                top: auto;
+                margin: 0 0.125em 0px 0;
+                background-color: transparent;
+                border: 0 none;
+                border-bottom: 2px solid transparent;
+                @include transition(border-color $transitionDuration);
+
+                &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                    background-color: transparent;
+                    border: 0 none;
+                    border-bottom: 2px solid #1b1c1e;
+
+                    > a {
+                        color: #1b1c1e;
+                    }
+                }
+
+                &.ui-state-active {
+                    background-color: transparent;
+                    border: 0 none;
+                    border-bottom: 2px solid $primaryColor;
+
+                    > a {
+                        color: $primaryColor;
+                    }
+
+                    &:hover {
+                        background-color: transparent;
+                        border: 0 none;
+                        border-bottom: 2px solid $primaryColor;
+
+                        a {
+                            color: $primaryColor;
+                        }
+                    }
+                }
+
+                > a {
+                    color: rgba(27, 28, 30, 0.7);
+                }
+            }
+        } 
+
+        .ui-tabview-panels {
+            padding: 1em 0;
+            height: 100%;
+            overflow: auto;
+            border-width: 1px 0 0 0;
+        }
+    }
+
+    .layout-config-subtitle {
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        margin: .75em 0;
+        color: $textSecondaryColor;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    p {
+        line-height: 1.5;
+        margin-top: 0;
+        color: $textSecondaryColor;
+    }
+}
+
+.layout-config-mask {
+    background-color: $maskBgColor;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000001;
+    width: 100%;
+    height: 100%;
+}
+
+.blocked-scroll-config{
+    overflow: hidden;
+}
+
+@media screen and (max-width: $responsiveLayoutBreakpoint) {
+    .layout-config {
+        width: 90vw;
+    }
+}

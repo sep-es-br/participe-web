@@ -1,0 +1,89 @@
+.layout-actionbar {
+	@include clearfix();
+	background-color: $actionBarBgColor;  
+    padding: 0px 15px;
+	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+	position: relative;
+
+	.breadcrumb {
+		float: left;
+		padding: 20px 0;
+		
+		.route-bar-breadcrumb {
+			list-style: none;
+			display: inline-block;
+			padding: 0;
+
+			li {
+				padding: 0 10px;
+				border-right: 1px solid  $breadcrumbSeparatorColor;
+				color: $breadcrumbItemTextColor;
+				font-size: 15px;
+                font-weight: 700;
+                display: inline-block;
+
+				&:last-of-type {
+					border-right: none;
+				}
+
+				.ui-link {
+					color:$breadcrumbLinkTextColor;
+					font-size: 13px;
+					font-weight: 500;
+
+					&:hover {
+						color: $primaryColor;
+					}
+				}
+			}
+		}
+	}
+
+	.actions {
+		float: right;
+		padding: 0;
+
+		ul {
+			padding: 0;
+			list-style: none;
+			display: inline-block;
+
+			> li {		
+                display: inline-block;
+                						
+				> button {
+					position: relative;
+					margin-left: 5px;				
+					background-color: $actionItemBgColor;
+					color: $actionItemIconColor;
+					font-size: 15px;	
+					width: 36px;
+					height: 36px;	
+					cursor: pointer;
+					border: 1px solid $actionBarBgColor;
+					@include border-radius(50%);
+                    @include transition(background-color $transitionDuration);
+
+					.icon{
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						width:16px;
+						margin-top: -0.5em;
+						margin-left: -0.5em;
+                        font-size: 1.25em;
+					}
+
+					&:hover {
+						background-color: $actionItemHoverBgColor;
+					}
+
+					&:active {
+						background: $actionItemActiveBgColor;
+						color:$actionItemActiveIconColor;
+					}					
+				}
+			}
+		}
+	}
+}
