@@ -8,13 +8,15 @@ import { DatePipe } from '@angular/common';
 import { ComponentsModule } from '@app/shared/components/components.module';
 import { ConferenceComponent } from './conference.component';
 import { ConferenceService } from '@app/shared/services/conference.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     AppRoutingModule,
     CommonModule,
     ComponentsModule,
-    CoreModule
+    CoreModule,
+    TranslateModule
   ],
   declarations: [
     ConferenceComponent

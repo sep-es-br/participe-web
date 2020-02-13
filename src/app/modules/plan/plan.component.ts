@@ -14,6 +14,8 @@ import { LocalityService } from '@app/shared/services/locality.service';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { PlanItemService } from '@app/shared/services/planItem.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tt-plan',
@@ -34,6 +36,7 @@ export class PlanComponent implements OnInit {
   selectedStructure: Structure;
   structureItem: StructureItem;
   planBreadcrumb: string;
+  structureBreadcrumb: string;
 
   planItem: PlanItem;
   planItemParent: PlanItem;
@@ -56,8 +59,10 @@ export class PlanComponent implements OnInit {
     private planService: PlanService,
     private planItemService: PlanItemService,
     private localityService: LocalityService,
-    private structureService: StructureService
-  ) {}
+    private structureService: StructureService,
+    private translate: TranslateService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.buildBreadcrumb();
@@ -71,8 +76,8 @@ export class PlanComponent implements OnInit {
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
-      { label: 'Administration' },
-      { label: 'Plans', routerLink: ['/administration/plans'] }
+      { label: 'administration.label' },
+      { label: 'administration.plan', routerLink: ['/administration/plans'] }
     ]);
   }
 
@@ -91,8 +96,8 @@ export class PlanComponent implements OnInit {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Erro',
-        detail: 'Error fetching domains.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('plan.error.fetch.domains')
       });
     }
   }
@@ -112,7 +117,7 @@ export class PlanComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: 'Error fetching structures.'
+        detail: this.translate.instant('plan.error.fetch.structures')
       });
     }
   }
@@ -134,14 +139,14 @@ export class PlanComponent implements OnInit {
             description: item.description,
             structure: item.structure ? item.structure : null,
             domain: item.domain ? item.domain : null,
-            type: item.structure  ? item.structure : item.structureItem
+            type: item.structure ? item.structure : item.structureItem
           },
           expanded: false
         }
-        if(item.items){
+        if (item.items) {
           node.children = this.buildTree(item.items);
         }
-        if(item.children){
+        if (item.children) {
           node.children = this.buildTree(item.children);
         }
         root.push(node);
@@ -150,8 +155,9 @@ export class PlanComponent implements OnInit {
     return root;
   }
 
-  toogleSearch() {
+  toggleSearch() {
     this.search = !this.search;
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
   }
 
   clearSearchForm() {
@@ -177,8 +183,7 @@ export class PlanComponent implements OnInit {
   }
 
   canclePlanItem() {
-    this.setSaveAndContinue(false);
-    this.clearPlanItemForm(null)
+    this.cancel()
   }
 
   clearPlanItemForm(planItem) {
@@ -187,7 +192,7 @@ export class PlanComponent implements OnInit {
       this.planBreadcrumb = '';
     }
     this.selectedLocalities = [];
-    if(!this.edit){
+    if (!this.edit) {
       this.planItem = new PlanItem();
     }
     this.planItemForm = this.formBuilder.group({
@@ -203,24 +208,25 @@ export class PlanComponent implements OnInit {
   }
 
   showEdit(rowNode) {
-    console.log(rowNode);
     this.edit = true;
     this.selectNode(rowNode);
-    if (rowNode.level > 0){
+    if (rowNode.level > 0) {
       this.clearPlanItemForm(this.planItem);
       this.showPlanItemForm = true;
       this.buildPlanBreadcrumb(rowNode, '');
-    }else{
+      this.buildStructureBreadcrumb(this.structureItem);
+    } else {
       this.clearPlanForm(this.plan);
       this.showPlanForm = true;
     }
   }
 
-  showCreatePlanItem(rowNode)  {
+  showCreatePlanItem(rowNode) {
     this.edit = false;
     this.clearPlanItemForm(null);
     this.selectNode(rowNode);
     this.buildPlanBreadcrumb(rowNode, '');
+    this.buildStructureBreadcrumb(this.structureItem);
     this.showPlanItemForm = true;
   }
 
@@ -242,37 +248,37 @@ export class PlanComponent implements OnInit {
         for (let i = 0; i <= level; i++) {
           if (this.structureItem) {
             this.structureItem = this.structureItem && this.structureItem.children ? this.structureItem.children[0] : this.structureItem;
-          }else{
+          } else {
             this.structureItem = this.selectedStructure.items[0];
           }
         }
       }
 
-    }else{
+    } else {
       this.structureItem = this.selectedStructure.items[0];
     }
 
-    if(this.structureItem.logo || this.structureItem.locality) {
+    if (this.structureItem.logo || this.structureItem.locality) {
       try {
         let localities = [];
-        if(this.plan.domain && this.plan.domain.id) {
+        if (this.plan.domain && this.plan.domain.id) {
           localities = await this.localityService.findByDomain(this.plan.domain.id);
         }
         this.localities = this.buildTreeLocality(localities);
       } catch (err) {
         console.error(err);
       }
-      if(level > 0 && this.edit){
+      if (level > 0 && this.edit) {
         let item = await this.planItemService.show(this.planItem.id);
-        if(item.localities) {
+        if (item.localities) {
           item.localities.forEach(l => {
             let node = this.getSelectedLocalityNode(l, this.localities);
-            if(node) {
+            if (node) {
               this.selectedLocalities.push(node);
             }
           });
         }
-        if(item.file){
+        if (item.file) {
           this.planItem.file = item.file;
         }
       }
@@ -280,18 +286,18 @@ export class PlanComponent implements OnInit {
 
   }
 
-  private getSelectedLocalityNode(locality, localities:TreeNode[]): TreeNode {
-    let node:TreeNode;
+  private getSelectedLocalityNode(locality, localities: TreeNode[]): TreeNode {
+    let node: TreeNode;
     if (this.localities) {
-      for(let i = 0; i < localities.length; i++) {
+      for (let i = 0; i < localities.length; i++) {
         let l = localities[i];
         if (l.data.id === locality.id) {
           node = l;
           break;
         }
-        if(l.children){
-          node = this.getSelectedLocalityNode(locality,l.children);
-          if(node){
+        if (l.children) {
+          node = this.getSelectedLocalityNode(locality, l.children);
+          if (node) {
             break;
           }
         }
@@ -303,15 +309,15 @@ export class PlanComponent implements OnInit {
 
 
 
-  private getPlanItem(id, planItems : PlanItem[]) :PlanItem {
-    let planItem:PlanItem;
-    for(let i = 0; i < planItems.length; i++) {
+  private getPlanItem(id, planItems: PlanItem[]): PlanItem {
+    let planItem: PlanItem;
+    for (let i = 0; i < planItems.length; i++) {
       let l = planItems[i];
       if (l.id === id) {
         planItem = l;
         break;
       }
-      if (l.children){
+      if (l.children) {
         planItem = this.getPlanItem(id, l.children);
         if (planItem) {
           break;
@@ -319,7 +325,7 @@ export class PlanComponent implements OnInit {
       }
     }
     return planItem;
-   }
+  }
 
   private buildTreeLocality(items: any[]): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
@@ -335,7 +341,7 @@ export class PlanComponent implements OnInit {
           },
           expanded: true
         }
-        if(item.children){
+        if (item.children) {
           node.children = this.buildTreeLocality(item.children);
         }
         root.push(node);
@@ -352,14 +358,18 @@ export class PlanComponent implements OnInit {
     }
   }
 
+  buildStructureBreadcrumb(structureItem) {
+    this.structureBreadcrumb = ` > ${this.translate.instant('new-a')} ${structureItem.name}`;
+  }
+
   uploadFile(event) {
-    this.planItem.file = {...event.originalEvent.body};
+    this.planItem.file = { ...event.originalEvent.body };
   }
 
   async removeFile(event) {
     try {
       await this.planService.deleteLogo(this.planItem.file.id).toPromise();
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     }
     this.planItem.file = null;
@@ -400,8 +410,8 @@ export class PlanComponent implements OnInit {
       await this.planService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: this.edit ? `Updated plan "${formData.name}".` : `New plan "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(this.edit ? 'plan.updated' : 'plan.inserted', { name: formData.name })
       });
       this.clearPlanForm(null);
       this.clearPlans(null);
@@ -409,24 +419,24 @@ export class PlanComponent implements OnInit {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving plan.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('plan.error.saving')
       });
     }
   }
 
   async savePlanItem(formData) {
-    try{
+    try {
       if (!this.isValidForm(this.planItemForm)) return;
       if (!this.isValidItemSave()) return;
       let localitiesIds = this.getLocalityIds(this.selectedLocalities, []);
       this.planItem.localitiesIds = localitiesIds;
       this.planItem.name = formData.name;
       this.planItem.description = formData.description;
-      if(!this.edit){
+      if (!this.edit) {
         if (this.planItemParent) {
           this.planItem.parent = this.planItemParent;
-        }else{
+        } else {
           this.planItem.plan = this.plan;
         }
         this.planItem.structureItem = this.structureItem;
@@ -434,8 +444,8 @@ export class PlanComponent implements OnInit {
       await this.planItemService.save(this.planItem, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: this.edit ? `Updated plan "${formData.name}".` : `New plan "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.edit ? this.translate.instant('plan.updated', { name: formData.name }) : this.translate.instant('plan.inserted', { name: formData.name })
       });
       this.clearPlanItemForm(null);
       this.clearPlans(null);
@@ -444,20 +454,20 @@ export class PlanComponent implements OnInit {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving plan.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('plan.error.saving')
       });
     }
   }
 
   getLocalityIds(localities, ids: number[]) {
-    if(!localities) {
+    if (!localities) {
       return null;
     }
     localities.forEach(l => {
       ids.push(l.data.id);
-      if(l.children) {
-        this.getLocalityIds(l.children,ids) ;
+      if (l.children) {
+        this.getLocalityIds(l.children, ids);
       }
     });
     let setIds = new Set(ids);
@@ -476,31 +486,31 @@ export class PlanComponent implements OnInit {
 
   private isValidItemSave(): boolean {
     let valid = true;
-    if(this.structureItem.locality && this.selectedLocalities.length == 0) {
+    if (this.structureItem.locality && this.selectedLocalities.length == 0) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: "Select one or more Localities"
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('plan.error.locality.select')
       });
       valid = false;
     }
 
-    if(this.structureItem.logo && !this.planItem.file) {
+    if (this.structureItem.logo && !this.planItem.file) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: "File is required"
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('file.required')
       });
       valid = false;
     }
     return valid;
   }
 
-  private isValidForm(form, errorMessage = 'Invalid data. Verify provided information and try again.') {
+  private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
     if (!form.valid) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
+        summary: this.translate.instant('error'),
         detail: errorMessage
       });
       return false;
@@ -513,34 +523,37 @@ export class PlanComponent implements OnInit {
     this.selectNode(rowNode);
     const deleteObject = rowNode.node.data;
     this.confirmationService.confirm({
-      message: `Are you sure that you want to delete "${deleteObject.name}?"`,
+      message: this.translate.instant('plan.confirm.delete', { name: deleteObject.name }),
       key: 'deletePlan',
-      acceptLabel: 'Yes',
-      rejectLabel: 'No',
+      acceptLabel: this.translate.instant('yes'),
+      rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(deleteObject.id, rowNode.level);
+      }, 
+      reject: () => {
+        this.clearPlans(null);
       }
     });
   }
 
   private async confirmDelete(id, level) {
-    try{
-      if(level > 0){
+    try {
+      if (level > 0) {
         await this.planItemService.delete(id);
-      }else{
+      } else {
         await this.planService.delete(id);
       }
 
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Register removed.'
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant('register.removed')
       });
-    } catch(err){
+    } catch (err) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error removing register.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('erro.removing.register')
       });
     }
     this.clearPlans(null);
@@ -549,14 +562,14 @@ export class PlanComponent implements OnInit {
   private getLevel(structure: Structure) {
     let level = 0;
     let structureItem: StructureItem;
-    if(structure.items) {
+    if (structure.items) {
       level++;
       structureItem = structure.items[0];
-      for(;;) {
-        if(structureItem.children){
+      for (; ;) {
+        if (structureItem.children) {
           level++;
           structureItem = structureItem.children[0];
-        }else{
+        } else {
           break;
         }
       }
@@ -565,7 +578,7 @@ export class PlanComponent implements OnInit {
   }
 
   disableBtnAdd(rowNode) {
-    if(this.listStructures){
+    if (this.listStructures) {
       let plan = this.getSelectedNodePlan(rowNode.node);
       let selectedStructure = this.listStructures.find(s => s.id == plan.structure.id);
       let maxLevel = this.getLevel(selectedStructure);
@@ -579,4 +592,10 @@ export class PlanComponent implements OnInit {
   setSaveAndContinue(saveAndContinue) {
     this.saveAndContinue = saveAndContinue;
   }
+
+  cancel() {
+    this.router.navigated = false;
+    this.router.navigateByUrl(this.router.url);
+  }
+
 }

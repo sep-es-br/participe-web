@@ -16,6 +16,11 @@ export class LocalityService {
     return this.http.get<Locality[]>(`${this.url}?query=${query}`, { headers: this.headers }).toPromise();
   }
 
+  listAllByNameType(query, type) {
+    const url = `${this.url}?query=${query}`.concat(type ? `&type=${type}` : '');
+    return this.http.get<Locality[]>(url, { headers: this.headers }).toPromise();
+  }
+
   save(locality, edit) {
     if (edit) {
       const editUrl = `${this.url}/${locality.id}`;

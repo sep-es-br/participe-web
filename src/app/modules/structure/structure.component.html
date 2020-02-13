@@ -4,24 +4,24 @@
       <div class="card card-w-title">
         <section *ngIf="!showStructureForm && !showStructureItemForm">
           <div class="p-grid ui-fluid actions">
-            <div class="p-md-1">
-              <button pButton type="button" label="New" (click)="showCreateStructure()">
-                <img src="assets/layout/images/icons/triangule_plus.png" />
+            <div class="ui-g-5 ui-md-2 ui-lg-2">
+              <button pButton type="button" class="button-new" [label]="'new'|translate" (click)="showCreateStructure()" icon="pi pi-plus">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-10"></div>
-            <div class="ui-g-5 ui-md-1 search">
-              <a class="search" (click)="toogleSearch()">{{ search ? 'Hide' : 'Search' }}</a>
+            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
+            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+              <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchStructures(searchForm.value)">
               <div class="p-grid ui-fluid">
                 <div class="ui-g-12 ui-md-6">
-                  <input pInputText placeholder="Structure name" formControlName="query">
+                  <label for="query">{{'structure.name'|translate}}</label>
+                  <input id="search-input" pInputText [placeholder]="'structure.placeholder.name'|translate" formControlName="query">
                 </div>
-                <div class="ui-g-12 ui-md-1">
-                  <button pButton icon="pi pi-search" type="submit" label="Search"></button>
+                <div class="ui-g-12 ui-md-3">
+                  <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
             </form>
@@ -29,7 +29,7 @@
           <p-treeTable #tt [value]="structureTree" selectionMode="single" class="tree-column">
             <ng-template pTemplate="header">
               <tr>
-                <th>Name</th>
+                <th>{{'name'|translate}}</th>
                 <th></th>
               </tr>
             </ng-template>
@@ -57,14 +57,16 @@
         <section class="p-grid ui-fluid" *ngIf="showStructureForm">
           <form [formGroup]="structureForm" (submit)="saveStructure(structureForm.value)">
             <div class="p-col-12 p-md-6">
-              <input pInputText placeholder="Structure name" formControlName="name">
+              <label for="name">{{'structure.name'|translate}}</label>
+              <input pInputText [placeholder]="'structure.placeholder.name'|translate" formControlName="name">
               <tt-input-message [form]="structureForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
-                <button pButton icon="pi pi-check" [disabled]="disableBtnSave" type="submit" label="Save"></button>
-                <button pButton icon="pi pi-ban" type="button" label="Cancel"
-                  (click)="clearStructureForm(null)"></button>
+                <button pButton icon="pi pi-check" [disabled]="disableBtnSave" type="submit"
+                  [label]="'save'|translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
+                  (click)="cancel()"></button>
               </div>
             </div>
           </form>
@@ -75,33 +77,36 @@
               {{ structureItemBreadcrumb }}
             </div>
             <div class="p-col-12 p-md-6">
-              <input pInputText placeholder="Structure name" formControlName="name">
+              <label for="name">{{'structure.name'|translate}}</label>
+              <input pInputText [placeholder]="'structure.placeholder.name'|translate" formControlName="name">
               <tt-input-message [form]="structureItemForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6 input-switch">
-              <label for="input-switch-logo">Logo</label>
+              <label for="input-switch-logo">{{'structure.logo'|translate}}</label>
               <p-inputSwitch id="input-switch-logo" formControlName="logo">
               </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-6 input-switch">
-              <label for="input-switch-locality">Locality</label>
+              <label for="input-switch-locality">{{'structure.locality'|translate}}</label>
               <p-inputSwitch id="input-switch-logo" formControlName="locality">
               </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-6 input-switch">
-              <label for="input-switch-votes">Votes</label>
+              <label for="input-switch-votes">{{'structure.votes'|translate}}</label>
               <p-inputSwitch id="input-switch-votes" formControlName="votes">
               </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-6 input-switch">
-              <label for="input-switch-comments">Comments</label>
+              <label for="input-switch-comments">{{'structure.comments'|translate}}</label>
               <p-inputSwitch id="input-switch-comments" formControlName="comments">
               </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
-                <button pButton icon="pi pi-check" type="submit" [disabled]="disableBtnSave" label="Save"></button>
-                <button pButton icon="pi pi-ban" type="button" label="Cancel" (click)="cancelStructureItem()"></button>
+                <button pButton icon="pi pi-check" type="submit" [disabled]="disableBtnSave"
+                  [label]="'save'|translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
+                  (click)="cancelStructureItem()"></button>
               </div>
             </div>
           </form>
@@ -109,5 +114,6 @@
       </div>
     </div>
   </div>
-  <p-confirmDialog header="Delete Structure" icon="pi pi-exclamation-triangle" key="deleteStructure"></p-confirmDialog>
+  <p-confirmDialog [header]="'structure.delete'|translate" icon="pi pi-exclamation-triangle" key="deleteStructure">
+  </p-confirmDialog>
 </app-template>

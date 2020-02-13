@@ -8,6 +8,9 @@ import { DomainService } from '@app/shared/services/domain.service';
 import { Locality } from '@app/shared/models/locality';
 import { LocalityService } from '@app/shared/services/locality.service';
 import { LocalityTypeService } from '@app/shared/services/locality-type.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'tt-domain',
@@ -37,6 +40,7 @@ export class DomainComponent implements OnInit {
   showLocalityForm = false;
   saveAndContinue = false;
 
+
   constructor(
     private breadcrumbService: BreadcrumbService,
     private confirmationService: ConfirmationService,
@@ -45,7 +49,9 @@ export class DomainComponent implements OnInit {
     private localityService: LocalityService,
     private localityTypeService: LocalityTypeService,
     private messageService: MessageService,
-  ) {}
+    private translate: TranslateService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.buildBreadcrumb();
@@ -58,8 +64,8 @@ export class DomainComponent implements OnInit {
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
-      { label: 'Administration' },
-      { label: 'Domain', routerLink: ['/administration/domains'] }
+      { label: 'administration.label' },
+      { label: 'administration.domain', routerLink: ['/administration/domains'] }
     ]);
   }
 
@@ -79,7 +85,7 @@ export class DomainComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: 'Error fetching types.'
+        detail: this.translate.instant('domain.error.fetch.types')
       });
     }
   }
@@ -102,10 +108,10 @@ export class DomainComponent implements OnInit {
           },
           expanded: false
         }
-        if(item.localities){
+        if (item.localities) {
           node.children = this.buildTree(item.localities);
         }
-        if(item.children){
+        if (item.children) {
           node.children = this.buildTree(item.children);
         }
         root.push(node);
@@ -114,8 +120,9 @@ export class DomainComponent implements OnInit {
     return root;
   }
 
-  toogleSearch() {
+  toggleSearch() {
     this.search = !this.search;
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
   }
 
   clearSearchForm() {
@@ -203,8 +210,8 @@ export class DomainComponent implements OnInit {
       await this.domainService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: this.edit ? `Updated domain "${formData.name}".` : `New domain "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(this.edit ? 'domain.updated' : 'domain.new', { name: formData.name })
       });
       this.clearDomainForm(null);
       this.clearDomains(null);
@@ -213,7 +220,7 @@ export class DomainComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Error saving domain.'
+        detail: this.translate.instant('domain.error.saving')
       });
     }
   }
@@ -228,11 +235,11 @@ export class DomainComponent implements OnInit {
     });
   }
 
-  private isValidForm(form, errorMessage = 'Invalid data. Verify provided information and try again.') {
+  private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
     if (!form.valid) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
+        summary: this.translate.instant('error'),
         detail: errorMessage
       });
       return false;
@@ -245,19 +252,22 @@ export class DomainComponent implements OnInit {
     this.selectNode(rowNode);
     const deleteObject = this.selectedLocality ? this.selectedLocality : this.domain;
     this.confirmationService.confirm({
-      message: `Are you sure that you want to delete "${deleteObject.name}?"`,
+      message: this.translate.instant('domain.confirm.delete', { name: deleteObject.name }),
       key: 'deleteDomain',
-      acceptLabel: 'Yes',
-      rejectLabel: 'No',
+      acceptLabel: this.translate.instant('yes'),
+      rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(deleteObject.id);
+      }, 
+      reject: () => {
+        this.clearDomains(null);
       }
     });
   }
 
   private async confirmDelete(id) {
     const isLocality = !!this.selectedLocality;
-    try{
+    try {
       if (isLocality) {
         await this.localityService.delete(id, this.domain.id);
       } else {
@@ -265,14 +275,14 @@ export class DomainComponent implements OnInit {
       }
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Register removed.'
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant('register.removed')
       });
-    } catch(err){
+    } catch (err) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error removing register.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('erro.removing.register')
       });
     }
     this.clearDomains(null);
@@ -297,8 +307,8 @@ export class DomainComponent implements OnInit {
     this.disableSelectLocalityType = true;
     this.localityForm = this.formBuilder.group({
       id: [locality && locality.id],
-      name: [ locality && locality.name, Validators.required],
-      type: [ locality && locality.type.id, Validators.required ]
+      name: [locality && locality.name, Validators.required],
+      type: [locality && locality.type.id, Validators.required]
     });
   }
 
@@ -307,14 +317,15 @@ export class DomainComponent implements OnInit {
   }
 
   cancelLocality() {
-    this.setSaveAndContinue(false);
-    this.clearLocalityForm(null);
+    this.cancel()
   }
 
-  async searchLocalities(event) {
-    const response = await this.localityService.listAll(event.query);
-    if (response) {
-      this.localities = response.map(locality => locality.name);
+  async searchLocalities(event, type) {
+    if (type) {
+      const response = await this.localityService.listAllByNameType(event.query, type);
+      if (response) {
+        this.localities = response.map(locality => locality.name);
+      }
     }
   }
 
@@ -325,26 +336,26 @@ export class DomainComponent implements OnInit {
       formData = {
         ...formData,
         type: { id: formData.type },
+        domain: { id: this.domain.id },
         domains: [{ id: this.domain.id }]
       }
 
       if (this.selectedLocality && !this.edit) {
-        formData.parents = [ this.selectedLocality ];
+        formData.parents = [this.selectedLocality];
+        formData.parent = this.selectedLocality;
       }
-
-      if (!this.edit && !await this.isValidLocalityType(formData)) return;
 
       await this.localityService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: this.edit ? `Updated locality "${formData.name}".` : `New locality "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.edit ? this.translate.instant('domain.locality.updated', { name: formData.name }) : this.translate.instant('domain.locality.inserted', { name: formData.name })
       });
 
       let data = null;
       if (this.saveAndContinue) {
         data = { type: formData.type },
-        this.edit = false;
+          this.edit = false;
       }
 
       this.clearLocalityForm(data);
@@ -353,65 +364,14 @@ export class DomainComponent implements OnInit {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving locality.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant(err.error.message)
       });
     }
   }
 
-  private async isValidLocalityType({ type, parents, domains }) {
-    const domainNode = this.domainTree.find(node => node.data.id === this.domain.id);
-    const usedLevel = this.usedLevel(domainNode, type);
-
-    if (!usedLevel) {
-      return true;
-    }
-
-    let sameParent = [];
-    let sameDomain = [];
-
-    if (parents && parents.length > 0) {
-      sameParent = parents.filter(parent => parent.id === usedLevel.data.id);
-    } else {
-      sameDomain = domains.filter(domain => domain.id === usedLevel.data.id);
-    }
-
-    const notSameParentOrDomain = sameParent.length === 0 && sameDomain.length === 0;
-
-    if (notSameParentOrDomain) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'This type has already been associated to another level on this domain.'
-      });
-
-      return false;
-    }
-
-    return true;
-  }
-
-  private usedLevel(node, type) {
-    const matches = this.childMatches(node.children, type);
-
-    if (matches) return node;
-
-    if (!node.children || node.children.length === 0) return null;
-
-    let matchingNode = null;
-    for (const child of node.children) {
-      matchingNode = this.usedLevel(child, type);
-      if (matchingNode !== null) break;
-    }
-
-    return matchingNode;
-  }
-
-  private childMatches(children, type) {
-    if (!children || children.length === 0) return false;
-
-    const matches = children.filter(child => child.data.type.id === type.id);
-
-    return matches && matches.length > 0;
+  cancel() {
+    this.router.navigated = false;
+    this.router.navigateByUrl(this.router.url);
   }
 }

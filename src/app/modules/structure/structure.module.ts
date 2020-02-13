@@ -8,13 +8,15 @@ import { ComponentsModule } from '@app/shared/components/components.module';
 import { StructureComponent } from './structure.component';
 import { StructureService } from '@app/shared/services/structure.service';
 import { StructureItemService } from '@app/shared/services/structure-item.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     AppRoutingModule,
     CommonModule,
     ComponentsModule,
-    CoreModule
+    CoreModule,
+    TranslateModule
   ],
   declarations: [
     StructureComponent

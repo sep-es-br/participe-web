@@ -7,6 +7,8 @@ import { Structure } from '@app/shared/models/structure';
 import { StructureService } from '@app/shared/services/structure.service';
 import { StructureItem } from '@app/shared/models/structure-item';
 import { StructureItemService } from '@app/shared/services/structure-item.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tt-structure',
@@ -42,7 +44,9 @@ export class StructureComponent implements OnInit {
     private formBuilder: FormBuilder,
     private structureItemService: StructureItemService,
     private messageService: MessageService,
-  ) {}
+    private translate: TranslateService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.buildBreadcrumb();
@@ -54,8 +58,8 @@ export class StructureComponent implements OnInit {
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
-      { label: 'Administration' },
-      { label: 'Structure', routerLink: ['/administration/structures'] }
+      { label: 'administration.label' },
+      { label: 'administration.structure', routerLink: ['/administration/structures'] }
     ]);
   }
 
@@ -77,10 +81,10 @@ export class StructureComponent implements OnInit {
           },
           expanded: false
         }
-        if(item.items){
+        if (item.items) {
           node.children = this.buildTree(item.items);
         }
-        if(item.children){
+        if (item.children) {
           node.children = this.buildTree(item.children);
         }
         root.push(node);
@@ -89,8 +93,9 @@ export class StructureComponent implements OnInit {
     return root;
   }
 
-  toogleSearch() {
+  toggleSearch() {
     this.search = !this.search;
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
   }
 
   clearSearchForm() {
@@ -177,8 +182,8 @@ export class StructureComponent implements OnInit {
       await this.structureService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: `New structure "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(this.edit ? 'structure.updated' : 'structure.new', { name: formData.name })
       });
       this.clearStructureForm(null);
       this.clearStructures(null);
@@ -186,8 +191,8 @@ export class StructureComponent implements OnInit {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving structure.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('structure.error.saving')
       });
     }
   }
@@ -197,19 +202,22 @@ export class StructureComponent implements OnInit {
     const deleteObject = this.selectedStructureItem ? this.selectedStructureItem : this.structure;
 
     this.confirmationService.confirm({
-      message: `Are you sure that you want to delete "${deleteObject.name}?"`,
+      message: this.translate.instant('structure.confirm.delete', { name: deleteObject.name }),
       key: 'deleteStructure',
-      acceptLabel: 'Yes',
-      rejectLabel: 'No',
+      acceptLabel: this.translate.instant('yes'),
+      rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(deleteObject.id);
+      }, 
+      reject: () => {
+        this.clearStructures(null);
       }
     });
   }
 
   private async confirmDelete(id) {
     const isStructureItem = !!this.selectedStructureItem;
-    try{
+    try {
       if (isStructureItem) {
         await this.structureItemService.delete(id);
       } else {
@@ -217,14 +225,14 @@ export class StructureComponent implements OnInit {
       }
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Register removed.'
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant('register.removed')
       });
-    } catch(err){
+    } catch (err) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error removing register.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('erro.removing.register')
       });
     }
     this.clearStructures(null);
@@ -261,16 +269,16 @@ export class StructureComponent implements OnInit {
 
 
   cancelStructureItem() {
-    this.clearStructureItemForm(null);
+    this.cancel()
   }
 
   async saveStructureItem(formData) {
     try {
-      if(!this.validName(formData.id, formData.name)) {
+      if (!this.validName(formData.id, formData.name)) {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'This name already exists.'
+          summary: this.translate.instant('error'),
+          detail: this.translate.instant('exists.name')
         });
         return;
       }
@@ -288,8 +296,8 @@ export class StructureComponent implements OnInit {
       await this.structureItemService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: `New structure item "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(this.edit ? 'structure.item.updated' : 'structure.item.new', { name: formData.name })
       });
 
       this.clearStructureItemForm(null);
@@ -297,17 +305,17 @@ export class StructureComponent implements OnInit {
     } catch (err) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving structure item.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('structure.error.item')
       });
     }
   }
 
-  private isValidForm(form, errorMessage = 'Invalid data. Verify provided information and try again.') {
+  private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
     if (!form.valid) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
+        summary: this.translate.instant('error'),
         detail: errorMessage
       });
       return false;
@@ -327,11 +335,11 @@ export class StructureComponent implements OnInit {
   }
 
   disableBtnAdd(rowNode) {
-    if(rowNode.node.children) {
+    if (rowNode.node.children) {
       return true;
     }
     let node = this.getSelectedNodeStructure(rowNode.node);
-    if(node){
+    if (node) {
       return node.hasPlan;
     }
     return false;
@@ -339,17 +347,17 @@ export class StructureComponent implements OnInit {
 
   disableBtnDelete(rowNode) {
     let node = this.getSelectedNodeStructure(rowNode.node);
-    if(node){
+    if (node) {
       return node.hasPlan;
     }
     return false;
   }
 
-  validName(id, name) :boolean{
-    if(name === this.structure.name){
+  validName(id, name): boolean {
+    if (name === this.structure.name) {
       return false;
     }
-    if(!this.selectedRootNode.children){
+    if (!this.selectedRootNode.children) {
       return true;
     }
     return this.verifyNameStructure(id, name, this.selectedRootNode.children);
@@ -357,20 +365,26 @@ export class StructureComponent implements OnInit {
 
   verifyNameStructure(id, name, nodes: TreeNode[]): boolean {
     let validName = true;
-    for(let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i++) {
       let node = nodes[i];
-      if(node.data.id !== id && node.data.name === name) {
+      if (node.data.id !== id && node.data.name === name) {
         validName = false;
         break;
       }
-      if(node.children) {
-        validName = this.verifyNameStructure(id,name,node.children);
-        if(!validName) {
+      if (node.children) {
+        validName = this.verifyNameStructure(id, name, node.children);
+        if (!validName) {
           break;
         }
       }
     }
     return validName;
   }
+
+  cancel() {
+    this.router.navigated = false;
+    this.router.navigateByUrl(this.router.url);
+  }
+
 
 }

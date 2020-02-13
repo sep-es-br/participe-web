@@ -1,7 +1,7 @@
 <div class="layout-topbar">
   <div href="#" class="layout-topbar-logo">
     <a href="#">
-      <img class="logo" src="assets/layout/images/logotype.png" alt="Ministério Público do"/>
+      <img class="logo" src="assets/layout/images/logotype.png" alt="Ministério Público do" />
     </a>
   </div>
   <a class="layout-menu-button" href="#" (click)="template.onMenuButtonClick($event)">
@@ -9,11 +9,13 @@
   </a>
 
   <ul class="layout-topbar-menu" role="menu">
-    <li #profile class="user-profile" role="menuitem" [ngClass]="{'active-topmenuitem':template.activeTopbarItem === profile}">
+
+    <li #profile class="user-profile" role="menuitem"
+      [ngClass]="{'active-topmenuitem':template.activeTopbarItem === profile}">
       <a href="#" (click)="template.onTopbarItemClick($event,profile)">
         <div class="user-profile-info profile-link">
           <span class="user-profile-name">Totem TI</span>
-          <span class="user-profile-role">Administrador</span>
+          <span class="user-profile-role">{{'roles.administrator'|translate}}</span>
         </div>
         <img class="logo" src="assets/layout/images/avatar/avatar-pedro.jpg" alt="prestige-layout" />
       </a>
@@ -23,7 +25,17 @@
             <img class="logo" src="assets/layout/images/avatar/avatar-pedro.jpg" alt="prestige-layout" />
             <div class="profile-info">
               <span class="user-profile-name">Totem TI</span>
-              <span class="user-profile-role">Administrador</span>
+              <span class="user-profile-role">{{'roles.administrator'|translate}}</span>
+              <div class="p-grid ui-fluid language-container">
+                <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('en')}" (click)="changeLanguage('en')">
+                  <img
+                    src="assets/layout/images/icons/flag-usa.png" />
+                  <span>{{'topbar.language.en'|translate}}</span></div>
+                <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('pt')}" (click)="changeLanguage('pt')">
+                  <img src="assets/layout/images/icons/flag-brazil.png" />
+                  <span>{{'topbar.language.ptbr'|translate}}</span>
+                </div>
+              </div>
             </div>
             <a [routerLink]="['/']" class="profile-detail-icon" (click)="template.onTopbarSubItemClick($event)">
               <i class="pi pi-sign-out"></i>
@@ -34,8 +46,8 @@
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-user"></i>
             <div class="menu-text">
-              <span class="menu-title">Perfil</span>
-              <span class="menu-subtitle">Editar perfil</span>
+              <span class="menu-title">{{'topbar.profile'|translate}}</span>
+              <span class="menu-subtitle">{{'topbar.edit.profile'|translate}}</span>
             </div>
 
             <i class="right-icon pi pi-angle-right"></i>
@@ -45,8 +57,8 @@
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-cog"></i>
             <div class="menu-text">
-              <span class="menu-title">Configurações</span>
-              <span class="menu-subtitle">Painel de configurações</span>
+              <span class="menu-title">{{'topbar.settings'|translate}}</span>
+              <span class="menu-subtitle">{{'topbar.panel.settings'|translate}}</span>
             </div>
             <i class="right-icon pi pi-angle-right"></i>
           </a>
@@ -55,8 +67,9 @@
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-inbox"></i>
             <div class="menu-text">
-              <span class="menu-title">Mensagens</span>
-              <span class="menu-subtitle">Você possui <div class="blue">3 novas</div> mensagens</span>
+              <span class="menu-title">{{'topbar.messages'|translate}}</span>
+              <span class="menu-subtitle">{{'topbar.yourhave'|translate}} <div class="blue">3 {{'topbar.new'|translate}}
+                </div> {{'topbar.messages'|translate}}</span>
             </div>
             <i class="right-icon pi pi-angle-right"></i>
           </a>
@@ -65,8 +78,8 @@
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-globe"></i>
             <div class="menu-text">
-              <span class="menu-title">Notificações</span>
-              <span class="menu-subtitle">Nenuma notificação nova</span>
+              <span class="menu-title">{{'topbar.notification'|translate}}</span>
+              <span class="menu-subtitle">{{'topbar.notifications.empty'|translate}}</span>
             </div>
             <i class="right-icon pi pi-angle-right"></i>
           </a>

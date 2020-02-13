@@ -9,13 +9,15 @@ import { DomainComponent } from '@app/modules/domain/domain.component';
 import { DomainService } from '@app/shared/services/domain.service';
 import { LocalityService } from '@app/shared/services/locality.service';
 import { LocalityTypeService } from '@app/shared/services/locality-type.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     AppRoutingModule,
     CommonModule,
     ComponentsModule,
-    CoreModule
+    CoreModule, 
+    TranslateModule
   ],
   declarations: [
     DomainComponent

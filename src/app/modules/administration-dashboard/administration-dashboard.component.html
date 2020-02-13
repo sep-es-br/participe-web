@@ -1,0 +1,16 @@
+<app-template>
+  <div class="page-home-container">
+    <div class="p-grid">
+      <div class="p-col-12">
+        <div class="card">
+          <div class="card-actions">
+            <div [routerLink]="item.url" *ngFor="let item of actions; let i = index" class="container-icon">
+              <fa-icon size="6x" [icon]="item.icon"></fa-icon>
+              <label>{{item.name | translate}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-template>
