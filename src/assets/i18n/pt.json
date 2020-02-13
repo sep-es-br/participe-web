@@ -1,0 +1,220 @@
+{
+	"administration": {
+		"conference": "Consulta",
+		"domain": "Domínio",
+		"label": "Administração",
+		"plan": "Plano",
+		"structure": "Estrutura"
+	},
+	"cancel": "Cancelar",
+	"clean": {
+		"search": "Limpar Pesquisa"
+	},
+	"conference": {
+		"confirm": {
+			"delete": "Deseja realmente excluir {{name}}?"
+		},
+		"delete": "Excluir Consulta",
+		"error": {
+			"fetch": {
+				"plans": "Erro ao carregar os planos"
+			},
+			"saving": "Erro ao salvar a consulta"
+		},
+		"name": "Nome da Consulta",
+		"new": "Nova consulta {{name}} inserida",
+		"placeholder": {
+			"begin-date": "Selecione a data de início da consulta",
+			"description": "Descreva maiores detalhes sobre a consulta",
+			"end-date": "Selecione a data de encerramento da consulta",
+			"month": "Selecione um mês",
+			"name": "Preencha o nome da consulta",
+			"plan": "Selecione o plano relacionado à consulta",
+			"year": "Selecione um ano"
+		},
+		"updated": "Consulta {{name}} atualizada"
+	},
+	"dashboard": "Painel de Controle",
+	"date": {
+		"end": "Data Final",
+		"start": "Data Inicial"
+	},
+	"description": "Descrição",
+	"domain": {
+		"confirm": {
+			"delete": "Deseja realmente deletar {{name}}?"
+		},
+		"delete": "Excluir Domínio",
+		"error": {
+			"fetch": {
+				"types": "Erro ao carregar os tipos"
+			},
+			"locality": {
+				"invalid-type-level": "Este tipo já foi utilizado em outro nível deste domínio",
+				"save": "Erro ao salvar a localidade"
+			},
+			"locality-type": {
+				"not-found": "Tipo de localidade não encontrado"
+			},
+			"not-found": "Dominio não encontrado",
+			"other": {
+				"level": "Esse tipo já está associado à outro nível do domínio"
+			},
+			"saving": "Erro ao salvar o domínio"
+		},
+		"locality": {
+			"inserted": "Nova localidade {{name}} inserida",
+			"updated": "Localidade {{name}} atualizada"
+		},
+		"name": "Nome do Domínio",
+		"new": "Novo domínio {{name}} registrado",
+		"placeholder": {
+			"locality": "Preencha com o nome da localidade",
+			"name": "Preencha o nome do domínio"
+		},
+		"updated": "Domínio {{name}} atualizado"
+	},
+	"erro": {
+		"invalid": {
+			"data": "Dados inválidos, corrija e tente novamente",
+			"field": "Campo inválido"
+		},
+		"removing": {
+			"register": "Erro ao remover o registro"
+		},
+		"required": {
+			"field": "Campo obrigatório"
+		}
+	},
+	"error": "Erro",
+	"exists": {
+		"name": "Esse nome já existe"
+	},
+	"file": {
+		"browse": "Selecione",
+		"label": "Arquivo",
+		"remove": "Remover arquivo",
+		"required": "Arquivo é obrigatório",
+		"send": "Enviar"
+	},
+	"footer": {
+		"label1": "Código aberto fornecido gratuitamente, sem suporte, sem certificação, sem manutenção, sem garantia e sem indenização por",
+		"label2": "Secretaria de Economia e Planejamento do Governo do Estado do Espirito Santo"
+	},
+	"hide": "Ocultar",
+	"home": "Página Inicial",
+	"label": {
+		"parent": "Nível acima"
+	},
+	"moderation": "Moderação",
+	"month": {
+		"april": "Abril",
+		"august": "Agosto",
+		"december": "Dezembro",
+		"february": "Fevereiro",
+		"january": "Janeiro",
+		"july": "Julho",
+		"june": "Junho",
+		"label": "Meses",
+		"march": "Março",
+		"may": "Maio",
+		"november": "Novembro",
+		"october": "Outubro",
+		"september": "Setembro"
+	},
+	"name": "Nome",
+	"new": "Novo",
+	"new-a": "Novo(a)",
+	"no": "Não",
+	"placeholder": {
+		"select": {
+			"type": "Selecione um tipo"
+		}
+	},
+	"plan": {
+		"confirm": {
+			"delete": "Deseja realmente excluir {{name}}?"
+		},
+		"delete": "Excluir Plano",
+		"error": {
+			"fetch": {
+				"domains": "Erro ao carregar os domínios",
+				"structures": "Erro ao carregar as estruturas"
+			},
+			"locality": {
+				"empty": "Não foram encontrados registros",
+				"select": "Selecione uma ou mais localidades"
+			},
+			"saving": "Erro ao salvar o plano"
+		},
+		"inserted": "Novo plano {{name}} inserido",
+		"label": "Plano",
+		"locality": "Localidade",
+		"name": "Nome do Plano",
+		"placeholder": {
+			"description": "Descreva maiores detalhes sobre o plano",
+			"name": "Preencha com o nome do plano",
+			"select-domain": "Selecione o domínio do plano",
+			"select-structure": "Selecione a estrutura"
+		},
+		"updated": "Plano {{name}} atualizado"
+	},
+	"register": {
+		"removed": "Registro removido"
+	},
+	"roles": {
+		"administrator": "Administrador"
+	},
+	"save": "Salvar",
+	"saveContinue": "Salvar e continuar",
+	"search": "Pesquisar",
+	"structure": {
+		"comments": "Comentários",
+		"confirm": {
+			"delete": "Deseja realmente excluir {{name}}?"
+		},
+		"delete": "Excluir Estrutura",
+		"error": {
+			"item": "Erro ao salvar estrutura item",
+			"saving": "Erro ao salvar a estrutura"
+		},
+		"item": {
+			"new": "Novo item da estrutura {{name}} inserido",
+			"updated": "Item da estrutura {{name}} atualizado"
+		},
+		"locality": "Localidade",
+		"logo": "Logomarca",
+		"name": "Nome da Estrutura",
+		"new": "Nova estrutura {{name}} inserida",
+		"placeholder": {
+			"name": "Preencha com o nome da estrutura"
+		},
+		"updated": "Estrutura {{name}} atualizada",
+		"votes": "Votos"
+	},
+	"success": "Sucesso",
+	"topbar": {
+		"edit": {
+			"profile": "Editar perfil"
+		},
+		"language": {
+			"en": "Inglês",
+			"ptbr": "Português"
+		},
+		"messages": "Mensagens",
+		"new": "novas",
+		"notification": "Notificações",
+		"notifications": {
+			"empty": "Nenhuma notificação nova"
+		},
+		"panel": {
+			"settings": "Painel de configurações"
+		},
+		"profile": "Perfil",
+		"settings": "Configurações",
+		"yourhave": "Você possui"
+	},
+	"type": "Tipo",
+	"years": "Anos",
+	"yes": "Sim"
+}

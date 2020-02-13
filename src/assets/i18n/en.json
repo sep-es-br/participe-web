@@ -1,0 +1,220 @@
+{
+	"administration": {
+		"conference": "Conference",
+		"domain": "Domain",
+		"label": "Administration",
+		"plan": "Plan",
+		"structure": "Structure"
+	},
+	"cancel": "Cancel",
+	"clean": {
+		"search": "Clear Search"
+	},
+	"conference": {
+		"confirm": {
+			"delete": "Are you sure that you want to delete {{name}}?"
+		},
+		"delete": "Delete Conference",
+		"error": {
+			"fetch": {
+				"plans": "Error fetching plans"
+			},
+			"saving": "Error saving conference"
+		},
+		"name": "Conference name",
+		"new": "New conference {{name}} registered",
+		"placeholder": {
+			"begin-date": "Select the start date of the conference",
+			"description": "Describe more details about the conference",
+			"end-date": "Select the conference end date",
+			"month": "Select a month",
+			"name": "Enter conference name",
+			"plan": "Select the plan related to the conference",
+			"year": "Select a year"
+		},
+		"updated": "Updated conference {{name}} "
+	},
+	"dashboard": "Dashboard",
+	"date": {
+		"end": "End Date",
+		"start": "Begin Date"
+	},
+	"description": "Description",
+	"domain": {
+		"confirm": {
+			"delete": "Are you sure that you want to delete {{name}}?"
+		},
+		"delete": "Delete Domain",
+		"error": {
+			"fetch": {
+				"types": "Error fetching types"
+			},
+			"locality": {
+				"invalid-type-level": "This type has already been used on another level of this domain",
+				"save": "Error saving locality"
+			},
+			"locality-type": {
+				"not-found": "Locality type not found"
+			},
+			"not-found": "Domain not found",
+			"other": {
+				"level": "This type has already been associated to another level on this domain"
+			},
+			"saving": "Error saving domain"
+		},
+		"locality": {
+			"inserted": "New locality {{name}} registered",
+			"updated": "Updated locality {{name}}"
+		},
+		"name": "Domain name",
+		"new": "New domain {{name}} registered",
+		"placeholder": {
+			"locality": "Enter the locality name",
+			"name": "Enter the domain name"
+		},
+		"updated": "Updated domain {{name}}"
+	},
+	"erro": {
+		"invalid": {
+			"data": "Invalid data. Verify provided information and try again.",
+			"field": "Invalid field"
+		},
+		"removing": {
+			"register": "Error removing register"
+		},
+		"required": {
+			"field": "Required field"
+		}
+	},
+	"error": "Error",
+	"exists": {
+		"name": "This name already exists"
+	},
+	"file": {
+		"browse": "Browse",
+		"label": "File",
+		"remove": "Remove file",
+		"required": "File is required",
+		"send": "Send"
+	},
+	"footer": {
+		"label1": "Open source provided free of charge, without support, without certification, without maintenance, without warranty and without indemnity for",
+		"label2": "Secretariat of Economy and Planning of the Espirito Santo State Government"
+	},
+	"hide": "Hide",
+	"home": "Home",
+	"label": {
+		"parent": "Parent"
+	},
+	"moderation": "Moderation",
+	"month": {
+		"april": "April",
+		"august": "August",
+		"december": "December",
+		"february": "February",
+		"january": "January",
+		"july": "July",
+		"june": "June",
+		"label": "Month",
+		"march": "March",
+		"may": "May",
+		"november": "November",
+		"october": "October",
+		"september": "September"
+	},
+	"name": "Name",
+	"new": "New",
+	"new-a": "New",
+	"no": "No",
+	"placeholder": {
+		"select": {
+			"type": "Select one Type"
+		}
+	},
+	"plan": {
+		"confirm": {
+			"delete": "Are you sure that you want to delete {{name}}?"
+		},
+		"delete": "Delete Plan",
+		"error": {
+			"fetch": {
+				"domains": "Error fetching domains",
+				"structures": "Error fetching structures"
+			},
+			"locality": {
+				"empty": "No records found",
+				"select": "Select one or more Localities"
+			},
+			"saving": "Error saving plan"
+		},
+		"inserted": "New plan {{name}} registered",
+		"label": "Plan",
+		"locality": "Locality",
+		"name": "Plan name",
+		"placeholder": {
+			"description": "Describe more details about the plan",
+			"name": "Enter the plan name",
+			"select-domain": "Select the domain",
+			"select-structure": "Select the structure"
+		},
+		"updated": "Updated plan {{name}}"
+	},
+	"register": {
+		"removed": "Register removed"
+	},
+	"roles": {
+		"administrator": "Administrator"
+	},
+	"save": "Save",
+	"saveContinue": "Save and continue",
+	"search": "Search",
+	"structure": {
+		"comments": "Comments",
+		"confirm": {
+			"delete": "Are you sure that you want to delete {{name}}?"
+		},
+		"delete": "Delete Structure",
+		"error": {
+			"item": "Error saving structure item",
+			"saving": "Error saving structure"
+		},
+		"item": {
+			"new": "New structure item {{name}} registered",
+			"updated": "Structure item {{name}} updated"
+		},
+		"locality": "Locality",
+		"logo": "Logo",
+		"name": "Structure name",
+		"new": "New structure {{name}} registered",
+		"placeholder": {
+			"name": "Enter the name of the structure"
+		},
+		"updated": "Updated {{name}} structure",
+		"votes": "Votes"
+	},
+	"success": "Success",
+	"topbar": {
+		"edit": {
+			"profile": "Edit Profile"
+		},
+		"language": {
+			"en": "English",
+			"ptbr": "Portuguese"
+		},
+		"messages": "Messages",
+		"new": "new",
+		"notification": "Notifications",
+		"notifications": {
+			"empty": "No new notifications"
+		},
+		"panel": {
+			"settings": "Settings Panel"
+		},
+		"profile": "Profile",
+		"settings": "Settings",
+		"yourhave": "You Have"
+	},
+	"type": "Type",
+	"years": "Years",
+	"yes": "Yes"
+}

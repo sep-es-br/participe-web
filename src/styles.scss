@@ -31,6 +31,10 @@ p-autocomplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
   box-shadow: 0 1px 0 0 #6d9c5f !important;
 }
 
+.button-new {
+  max-width: 250px;
+}
+
 .tree-column table {
   border-bottom: 1px solid #e0e0e0 !important;
   th:last-child{
@@ -42,4 +46,38 @@ p-autocomplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
     border-right: 1px solid #e0e0e0 !important;
   }
 
+}
+
+.language-container {
+  padding-top: 10px;
+  padding-bottom: 0px;
+  margin-left: -6px;
+  .p-md-6 {
+    display: flex;
+    cursor: pointer;
+    &.selected {
+      font-weight: 700;
+    }
+    img {
+      max-width: 20px;
+      max-height: 20px;
+      margin-right: 5px;
+    }
+  }
+}
+
+form {
+  label {
+    margin-bottom: 5px;
+    margin-left: 1px;
+    float: left;
+  }
+  .label-parent {
+    font-weight: 500;
+    margin-right: 5px;
+  }
+}
+
+.search-form form .ui-fluid {
+  align-items: flex-end;
 }

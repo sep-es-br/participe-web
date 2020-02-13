@@ -4,24 +4,24 @@
       <div class="card card-w-title">
         <section *ngIf="!showDomainForm && !showLocalityForm">
           <div class="p-grid ui-fluid actions">
-            <div class="ui-g-5 ui-md-1">
-              <button pButton type="button" label="New" (click)="showCreateDomain()">
-                <img src="assets/layout/images/icons/triangule_plus.png" />
+            <div class="ui-g-5 ui-md-2 ui-lg-2">
+              <button pButton type="button" class="button-new" [label]="'new' | translate" (click)="showCreateDomain()" icon="pi pi-plus">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-10"></div>
-            <div class="ui-g-5 ui-md-1 search">
-              <a class="search" (click)="toogleSearch()">{{ search ? 'Hide' : 'Search' }}</a>
+            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
+            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+              <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchDomains(searchForm.value)">
               <div class="p-grid ui-fluid">
-                <div class="ui-g-12 ui-md-6">
-                  <input pInputText placeholder="Domain name" formControlName="query">
+                <div class="ui-g-12 ui-md-6 ui">
+                  <label for="query">{{'domain.name' | translate}}</label>
+                  <input id="search-input" pInputText [placeholder]="'domain.placeholder.name' | translate" formControlName="query">
                 </div>
-                <div class="ui-g-12 ui-md-1">
-                  <button pButton icon="pi pi-search" type="submit" label="Search"></button>
+                <div class="ui-g-12 ui-md-3">
+                  <button pButton icon="pi pi-search" type="submit" [label]="'search' | translate"></button>
                 </div>
               </div>
             </form>
@@ -29,8 +29,8 @@
           <p-treeTable #tt [value]="domainTree" selectionMode="single" class="tree-column">
             <ng-template pTemplate="header">
               <tr>
-                <th>Name</th>
-                <th>Type</th>
+                <th>{{'name'| translate }}</th>
+                <th>{{'type' | translate}}</th>
                 <th></th>
               </tr>
             </ng-template>
@@ -44,7 +44,8 @@
                   {{ rowData.type && rowData.type.name }}
                 </td>
                 <td class="column-actions">
-                  <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" (click)="showCreateLocality(rowNode)">
+                  <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                    (click)="showCreateLocality(rowNode)">
                     <img src="assets/layout/images/icons/triangule_plus.png" />
                   </button>
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
@@ -58,13 +59,15 @@
         <section class="p-grid ui-fluid" *ngIf="showDomainForm">
           <form [formGroup]="domainForm" (submit)="saveDomain(domainForm.value)">
             <div class="p-col-12 p-md-6">
-              <input pInputText placeholder="Domain name" formControlName="name">
+              <label for="name">{{'domain.name'|translate}}</label>
+              <input pInputText [placeholder]="'domain.placeholder.name'|translate" formControlName="name">
               <tt-input-message [form]="domainForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-4">
               <div class="form-actions">
-                <button pButton icon="pi pi-check" type="submit" label="Save"></button>
-                <button pButton icon="pi pi-ban" type="button" label="Cancel" (click)="clearDomainForm(null)"></button>
+                <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
+                  (click)="cancel()"></button>
               </div>
             </div>
           </form>
@@ -75,23 +78,26 @@
               {{ localityBreadcrumb }}
             </div>
             <div class="p-col-12 p-md-6">
+              <label for="name">{{'type'|translate}}</label>
               <p-dropdown [options]="types" [disabled]="disableSelectLocalityType" formControlName="type"
-                class="ng-dirty ng-invalid" placeholder="Type"></p-dropdown>
+                class="ng-dirty ng-invalid" [placeholder]="'placeholder.select.type'|translate"></p-dropdown>
               <tt-input-message [form]="localityForm" field="type"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
-              <p-autoComplete placeholder="Name" formControlName="name" [suggestions]="localities"
-                (completeMethod)="searchLocalities($event)">
+              <label for="name">{{'plan.locality'|translate}}</label>
+              <p-autoComplete [placeholder]="'domain.placeholder.locality'|translate" formControlName="name" [suggestions]="localities"
+                (completeMethod)="searchLocalities($event, localityForm.value.type)">
               </p-autoComplete>
               <tt-input-message [form]="localityForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
-                <button pButton *ngIf="!edit" icon="pi pi-check" type="submit" label="Save and continue"
+                <button pButton *ngIf="!edit" icon="pi pi-check" type="submit" [label]="'saveContinue'|translate"
                   (click)="setSaveAndContinue(true)"></button>
-                <button pButton icon="pi pi-check" type="submit" label="Save"
+                <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"
                   (click)="setSaveAndContinue(false)"></button>
-                <button pButton icon="pi pi-ban" type="button" label="Cancel" (click)="cancelLocality()"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
+                  (click)="cancelLocality()"></button>
               </div>
             </div>
           </form>
@@ -99,5 +105,6 @@
       </div>
     </div>
   </div>
-  <p-confirmDialog header="Delete Domain" icon="pi pi-exclamation-triangle" key="deleteDomain"></p-confirmDialog>
+  <p-confirmDialog [header]="'domain.delete'|translate" icon="pi pi-exclamation-triangle" key="deleteDomain">
+  </p-confirmDialog>
 </app-template>

@@ -7,6 +7,10 @@ import { DatePipe } from '@angular/common';
 import { Conference } from '@app/shared/models/conference';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { PlanService } from '@app/shared/services/plan.service';
+import { TranslateService } from '@ngx-translate/core';
+import { calendar } from '../../shared/constants';
+import { TranslateChangeService } from '../../shared/services/translateChange.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tt-conference',
@@ -32,6 +36,7 @@ export class ConferenceComponent implements OnInit {
   edit = false;
   showConferenceForm = false;
   minDate: Date = new Date();
+  calendarTranslate: any;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -41,7 +46,10 @@ export class ConferenceComponent implements OnInit {
     private formBuilder: FormBuilder,
     private datePipe: DatePipe,
     private messageService: MessageService,
-  ) {}
+    private translate: TranslateService,
+    private translateChange: TranslateChangeService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.buildBreadcrumb();
@@ -49,9 +57,13 @@ export class ConferenceComponent implements OnInit {
     this.clearConferences();
     this.clearConferenceForm(null);
     this.listAllDropdown();
+
+    this.translateChange.getCurrentLang().subscribe(({ lang }) => {
+      this.calendarTranslate = calendar[lang];
+    })
   }
 
-  async listAllDropdown () {
+  async listAllDropdown() {
     this.plans = [];
     try {
       let plans = await this.planService.listAll(null);
@@ -62,39 +74,39 @@ export class ConferenceComponent implements OnInit {
         });
       });
       this.months = [];
-      this.months.push({label: 'January', value: 1});
-      this.months.push({label: 'February', value: 2});
-      this.months.push({label: 'March', value: 3});
-      this.months.push({label: 'April', value: 4});
-      this.months.push({label: 'May', value: 5});
-      this.months.push({label: 'June', value: 6});
-      this.months.push({label: 'July', value: 7});
-      this.months.push({label: 'August', value: 8});
-      this.months.push({label: 'September', value: 9});
-      this.months.push({label: 'October', value: 10});
-      this.months.push({label: 'November', value: 11});
-      this.months.push({label: 'December', value: 12});
+      this.months.push({ label: this.translate.instant('month.january'), value: 1 });
+      this.months.push({ label: this.translate.instant('month.february'), value: 2 });
+      this.months.push({ label: this.translate.instant('month.march'), value: 3 });
+      this.months.push({ label: this.translate.instant('month.april'), value: 4 });
+      this.months.push({ label: this.translate.instant('month.may'), value: 5 });
+      this.months.push({ label: this.translate.instant('month.june'), value: 6 });
+      this.months.push({ label: this.translate.instant('month.july'), value: 7 });
+      this.months.push({ label: this.translate.instant('month.august'), value: 8 });
+      this.months.push({ label: this.translate.instant('month.september'), value: 9 });
+      this.months.push({ label: this.translate.instant('month.october'), value: 10 });
+      this.months.push({ label: this.translate.instant('month.november'), value: 11 });
+      this.months.push({ label: this.translate.instant('month.december'), value: 12 });
 
       this.years = [];
       let year = new Date().getFullYear();
-      for(let i = year - 5; i < year + 5; i++) {
-        this.years.push({label: i.toString(), value: i});
+      for (let i = year - 5; i < year + 5; i++) {
+        this.years.push({ label: i.toString(), value: i });
       }
 
     } catch (err) {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Erro',
-        detail: 'Error fetching plans.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('conference.error.fetch.plans')
       });
     }
   }
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
-      { label: 'Administration' },
-      { label: 'Conference', routerLink: ['/administration/conferences'] }
+      { label: 'administration.label' },
+      { label: 'administration.conference', routerLink: ['/administration/conferences'] }
     ]);
   }
 
@@ -102,9 +114,9 @@ export class ConferenceComponent implements OnInit {
     this.conferences = await this.conferenceService.listAll();
   }
 
-
-  toogleSearch() {
+  toggleSearch() {
     this.search = !this.search;
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
   }
 
   clearSearchForm() {
@@ -130,6 +142,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   clearConferenceForm(conference) {
+
     this.showConferenceForm = false;
     this.conference = new Conference();
     this.conferenceForm = this.formBuilder.group({
@@ -140,6 +153,11 @@ export class ConferenceComponent implements OnInit {
       endDate: [conference && conference.endDate, Validators.required],
       plan: [conference && conference.plan.id, Validators.required],
     });
+  }
+
+  cancel() {
+    this.router.navigated = false;
+    this.router.navigateByUrl(this.router.url);
   }
 
   showCreateConference() {
@@ -161,15 +179,14 @@ export class ConferenceComponent implements OnInit {
       formData = {
         ...formData,
         plan: { id: formData.plan },
-        beginDate: this.datePipe.transform(this.getDate(formData.beginDate),"dd/MM/yyyy"),
-        endDate:  this.datePipe.transform(this.getDate(formData.endDate),"dd/MM/yyyy")
+        beginDate: this.datePipe.transform(this.getDate(formData.beginDate), "dd/MM/yyyy"),
+        endDate: this.datePipe.transform(this.getDate(formData.endDate), "dd/MM/yyyy")
       }
-
       await this.conferenceService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: `New conference "${formData.name}" registered.`
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(this.edit ? 'conference.updated' : 'conference.inserted', { name: formData.name })
       });
       this.clearConferenceForm(null);
       this.clearConferences();
@@ -177,14 +194,14 @@ export class ConferenceComponent implements OnInit {
       console.error(err);
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error saving conference.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('conference.error.saving')
       });
     }
   }
 
   private getDate(str) {
-    if(str instanceof Date) {
+    if (str instanceof Date) {
       return new Date(str);
     }
     let args = str.split('/');
@@ -194,40 +211,43 @@ export class ConferenceComponent implements OnInit {
   async delete(conference) {
 
     this.confirmationService.confirm({
-      message: `Are you sure that you want to delete "${conference.name}?"`,
+      message: this.translate.instant('conference.confirm.delete', { name: conference.name }),
       key: 'deleteConference',
-      acceptLabel: 'Yes',
-      rejectLabel: 'No',
+      acceptLabel: this.translate.instant('yes'),
+      rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(conference.id);
+      }, 
+      reject: () => {
+        this.clearConferences();
       }
     });
   }
 
   private async confirmDelete(id) {
-    try{
+    try {
       await this.conferenceService.delete(id);
       this.messageService.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Register removed.'
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant('register.removed')
       });
-    } catch(err){
+    } catch (err) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error removing register.'
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('erro.removing.register')
       });
     }
     this.clearConferences();
   }
 
 
-  private isValidForm(form, errorMessage = 'Invalid data. Verify provided information and try again.') {
+  private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
     if (!form.valid) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
+        summary: this.translate.instant('error'),
         detail: errorMessage
       });
       return false;
@@ -248,9 +268,9 @@ export class ConferenceComponent implements OnInit {
 
   changeBeginDate(event) {
     this.minDate = this.getDate(event);
-    if(this.conferenceForm && this.conferenceForm.value.endDate) {
+    if (this.conferenceForm && this.conferenceForm.value.endDate) {
       let endDate = this.getDate(this.conferenceForm.value.endDate);
-      if(endDate < this.minDate) {
+      if (endDate < this.minDate) {
         this.conferenceForm.get('endDate').setValue(this.minDate);
       }
     }
@@ -259,11 +279,11 @@ export class ConferenceComponent implements OnInit {
   async validateName(event) {
     const id = this.conferenceForm.value.id;
     const nameValid = await this.conferenceService.validate(event.target.value, id);
-    if(!nameValid) {
+    if (!nameValid) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error',
-        detail: "This name already exists"
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('exists.name')
       });
     }
   }

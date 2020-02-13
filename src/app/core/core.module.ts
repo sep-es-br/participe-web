@@ -77,6 +77,8 @@ import { AppSubMenuComponent } from '@app/core/menu/submenu/app.submenu.componen
 import { AppFooterComponent } from '@app/core/footer/app.footer.component';
 import { AppTemplateComponent } from '@app/core/template/app.template.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateChangeService } from '../shared/services/translateChange.service';
 
 @NgModule({
   imports: [
@@ -147,7 +149,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     TreeModule,
     TreeTableModule,
     VirtualScrollerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
    ],
    declarations: [
     AppActionBarComponent,
@@ -234,7 +237,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
    ],
    providers: [
-     MessageService
+     MessageService, 
+     TranslateChangeService
   ]
 })
 export class CoreModule {}

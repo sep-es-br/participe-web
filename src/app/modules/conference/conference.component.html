@@ -4,84 +4,61 @@
       <div class="card card-w-title">
         <section *ngIf="!showConferenceForm">
           <div class="p-grid ui-fluid actions">
-            <div class="p-md-1">
-              <button
-                pButton
-                type="button"
-                label="New"
+            <div class="ui-g-5 ui-md-2 ui-lg-2">
+              <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
                 (click)="showCreateConference()">
-                  <img src="assets/layout/images/icons/triangule_plus.png" />
               </button>
             </div>
-            <div class="ui-g-2 ui-md-10"></div>
-            <div class="ui-g-5 ui-md-1 search">
-              <a class="search" (click)="toogleSearch()">{{ search ? 'Hide' : 'Search' }}</a>
+            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
+            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+              <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') |translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchConferences(searchForm.value)">
               <div class="p-grid ui-fluid">
-                <div class="ui-g-12 ui-md-3">
-                  <input
-                    pInputText
-                    placeholder="Conference name"
-                    formControlName="nameSearch">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="nameSearch">{{'conference.name'|translate}}</label>
+                  <input id="search-input" pInputText [placeholder]="'conference.placeholder.name'|translate" formControlName="nameSearch">
                 </div>
-                <div class="ui-g-12 ui-md-3">
-                  <p-dropdown
-                    [options]="plans"
-                    formControlName="planSearch"
-                    class="ng-dirty ng-invalid"
-                    placeholder="Plan"></p-dropdown>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="planSearch">{{'plan.label'|translate}}</label>
+                  <p-dropdown [options]="plans" formControlName="planSearch" class="ng-dirty ng-invalid"
+                    [placeholder]="'conference.placeholder.plan'|translate"></p-dropdown>
                 </div>
-                <div class="ui-g-12 ui-md-3">
-                  <p-dropdown
-                    [options]="months"
-                    formControlName="monthSearch"
-                    class="ng-dirty ng-invalid"
-                    placeholder="Month"></p-dropdown>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="monthSearch">{{'month.label'|translate}}</label>
+                  <p-dropdown [options]="months" formControlName="monthSearch" class="ng-dirty ng-invalid"
+                    [placeholder]="'conference.placeholder.month'|translate"></p-dropdown>
                 </div>
-                <div class="ui-g-12 ui-md-3">
-                  <p-dropdown
-                    [options]="years"
-                    formControlName="yearSearch"
-                    class="ng-dirty ng-invalid"
-                    placeholder="Year"></p-dropdown>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="yearSearch">{{'years'|translate}}</label>
+                  <p-dropdown [options]="years" formControlName="yearSearch" class="ng-dirty ng-invalid"
+                    [placeholder]="'conference.placeholder.year'|translate"></p-dropdown>
                 </div>
 
-                <div class="ui-g-12 ui-md-2">
-                  <button
-                    pButton
-                    icon="pi pi-search"
-                    type="submit"
-                    label="Search"></button>
+                <div class="ui-g-12 ui-md-3 ui-lg-3">
+                  <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
                 </div>
-                <div class="ui-g-12 ui-md-2">
-                  <button
-                    pButton
-                    icon="pi pi-ban"
-                    type="button"
-                    label="Clear Search"
+                <div class="ui-g-12 ui-md-4 ui-lg-3">
+                  <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
                     (click)="clearSearch()"></button>
                 </div>
               </div>
             </form>
           </div>
-          <p-table
-            [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true"
-                [rows]="10" [responsive]="true" paginatorPosition="both">
+          <p-table [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
+            [responsive]="true" paginatorPosition="both">
             <ng-template pTemplate="header">
               <tr>
-                <th>Name</th>
-                <th>Plan</th>
-                <th>Begin Date</th>
-                <th>End Date</th>
+                <th>{{'name'|translate}}</th>
+                <th>{{'plan.label'|translate}}</th>
+                <th>{{'date.start'|translate}}</th>
+                <th>{{'date.end'|translate}}</th>
                 <th></th>
               </tr>
             </ng-template>
-            <ng-template
-              pTemplate="body"
-              let-conference>
+            <ng-template pTemplate="body" let-conference>
               <tr>
                 <td>
                   <span style="vertical-align: middle">{{conference.name}}</span>
@@ -96,17 +73,9 @@
                   <span style="vertical-align: middle">{{conference.endDate}}</span>
                 </td>
                 <td class="column-actions">
-                  <button
-                    pButton
-                    icon="pi pi-pencil"
-                    type="button"
-                    style="margin-right: 2px;"
+                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
                     (click)="showEdit(conference)"></button>
-                  <button
-                    pButton
-                    icon="pi pi-trash"
-                    type="button"
-                    (click)="delete(conference)"></button>
+                  <button pButton icon="pi pi-trash" type="button" (click)="delete(conference)"></button>
                 </td>
               </tr>
             </ng-template>
@@ -115,51 +84,44 @@
         <section class="p-grid ui-fluid" *ngIf="showConferenceForm">
           <form [formGroup]="conferenceForm" (submit)="saveConference(conferenceForm.value)">
             <div class="p-col-12 p-md-6">
-              <input
-                pInputText
-                placeholder="Conference name"
-                (change)="validateName($event)"
+              <label for="name">{{'conference.name'|translate}}</label>
+              <input pInputText [placeholder]="'conference.placeholder.name'|translate" (change)="validateName($event)"
                 formControlName="name">
               <tt-input-message [form]="conferenceForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
-              <textarea [rows]="3" [cols]="30" pInputTextarea placeholder="Conference description" formControlName="description"
-                autoResize="autoResize">
+              <label for="description">{{'description'|translate}}</label>
+              <textarea [rows]="3" [cols]="30" pInputTextarea [placeholder]="'conference.placeholder.description'|translate"
+                formControlName="description" autoResize="autoResize">
               </textarea>
               <tt-input-message [form]="conferenceForm" field="description"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
-              <p-calendar dateFormat="dd/mm/yy" placeholder="Begin Date" (onSelect)="changeBeginDate($event)"
-                formControlName="beginDate" ></p-calendar>
+              <label for="beginDate">{{'date.start'|translate}}</label>
+              <p-calendar dateFormat="dd/mm/yy" [placeholder]="'conference.placeholder.begin-date'|translate"
+                (onSelect)="changeBeginDate($event)" formControlName="beginDate" [locale]="calendarTranslate">
+              </p-calendar>
               <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
-              <p-calendar dateFormat="dd/mm/yy" placeholder="End Date"
-                [minDate]="minDate"
-                formControlName="endDate" ></p-calendar>
+              <label for="endDate">{{'date.end'|translate}}</label>
+              <p-calendar dateFormat="dd/mm/yy" [placeholder]="'conference.placeholder.end-date'|translate" [minDate]="minDate"
+                formControlName="endDate">
+              </p-calendar>
               <tt-input-message [form]="conferenceForm" field="endDate"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
-              <p-dropdown
-                [options]="plans"
-                formControlName="plan"
-                class="ng-dirty ng-invalid"
-                placeholder="Plan"></p-dropdown>
+              <label for="plan">{{'plan.label'|translate}}</label>
+              <p-dropdown [options]="plans" formControlName="plan" class="ng-dirty ng-invalid"
+                [placeholder]="'conference.placeholder.plan'|translate">
+              </p-dropdown>
               <tt-input-message [form]="conferenceForm" field="plan"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
-                <button
-                  pButton
-                  icon="pi pi-check"
-                  type="submit"
-                  label="Save"></button>
-                <button
-                  pButton
-                  icon="pi pi-ban"
-                  type="button"
-                  label="Cancel"
-                  (click)="clearConferenceForm(null)"></button>
+                <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
+                  (click)="cancel()"></button>
               </div>
             </div>
           </form>
@@ -167,5 +129,6 @@
       </div>
     </div>
   </div>
-  <p-confirmDialog header="Delete Conference" icon="pi pi-exclamation-triangle" key="deleteConference"></p-confirmDialog>
+  <p-confirmDialog [header]="'conference.delete'|translate" icon="pi pi-exclamation-triangle" key="deleteConference">
+  </p-confirmDialog>
 </app-template>
