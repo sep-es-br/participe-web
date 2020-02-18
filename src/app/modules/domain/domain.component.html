@@ -84,7 +84,7 @@
               <tt-input-message [form]="localityForm" field="type"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
-              <label for="name">{{'plan.locality'|translate}}</label>
+              <label for="name">{{'domain.locality.name'|translate}}</label>
               <p-autoComplete [placeholder]="'domain.placeholder.locality'|translate" formControlName="name" [suggestions]="localities"
                 (completeMethod)="searchLocalities($event, localityForm.value.type)">
               </p-autoComplete>
@@ -92,10 +92,11 @@
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
-                <button pButton *ngIf="!edit" icon="pi pi-check" type="submit" [label]="'saveContinue'|translate"
+                <button pButton *ngIf="!edit" [icon]="loadingIcon()" [disabled]="loading" type="submit" [label]="'saveContinue'|translate"
                   (click)="setSaveAndContinue(true)"></button>
-                <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"
-                  (click)="setSaveAndContinue(false)"></button>
+                <button pButton [icon]="loadingIcon()" [disabled]="loading" type="submit" [label]="'save'|translate"
+                  (click)="setSaveAndContinue(false)">
+                </button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                   (click)="cancelLocality()"></button>
               </div>

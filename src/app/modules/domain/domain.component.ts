@@ -39,7 +39,7 @@ export class DomainComponent implements OnInit {
   showDomainForm = false;
   showLocalityForm = false;
   saveAndContinue = false;
-
+  loading = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -258,7 +258,7 @@ export class DomainComponent implements OnInit {
       rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(deleteObject.id);
-      }, 
+      },
       reject: () => {
         this.clearDomains(null);
       }
@@ -331,8 +331,12 @@ export class DomainComponent implements OnInit {
 
   async saveLocality(formData) {
     try {
+      this.loading = true;
       this.markFormGroupTouched(this.localityForm);
-      if (!this.isValidForm(this.localityForm)) return;
+      if (!this.isValidForm(this.localityForm)) {
+        this.loading = false;
+        return;
+      }
       formData = {
         ...formData,
         type: { id: formData.type },
@@ -360,7 +364,9 @@ export class DomainComponent implements OnInit {
 
       this.clearLocalityForm(data);
       this.clearDomains(null);
+      this.loading = false;
     } catch (err) {
+      this.loading = false;
       console.error(err);
       this.messageService.add({
         severity: 'error',
@@ -373,5 +379,9 @@ export class DomainComponent implements OnInit {
   cancel() {
     this.router.navigated = false;
     this.router.navigateByUrl(this.router.url);
+  }
+
+  loadingIcon(icon = 'pi pi-check') {
+    return this.loading ? 'pi pi-spin pi-spinner' : icon;
   }
 }

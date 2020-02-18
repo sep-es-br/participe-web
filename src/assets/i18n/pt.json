@@ -21,14 +21,14 @@
 			},
 			"saving": "Erro ao salvar a consulta"
 		},
-		"name": "Nome da Consulta",
+		"name": "Nome",
 		"new": "Nova consulta {{name}} inserida",
 		"placeholder": {
 			"begin-date": "Selecione a data de início da consulta",
-			"description": "Descreva maiores detalhes sobre a consulta",
+			"description": "Descreva mais detalhes sobre a consulta",
 			"end-date": "Selecione a data de encerramento da consulta",
 			"month": "Selecione um mês",
-			"name": "Preencha o nome da consulta",
+			"name": "Preencha com o nome da consulta",
 			"plan": "Selecione o plano relacionado à consulta",
 			"year": "Selecione um ano"
 		},
@@ -50,7 +50,7 @@
 				"types": "Erro ao carregar os tipos"
 			},
 			"locality": {
-				"invalid-type-level": "Este tipo já foi utilizado em outro nível deste domínio",
+				"invalid-type-level": "Tipo inválido. Este tipo já foi utilizado em outro nível ou este nível precisa ser de um tipo específico.",
 				"save": "Erro ao salvar a localidade"
 			},
 			"locality-type": {
@@ -64,13 +64,14 @@
 		},
 		"locality": {
 			"inserted": "Nova localidade {{name}} inserida",
+			"name": "Nome",
 			"updated": "Localidade {{name}} atualizada"
 		},
 		"name": "Nome do Domínio",
 		"new": "Novo domínio {{name}} registrado",
 		"placeholder": {
 			"locality": "Preencha com o nome da localidade",
-			"name": "Preencha o nome do domínio"
+			"name": "Preencha com o nome do domínio"
 		},
 		"updated": "Domínio {{name}} atualizado"
 	},
@@ -92,9 +93,9 @@
 	},
 	"file": {
 		"browse": "Selecione",
-		"label": "Arquivo",
-		"remove": "Remover arquivo",
-		"required": "Arquivo é obrigatório",
+		"label": "Imagem",
+		"remove": "Remover imagem",
+		"required": "Imagem é obrigatória",
 		"send": "Enviar"
 	},
 	"footer": {
@@ -135,24 +136,31 @@
 		"confirm": {
 			"delete": "Deseja realmente excluir {{name}}?"
 		},
-		"delete": "Excluir Plano",
+    "delete": "Excluir Plano",
 		"error": {
-			"fetch": {
-				"domains": "Erro ao carregar os domínios",
+      "fetch": {
+        "domains": "Erro ao carregar os domínios",
 				"structures": "Erro ao carregar as estruturas"
 			},
 			"locality": {
-				"empty": "Não foram encontrados registros",
+        "empty": "Não foram encontrados registros",
 				"select": "Selecione uma ou mais localidades"
 			},
 			"saving": "Erro ao salvar o plano"
 		},
+		"file": "Imagem",
 		"inserted": "Novo plano {{name}} inserido",
 		"label": "Plano",
 		"locality": "Localidade",
-		"name": "Nome do Plano",
+		"name": "Nome do plano",
+    "item": {
+      "name": "Nome",
+      "placeholder": {
+        "name": "Preencha com o nome do item do plano"
+      }
+    },
 		"placeholder": {
-			"description": "Descreva maiores detalhes sobre o plano",
+			"description": "Descreva mais detalhes",
 			"name": "Preencha com o nome do plano",
 			"select-domain": "Selecione o domínio do plano",
 			"select-structure": "Selecione a estrutura"
@@ -179,19 +187,23 @@
 			"saving": "Erro ao salvar a estrutura"
 		},
 		"item": {
+      "name": "Nome",
 			"new": "Novo item da estrutura {{name}} inserido",
-			"updated": "Item da estrutura {{name}} atualizado"
+      "updated": "Item da estrutura {{name}} atualizado",
+      "placeholder": {
+        "name": "Preencha com o nome do item da estrutura"
+      }
 		},
 		"locality": "Localidade",
-		"logo": "Logomarca",
-		"name": "Nome da Estrutura",
+		"logo": "Imagem",
+		"name": "Nome da estrutura",
 		"new": "Nova estrutura {{name}} inserida",
 		"placeholder": {
 			"name": "Preencha com o nome da estrutura"
 		},
 		"updated": "Estrutura {{name}} atualizada",
 		"votes": "Votos"
-	},
+  },
 	"success": "Sucesso",
 	"topbar": {
 		"edit": {
