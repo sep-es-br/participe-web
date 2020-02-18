@@ -1,6 +1,6 @@
 .layout-actionbar {
 	@include clearfix();
-	background-color: $actionBarBgColor;  
+	background-color: $actionBarBgColor;
     padding: 0px 15px;
 	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 	position: relative;
@@ -8,7 +8,7 @@
 	.breadcrumb {
 		float: left;
 		padding: 20px 0;
-		
+
 		.route-bar-breadcrumb {
 			list-style: none;
 			display: inline-block;
@@ -30,10 +30,6 @@
 					color:$breadcrumbLinkTextColor;
 					font-size: 13px;
 					font-weight: 500;
-
-					&:hover {
-						color: $primaryColor;
-					}
 				}
 			}
 		}
@@ -48,17 +44,17 @@
 			list-style: none;
 			display: inline-block;
 
-			> li {		
+			> li {
                 display: inline-block;
-                						
+
 				> button {
 					position: relative;
-					margin-left: 5px;				
+					margin-left: 5px;
 					background-color: $actionItemBgColor;
 					color: $actionItemIconColor;
-					font-size: 15px;	
+					font-size: 15px;
 					width: 36px;
-					height: 36px;	
+					height: 36px;
 					cursor: pointer;
 					border: 1px solid $actionBarBgColor;
 					@include border-radius(50%);
@@ -81,7 +77,7 @@
 					&:active {
 						background: $actionItemActiveBgColor;
 						color:$actionItemActiveIconColor;
-					}					
+					}
 				}
 			}
 		}

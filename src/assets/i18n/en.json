@@ -21,7 +21,7 @@
 			},
 			"saving": "Error saving conference"
 		},
-		"name": "Conference name",
+		"name": "Name",
 		"new": "New conference {{name}} registered",
 		"placeholder": {
 			"begin-date": "Select the start date of the conference",
@@ -50,7 +50,7 @@
 				"types": "Error fetching types"
 			},
 			"locality": {
-				"invalid-type-level": "This type has already been used on another level of this domain",
+				"invalid-type-level": "Invalid type. This type has already been used on another level or this level must be of a specific type.",
 				"save": "Error saving locality"
 			},
 			"locality-type": {
@@ -64,6 +64,7 @@
 		},
 		"locality": {
 			"inserted": "New locality {{name}} registered",
+			"name": "Name",
 			"updated": "Updated locality {{name}}"
 		},
 		"name": "Domain name",
@@ -147,13 +148,20 @@
 			},
 			"saving": "Error saving plan"
 		},
+		"file": "Image",
 		"inserted": "New plan {{name}} registered",
 		"label": "Plan",
 		"locality": "Locality",
-		"name": "Plan name",
+    "name": "Plan's name",
+    "item": {
+      "name": "Name",
+      "placeholder": {
+        "name": "Enter the plan item's name"
+      }
+    },
 		"placeholder": {
-			"description": "Describe more details about the plan",
-			"name": "Enter the plan name",
+			"description": "Describe more details",
+			"name": "Enter the plan's name",
 			"select-domain": "Select the domain",
 			"select-structure": "Select the structure"
 		},
@@ -179,19 +187,23 @@
 			"saving": "Error saving structure"
 		},
 		"item": {
+      "name": "Name",
 			"new": "New structure item {{name}} registered",
-			"updated": "Structure item {{name}} updated"
+      "updated": "Structure item {{name}} updated",
+      "placeholder": {
+        "name": "Enter the name of the structure-item"
+      }
 		},
 		"locality": "Locality",
-		"logo": "Logo",
-		"name": "Structure name",
+		"logo": "Image",
+		"name": "Structure's name",
 		"new": "New structure {{name}} registered",
 		"placeholder": {
 			"name": "Enter the name of the structure"
 		},
 		"updated": "Updated {{name}} structure",
 		"votes": "Votes"
-	},
+  },
 	"success": "Success",
 	"topbar": {
 		"edit": {

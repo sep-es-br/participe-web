@@ -96,8 +96,8 @@
               {{ planBreadcrumb }} <span class="label-parent">{{ structureBreadcrumb }}</span>
             </div>
             <div class="p-col-12 p-md-6">
-              <label for="name">{{'plan.name'|translate}}</label>
-              <input pInputText [placeholder]="'plan.placeholder.name'|translate" formControlName="name">
+              <label for="name">{{'plan.item.name'|translate}}</label>
+              <input pInputText [placeholder]="'plan.item.placeholder.name'|translate" formControlName="name">
               <tt-input-message [form]="planItemForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
@@ -121,7 +121,7 @@
                 [cancelLabel]="'cancel'|translate"></p-fileUpload>
             </div>
             <div class="p-col-12 p-md-2" *ngIf="structureItem.logo && planItem.file">
-              <h3>{{'file.label'|translate}}</h3>
+              <h3>{{'plan.file'|translate}}</h3>
               <img [src]="getUrlFile(planItem.file.id)" alt="Logo do Plano" width="120px" style="padding: 20px;">
               <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
                 (click)="removeFile($event)"></button>
