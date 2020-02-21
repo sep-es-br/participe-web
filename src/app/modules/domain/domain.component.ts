@@ -91,28 +91,37 @@ export class DomainComponent implements OnInit {
   }
 
   private async clearDomains(query) {
-    const response = await this.domainService.listAll(query);
-    this.domainTree = this.buildTree(response);
+    try {
+      this.loading = true;
+      const response = await this.domainService.listAll(query);
+      this.domainTree = this.buildTree(response, !!query, query);
+      this.loading = false;
+    } catch (err) {
+      console.error(err);
+      this.loading = false;
+    }
   }
 
-  private buildTree(items: any[]): TreeNode[] {
+  private buildTree(items: any[], open = false, query = null): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
     let root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
+        const foundQuery = open && query !== null && item.name.toLowerCase().includes(query.toLowerCase());
+        const expanded = foundQuery ? false : open;
         let node: TreeNode = {
           data: {
             id: item.id,
             name: item.name,
             type: item.type ? item.type : null
           },
-          expanded: false
+          expanded
         }
         if (item.localities) {
-          node.children = this.buildTree(item.localities);
+          node.children = this.buildTree(item.localities, open, query);
         }
         if (item.children) {
-          node.children = this.buildTree(item.children);
+          node.children = this.buildTree(item.children, open, query);
         }
         root.push(node);
       });

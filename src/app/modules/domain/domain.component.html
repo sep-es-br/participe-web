@@ -18,10 +18,10 @@
               <div class="p-grid ui-fluid">
                 <div class="ui-g-12 ui-md-6 ui">
                   <label for="query">{{'domain.name' | translate}}</label>
-                  <input id="search-input" pInputText [placeholder]="'domain.placeholder.name' | translate" formControlName="query">
+                  <input id="search-input" pInputText formControlName="query">
                 </div>
                 <div class="ui-g-12 ui-md-3">
-                  <button pButton icon="pi pi-search" type="submit" [label]="'search' | translate"></button>
+                  <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search' | translate"></button>
                 </div>
               </div>
             </form>
@@ -60,7 +60,7 @@
           <form [formGroup]="domainForm" (submit)="saveDomain(domainForm.value)">
             <div class="p-col-12 p-md-6">
               <label for="name">{{'domain.name'|translate}}</label>
-              <input pInputText [placeholder]="'domain.placeholder.name'|translate" formControlName="name">
+              <input pInputText formControlName="name">
               <tt-input-message [form]="domainForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-4">
@@ -80,12 +80,12 @@
             <div class="p-col-12 p-md-6">
               <label for="name">{{'type'|translate}}</label>
               <p-dropdown [options]="types" [disabled]="disableSelectLocalityType" formControlName="type"
-                class="ng-dirty ng-invalid" [placeholder]="'placeholder.select.type'|translate"></p-dropdown>
+                class="ng-dirty ng-invalid" [placeholder]="'placeholder.select'|translate"></p-dropdown>
               <tt-input-message [form]="localityForm" field="type"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'domain.locality.name'|translate}}</label>
-              <p-autoComplete [placeholder]="'domain.placeholder.locality'|translate" formControlName="name" [suggestions]="localities"
+              <p-autoComplete formControlName="name" [suggestions]="localities"
                 (completeMethod)="searchLocalities($event, localityForm.value.type)">
               </p-autoComplete>
               <tt-input-message [form]="localityForm" field="name"></tt-input-message>

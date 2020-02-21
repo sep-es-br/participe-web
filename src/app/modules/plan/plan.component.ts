@@ -49,6 +49,7 @@ export class PlanComponent implements OnInit {
   showPlanForm = false;
   showPlanItemForm = false;
   saveAndContinue = false;
+  loading = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -123,15 +124,24 @@ export class PlanComponent implements OnInit {
   }
 
   private async clearPlans(query) {
-    this.plans = await this.planService.listAll(query);
-    this.planTree = this.buildTree(this.plans);
+    try {
+      this.loading = true;
+      this.plans = await this.planService.listAll(query);
+      this.planTree = this.buildTree(this.plans, !!query, query);
+      this.loading = false;
+    } catch (err) {
+      console.error(err);
+      this.loading = false;
+    }
   }
 
-  private buildTree(items: any[]): TreeNode[] {
+  private buildTree(items: any[], open = false, query = null): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
     let root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
+        const foundQuery = open && query !== null && item.name.toLowerCase().includes(query.toLowerCase());
+        const expanded = foundQuery ? false : open;
         let node: TreeNode = {
           data: {
             id: item.id,
@@ -141,13 +151,13 @@ export class PlanComponent implements OnInit {
             domain: item.domain ? item.domain : null,
             type: item.structure ? item.structure : item.structureItem
           },
-          expanded: false
+          expanded
         }
         if (item.items) {
-          node.children = this.buildTree(item.items);
+          node.children = this.buildTree(item.items, open, query);
         }
         if (item.children) {
-          node.children = this.buildTree(item.children);
+          node.children = this.buildTree(item.children, open, query);
         }
         root.push(node);
       });
@@ -529,7 +539,7 @@ export class PlanComponent implements OnInit {
       rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(deleteObject.id, rowNode.level);
-      }, 
+      },
       reject: () => {
         this.clearPlans(null);
       }
@@ -598,4 +608,7 @@ export class PlanComponent implements OnInit {
     this.router.navigateByUrl(this.router.url);
   }
 
+  loadingIcon(icon = 'pi pi-check') {
+    return this.loading ? 'pi pi-spin pi-spinner' : icon;
+  }
 }

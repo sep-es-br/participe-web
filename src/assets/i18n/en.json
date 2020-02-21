@@ -67,7 +67,7 @@
 			"name": "Name",
 			"updated": "Updated locality {{name}}"
 		},
-		"name": "Domain name",
+		"name": "Name",
 		"new": "New domain {{name}} registered",
 		"placeholder": {
 			"locality": "Enter the locality name",
@@ -128,9 +128,7 @@
 	"new-a": "New",
 	"no": "No",
 	"placeholder": {
-		"select": {
-			"type": "Select one Type"
-		}
+		"select": "Select"
 	},
 	"plan": {
 		"confirm": {
@@ -150,15 +148,15 @@
 		},
 		"file": "Image",
 		"inserted": "New plan {{name}} registered",
+		"item": {
+			"name": "Name",
+			"placeholder": {
+				"name": "Enter the plan item's name"
+			}
+		},
 		"label": "Plan",
 		"locality": "Locality",
-    "name": "Plan's name",
-    "item": {
-      "name": "Name",
-      "placeholder": {
-        "name": "Enter the plan item's name"
-      }
-    },
+		"name": "Name",
 		"placeholder": {
 			"description": "Describe more details",
 			"name": "Enter the plan's name",
@@ -187,23 +185,23 @@
 			"saving": "Error saving structure"
 		},
 		"item": {
-      "name": "Name",
+			"name": "Name",
 			"new": "New structure item {{name}} registered",
-      "updated": "Structure item {{name}} updated",
-      "placeholder": {
-        "name": "Enter the name of the structure-item"
-      }
+			"placeholder": {
+				"name": "Enter the name of the structure-item"
+			},
+			"updated": "Structure item {{name}} updated"
 		},
 		"locality": "Locality",
 		"logo": "Image",
-		"name": "Structure's name",
+		"name": "Name",
 		"new": "New structure {{name}} registered",
 		"placeholder": {
 			"name": "Enter the name of the structure"
 		},
 		"updated": "Updated {{name}} structure",
 		"votes": "Votes"
-  },
+	},
 	"success": "Success",
 	"topbar": {
 		"edit": {
