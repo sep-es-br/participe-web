@@ -205,7 +205,7 @@ export class ConferenceComponent implements OnInit {
       return new Date(str);
     }
     let args = str.split('/');
-    return new Date(args[2], args[1], args[0]);
+    return new Date(args[2], (args[1] - 1), args[0]);
   }
 
   async delete(conference) {

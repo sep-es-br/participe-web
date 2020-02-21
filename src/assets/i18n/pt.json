@@ -67,7 +67,7 @@
 			"name": "Nome",
 			"updated": "Localidade {{name}} atualizada"
 		},
-		"name": "Nome do Domínio",
+		"name": "Nome",
 		"new": "Novo domínio {{name}} registrado",
 		"placeholder": {
 			"locality": "Preencha com o nome da localidade",
@@ -128,37 +128,35 @@
 	"new-a": "Novo(a)",
 	"no": "Não",
 	"placeholder": {
-		"select": {
-			"type": "Selecione um tipo"
-		}
+		"select": "Selecione"
 	},
 	"plan": {
 		"confirm": {
 			"delete": "Deseja realmente excluir {{name}}?"
 		},
-    "delete": "Excluir Plano",
+		"delete": "Excluir Plano",
 		"error": {
-      "fetch": {
-        "domains": "Erro ao carregar os domínios",
+			"fetch": {
+				"domains": "Erro ao carregar os domínios",
 				"structures": "Erro ao carregar as estruturas"
 			},
 			"locality": {
-        "empty": "Não foram encontrados registros",
+				"empty": "Não foram encontrados registros",
 				"select": "Selecione uma ou mais localidades"
 			},
 			"saving": "Erro ao salvar o plano"
 		},
 		"file": "Imagem",
 		"inserted": "Novo plano {{name}} inserido",
+		"item": {
+			"name": "Nome",
+			"placeholder": {
+				"name": "Preencha com o nome do item do plano"
+			}
+		},
 		"label": "Plano",
 		"locality": "Localidade",
-		"name": "Nome do plano",
-    "item": {
-      "name": "Nome",
-      "placeholder": {
-        "name": "Preencha com o nome do item do plano"
-      }
-    },
+		"name": "Nome",
 		"placeholder": {
 			"description": "Descreva mais detalhes",
 			"name": "Preencha com o nome do plano",
@@ -187,23 +185,23 @@
 			"saving": "Erro ao salvar a estrutura"
 		},
 		"item": {
-      "name": "Nome",
+			"name": "Nome",
 			"new": "Novo item da estrutura {{name}} inserido",
-      "updated": "Item da estrutura {{name}} atualizado",
-      "placeholder": {
-        "name": "Preencha com o nome do item da estrutura"
-      }
+			"placeholder": {
+				"name": "Preencha com o nome do item da estrutura"
+			},
+			"updated": "Item da estrutura {{name}} atualizado"
 		},
 		"locality": "Localidade",
 		"logo": "Imagem",
-		"name": "Nome da estrutura",
+		"name": "Nome",
 		"new": "Nova estrutura {{name}} inserida",
 		"placeholder": {
 			"name": "Preencha com o nome da estrutura"
 		},
 		"updated": "Estrutura {{name}} atualizada",
 		"votes": "Votos"
-  },
+	},
 	"success": "Sucesso",
 	"topbar": {
 		"edit": {

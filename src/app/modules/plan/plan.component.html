@@ -18,10 +18,10 @@
               <div class="p-grid ui-fluid">
                 <div class="ui-g-12 ui-md-6">
                   <label for="query">{{'plan.name'|translate}}</label>
-                  <input id="search-input" pInputText [placeholder]="'plan.name'|translate" formControlName="query">
+                  <input id="search-input" pInputText formControlName="query">
                 </div>
                 <div class="ui-g-12 ui-md-3">
-                  <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
+                  <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
             </form>
@@ -64,19 +64,18 @@
           <form [formGroup]="planForm" (submit)="savePlan(planForm.value)">
             <div class="p-col-12 p-md-6">
               <label for="name">{{'plan.name'|translate}}</label>
-              <input pInputText [placeholder]="'plan.placeholder.name'|translate" formControlName="name">
+              <input pInputText formControlName="name">
               <tt-input-message [form]="planForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <label for="structure">{{'administration.structure'|translate}}</label>
-              <p-dropdown [options]="structures" [disabled]="edit" formControlName="structure"
-                class="ng-dirty ng-invalid" [placeholder]="'plan.placeholder.select-structure'|translate"></p-dropdown>
+              <p-dropdown [options]="structures" [disabled]="edit" [placeholder]="'placeholder.select'|translate" formControlName="structure"
+                class="ng-dirty ng-invalid"></p-dropdown>
               <tt-input-message [form]="planForm" field="structure"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <label for="domain">{{'administration.domain'|translate}}</label>
-              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" class="ng-dirty ng-invalid"
-                [placeholder]="'plan.placeholder.select-domain'|translate"></p-dropdown>
+              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"></p-dropdown>
             </div>
             <div class="p-col-12 p-md-4">
               <div class="form-actions">
@@ -97,12 +96,12 @@
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'plan.item.name'|translate}}</label>
-              <input pInputText [placeholder]="'plan.item.placeholder.name'|translate" formControlName="name">
+              <input pInputText formControlName="name">
               <tt-input-message [form]="planItemForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'description'|translate}}</label>
-              <textarea [rows]="3" [cols]="30" pInputTextarea [placeholder]="'plan.placeholder.description'|translate"
+              <textarea [rows]="3" [cols]="30" pInputTextarea
                 formControlName="description" autoResize="autoResize">
                 </textarea>
             </div>

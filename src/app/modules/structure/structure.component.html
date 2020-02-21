@@ -18,10 +18,10 @@
               <div class="p-grid ui-fluid">
                 <div class="ui-g-12 ui-md-6">
                   <label for="query">{{'structure.name'|translate}}</label>
-                  <input id="search-input" pInputText [placeholder]="'structure.placeholder.name'|translate" formControlName="query">
+                  <input id="search-input" pInputText formControlName="query">
                 </div>
                 <div class="ui-g-12 ui-md-3">
-                  <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
+                  <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
             </form>
@@ -58,7 +58,7 @@
           <form [formGroup]="structureForm" (submit)="saveStructure(structureForm.value)">
             <div class="p-col-12 p-md-6">
               <label for="name">{{'structure.name'|translate}}</label>
-              <input pInputText [placeholder]="'structure.placeholder.name'|translate" formControlName="name">
+              <input pInputText formControlName="name">
               <tt-input-message [form]="structureForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
@@ -78,7 +78,7 @@
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'structure.item.name'|translate}}</label>
-              <input pInputText [placeholder]="'structure.item.placeholder.name'|translate" formControlName="name">
+              <input pInputText formControlName="name">
               <tt-input-message [form]="structureItemForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6 input-switch">

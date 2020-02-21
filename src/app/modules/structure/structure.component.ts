@@ -36,6 +36,7 @@ export class StructureComponent implements OnInit {
   showStructureItemForm = false;
   saveAndContinue = false;
   disableBtnSave = false;
+  loading = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -64,28 +65,37 @@ export class StructureComponent implements OnInit {
   }
 
   private async clearStructures(query) {
-    const response = await this.structureService.listAll(query);
-    this.structureTree = this.buildTree(response);
+    try {
+      this.loading = true;
+      const response = await this.structureService.listAll(query);
+      this.structureTree = this.buildTree(response, !!query, query);
+      this.loading = false;
+    } catch (err) {
+      console.error(err);
+      this.loading = false;
+    }
   }
 
-  private buildTree(items: any[]): TreeNode[] {
+  private buildTree(items: any[], open = false, query = null): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
     let root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
+        const foundQuery = open && query !== null && item.name.toLowerCase().includes(query.toLowerCase());
+        const expanded = foundQuery ? false : open;
         let node: TreeNode = {
           data: {
             id: item.id,
             name: item.name,
             hasPlan: item.hasPlan
           },
-          expanded: false
+          expanded
         }
         if (item.items) {
-          node.children = this.buildTree(item.items);
+          node.children = this.buildTree(item.items, open, query);
         }
         if (item.children) {
-          node.children = this.buildTree(item.children);
+          node.children = this.buildTree(item.children, open, query);
         }
         root.push(node);
       });
@@ -208,7 +218,7 @@ export class StructureComponent implements OnInit {
       rejectLabel: this.translate.instant('no'),
       accept: () => {
         this.confirmDelete(deleteObject.id);
-      }, 
+      },
       reject: () => {
         this.clearStructures(null);
       }
@@ -386,5 +396,7 @@ export class StructureComponent implements OnInit {
     this.router.navigateByUrl(this.router.url);
   }
 
-
+  loadingIcon(icon = 'pi pi-check') {
+    return this.loading ? 'pi pi-spin pi-spinner' : icon;
+  }
 }
