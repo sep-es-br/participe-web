@@ -12,6 +12,6 @@ export class PlanItem {
   parent: PlanItem;
   file: File;
   children: PlanItem[];
-  localities: Locality[];
+  localities: Locality[] = null;
   localitiesIds: number[];
 }

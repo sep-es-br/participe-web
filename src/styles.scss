@@ -81,3 +81,58 @@ form {
 .search-form form .ui-fluid {
   align-items: flex-end;
 }
+
+
+.form-actions {
+  display: inline-flex;
+  button, 
+  p-splitbutton {
+    margin-right: 10px;
+  }
+  
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  > label {
+    padding-bottom: 5px;
+  }
+}
+.search {
+  cursor: pointer;
+}
+
+.actions-container {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  
+  .action-item {
+    display: flex;
+    align-items: center;
+    > * {
+      margin: 2px;
+    }
+  }
+  
+  img {
+    width: 20px;
+  }
+
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.action-modal {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.display-none {
+  display: none !important;
+}

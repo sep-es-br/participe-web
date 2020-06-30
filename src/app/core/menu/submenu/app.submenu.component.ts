@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
     selector: '[app-submenu]',
     /* tslint:enable:component-selector */
     templateUrl: './app.submenu.component.html',
+    styleUrls: [ './app.submenu.component.scss' ],
     animations: [
         trigger('children', [
             state('hiddenAnimated', style({
@@ -57,7 +58,7 @@ export class AppSubMenuComponent implements OnDestroy {
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
         this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
             this.routeItems = response;
-        });
+        });      
     }
 
     ngOnDestroy() {

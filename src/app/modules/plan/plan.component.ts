@@ -16,6 +16,14 @@ import { environment } from '@environments/environment';
 import { PlanItemService } from '@app/shared/services/planItem.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { Domain } from '@app/shared/models/domain';
+import { LocalityType } from '@app/shared/models/locality-type';
+import { IfStmt } from '@angular/compiler';
+
+export class local {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'tt-plan',
@@ -25,6 +33,10 @@ import { Router } from '@angular/router';
 export class PlanComponent implements OnInit {
   searchForm: FormGroup;
 
+  contrastPlan: number = -1;
+  localitiesPlanItem: local[] = [];
+  localitiesPlanItemSelected: local[] = [];
+
   plans: Plan[] = [];
   planTree: TreeNode[];
   planForm: FormGroup;
@@ -32,11 +44,14 @@ export class PlanComponent implements OnInit {
 
   domains: SelectItem[] = [];
   structures: SelectItem[] = [];
+  typesDomaim: SelectItem[] = [];
   listStructures: Structure[];
+  listDomains: Domain[];
   selectedStructure: Structure;
   structureItem: StructureItem;
   planBreadcrumb: string;
   structureBreadcrumb: string;
+  region: LocalityType;
 
   planItem: PlanItem;
   planItemParent: PlanItem;
@@ -50,6 +65,9 @@ export class PlanComponent implements OnInit {
   showPlanItemForm = false;
   saveAndContinue = false;
   loading = false;
+  structSelected = false;
+  domainSelected = false;
+  loadRegionFineshed = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -63,7 +81,7 @@ export class PlanComponent implements OnInit {
     private structureService: StructureService,
     private translate: TranslateService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.buildBreadcrumb();
@@ -86,8 +104,8 @@ export class PlanComponent implements OnInit {
     this.domains = [];
     try {
 
-      const domains = await this.domainService.listAll(null);
-      domains.forEach(domain => {
+      this.listDomains = await this.domainService.listAll(null);
+      this.listDomains.forEach(domain => {
         this.domains.push({
           value: domain.id,
           label: domain.name
@@ -112,6 +130,7 @@ export class PlanComponent implements OnInit {
           value: structure.id,
           label: structure.name
         });
+
       });
     } catch (err) {
       console.error(err);
@@ -123,9 +142,73 @@ export class PlanComponent implements OnInit {
     }
   }
 
+  onChangeStructures(event){   
+    this.typesDomaim = []; 
+    for(let index = 0; index < this.listStructures.length; index++){
+      if(this.listStructures[index].id == event){
+        this.checkStructure(this.listStructures[index]);
+        break;
+      }
+    }
+  }
+
+  onChangeDomains(event){
+    this.typesDomaim = []
+    let typeLocality = {};
+
+    this.listDomains.forEach(domain =>{
+      if(event == domain.id && domain.localities){
+        domain.localities.forEach( locality => {
+          if(!typeLocality[locality.type.name]){
+            typeLocality[locality.type.name] = true;
+            this.typesDomaim.push({
+              value: locality.type.id,
+              label: locality.type.name});
+          }
+
+          if(locality.children){
+            this.checktree(typeLocality, locality.children)
+          }
+        }) 
+      }
+    });
+  
+    this.domainSelected = (this.typesDomaim.length > 0) ? true : false;
+  }
+
+  private checktree(typeLocality, children, ){
+      
+      children.forEach(child => {
+        if(!typeLocality[child.type.name]){
+          typeLocality[child.type.name] = true;
+          this.typesDomaim.push({
+            value: child.type.id,
+            label: child.type.name
+          });
+        }
+        if(child.children){
+          this.checktree(typeLocality, child.children)
+        }
+      });
+  }
+
+  changeStyle(rowNode){
+    if(rowNode.node.data.id == this.contrastPlan){
+      this.contrastPlan = -1;
+      return {"newtr":true,
+              "oldtr":false}
+    }
+    return {"newtr":false,
+            "oldtr":true}
+  }
+
   private async clearPlans(query) {
     try {
       this.loading = true;
+      if(!!query){
+        query = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+        query = query.replace(/[^a-z0-9]/gi, " ");
+      }
       this.plans = await this.planService.listAll(query);
       this.planTree = this.buildTree(this.plans, !!query, query);
       this.loading = false;
@@ -140,8 +223,10 @@ export class PlanComponent implements OnInit {
     let root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
-        const foundQuery = open && query !== null && item.name.toLowerCase().includes(query.toLowerCase());
+        const name =item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+        const foundQuery = open && query !== null && name.toLowerCase().includes(query.trim().toLowerCase());
         const expanded = foundQuery ? false : open;
+        
         let node: TreeNode = {
           data: {
             id: item.id,
@@ -149,7 +234,8 @@ export class PlanComponent implements OnInit {
             description: item.description,
             structure: item.structure ? item.structure : null,
             domain: item.domain ? item.domain : null,
-            type: item.structure ? item.structure : item.structureItem
+            type: item.structure ? item.structure : item.structureItem,
+            localitytype: item.localitytype ? item.localitytype : null
           },
           expanded
         }
@@ -189,6 +275,7 @@ export class PlanComponent implements OnInit {
       name: [plan && plan.name, Validators.required],
       structure: [plan && plan.structure && plan.structure.id, Validators.required],
       domain: [plan && plan.domain && plan.domain.id],
+      localitytype: [plan && plan.localitytype && plan.localitytype.id]
     });
   }
 
@@ -205,10 +292,12 @@ export class PlanComponent implements OnInit {
     if (!this.edit) {
       this.planItem = new PlanItem();
     }
+    //this.teste = planItem.listAllDomains
     this.planItemForm = this.formBuilder.group({
       id: [planItem && planItem.id],
       name: [planItem && planItem.name, Validators.required],
-      description: [planItem && planItem.description]
+      description: [planItem && planItem.description],
+      locality: []
     });
   }
 
@@ -217,22 +306,82 @@ export class PlanComponent implements OnInit {
     this.showPlanForm = true;
   }
 
-  showEdit(rowNode) {
+  async showEdit(rowNode) {
     this.edit = true;
-    this.selectNode(rowNode);
+    this.localitiesPlanItemSelected = [];
+
+    const plan = this.getSelectedNodePlan(rowNode.node);
+    const structure = this.listStructures.find(s => s.id === plan.structure.id);
+    this.checkStructure(structure);
+
+    await this.selectNode(rowNode);
     if (rowNode.level > 0) {
       this.clearPlanItemForm(this.planItem);
+      
+      if(this.planItem.localities)
+        this.planItem.localities.forEach(l => {
+          this.localitiesPlanItemSelected.push({id: l.id,
+            name: l.name});
+        })
+
       this.showPlanItemForm = true;
-      this.buildPlanBreadcrumb(rowNode, '');
+      this.buildPlanBreadcrumb(rowNode.parent, '');
       this.buildStructureBreadcrumb(this.structureItem);
     } else {
+      this.onChangeDomains(plan.domain.id);
       this.clearPlanForm(this.plan);
       this.showPlanForm = true;
     }
   }
 
+  checkDomain(domain){
+    if(domain)
+      this.domainSelected = true;
+  }
+
+  checkStructure(structure){
+    let isRegionalizable = false;
+    if (structure.items != null) {
+      const isAnyItemRegionalizable = structure.items.find(item => item.locality);
+
+      if (isAnyItemRegionalizable) {
+        isRegionalizable = true;
+      } else {
+        structure.items.forEach(item => {
+          const isSubItemRegionalizable = this.checkChildrenRegionalizable(item.children);
+
+          if (isSubItemRegionalizable) {
+            isRegionalizable = true;
+          }
+        });
+      }
+
+      this.structSelected = isRegionalizable;
+    } else {
+      this.structSelected = false;
+    } 
+  }
+
+  checkChildrenRegionalizable(children) {
+    if (children) {
+      for (let i = 0; i < children.length; i++) {
+        const currentItem = children[i];
+
+        if (currentItem.locality) {
+          return true;
+        }
+
+        if (currentItem.children) {
+          return this.checkChildrenRegionalizable(currentItem.children);
+        }
+      }
+    }
+  }
+
   showCreatePlanItem(rowNode) {
+    
     this.edit = false;
+    this.localitiesPlanItemSelected = [];
     this.clearPlanItemForm(null);
     this.selectNode(rowNode);
     this.buildPlanBreadcrumb(rowNode, '');
@@ -243,16 +392,18 @@ export class PlanComponent implements OnInit {
   async selectNode(rowNode) {
     this.structureItem = null;
     this.planItemParent = null;
+    this.localitiesPlanItem = [];
 
     const plan = this.getSelectedNodePlan(rowNode.node);
     this.plan = this.plans.find(p => p.id === plan.id);
     this.selectedStructure = this.listStructures.find(s => s.id == this.plan.structure.id);
-
+    
     let level = rowNode.level;
     if (level > 0) {
       if (this.edit) {
         this.planItem = this.getPlanItem(rowNode.node.data.id, this.plan.items);
         this.structureItem = this.planItem.structureItem;
+        
       } else {
         this.planItemParent = rowNode.node.data;
         for (let i = 0; i <= level; i++) {
@@ -267,14 +418,20 @@ export class PlanComponent implements OnInit {
     } else {
       this.structureItem = this.selectedStructure.items[0];
     }
-
+    
     if (this.structureItem.logo || this.structureItem.locality) {
       try {
         let localities = [];
         if (this.plan.domain && this.plan.domain.id) {
           localities = await this.localityService.findByDomain(this.plan.domain.id);
         }
+        
         this.localities = this.buildTreeLocality(localities);
+        this.convertTreeToList(this.localities, plan);
+        if(this.localitiesPlanItem.length){
+          this.loadRegionFineshed = true;
+        }
+        
       } catch (err) {
         console.error(err);
       }
@@ -288,12 +445,15 @@ export class PlanComponent implements OnInit {
             }
           });
         }
+
         if (item.file) {
           this.planItem.file = item.file;
         }
+        if(item.localities){
+          this.planItem.localities = item.localities;
+        }
       }
     }
-
   }
 
   private getSelectedLocalityNode(locality, localities: TreeNode[]): TreeNode {
@@ -316,8 +476,6 @@ export class PlanComponent implements OnInit {
     }
     return node;
   }
-
-
 
   private getPlanItem(id, planItems: PlanItem[]): PlanItem {
     let planItem: PlanItem;
@@ -360,6 +518,23 @@ export class PlanComponent implements OnInit {
     return root;
   }
 
+  convertTreeToList(items: any[], plan){
+    if(items){
+      items.forEach(item =>{
+        if(item.children)
+          this.convertTreeToList(item.children, plan);
+
+        if(item.data.type && item.data.type.id == plan.localitytype.id){
+          let node:  local= {
+            name: item.data.name,
+            id: item.data.id
+          }
+          this.localitiesPlanItem.push(node);
+        }
+      })
+    }
+  }
+
   buildPlanBreadcrumb(rowNode, breadcrumb) {
     breadcrumb = (breadcrumb ? ' > ' : '').concat(breadcrumb);
     this.planBreadcrumb = (rowNode.node ? rowNode.node.data.name : rowNode.data.name).concat(breadcrumb);
@@ -369,7 +544,10 @@ export class PlanComponent implements OnInit {
   }
 
   buildStructureBreadcrumb(structureItem) {
-    this.structureBreadcrumb = ` > ${this.translate.instant('new-a')} ${structureItem.name}`;
+    if(!this.edit)
+      this.structureBreadcrumb = ` > ${this.translate.instant('new-a')} ${structureItem.name}`;
+    else
+      this.structureBreadcrumb = ` > ${this.translate.instant('update')} ${structureItem.name}`;
   }
 
   uploadFile(event) {
@@ -407,17 +585,21 @@ export class PlanComponent implements OnInit {
   }
 
   async savePlan(formData) {
+    
     try {
       this.markFormGroupTouched(this.planForm);
       if (!this.isValidForm(this.planForm)) return;
-
       formData = {
         ...formData,
         structure: { id: formData.structure },
-        domain: { id: formData.domain }
+        domain: { id: formData.domain },
+        localitytype: {id: formData.localitytype}
       }
 
-      await this.planService.save(formData, this.edit);
+      const plan = await this.planService.save(formData, this.edit);
+      this.loadRegionFineshed = false;
+      this.contrastPlan = plan.id;
+      
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
@@ -425,6 +607,7 @@ export class PlanComponent implements OnInit {
       });
       this.clearPlanForm(null);
       this.clearPlans(null);
+      
     } catch (err) {
       console.error(err);
       this.messageService.add({
@@ -433,16 +616,21 @@ export class PlanComponent implements OnInit {
         detail: this.translate.instant('plan.error.saving')
       });
     }
+    this.structSelected = false;
+    this.domainSelected = false;
   }
 
   async savePlanItem(formData) {
     try {
       if (!this.isValidForm(this.planItemForm)) return;
-      if (!this.isValidItemSave()) return;
-      let localitiesIds = this.getLocalityIds(this.selectedLocalities, []);
+      if (!this.isValidItemSave(formData)) return;
+      
+      let localitiesIds = this.getLocalityIds(this.localitiesPlanItemSelected, []);
       this.planItem.localitiesIds = localitiesIds;
       this.planItem.name = formData.name;
       this.planItem.description = formData.description;
+      this.planItem.localitiesIds = localitiesIds;
+
       if (!this.edit) {
         if (this.planItemParent) {
           this.planItem.parent = this.planItemParent;
@@ -451,14 +639,21 @@ export class PlanComponent implements OnInit {
         }
         this.planItem.structureItem = this.structureItem;
       }
-      await this.planItemService.save(this.planItem, this.edit);
+
+      const planItem = await this.planItemService.save(this.planItem, this.edit);
+      this.loadRegionFineshed = this.loadRegionFineshed && this.saveAndContinue ? true : false;
+      this.localitiesPlanItemSelected = [];
+
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
         detail: this.edit ? this.translate.instant('plan.updated', { name: formData.name }) : this.translate.instant('plan.inserted', { name: formData.name })
       });
+
       this.clearPlanItemForm(null);
-      this.clearPlans(null);
+      await this.clearPlans(null);
+      this.openTree(this.planTree, planItem.id);
+
 
     } catch (err) {
       console.error(err);
@@ -475,7 +670,7 @@ export class PlanComponent implements OnInit {
       return null;
     }
     localities.forEach(l => {
-      ids.push(l.data.id);
+      ids.push(l.id);
       if (l.children) {
         this.getLocalityIds(l.children, ids);
       }
@@ -494,9 +689,9 @@ export class PlanComponent implements OnInit {
     });
   }
 
-  private isValidItemSave(): boolean {
+  private isValidItemSave(formData): boolean {
     let valid = true;
-    if (this.structureItem.locality && this.selectedLocalities.length == 0) {
+    if (this.structureItem.locality && formData.length == 0) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -504,7 +699,6 @@ export class PlanComponent implements OnInit {
       });
       valid = false;
     }
-
     if (this.structureItem.logo && !this.planItem.file) {
       this.messageService.add({
         severity: 'error',
@@ -538,17 +732,23 @@ export class PlanComponent implements OnInit {
       acceptLabel: this.translate.instant('yes'),
       rejectLabel: this.translate.instant('no'),
       accept: () => {
-        this.confirmDelete(deleteObject.id, rowNode.level);
+        this.confirmDelete(deleteObject.id, rowNode);
       },
       reject: () => {
-        this.clearPlans(null);
+        this.canceldeleteItem(rowNode);
       }
     });
+    
   }
 
-  private async confirmDelete(id, level) {
+  async canceldeleteItem(rowNode){
+    await this.clearPlans(null);
+    this.openTree(this.planTree, rowNode.node.data.id);
+  }
+
+  private async confirmDelete(id, rowNode) {
     try {
-      if (level > 0) {
+      if (rowNode.level > 0) {
         await this.planItemService.delete(id);
       } else {
         await this.planService.delete(id);
@@ -561,12 +761,26 @@ export class PlanComponent implements OnInit {
       });
     } catch (err) {
       this.messageService.add({
-        severity: 'error',
-        summary: this.translate.instant('error'),
-        detail: this.translate.instant('erro.removing.register')
+        severity: 'warn',
+        summary: this.translate.instant('warn'),
+        detail: this.translate.instant('plan.warn.contain-conference')
       });
+      
     }
-    this.clearPlans(null);
+    this.loadRegionFineshed = false;
+    await this.clearPlans(null);
+
+    if(rowNode.parent)
+      if(rowNode.parent.children && rowNode.parent.children.length > 1){
+        for(let i = 0; i < rowNode.parent.children.length; i++){
+          if(rowNode.parent.children[i].data.id != id){
+            this.openTree(this.planTree, rowNode.parent.children[i].data.id);
+            break;
+          }
+        }
+      }
+      else
+        this.openTree(this.planTree, rowNode.parent.data.id);
   }
 
   private getLevel(structure: Structure) {
@@ -603,12 +817,38 @@ export class PlanComponent implements OnInit {
     this.saveAndContinue = saveAndContinue;
   }
 
-  cancel() {
-    this.router.navigated = false;
-    this.router.navigateByUrl(this.router.url);
+  async cancel() {
+    
+    this.structSelected = false;
+    this.loadRegionFineshed = false;
+
+    this.clearPlanItemForm(null);
+    this.clearPlanForm(null);
+    await this.clearPlans(null);
+    //this.openTree(this.planTree, this.planItem.id);
+    this.showPlanForm = false;
+    this.showPlanItemForm = false;
   }
 
   loadingIcon(icon = 'pi pi-check') {
     return this.loading ? 'pi pi-spin pi-spinner' : icon;
   }
+
+  openTree(Tree, id){
+    let result = false;
+
+    Tree.forEach(node =>{
+      if(node.data.id != id){
+        if(node.children){
+          result = this.openTree(node.children, id);
+          node.expanded = result;
+        }
+      }
+      else{
+        result =  true;
+      }
+    });
+    return result;
+  }
+
 }

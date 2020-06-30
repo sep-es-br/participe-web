@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiEndpoint: 'http://192.168.15.224:1005/participe',
+  apiEndpoint: 'https://201.62.46.73:1005/participe',
 };

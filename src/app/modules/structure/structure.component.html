@@ -54,8 +54,16 @@
             </ng-template>
           </p-treeTable>
         </section>
+
+        <!-- Structure Form -->
+
         <section class="p-grid ui-fluid" *ngIf="showStructureForm">
           <form [formGroup]="structureForm" (submit)="saveStructure(structureForm.value)">
+            <div class="p-col-12 p-md-6">
+              <span *ngIf="edit">{{'update' | translate }}</span>
+              <span *ngIf="!edit">{{'new' | translate }}</span>
+               {{'administration.structure'|translate}}
+            </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'structure.name'|translate}}</label>
               <input pInputText formControlName="name">
@@ -71,11 +79,18 @@
             </div>
           </form>
         </section>
+
+        <!-- Structure Item Form -->
+
         <section class="p-grid ui-fluid" *ngIf="showStructureItemForm">
           <form [formGroup]="structureItemForm" (submit)="saveStructureItem(structureItemForm.value)">
             <div class="p-col-12 p-md-6">
-              {{ structureItemBreadcrumb }}
+              {{ structureItemBreadcrumb }} >
+              <span *ngIf="edit">{{'update' | translate }}</span>
+              <span *ngIf="!edit">{{'new' | translate }}</span>
+               {{'structure.item.item'|translate}}
             </div>
+
             <div class="p-col-12 p-md-6">
               <label for="name">{{'structure.item.name'|translate}}</label>
               <input pInputText formControlName="name">
@@ -101,6 +116,36 @@
               <p-inputSwitch id="input-switch-comments" formControlName="comments">
               </p-inputSwitch>
             </div>
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-title">{{'structure.title'|translate}}</label>
+              <p-inputSwitch id="input-switch-title"  [(ngModel)]="tileChecked" [ngModelOptions]="{standalone: true}">
+              </p-inputSwitch>
+            </div>
+            <div class="p-col-12 p-md-6" *ngIf="tileChecked">
+              <input pInputText formControlName="title">
+              <tt-input-message [form]="structureItemForm" field="title"></tt-input-message>
+            </div>
+
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-subtitle">{{'structure.subTitle'|translate}}</label>
+              <p-inputSwitch id="input-switch-subtitle"  [(ngModel)]="subtileChecked" [ngModelOptions]="{standalone: true}">
+              </p-inputSwitch>
+            </div>
+            <div class="p-col-12 p-md-6" *ngIf="subtileChecked">
+              <input pInputText formControlName="subtitle">
+              <tt-input-message [form]="structureItemForm" field="subtitle"></tt-input-message>
+            </div>
+
+            <div class="col-12 p-md-8 input-switch">
+              <label for="input-switch-link">{{'structure.link'|translate}}</label>
+              <p-inputSwitch id="input-switch-link" [(ngModel)]="linkChecked" [ngModelOptions]="{standalone: true}">
+              </p-inputSwitch>
+            </div>
+            <div class="col-12 p-md-6" *ngIf="linkChecked">
+              <input pInputText formControlName="link">
+              <tt-input-message [form]="structureItemForm" field="link"></tt-input-message>
+            </div>
+
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit" [disabled]="disableBtnSave"

@@ -1,4 +1,6 @@
-# Aplicação web do Participe
+# Projeto Integrador
+
+Projeto para integração entre serviços.
 
 ## 1 Características técnicas
 
@@ -16,7 +18,6 @@ Para iniciar a aplicação, em ambiente de desenvolvimento, instale as dependên
 
 ```sh
 npm install
-
 ```
 
 Inicie o servidor de desenvolvimento:

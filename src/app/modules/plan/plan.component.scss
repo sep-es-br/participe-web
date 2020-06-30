@@ -92,3 +92,17 @@ form {
         display: table-cell;
     }
 }
+
+@keyframes contrast {
+  from {background-color: orange;}
+  to {background-color: white;}
+}
+
+.newtr {
+ 
+  animation-name: contrast;
+  animation-duration: 3s; 
+} 
+.oldtr{
+  background-color: white;
+}

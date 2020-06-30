@@ -1,0 +1,66 @@
+<app-template>
+  <div class="p-grid ui-fluid">
+    <div class="p-col-12 p-lg-12">
+      <div class="card card-w-title">
+        <section *ngIf="!formEdit"></section>
+        <section *ngIf="formEdit">
+          <form class="p-grid ui-fluid p-col-8" [formGroup]="citizenForm" (submit)="save(citizenForm.value)">
+            <div class="p-col-12 p-md-12">
+              <label for="name">{{'citizen.name'|translate}}</label>
+              <input pInputText formControlName="name">
+              <tt-input-message [form]="citizenForm" field="name"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-12">
+              <label for="locality">{{'citizen.locality'|translate}}</label>
+              <p-dropdown [options]="localitys" formControlName="locality" class="ng-dirty ng-invalid"
+                [placeholder]="'placeholder.select'|translate"></p-dropdown>
+              <tt-input-message [form]="citizenForm" field="locality"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-sm-12 p-md-12 authentication-container">
+              <label>Autenticação</label>
+              <div class="container">
+                <div class="icons-container">
+                  <img src="../../assets/layout/images/icons/participe.svg" />
+                  <img src="../../assets/layout/images/icons/google.svg" />
+                  <img src="../../assets/layout/images/icons/facebook.svg" />
+                  <img src="../../assets/layout/images/icons/twitter.svg" />
+                </div>
+                <div class="options-container">
+                  <p-radioButton name="optionsAuthentication" value="cpf" label="CPF"></p-radioButton>
+                  <p-radioButton name="optionsAuthentication" value="mail" label="E-mail"></p-radioButton>
+                </div>
+              </div>
+            </div>
+            <div class="p-col-12  p-sm-12 p-md-6">
+              <label for="cpf">{{'citizen.cpf'|translate}}</label>
+              <input pInputText formControlName="cpf">
+              <tt-input-message [form]="citizenForm" field="cpf"></tt-input-message>
+            </div>
+            <div class="p-col-12  p-sm-12 p-md-6">
+              <label for="password">{{'citizen.password'|translate}}</label>
+              <input pInputText formControlName="password">
+              <tt-input-message [form]="citizenForm" field="password"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-12">
+              <label for="mail">{{'citizen.mail'|translate}}</label>
+              <input pInputText formControlName="mail">
+              <tt-input-message [form]="citizenForm" field="mail"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-12">
+              <label for="phone">{{'citizen.phone'|translate}}</label>
+              <p-inputMask formControlName="phone" mask="(99) 99999-9999"></p-inputMask>
+              <tt-input-message [form]="citizenForm" field="phone"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-12">
+              <div class="form-actions">
+                <button [disabled]="citizenForm.invalid" [icon]="iconSave" pButton *ngIf="formEdit" type="submit"
+                  [label]="'save'|translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"></button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+</app-template>

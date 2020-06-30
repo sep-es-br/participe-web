@@ -7,6 +7,9 @@ export class StructureItem {
   locality: boolean;
   votes: boolean;
   comments: boolean;
+  title: string;
+  subtitle: string;
+  link: string;
   structure: Structure;
   parent: StructureItem;
   children: StructureItem[];

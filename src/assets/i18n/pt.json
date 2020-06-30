@@ -1,12 +1,22 @@
 {
 	"administration": {
+		"citizen": "Cidadão",
 		"conference": "Consulta",
 		"domain": "Domínio",
 		"label": "Administração",
+		"moderation": "Moderação",
 		"plan": "Plano",
 		"structure": "Estrutura"
 	},
 	"cancel": "Cancelar",
+	"citizen": {
+		"cpf": "CPF",
+		"locality": "Localidade",
+		"mail": "E-mail",
+		"name": "Nome",
+		"password": "Senha",
+		"phone": "Telefone"
+	},
 	"clean": {
 		"search": "Limpar Pesquisa"
 	},
@@ -22,6 +32,8 @@
 			"saving": "Erro ao salvar a consulta"
 		},
 		"name": "Nome",
+		"email": "E-mail",
+		"enable": "Habilitado",
 		"new": "Nova consulta {{name}} inserida",
 		"placeholder": {
 			"begin-date": "Selecione a data de início da consulta",
@@ -29,10 +41,26 @@
 			"end-date": "Selecione a data de encerramento da consulta",
 			"month": "Selecione um mês",
 			"name": "Preencha com o nome da consulta",
+			"email": "Preencha com o e-mail da consulta",
 			"plan": "Selecione o plano relacionado à consulta",
 			"year": "Selecione um ano"
 		},
-		"updated": "Consulta {{name}} atualizada"
+		"updated": "Consulta {{name}} atualizada",
+		"inserted": "Consulta {{name}} inserida",
+		"in-progress": "Consulta em andamento, não pode ser excluída!",
+		"citizen-Authentication": "Autenticação do Cidadão",
+		"participation-Pages": "Páginas de Participação",
+		"regionalization-Pages": "Páginas de Regionalização",
+		"moderators": "Moderadores",
+		"moderator": {
+			"enabled": "Moderadores Habilitados",
+			"empty": "Não foram encontrados registros",
+			"already-enabled": "{{name}} já está habilitado como moderador"
+		},
+		"image": "Imagem",
+		"title": "Título",
+		"sub-title": "Subtítulo",
+		"locality-citizen": "Tipo de localidade do cidadão"
 	},
 	"dashboard": "Painel de Controle",
 	"date": {
@@ -65,7 +93,8 @@
 		"locality": {
 			"inserted": "Nova localidade {{name}} inserida",
 			"name": "Nome",
-			"updated": "Localidade {{name}} atualizada"
+			"updated": "Localidade {{name}} atualizada",
+			"new": "Nova"
 		},
 		"name": "Nome",
 		"new": "Novo domínio {{name}} registrado",
@@ -73,7 +102,10 @@
 			"locality": "Preencha com o nome da localidade",
 			"name": "Preencha com o nome do domínio"
 		},
-		"updated": "Domínio {{name}} atualizado"
+		"updated": "Domínio {{name}} atualizado",
+		"warn": {
+			"contain-plan": "Domínio não pode ser excluído, pois está vinculado a um plano"
+		}
 	},
 	"erro": {
 		"invalid": {
@@ -88,6 +120,7 @@
 		}
 	},
 	"error": "Erro",
+	"warn": "Cuidado",
 	"exists": {
 		"name": "Esse nome já existe"
 	},
@@ -107,7 +140,71 @@
 	"label": {
 		"parent": "Nível acima"
 	},
-	"moderation": "Moderação",
+	"moderation": {
+		"filters": {
+			"all": "Todos",
+			"endAt": "Data Fim",
+			"microregion": "Microrregião",
+			"pending": "Pendentes",
+			"startAt": "Data de Início",
+			"status": "Situação",
+			"text": "Texto",
+			"trash": "Lixo",
+			"type_of_participation": "Tipo de Participação"
+		},
+		"error": {
+			"fetch": {
+				"comments": "Erro ao carregar os comentários",
+				"regionalization": "Erro ao carregar a Regionalização",
+				"planItems": "Erro ao carregar os item de planos da consulta"
+			},
+			"update_comment": "Houve um problema ao salvar a moderação",
+			"publish_comment": "Houve um problema ao publicar o comentários"
+		},
+		"label": {
+      "btnModerate": "Moderar",
+      "btnPublish": "Publicar",
+			"comment": "Comentário",
+			"proposal": "Proposta",
+			"remote": "Remoto",
+			"presential": "Presencial",
+			"strategic_area": "Área Estratégica",
+			"in_moderation_by": "em moderação por",
+			"select_conference": "Selecione a consulta que deseja moderar",
+			"empty_comments": "Não existe nenhum comentário a ser moderado ou a consulta não retornou dados",
+			"confirm_publish": "Deseja realmente publicar o comentário {{text}} feito por {{citizenName}}?",
+			"confirm_publish_title": "Publicar?",
+			"confirm_change_tree_title": "Confirma?",
+			"confirm_change_tree": "Confirma a alteração da árvore do comentário?",
+      "saved_success": "Comentário atualizado com sucesso!",
+      "msg": {
+        "pending_proposal": "Proposta pendente",
+        "pending_comment": "Comentário pendente",
+        "publish_proposal": "Proposta publicada",
+        "publish_comment": "Comentário publicado",
+        "filed_proposal": "Proposta arquivada",
+        "filed_comment": "Comentário arquivado",
+        "removed_proposal": "Proposta no lixo",
+        "removed_comment": "Comentário no lixo"
+
+      }
+		},
+		"moderate": {
+			"about": "Sobre",
+			"moveText": "Mover texto",
+			"placeholder": {
+				"moveFilter": ""
+			},
+			"save": {
+        "pending":"Pendente",
+				"archived": "Arquivado",
+				"inTrash": "No lixo",
+				"published": "Publicado"
+			},
+			"saveAndTo": "Salvar e ir para",
+			"title": "Texto em moderação"
+		}
+	},
 	"month": {
 		"april": "Abril",
 		"august": "Agosto",
@@ -125,7 +222,9 @@
 	},
 	"name": "Nome",
 	"new": "Novo",
-	"new-a": "Novo(a)",
+	"new-a": "Novo (a)",
+	"update": "Editar",
+	"locality": "Localidade",
 	"no": "Não",
 	"placeholder": {
 		"select": "Selecione"
@@ -155,7 +254,8 @@
 			}
 		},
 		"label": "Plano",
-		"locality": "Localidade",
+		"locality": "Regionalização",
+		"RegionalizedBy": "Regionalizado por",
 		"name": "Nome",
 		"placeholder": {
 			"description": "Descreva mais detalhes",
@@ -163,13 +263,18 @@
 			"select-domain": "Selecione o domínio do plano",
 			"select-structure": "Selecione a estrutura"
 		},
-		"updated": "Plano {{name}} atualizado"
+		"updated": "Plano {{name}} atualizado",
+		"warn": {
+			"contain-conference": "Plano não pode ser excluído, pois está vinculado a uma consulta"
+		}
 	},
 	"register": {
 		"removed": "Registro removido"
 	},
 	"roles": {
-		"administrator": "Administrador"
+		"Administrator": "Administrador",
+		"Moderator": "Moderador",
+		"Recepcionist": "Recepcionista"
 	},
 	"save": "Salvar",
 	"saveContinue": "Salvar e continuar",
@@ -186,13 +291,14 @@
 		},
 		"item": {
 			"name": "Nome",
+			"item": "Item",
 			"new": "Novo item da estrutura {{name}} inserido",
 			"placeholder": {
 				"name": "Preencha com o nome do item da estrutura"
 			},
 			"updated": "Item da estrutura {{name}} atualizado"
 		},
-		"locality": "Localidade",
+		"locality": "Regionalizável",
 		"logo": "Imagem",
 		"name": "Nome",
 		"new": "Nova estrutura {{name}} inserida",
@@ -200,7 +306,10 @@
 			"name": "Preencha com o nome da estrutura"
 		},
 		"updated": "Estrutura {{name}} atualizada",
-		"votes": "Votos"
+		"votes": "Destaques",
+		"title": "Título",
+		"subTitle": "Subtítulo",
+		"link": "Link para proposta alternativa"
 	},
 	"success": "Sucesso",
 	"topbar": {
@@ -226,5 +335,10 @@
 	},
 	"type": "Tipo",
 	"years": "Anos",
-	"yes": "Sim"
+	"yes": "Sim",
+	"pending": "Pendente",
+	"filed": "Arquivado",
+	"removed": "No lixo",
+	"published": "Publicado",
+	"all": "Todos"
 }

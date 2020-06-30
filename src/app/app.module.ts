@@ -1,3 +1,4 @@
+import { CitizenModule } from './modules/citizen/citizen.module';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -23,6 +24,8 @@ import { ConferenceModule } from './modules/conference/conference.module';
 // import ngx-translate and the http loader
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from './HttpLoaderFactory';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { ModerationModule } from './modules/moderation/moderation.module';
 
 @NgModule({
   imports: [
@@ -41,18 +44,27 @@ import { HttpLoaderFactory } from './HttpLoaderFactory';
     ConferenceModule,
     CoreModule,
     StructureModule,
+    CitizenModule,
+    ModerationModule,
     TranslateModule.forRoot({
       loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
       }
     }),
 
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [BreadcrumbService]
+  providers: [
+    BreadcrumbService,
+    {
+      provide: JWT_OPTIONS,
+      useValue: JWT_OPTIONS
+    },
+    JwtHelperService
+  ]
 })
 export class AppModule { }
 

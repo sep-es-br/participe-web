@@ -1,6 +1,7 @@
 import { AppRoutingModule } from '@app/app-routing.module';
 import { CommonModule } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
+import { ListboxModule} from 'primeng/listbox';
 import { CoreModule } from '@app/core/core.module';
 import { NgModule } from '@angular/core';
 
@@ -16,7 +17,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     ComponentsModule,
     CoreModule,
-    TranslateModule
+    TranslateModule,
+    ListboxModule
   ],
   declarations: [
     PlanComponent
