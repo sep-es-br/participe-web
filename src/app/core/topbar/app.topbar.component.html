@@ -14,22 +14,21 @@
       [ngClass]="{'active-topmenuitem':template.activeTopbarItem === profile}">
       <a href="#" (click)="template.onTopbarItemClick($event,profile)">
         <div class="user-profile-info profile-link">
-          <span class="user-profile-name">Totem TI</span>
-          <span class="user-profile-role">{{'roles.administrator'|translate}}</span>
+          <span class="user-profile-name">{{shortName}}</span>
+          <span class="user-profile-role">{{'roles.' + person.defaultRole|translate}}</span>
         </div>
-        <img class="logo" src="assets/layout/images/avatar/avatar-pedro.jpg" alt="prestige-layout" />
+        <img class="logo" src="assets/layout/images/avatar/avatar-default.png" alt="prestige-layout" />
       </a>
       <ul class="fadeInDown">
         <li class="profile-detail">
           <div class="user-profile-info">
-            <img class="logo" src="assets/layout/images/avatar/avatar-pedro.jpg" alt="prestige-layout" />
+            <img class="logo" src="assets/layout/images/avatar/avatar-default.png" alt="prestige-layout" />
             <div class="profile-info">
-              <span class="user-profile-name">Totem TI</span>
-              <span class="user-profile-role">{{'roles.administrator'|translate}}</span>
+              <span class="user-profile-name">{{ person?.name }}</span>
+              <span class="user-profile-role">{{'roles.' + person.defaultRole|translate}}</span>
               <div class="p-grid ui-fluid language-container">
                 <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('en')}" (click)="changeLanguage('en')">
-                  <img
-                    src="assets/layout/images/icons/flag-usa.png" />
+                  <img src="assets/layout/images/icons/flag-usa.png" />
                   <span>{{'topbar.language.en'|translate}}</span></div>
                 <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('pt')}" (click)="changeLanguage('pt')">
                   <img src="assets/layout/images/icons/flag-brazil.png" />
@@ -42,7 +41,7 @@
             </a>
           </div>
         </li>
-        <li>
+        <li class="display-none">
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-user"></i>
             <div class="menu-text">
@@ -53,7 +52,7 @@
             <i class="right-icon pi pi-angle-right"></i>
           </a>
         </li>
-        <li>
+        <li class="display-none">
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-cog"></i>
             <div class="menu-text">
@@ -63,7 +62,7 @@
             <i class="right-icon pi pi-angle-right"></i>
           </a>
         </li>
-        <li>
+        <li class="display-none">
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-inbox"></i>
             <div class="menu-text">
@@ -74,7 +73,7 @@
             <i class="right-icon pi pi-angle-right"></i>
           </a>
         </li>
-        <li>
+        <li class="display-none">
           <a href="#" (click)="template.onTopbarSubItemClick($event)">
             <i class="pi pi-globe"></i>
             <div class="menu-text">

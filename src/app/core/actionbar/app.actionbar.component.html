@@ -9,9 +9,20 @@
       </ng-template>
     </div>
   </div>
-  <div class="actions">
-    <ul>
-
-    </ul>
+  <div class="actions-container">
+    <div class="actions-left">
+      <div class="action-item" *ngFor="let action of actionsButtonLeft" [ngClass]="{'clickable': isClickable(action) }"
+        (click)="handleEvent(action)">
+        <img *ngIf="action?.icon" [src]="'assets/layout/images/icons/' + action?.icon">
+        <span>{{ action?.label }}</span>
+      </div>
+    </div>
+    <div class="actions-right">
+      <div class="action-item" [ngClass]="{'clickable': isClickable(action)}" *ngFor="let action of actionsButtonRight"
+        (click)="handleEvent(action)">
+        <img *ngIf="action?.icon" [src]="'assets/layout/images/icons/' + action?.icon">
+        <span>{{ action?.label }}</span>
+      </div>
+    </div>
   </div>
 </div>

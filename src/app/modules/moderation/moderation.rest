@@ -1,0 +1,44 @@
+@url=https://dev.totemti.com.br:9010/participe
+@token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNTIiLCJyb2xlcyI6WyJNb2RlcmF0b3IiLCJBZG1pbmlzdHJhdG9yIl0sImV4cCI6MTU5MzM2MDMyMH0.mlI1BkUsHYCCvSVPL4AwcT820jka7yqEQ3nnvmEwnVg
+
+###
+GET {{url}}/comments/moderation/656?status=pendente
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
+###
+GET {{url}}/plan-items/conference/565
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
+
+###
+GET {{url}}/localities/moderation/565
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
+###
+GET {{url}}/comments/moderation/conferences
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
+###
+GET {{url}}/moderation/treeView/632
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}

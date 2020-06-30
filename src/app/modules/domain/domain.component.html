@@ -59,6 +59,11 @@
         <section class="p-grid ui-fluid" *ngIf="showDomainForm">
           <form [formGroup]="domainForm" (submit)="saveDomain(domainForm.value)">
             <div class="p-col-12 p-md-6">
+              <span *ngIf="edit">{{'update' | translate }}</span>
+              <span *ngIf="!edit">{{'new' | translate }}</span>
+               {{'administration.domain'|translate}}
+            </div>
+            <div class="p-col-12 p-md-6">
               <label for="name">{{'domain.name'|translate}}</label>
               <input pInputText formControlName="name">
               <tt-input-message [form]="domainForm" field="name"></tt-input-message>
@@ -76,6 +81,9 @@
           <form [formGroup]="localityForm" (submit)="saveLocality(localityForm.value)">
             <div class="p-col-12 p-md-6">
               {{ localityBreadcrumb }}
+              <span *ngIf="edit">> {{'update' | translate }}</span>
+              <span *ngIf="!edit">> {{'domain.locality.new' | translate }}</span>
+               {{'locality'|translate}}
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'type'|translate}}</label>

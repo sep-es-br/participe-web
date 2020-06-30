@@ -1,0 +1,61 @@
+<app-template>
+  <div class="p-grid ui-fluid moderate-screen">
+    <div class="p-col-12 p-lg-12">
+      <h2 class="title-screen">{{ 'moderation.moderate.title' | translate }}</h2>
+      <div class="p-col-12 p-md-12 info">
+        {{ comment?.citizenName }} | há 2 horas | {{ 'moderation.label.' + comment?.type?.toLowerCase() | translate }} |
+        {{comment?.localityName}}
+      </div>
+      <div class="p-col-12 p-md-12 description">
+        <textarea [maxlength]="200" rows="4" [(ngModel)]="comment.text"></textarea>
+        <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/200</span>
+      </div>
+      <div class="p-col-12 p-md-12 margin-item">
+        <p-radioButton [(ngModel)]="comment.classification" name="optionModeration" value="proposal"
+          [label]="'moderation.label.proposal' | translate">
+        </p-radioButton>
+        <p-radioButton [(ngModel)]="comment.classification" name="optionModeration" value="comment"
+          [label]="'moderation.label.comment'| translate ">
+        </p-radioButton>
+      </div>
+      <div class="p-col-12 p-md-3 form-group">
+        <label>{{ labelMicroregion }}</label>
+        <p-dropdown [options]="microregion" [(ngModel)]="comment.localityId"
+          [placeholder]="'placeholder.select'|translate"></p-dropdown>
+      </div>
+      <div class="p-col-12 p-md-12 steps-container">
+        <label>{{ 'moderation.moderate.about' | translate }}</label>
+        <div class="step-item-container" *ngFor="let item of comment.commentStructure; let i = index; let last = last">
+          <div class="context-container">
+            <div class="feature">{{ item.structureItem.name }}</div>
+            <span>{{ item.planItem.name }}</span>
+          </div>
+          <i *ngIf="!last" class="pi pi-chevron-right"></i>
+        </div>
+        <div class="step-item-container align-items-start">
+          <div class="move-text" (click)="moveComment()" [ngClass]="{'cancel': moving}">
+            <i class="pi pi-sort-alt"></i>
+            <span *ngIf="!moving">{{'moderation.moderate.moveText' | translate}}</span>
+            <span *ngIf="moving">{{'cancel' | translate}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-12 p-md-6" *ngIf="moving">
+        <p-tree [value]="strategyArea" [filter]="true" selectionMode="single" [propagateSelectionUp]="true"
+          [propagateSelectionDown]="true" [(selection)]="selectedStratgyArea"
+          [filterPlaceholder]="'moderation.moderate.placeholder.moveFilter' | translate"></p-tree>
+      </div>
+      <div class="p-col-12">
+        <div class="form-actions">
+          <p-splitButton (onClick)="save('Published')" [label]="'moderation.moderate.save.published' | translate" [icon]="getIcon('pi pi-check')"
+            [model]="optionsSave"></p-splitButton>
+          <button pButton icon="pi pi-ban" type="button" [routerLink]="['/moderation/search']"
+            [label]="'cancel'|translate"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-confirmDialog [header]="'moderation.label.confirm_change_tree_title'|translate" icon="pi pi-exclamation-triangle"
+    key="confirm_change_tree">
+  </p-confirmDialog>
+</app-template>

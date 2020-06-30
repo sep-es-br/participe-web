@@ -1,4 +1,30 @@
 .login-body {
-  position: fixed;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  img {
+    max-width: 300px;
+  }
+  .login-entrar-acesso-cidadao {
+    color: white;
+    border: 2px solid white;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 60px;
+    height: 50px;
+    margin-top: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    i {
+      margin-right: 10px;
+      margin-top: 5px;
+      font-size: 24px;
+    }
+    &:hover {
+      background-color: #ef8533;
+    }
+  }
 }

@@ -1,19 +1,29 @@
-import { Injectable } from '@angular/core';
-import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
-
+import { Injectable } from '@angular/core';
 import Common from '@app/shared/util/Common';
+import { environment } from '@environments/environment';
 import { Conference } from '../models/conference';
+import { IPerson } from './../interface/IPerson';
+
 
 @Injectable()
 export class ConferenceService {
   private url = `${environment.apiEndpoint}/conferences`;
   private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  getById(id: number) {
+    return this.http.get<Conference>(`${this.url}/${id}`, { headers: this.headers }).toPromise();
+  }
 
   listAll() {
     return this.http.get<Conference[]>(this.url, { headers: this.headers }).toPromise();
+  }
+
+  show(id) {
+    const url = this.url.concat(`/${id}`);
+    return this.http.get<IPerson>(url, { headers: this.headers }).toPromise();
   }
 
   search(name, plan, year, month) {
@@ -40,4 +50,33 @@ export class ConferenceService {
     const url = this.url.concat('/validate?name=').concat(name ? name : '').concat(id ? `&id=${id}` : '');
     return this.http.get<boolean>(url, { headers: this.headers }).toPromise();
   }
+
+  searchModerators(name, email) {
+    const url = this.url.concat('/moderators').concat('?name=').concat(name ? name : '').concat(email ? `&email=${email}` : '');
+    return this.http.get<IPerson[]>(url, { headers: this.headers }).toPromise();
+  }
+
+  searchReceptionists(name, email) {
+    const url = this.url.concat('/receptionists').concat('?name=').concat(name ? name : '').concat(email ? `&email=${email}` : '');
+    return this.http.get<IPerson[]>(url, { headers: this.headers }).toPromise();
+  }
+
+  comments(id) {
+    const url = this.url.concat(`/${id}/comments`);
+    return this.http.get<number>(url, { headers: this.headers }).toPromise();
+
+  }
+
+  highlights(id) {
+    const url = this.url.concat(`/${id}/highlights`);
+    return this.http.get<number>(url, { headers: this.headers }).toPromise();
+
+  }
+
+  selfdeclarations(id) {
+    const url = this.url.concat(`/${id}/selfdeclarations`);
+    return this.http.get<number>(url, { headers: this.headers }).toPromise();
+
+  }
+
 }

@@ -22,6 +22,7 @@ export class DomainComponent implements OnInit {
 
   domains: Domain[] = [];
   domainTree: TreeNode[];
+  selectedNode: TreeNode;
   domainForm: FormGroup;
   domain: Domain;
 
@@ -96,10 +97,43 @@ export class DomainComponent implements OnInit {
       const response = await this.domainService.listAll(query);
       this.domainTree = this.buildTree(response, !!query, query);
       this.loading = false;
+      await this.expandTree(this.domainTree);
+      this.selectedNode = null;
     } catch (err) {
       console.error(err);
       this.loading = false;
     }
+  }
+
+  private expandTree(tree: TreeNode[]) {
+    let found = false;
+    if(tree && this.selectedNode) {
+      for (let i = 0; i < tree.length; i++) {
+        let node = tree[i];
+        if (node.data.id == this.selectedNode.data.id) {
+          if (!this.edit) {
+            node.expanded = true;
+          }
+          found = true;
+        } else {
+          if (node.children) {
+            found = this.expandTree(node.children);
+            if (found) {
+              node.expanded = true;
+              break;
+            }
+          }
+        }
+
+      }
+    }
+    return found;
+  }
+
+  private findNode(domainTree: TreeNode[]) :boolean {
+    let found = false;
+
+    return found;
   }
 
   private buildTree(items: any[], open = false, query = null): TreeNode[] {
@@ -160,13 +194,14 @@ export class DomainComponent implements OnInit {
   }
 
   showEdit(rowNode) {
+    this.selectedNode = rowNode.node;
     this.selectNode(rowNode);
 
     if (this.selectedLocality) {
       this.clearLocalityForm(this.selectedLocality);
       this.showLocalityForm = true;
       this.disableSelectLocalityType = true;
-      this.buildLocalityBreadcrumb(rowNode, '');
+      this.buildLocalityBreadcrumb(rowNode.parent, '');
     } else {
       this.clearDomainForm(this.domain);
       this.showDomainForm = true;
@@ -258,6 +293,9 @@ export class DomainComponent implements OnInit {
   }
 
   delete(rowNode) {
+    if(rowNode.node.parent) {
+      this.selectedNode = rowNode.node.parent;
+    }
     this.selectNode(rowNode);
     const deleteObject = this.selectedLocality ? this.selectedLocality : this.domain;
     this.confirmationService.confirm({
@@ -289,15 +327,16 @@ export class DomainComponent implements OnInit {
       });
     } catch (err) {
       this.messageService.add({
-        severity: 'error',
-        summary: this.translate.instant('error'),
-        detail: this.translate.instant('erro.removing.register')
+        severity: 'warn',
+        summary: this.translate.instant('warn'),
+        detail: this.translate.instant('domain.warn.contain-plan')
       });
     }
     this.clearDomains(null);
   }
 
   showCreateLocality(rowNode) {
+    this.selectedNode = rowNode.node;
     this.selectNode(rowNode);
     this.validateLocalityType(rowNode);
     this.buildLocalityBreadcrumb(rowNode, '');
@@ -386,8 +425,7 @@ export class DomainComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigated = false;
-    this.router.navigateByUrl(this.router.url);
+    this.ngOnInit();
   }
 
   loadingIcon(icon = 'pi pi-check') {

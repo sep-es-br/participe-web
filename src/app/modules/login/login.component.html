@@ -1,58 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script>document.write('<base href="' + document.location + '" />');</script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <title>Projeto Integrador</title>
-  </head>
-  <body class="login-body">
-    <div class="mobile-banner">
-      <img src="../../assets/layout/images/logomark.png" alt="prestige-layout"/>
-    </div>
-    <div class="login-panel">
-      <div class="logo">
-        <img src="../../assets/layout/images/logomark.png" alt="prestige-layout"/>
-      </div>
-    </div>
-    <div class="login-card">
-      <form [formGroup]="form" (submit)="submit($event)">
-        <div class="top-border"></div>
-        <div class="login-content">
-          <h1>Participe</h1>
-          <p>Bem-vindo, utilize o formulário abaixo para efetuar o login.</p>
-          <div class="username-container">
-            <label>Usuário</label>
-            <div class="login-input">
-              <input
-                class="ui-inputtext ui-widget"
-                autocomplete="off"
-                placeholder="Digite seu nome de usuário ou e-mail"
-                formControlName="email"
-              >
-            </div>
-          </div>
-          <div class="password-container">
-            <label>Senha</label>
-            <div class="login-input">
-              <input
-                class="ui-inputtext ui-widget"
-                autocomplete="off"
-                placeholder="Digite sua senha"
-                type="password"
-                formControlName="senha"
-              >
-            </div>
-          </div>
-          <div>
-            <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-              <span class="ui-button-text ui-c">Login</span>
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </body>
+
+<head>
+  <script>document.write('<base href="' + document.location + '" />');</script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Participe</title>
+</head>
+
+<body class="login-body">
+  <img src="assets/layout/images/logo-login.png" />
+  <div class="login-entrar-acesso-cidadao" (click)="signIn()">
+    <i class="pi pi-users"></i>
+    Entrar com Acesso Cidadão
+  </div>
+</body>
+
 </html>

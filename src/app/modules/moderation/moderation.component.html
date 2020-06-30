@@ -1,0 +1,131 @@
+<app-template>
+  <div class="p-grid ui-fluid">
+    <div class="p-col-12 p-lg-12">
+      <div class="search-small-container">
+        <div class="search-itens" *ngIf="!search">
+          <a class="search" (click)="changeSmallFilter('Pending')"
+            [ngClass]="{'filter-active': filter.status === 'Pending'}">{{ 'moderation.filters.pending'| translate }}</a>
+          |
+          <a class="search" (click)="changeSmallFilter('All')"
+            [ngClass]="{'filter-active': filter.status === 'All'}">{{ 'moderation.filters.all'| translate }}</a> |
+          <a class="search" (click)="changeSmallFilter('Removed')"
+            [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
+        </div>
+        <a class="search" [ngClass]="{'search-full': search}"
+          (click)="search = !search">{{ (search ? 'hide' : 'search') | translate }}</a>
+      </div>
+      <div class="p-col-12 p-md-12" *ngIf="search">
+        <div class="p-grid ui-fluid search-complete">
+          <div class="p-col-12 p-md-3 form-group">
+            <label class="form-label">{{ 'moderation.filters.status' | translate }}</label>
+            <p-dropdown [options]="status" [(ngModel)]="filter.status" [placeholder]="'placeholder.select'|translate">
+            </p-dropdown>
+          </div>
+          <div class="p-col-12 p-md-3 form-group">
+            <label>{{ 'moderation.filters.type_of_participation' | translate }}</label>
+            <p-dropdown [options]="typeOfParticipation" [(ngModel)]="filter.type"
+              [placeholder]="'placeholder.select'|translate"></p-dropdown>
+          </div>
+          <div class="p-col-12 p-md-3 form-group">
+            <label>{{ labelMicroregion }}</label>
+            <p-dropdown [options]="microregion" (onChange)="selectLocality($event)"
+              [placeholder]="'placeholder.select'|translate"></p-dropdown>
+          </div>
+          <div class="p-col-12 p-md-3 form-group">
+            <label>{{ labelPlanItem }}</label>
+            <p-dropdown [options]="planItem" (onChange)="selectPlanItem($event)"
+              [placeholder]="'placeholder.select'|translate"></p-dropdown>
+          </div>
+          <div class="p-col-12 p-md-3 form-group">
+            <label>{{ 'moderation.filters.text' | translate }}</label>
+            <input pInputText [(ngModel)]="filter.text" />
+          </div>
+          <div class="p-col-12 p-md-3 form-group">
+            <label>{{ 'moderation.filters.startAt' | translate }}</label>
+            <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeDate('initialDate',$event)"
+              [locale]="calendarTranslate">
+            </p-calendar>
+          </div>
+          <div class="p-col-12 p-md-3 form-group">
+            <label>{{ 'moderation.filters.endAt' | translate }}</label>
+            <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeDate('endDate',$event)" [locale]="calendarTranslate">
+            </p-calendar>
+          </div>
+          <div class="p-col-12 p-md-3 p-col-align-end">
+            <button pButton [icon]="getIcon('pi pi-search')" [disabled]="loading" (click)="searchHandle();"
+              [label]="'search' | translate"></button>
+          </div>
+        </div>
+      </div>
+      <div class="card card-w-title moderation-item" *ngIf="conferenceComments?.length === 0">
+        {{ 'moderation.label.empty_comments' | translate }}
+      </div>
+      <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
+        <div class="p-grid ui-fluid">
+          <div class="p-col-12 p-md-6">
+            <div class="row">
+              <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span> <span
+                class="moderation-for"
+                *ngIf="comment?.moderatorName">{{ 'moderation.label.in_moderation_by' | translate}}
+                {{ comment.moderatorName }}
+              </span>
+            </div>
+            <div class="row description">
+              {{ comment.text }}
+            </div>
+            <div class="row info">
+              {{ comment.citizenName }} | {{ timesAgo(comment) }} |
+              {{ 'moderation.label.' + comment?.type.toLowerCase() | translate}} |
+              {{ comment.localityName }}
+            </div>
+          </div>
+          <div class="p-col-12 p-md-3">
+            <div class="row info">{{ labelPlanItem }}</div>
+            <div>{{ comment.planItemName }}</div>
+          </div>
+          <div class="p-col-12 p-md-2 p-col-align-center options">
+            <p-radioButton [name]="'optionModeration_' + comment.commentId"  (onClick)="selectClassificationComment(comment)" [(ngModel)]="comment.classification" value="proposal" [label]="'moderation.label.proposal' | translate">
+            </p-radioButton>
+            <p-radioButton [name]="'optionModeration_' + comment.commentId" (onClick)="selectClassificationComment(comment)"  [(ngModel)]="comment.classification" value="comment" [label]="'moderation.label.comment'| translate ">
+            </p-radioButton>
+          </div>
+          <div class="p-col-12 p-md-1 p-col-align-center actions">
+            <button pButton class="ui-button-primary ui-button-icon-only" [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
+              <img src="assets/layout/images/icons/internet.svg" />
+            </button>
+            <button pButton class="ui-button-primary ui-button-icon-only" icon="" [pTooltip]="'moderation.label.btnModerate' | translate"
+              [routerLink]="['/moderation/moderate', comment.commentId, conferenceSelect.id]">
+              <img src="assets/layout/images/icons/king.svg" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
+    [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
+    <div class="conferences-item" *ngFor="let conference of conferencesActives"
+      (click)="selectOtherConference(conference)">
+      <h4>{{ conference.name }}</h4>
+      <small>{{ conference.description }}</small>
+      <div class="date-container">
+        <div class="date">
+          <i class="pi pi-calendar"></i>
+          {{ conference.beginDate }}
+        </div>
+        <div class="date">
+          <i class="pi pi-calendar"></i>
+          {{ conference.endDate }}
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="action-modal">
+        <button pButton label="Fechar" (click)="showSelectConference = false"></button>
+      </div>
+    </p-footer>
+  </p-dialog>
+  <p-confirmDialog [header]="'moderation.label.confirm_publish_title'|translate" icon="pi pi-exclamation-triangle"
+    key="confirm_publish">
+  </p-confirmDialog>
+</app-template>

@@ -36,7 +36,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
               <tr>
-                <td>
+                <td >
                   <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                   <span style="vertical-align: middle">{{rowData.name}}</span>
                   <span class="visibility-sm">
@@ -60,8 +60,16 @@
             </ng-template>
           </p-treeTable>
         </section>
+
+        <!-- Plan Form -->
+
         <section class="p-grid ui-fluid" *ngIf="showPlanForm">
           <form [formGroup]="planForm" (submit)="savePlan(planForm.value)">
+            <div class="p-col-12 p-md-6">
+              <span *ngIf="edit">{{'update' | translate }}</span>
+              <span *ngIf="!edit">{{'new' | translate }}</span>
+               {{'administration.plan'|translate}}
+            </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'plan.name'|translate}}</label>
               <input pInputText formControlName="name">
@@ -70,13 +78,22 @@
             <div class="p-col-12 p-md-6">
               <label for="structure">{{'administration.structure'|translate}}</label>
               <p-dropdown [options]="structures" [disabled]="edit" [placeholder]="'placeholder.select'|translate" formControlName="structure"
-                class="ng-dirty ng-invalid"></p-dropdown>
+                class="ng-dirty ng-invalid" (onChange)="onChangeStructures($event.value)"></p-dropdown>
               <tt-input-message [form]="planForm" field="structure"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <label for="domain">{{'administration.domain'|translate}}</label>
-              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"></p-dropdown>
+              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate" 
+              class="ng-dirty ng-invalid" (onChange)="onChangeDomains($event.value)"></p-dropdown>
             </div>
+
+            <div class="p-col-12 p-md-6" *ngIf="structSelected || edit">
+              <label for="regionalized">{{'plan.RegionalizedBy'|translate}}</label>
+              <p-dropdown [options]="typesDomaim" [disabled]="edit || !domainSelected" [placeholder]="'placeholder.select'|translate" formControlName="localitytype"
+              class="ng-dirty ng-invalid" ></p-dropdown>
+              <tt-input-message [form]="planForm" field="localitytype" *ngIf="domainSelected"></tt-input-message>
+            </div>
+            
             <div class="p-col-12 p-md-4">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
@@ -94,22 +111,25 @@
             <div class="p-col-12 p-md-6">
               {{ planBreadcrumb }} <span class="label-parent">{{ structureBreadcrumb }}</span>
             </div>
+
             <div class="p-col-12 p-md-6">
               <label for="name">{{'plan.item.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText formControlName="name"  maxlength="150">
               <tt-input-message [form]="planItemForm" field="name"></tt-input-message>
             </div>
+
             <div class="p-col-12 p-md-6">
               <label for="name">{{'description'|translate}}</label>
-              <textarea [rows]="3" [cols]="30" pInputTextarea
+              <textarea [rows]="3" [cols]="30" pInputTextarea maxlength="200"
                 formControlName="description" autoResize="autoResize">
-                </textarea>
+              </textarea>
             </div>
 
-            <div class="p-col-12 p-md-6" *ngIf="structureItem.locality">
+            <div class="p-col-12 p-md-6" *ngIf="loadRegionFineshed">
               <h3>{{'plan.locality'|translate}}</h3>
-              <p-tree [value]="localities" selectionMode="checkbox" [emptyMessage]="'plan.error.locality.empty'|translate" [(selection)]="selectedLocalities"
-                [style]="{width: '100%'}"></p-tree>
+              <p-listbox [options]="localitiesPlanItem"  [multiple]="true" [checkbox]="true" 
+              [filter]="true"  optionLabel="name" [(ngModel)]="localitiesPlanItemSelected" [ngModelOptions]="{standalone: true}">
+              </p-listbox>
             </div>
 
             <div class="p-col-12 p-md-6" *ngIf="structureItem.logo && !planItem.file">

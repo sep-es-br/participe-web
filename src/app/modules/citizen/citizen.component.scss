@@ -1,0 +1,27 @@
+.authentication-container {
+  display: flex;
+  flex-direction: column;
+  flex-direction: column;
+  margin: 10px 0px;
+  .container {
+    display: flex;
+    align-items: center;
+    .options-container {
+      display: flex;
+      margin-left: 20px;
+      p-radiobutton {
+        display: flex;
+        &:last-child {
+          margin-left: 20px;
+        }
+      }
+    }
+    .icons-container {
+      display: flex;
+      img  {
+        width: 30px;
+        margin-right: 5px;
+      }
+    } }
+}
+
