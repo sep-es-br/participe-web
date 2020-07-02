@@ -309,11 +309,11 @@ export class PlanComponent implements OnInit {
   async showEdit(rowNode) {
     this.edit = true;
     this.localitiesPlanItemSelected = [];
-
+    
     const plan = this.getSelectedNodePlan(rowNode.node);
     const structure = this.listStructures.find(s => s.id === plan.structure.id);
     this.checkStructure(structure);
-
+    
     await this.selectNode(rowNode);
     if (rowNode.level > 0) {
       this.clearPlanItemForm(this.planItem);
@@ -339,7 +339,7 @@ export class PlanComponent implements OnInit {
       this.domainSelected = true;
   }
 
-  checkStructure(structure){
+  checkStructure(structure) {
     let isRegionalizable = false;
     if (structure.items != null) {
       const isAnyItemRegionalizable = structure.items.find(item => item.locality);

@@ -12,6 +12,8 @@ import { calendar } from '../../shared/constants';
 import { TranslateChangeService } from '../../shared/services/translateChange.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/shared/services/auth.service';
 @Component({
   selector: 'app-moderation',
   templateUrl: './moderation.component.html',
@@ -42,7 +44,9 @@ export class ModerationComponent implements OnInit {
     private translate: TranslateService,
     private translateChange: TranslateChangeService,
     private moderationSrv: ModerationService,
-    private actionBarSrv: ActionBarService
+    private actionBarSrv: ActionBarService,
+    private route: Router,
+    private userAuth: AuthService
   ) { }
 
   async ngOnInit() {
@@ -126,10 +130,13 @@ export class ModerationComponent implements OnInit {
     }
   }
 
-  timesAgo(comment: ModerationComments): string {
+  timesAgo(time: string): string {
+    if(!time) {
+      return '';
+    }
     try {
       moment.locale(this.language);
-      return moment(comment.time).fromNow();
+      return moment(time).fromNow();
     } catch (error) {
       return '';
     }
@@ -190,6 +197,9 @@ export class ModerationComponent implements OnInit {
   changeSmallFilter(status: string) {
     this.filter.status = status;
     this.loadComments();
+    setTimeout(() => {
+      this.configureActionBar();
+    }, 1000);
   }
 
   async searchHandle() {
@@ -250,10 +260,61 @@ export class ModerationComponent implements OnInit {
       });
     } catch (error) {
       this.messageService.add({
-        severity: 'error', summary: this.translate.instant('success'),
+        severity: 'error', summary: this.translate.instant('error'),
         detail: this.translate.instant('moderation.error.update_comment')
       });
     }
   }
+
+  async moderate(comment: ModerationComments) {
+    if(comment.moderatorId && !comment.moderated) {
+      let person = this.userAuth.getUserInfo;
+      if(person.id == comment.moderatorId) {
+        this.begin(comment);
+      }else{
+        this.alterModerator(comment);
+      }
+    }else{
+      this.begin(comment);
+    }
+  }
+
+  async begin(comment: ModerationComments) {
+    console.log(comment);
+    try {
+      await this.moderationSrv.begin({
+        id: comment.commentId
+      } as any);
+      this.route.navigate(['/moderation/moderate', comment.commentId, this.conferenceSelect.id])
+    } catch (error) {
+      console.log(error);
+      let msg = "moderation.error.begin"
+      if(error && error.code == 400) {
+        msg = error.message;
+      }
+      this.messageService.add({
+        severity: 'error', summary: this.translate.instant('error'),
+        detail: this.translate.instant(msg)
+      });
+    }
+  }
+
+  alterModerator(comment: ModerationComments) {
+    let proposal = comment.classification && comment.classification === 'proposal';
+    let msg = proposal ? 'moderation.label.confirm_alter_moderator_proposal' : 'moderation.label.confirm_alter_moderator_comment';
+    this.confirmationService.confirm({
+      message: this.translate.instant(msg),
+      key: 'confirm_alter_moderator',
+      acceptLabel: this.translate.instant('yes'),
+      rejectLabel: this.translate.instant('no'),
+      accept: () => {
+        this.begin(comment);
+      },
+      reject: () => {
+        console.log('reject');
+      }
+    });
+  }
+
 
 }
