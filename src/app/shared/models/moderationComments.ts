@@ -15,5 +15,10 @@ export interface ModerationComments {
   moderatorName: string;
   commentStructure: CommentStructure[];
   classification: string;
+  moderateTime: string;
+  moderatorId: number;
+  disableModerate: boolean;
+  structureItemId: number;
+	structureItemName: string;
 }
 

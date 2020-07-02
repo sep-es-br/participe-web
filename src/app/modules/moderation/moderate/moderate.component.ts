@@ -111,10 +111,10 @@ export class ModerateComponent implements OnInit {
     this.loadTreeView();
   }
 
-  timesAgo(comment: ModerationComments): string {
+  timesAgo(time: string): string {
     try {
       moment.locale(this.language);
-      return moment(comment.time).fromNow();
+      return moment(time).fromNow();
     } catch (error) {
       return '';
     }
@@ -199,10 +199,27 @@ export class ModerateComponent implements OnInit {
       setTimeout(()=>{ this.route.navigate(['/moderation/search'])}, 2000)
 
     } catch (error) {
+      let msg = 'moderation.error.moderator';
+      if(error && error.code == 400 && error.message != 'moderation.error.moderator') {
+        msg = 'moderation.error.update_comment';
+      }
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('success'),
-        detail: this.translate.instant('moderation.error.update_comment')
+        detail: this.translate.instant(msg)
       });
+      setTimeout(()=>{ this.route.navigate(['/moderation/search'])}, 5000)
+    }
+  }
+
+  async end() {
+    try {
+      await this.moderationSrv.end({
+        id: this.comment.commentId
+      } as any);
+      this.route.navigate(['/moderation/search']);
+    } catch (error) {
+      console.error(error);
+      this.route.navigate(['/moderation/search'])
     }
   }
 

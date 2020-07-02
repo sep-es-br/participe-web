@@ -159,7 +159,9 @@
 				"planItems": "Error in load plan items"
 			},
 			"update_comment": "There was a problem saving moderation",
-			"publish_comment": "There was a problem publishing comments"
+      "publish_comment": "There was a problem publishing comments",
+      "begin": "The comment already is in moderation with another moderator",
+      "moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save"
 		},
 		"label": {
       "btnModerate": "Moderate",
@@ -177,6 +179,9 @@
 			"confirm_change_tree_title": "Confirm?",
 			"confirm_change_tree": "Confirm the change to the comment tree?",
       "saved_success": "Comment saved!",
+      "confirm_alter_moderator_title":"Alter moderator",
+      "confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
+      "confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
       "msg": {
         "pending_proposal": "Proposal pending",
         "pending_comment": "Comment pending",

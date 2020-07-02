@@ -159,7 +159,9 @@
 				"planItems": "Erro ao carregar os item de planos da consulta"
 			},
 			"update_comment": "Houve um problema ao salvar a moderação",
-			"publish_comment": "Houve um problema ao publicar o comentários"
+      "publish_comment": "Houve um problema ao publicar o comentários",
+      "begin":"O comentário já está em moderação com outro moderador",
+      "moderator": "A edição desta proposta foi cancelada pelo administrador do sistema e suas alterações não serão salvas"
 		},
 		"label": {
       "btnModerate": "Moderar",
@@ -177,6 +179,9 @@
 			"confirm_change_tree_title": "Confirma?",
 			"confirm_change_tree": "Confirma a alteração da árvore do comentário?",
       "saved_success": "Comentário atualizado com sucesso!",
+      "confirm_alter_moderator_title":"Alterar moderador",
+      "confirm_alter_moderator_proposal": "Proposta em moderação por outro usuário, deseja moderar mesmo assim?",
+      "confirm_alter_moderator_comment": "Comentário em moderação por outro usuário, deseja moderar mesmo assim?",
       "msg": {
         "pending_proposal": "Proposta pendente",
         "pending_comment": "Comentário pendente",

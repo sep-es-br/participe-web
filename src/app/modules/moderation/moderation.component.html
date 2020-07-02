@@ -66,21 +66,21 @@
             <div class="row">
               <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span> <span
                 class="moderation-for"
-                *ngIf="comment?.moderatorName">{{ 'moderation.label.in_moderation_by' | translate}}
-                {{ comment.moderatorName }}
+                *ngIf="comment?.moderatorName && !(comment?.moderated)">{{ 'moderation.label.in_moderation_by' | translate}}
+                {{ comment.moderatorName }} | {{ timesAgo(comment?.moderateTime) }}
               </span>
             </div>
             <div class="row description">
               {{ comment.text }}
             </div>
             <div class="row info">
-              {{ comment.citizenName }} | {{ timesAgo(comment) }} |
+              {{ comment.citizenName }} | {{ timesAgo(comment?.time) }} |
               {{ 'moderation.label.' + comment?.type.toLowerCase() | translate}} |
               {{ comment.localityName }}
             </div>
           </div>
           <div class="p-col-12 p-md-3">
-            <div class="row info">{{ labelPlanItem }}</div>
+            <div class="row info">{{ comment.structureItemName }}</div>
             <div>{{ comment.planItemName }}</div>
           </div>
           <div class="p-col-12 p-md-2 p-col-align-center options">
@@ -90,11 +90,11 @@
             </p-radioButton>
           </div>
           <div class="p-col-12 p-md-1 p-col-align-center actions">
-            <button pButton class="ui-button-primary ui-button-icon-only" [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
+            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
               <img src="assets/layout/images/icons/internet.svg" />
             </button>
-            <button pButton class="ui-button-primary ui-button-icon-only" icon="" [pTooltip]="'moderation.label.btnModerate' | translate"
-              [routerLink]="['/moderation/moderate', comment.commentId, conferenceSelect.id]">
+            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" icon="" [pTooltip]="'moderation.label.btnModerate' | translate"
+              (click)="moderate(comment)">
               <img src="assets/layout/images/icons/king.svg" />
             </button>
           </div>
@@ -127,5 +127,8 @@
   </p-dialog>
   <p-confirmDialog [header]="'moderation.label.confirm_publish_title'|translate" icon="pi pi-exclamation-triangle"
     key="confirm_publish">
+  </p-confirmDialog>
+  <p-confirmDialog [header]="'moderation.label.confirm_alter_moderator_title'|translate" icon="pi pi-exclamation-triangle"
+    key="confirm_alter_moderator">
   </p-confirmDialog>
 </app-template>

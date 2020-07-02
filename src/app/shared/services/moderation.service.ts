@@ -68,6 +68,20 @@ export class ModerationService {
     ).toPromise();
   }
 
+  begin(comment: ModerateUpdate): Promise<ModerationComments> {
+    return this.http.put<ModerationComments>(`${environment.apiEndpoint}/moderation/begin/${comment.id}`,
+      comment,
+      { headers: this.headers }
+    ).toPromise();
+  }
+
+  end(comment: ModerateUpdate): Promise<ModerationComments> {
+    return this.http.put<ModerationComments>(`${environment.apiEndpoint}/moderation/end/${comment.id}`,
+      comment,
+      { headers: this.headers }
+    ).toPromise();
+  }
+
   getTreeView(commentId: number) {
     return this.http.get<ModerationTreeView>(
       `${environment.apiEndpoint}/moderation/treeView/${commentId}`,

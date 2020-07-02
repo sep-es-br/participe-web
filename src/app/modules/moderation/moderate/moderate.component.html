@@ -49,7 +49,7 @@
         <div class="form-actions">
           <p-splitButton (onClick)="save('Published')" [label]="'moderation.moderate.save.published' | translate" [icon]="getIcon('pi pi-check')"
             [model]="optionsSave"></p-splitButton>
-          <button pButton icon="pi pi-ban" type="button" [routerLink]="['/moderation/search']"
+          <button pButton icon="pi pi-ban" type="button" (click)="end()"
             [label]="'cancel'|translate"></button>
         </div>
       </div>

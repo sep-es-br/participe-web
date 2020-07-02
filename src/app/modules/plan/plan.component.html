@@ -125,7 +125,7 @@
               </textarea>
             </div>
 
-            <div class="p-col-12 p-md-6" *ngIf="loadRegionFineshed">
+            <div class="p-col-12 p-md-6" *ngIf="loadRegionFineshed && structureItem.locality">
               <h3>{{'plan.locality'|translate}}</h3>
               <p-listbox [options]="localitiesPlanItem"  [multiple]="true" [checkbox]="true" 
               [filter]="true"  optionLabel="name" [(ngModel)]="localitiesPlanItemSelected" [ngModelOptions]="{standalone: true}">
