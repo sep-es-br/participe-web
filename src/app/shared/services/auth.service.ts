@@ -77,7 +77,13 @@ export class AuthService {
 
   private getFrontFallbackUrl(): string {
     const { protocol, host } = window.location;
-    return `${protocol}//${host}`;
+    let url = `${protocol}//${host}`;
+    
+    if (environment.production) {
+      url = url + '/admin';
+    }
+
+    return url;
   }
 
   get getUserInfo(): IPerson {
