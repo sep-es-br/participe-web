@@ -31,7 +31,7 @@ export class AppMenuComponent implements OnInit {
     this.model = [
       { label: 'dashboard', icon: faTachometerAlt, routerLink: ['/home'] }
     ];
-    if (person.roles.includes('Moderator')) {
+    if (person.roles.includes('Moderator') || person.roles.includes('Administrator')) {
       this.model.push({ label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search'] })
     }
     if (person.roles.includes('Administrator')) {
