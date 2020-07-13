@@ -91,7 +91,7 @@ export class ModerateComponent implements OnInit {
       expandedIcon: 'pi pi-folder-open',
       collapsedIcon: 'pi pi-folder',
       key: tree.id.toString(),
-      selectable: tree.structureItem.comments,
+      selectable: true,
       styleClass: _.get(this.selectedStratgyArea, 'data', 0) === tree.id ? 'selected-tree' : undefined
     });
   }
