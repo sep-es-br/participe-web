@@ -27,14 +27,18 @@ export class ModerationService {
   }
 
   getCommentsForModeration(conferenceId: number, filter: ModerationFilter) {
+    let localityIds = filter.localityIds;
+    let planItensIds = filter.planItemIds;
+    filter.localityIds = undefined;
+    filter.planItemIds = undefined;
     const query = {
       conferenceId,
       ...filter
     };
-    return this.http.get<ModerationComments[]>(
-      `${environment.apiEndpoint}/moderation${qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })}`,
-      { headers: this.headers }
-    ).toPromise();
+    let url = `${environment.apiEndpoint}/moderation${qs.stringify(query, { addQueryPrefix: true })}`
+      .concat(localityIds ? `&localityIds=${localityIds.toString()}` : '')
+      .concat(planItensIds ? `&planItemIds=${planItensIds.toString()}` : '');
+    return this.http.get<ModerationComments[]>(url, { headers: this.headers }).toPromise();
   }
 
   getLocalities(conferenceId: number) {
