@@ -1,3 +1,4 @@
+import { MeetingModule } from './meeting/meeting.module';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { CommonModule } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
@@ -9,6 +10,7 @@ import { ComponentsModule } from '@app/shared/components/components.module';
 import { ConferenceComponent } from './conference.component';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { FilesService } from '@app/shared/services/files.service';
 
 @NgModule({
   imports: [
@@ -16,7 +18,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     ComponentsModule,
     CoreModule,
-    TranslateModule
+    TranslateModule,
+    MeetingModule
   ],
   declarations: [
     ConferenceComponent
@@ -27,7 +30,8 @@ import { TranslateModule } from '@ngx-translate/core';
   providers: [
     ConfirmationService,
     ConferenceService,
-    DatePipe
+    DatePipe,
+    FilesService
   ]
 })
 export class ConferenceModule {}

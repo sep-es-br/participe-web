@@ -11,7 +11,7 @@ import { Structure } from '@app/shared/models/structure';
 import { StructureItem } from '@app/shared/models/structure-item';
 import { PlanItem } from '@app/shared/models/plan-item';
 import { LocalityService } from '@app/shared/services/locality.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { PlanItemService } from '@app/shared/services/planItem.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -80,7 +80,8 @@ export class PlanComponent implements OnInit {
     private localityService: LocalityService,
     private structureService: StructureService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit() {
@@ -142,72 +143,72 @@ export class PlanComponent implements OnInit {
     }
   }
 
-  onChangeStructures(event){   
-    this.typesDomaim = []; 
-    for(let index = 0; index < this.listStructures.length; index++){
-      if(this.listStructures[index].id == event){
+  onChangeStructures(event) {
+    this.typesDomaim = [];
+    for (let index = 0; index < this.listStructures.length; index++) {
+      if (this.listStructures[index].id == event) {
         this.checkStructure(this.listStructures[index]);
         break;
       }
     }
   }
 
-  onChangeDomains(event){
-    this.typesDomaim = []
-    let typeLocality = {};
+  onChangeDomains(event) {
+    this.typesDomaim = [];
+    const typeLocality = {};
 
-    this.listDomains.forEach(domain =>{
-      if(event == domain.id && domain.localities){
+    this.listDomains.forEach(domain => {
+      if (event == domain.id && domain.localities) {
         domain.localities.forEach( locality => {
-          if(!typeLocality[locality.type.name]){
+          if (!typeLocality[locality.type.name]) {
             typeLocality[locality.type.name] = true;
             this.typesDomaim.push({
               value: locality.type.id,
               label: locality.type.name});
           }
 
-          if(locality.children){
-            this.checktree(typeLocality, locality.children)
+          if (locality.children) {
+            this.checktree(typeLocality, locality.children);
           }
-        }) 
+        });
       }
     });
-  
+
     this.domainSelected = (this.typesDomaim.length > 0) ? true : false;
   }
 
-  private checktree(typeLocality, children, ){
-      
+  private checktree(typeLocality, children, ) {
+
       children.forEach(child => {
-        if(!typeLocality[child.type.name]){
+        if (!typeLocality[child.type.name]) {
           typeLocality[child.type.name] = true;
           this.typesDomaim.push({
             value: child.type.id,
             label: child.type.name
           });
         }
-        if(child.children){
-          this.checktree(typeLocality, child.children)
+        if (child.children) {
+          this.checktree(typeLocality, child.children);
         }
       });
   }
 
-  changeStyle(rowNode){
-    if(rowNode.node.data.id == this.contrastPlan){
+  changeStyle(rowNode) {
+    if (rowNode.node.data.id == this.contrastPlan) {
       this.contrastPlan = -1;
-      return {"newtr":true,
-              "oldtr":false}
+      return {newtr: true,
+              oldtr: false};
     }
-    return {"newtr":false,
-            "oldtr":true}
+    return {newtr: false,
+            oldtr: true};
   }
 
   private async clearPlans(query) {
     try {
       this.loading = true;
-      if(!!query){
+      if (!!query) {
         query = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-        query = query.replace(/[^a-z0-9]/gi, " ");
+        query = query.replace(/[^a-z0-9]/gi, ' ');
       }
       this.plans = await this.planService.listAll(query);
       this.planTree = this.buildTree(this.plans, !!query, query);
@@ -220,14 +221,14 @@ export class PlanComponent implements OnInit {
 
   private buildTree(items: any[], open = false, query = null): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
-    let root: TreeNode[] = [];
+    const root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
-        const name =item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+        const name = item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
         const foundQuery = open && query !== null && name.toLowerCase().includes(query.trim().toLowerCase());
         const expanded = foundQuery ? false : open;
-        
-        let node: TreeNode = {
+
+        const node: TreeNode = {
           data: {
             id: item.id,
             name: item.name,
@@ -238,7 +239,7 @@ export class PlanComponent implements OnInit {
             localitytype: item.localitytype ? item.localitytype : null
           },
           expanded
-        }
+        };
         if (item.items) {
           node.children = this.buildTree(item.items, open, query);
         }
@@ -280,7 +281,7 @@ export class PlanComponent implements OnInit {
   }
 
   canclePlanItem() {
-    this.cancel()
+    this.cancel();
   }
 
   clearPlanItemForm(planItem) {
@@ -292,7 +293,7 @@ export class PlanComponent implements OnInit {
     if (!this.edit) {
       this.planItem = new PlanItem();
     }
-    //this.teste = planItem.listAllDomains
+    // this.teste = planItem.listAllDomains
     this.planItemForm = this.formBuilder.group({
       id: [planItem && planItem.id],
       name: [planItem && planItem.name, Validators.required],
@@ -309,20 +310,21 @@ export class PlanComponent implements OnInit {
   async showEdit(rowNode) {
     this.edit = true;
     this.localitiesPlanItemSelected = [];
-    
+
     const plan = this.getSelectedNodePlan(rowNode.node);
     const structure = this.listStructures.find(s => s.id === plan.structure.id);
     this.checkStructure(structure);
-    
+
     await this.selectNode(rowNode);
     if (rowNode.level > 0) {
       this.clearPlanItemForm(this.planItem);
-      
-      if(this.planItem.localities)
+
+      if (this.planItem.localities) {
         this.planItem.localities.forEach(l => {
           this.localitiesPlanItemSelected.push({id: l.id,
             name: l.name});
-        })
+        });
+      }
 
       this.showPlanItemForm = true;
       this.buildPlanBreadcrumb(rowNode.parent, '');
@@ -334,9 +336,10 @@ export class PlanComponent implements OnInit {
     }
   }
 
-  checkDomain(domain){
-    if(domain)
+  checkDomain(domain) {
+    if (domain) {
       this.domainSelected = true;
+    }
   }
 
   checkStructure(structure) {
@@ -359,7 +362,7 @@ export class PlanComponent implements OnInit {
       this.structSelected = isRegionalizable;
     } else {
       this.structSelected = false;
-    } 
+    }
   }
 
   checkChildrenRegionalizable(children) {
@@ -379,7 +382,7 @@ export class PlanComponent implements OnInit {
   }
 
   showCreatePlanItem(rowNode) {
-    
+
     this.edit = false;
     this.localitiesPlanItemSelected = [];
     this.clearPlanItemForm(null);
@@ -397,13 +400,13 @@ export class PlanComponent implements OnInit {
     const plan = this.getSelectedNodePlan(rowNode.node);
     this.plan = this.plans.find(p => p.id === plan.id);
     this.selectedStructure = this.listStructures.find(s => s.id == this.plan.structure.id);
-    
-    let level = rowNode.level;
+
+    const level = rowNode.level;
     if (level > 0) {
       if (this.edit) {
         this.planItem = this.getPlanItem(rowNode.node.data.id, this.plan.items);
         this.structureItem = this.planItem.structureItem;
-        
+
       } else {
         this.planItemParent = rowNode.node.data;
         for (let i = 0; i <= level; i++) {
@@ -418,28 +421,28 @@ export class PlanComponent implements OnInit {
     } else {
       this.structureItem = this.selectedStructure.items[0];
     }
-    
+
     if (this.structureItem.logo || this.structureItem.locality) {
       try {
         let localities = [];
         if (this.plan.domain && this.plan.domain.id) {
           localities = await this.localityService.findByDomain(this.plan.domain.id);
         }
-        
+
         this.localities = this.buildTreeLocality(localities);
         this.convertTreeToList(this.localities, plan);
-        if(this.localitiesPlanItem.length){
+        if (this.localitiesPlanItem.length) {
           this.loadRegionFineshed = true;
         }
-        
+
       } catch (err) {
         console.error(err);
       }
       if (level > 0 && this.edit) {
-        let item = await this.planItemService.show(this.planItem.id);
+        const item = await this.planItemService.show(this.planItem.id);
         if (item.localities) {
           item.localities.forEach(l => {
-            let node = this.getSelectedLocalityNode(l, this.localities);
+            const node = this.getSelectedLocalityNode(l, this.localities);
             if (node) {
               this.selectedLocalities.push(node);
             }
@@ -449,7 +452,7 @@ export class PlanComponent implements OnInit {
         if (item.file) {
           this.planItem.file = item.file;
         }
-        if(item.localities){
+        if (item.localities) {
           this.planItem.localities = item.localities;
         }
       }
@@ -460,7 +463,7 @@ export class PlanComponent implements OnInit {
     let node: TreeNode;
     if (this.localities) {
       for (let i = 0; i < localities.length; i++) {
-        let l = localities[i];
+        const l = localities[i];
         if (l.data.id === locality.id) {
           node = l;
           break;
@@ -480,7 +483,7 @@ export class PlanComponent implements OnInit {
   private getPlanItem(id, planItems: PlanItem[]): PlanItem {
     let planItem: PlanItem;
     for (let i = 0; i < planItems.length; i++) {
-      let l = planItems[i];
+      const l = planItems[i];
       if (l.id === id) {
         planItem = l;
         break;
@@ -497,10 +500,10 @@ export class PlanComponent implements OnInit {
 
   private buildTreeLocality(items: any[]): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
-    let root: TreeNode[] = [];
+    const root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
-        let node: TreeNode = {
+        const node: TreeNode = {
           label: item.name,
           data: {
             id: item.id,
@@ -508,7 +511,7 @@ export class PlanComponent implements OnInit {
             type: item.type ? item.type : null
           },
           expanded: true
-        }
+        };
         if (item.children) {
           node.children = this.buildTreeLocality(item.children);
         }
@@ -518,20 +521,21 @@ export class PlanComponent implements OnInit {
     return root;
   }
 
-  convertTreeToList(items: any[], plan){
-    if(items){
-      items.forEach(item =>{
-        if(item.children)
+  convertTreeToList(items: any[], plan) {
+    if (items) {
+      items.forEach(item => {
+        if (item.children) {
           this.convertTreeToList(item.children, plan);
+        }
 
-        if(item.data.type && item.data.type.id == plan.localitytype.id){
-          let node:  local= {
+        if (item.data.type && item.data.type.id == plan.localitytype.id) {
+          const node: local = {
             name: item.data.name,
             id: item.data.id
-          }
+          };
           this.localitiesPlanItem.push(node);
         }
-      })
+      });
     }
   }
 
@@ -544,14 +548,23 @@ export class PlanComponent implements OnInit {
   }
 
   buildStructureBreadcrumb(structureItem) {
-    if(!this.edit)
+    if (!this.edit) {
       this.structureBreadcrumb = ` > ${this.translate.instant('new-a')} ${structureItem.name}`;
-    else
+    } else {
       this.structureBreadcrumb = ` > ${this.translate.instant('update')} ${structureItem.name}`;
+    }
   }
 
-  uploadFile(event) {
-    this.planItem.file = { ...event.originalEvent.body };
+  uploadFile(data: { files: File }) {    
+    const formData: FormData = new FormData();
+    const file = data.files[0];
+    
+    formData.append('file', file, file.name);
+    this.httpClient
+        .post<any>(this.getUrlUploadFile(), formData)
+        .subscribe(r => {
+          this.planItem.file = r; 
+        });
   }
 
   async removeFile(event) {
@@ -572,34 +585,34 @@ export class PlanComponent implements OnInit {
   }
 
   getHeadersUploadFile() {
-    let headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
-      'Authorization': 'Bearer ' + window.sessionStorage.getItem('token')
+      Authorization: 'Bearer ' + window.sessionStorage.getItem('token')
     });
     return headers;
   }
 
   private getSelectedNodePlan(node) {
-    if (!node.parent) return node.data;
+    if (!node.parent) { return node.data; }
     return this.getSelectedNodePlan(node.parent);
   }
 
   async savePlan(formData) {
-    
+
     try {
       this.markFormGroupTouched(this.planForm);
-      if (!this.isValidForm(this.planForm)) return;
+      if (!this.isValidForm(this.planForm)) { return; }
       formData = {
         ...formData,
         structure: { id: formData.structure },
         domain: { id: formData.domain },
         localitytype: {id: formData.localitytype}
-      }
+      };
 
       const plan = await this.planService.save(formData, this.edit);
       this.loadRegionFineshed = false;
       this.contrastPlan = plan.id;
-      
+
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
@@ -607,7 +620,7 @@ export class PlanComponent implements OnInit {
       });
       this.clearPlanForm(null);
       this.clearPlans(null);
-      
+
     } catch (err) {
       console.error(err);
       this.messageService.add({
@@ -622,10 +635,10 @@ export class PlanComponent implements OnInit {
 
   async savePlanItem(formData) {
     try {
-      if (!this.isValidForm(this.planItemForm)) return;
-      if (!this.isValidItemSave(formData)) return;
-      
-      let localitiesIds = this.getLocalityIds(this.localitiesPlanItemSelected, []);
+      if (!this.isValidForm(this.planItemForm)) { return; }
+      if (!this.isValidItemSave(formData)) { return; }
+
+      const localitiesIds = this.getLocalityIds(this.localitiesPlanItemSelected, []);
       this.planItem.localitiesIds = localitiesIds;
       this.planItem.name = formData.name;
       this.planItem.description = formData.description;
@@ -675,12 +688,12 @@ export class PlanComponent implements OnInit {
         this.getLocalityIds(l.children, ids);
       }
     });
-    let setIds = new Set(ids);
+    const setIds = new Set(ids);
     return Array.from(setIds);
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    (<any>Object).values(formGroup.controls).forEach(control => {
+    (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 
       if (control.controls) {
@@ -738,10 +751,10 @@ export class PlanComponent implements OnInit {
         this.canceldeleteItem(rowNode);
       }
     });
-    
+
   }
 
-  async canceldeleteItem(rowNode){
+  async canceldeleteItem(rowNode) {
     await this.clearPlans(null);
     this.openTree(this.planTree, rowNode.node.data.id);
   }
@@ -765,22 +778,23 @@ export class PlanComponent implements OnInit {
         summary: this.translate.instant('warn'),
         detail: this.translate.instant('plan.warn.contain-conference')
       });
-      
+
     }
     this.loadRegionFineshed = false;
     await this.clearPlans(null);
 
-    if(rowNode.parent)
-      if(rowNode.parent.children && rowNode.parent.children.length > 1){
-        for(let i = 0; i < rowNode.parent.children.length; i++){
-          if(rowNode.parent.children[i].data.id != id){
+    if (rowNode.parent) {
+      if (rowNode.parent.children && rowNode.parent.children.length > 1) {
+        for (let i = 0; i < rowNode.parent.children.length; i++) {
+          if (rowNode.parent.children[i].data.id != id) {
             this.openTree(this.planTree, rowNode.parent.children[i].data.id);
             break;
           }
         }
-      }
-      else
+      } else {
         this.openTree(this.planTree, rowNode.parent.data.id);
+    }
+      }
   }
 
   private getLevel(structure: Structure) {
@@ -803,9 +817,9 @@ export class PlanComponent implements OnInit {
 
   disableBtnAdd(rowNode) {
     if (this.listStructures) {
-      let plan = this.getSelectedNodePlan(rowNode.node);
-      let selectedStructure = this.listStructures.find(s => s.id == plan.structure.id);
-      let maxLevel = this.getLevel(selectedStructure);
+      const plan = this.getSelectedNodePlan(rowNode.node);
+      const selectedStructure = this.listStructures.find(s => s.id == plan.structure.id);
+      const maxLevel = this.getLevel(selectedStructure);
       if (rowNode.level >= maxLevel) {
         return true;
       }
@@ -818,14 +832,14 @@ export class PlanComponent implements OnInit {
   }
 
   async cancel() {
-    
+
     this.structSelected = false;
     this.loadRegionFineshed = false;
 
     this.clearPlanItemForm(null);
     this.clearPlanForm(null);
     await this.clearPlans(null);
-    //this.openTree(this.planTree, this.planItem.id);
+    // this.openTree(this.planTree, this.planItem.id);
     this.showPlanForm = false;
     this.showPlanItemForm = false;
   }
@@ -834,17 +848,16 @@ export class PlanComponent implements OnInit {
     return this.loading ? 'pi pi-spin pi-spinner' : icon;
   }
 
-  openTree(Tree, id){
+  openTree(Tree, id) {
     let result = false;
 
-    Tree.forEach(node =>{
-      if(node.data.id != id){
-        if(node.children){
+    Tree.forEach(node => {
+      if (node.data.id != id) {
+        if (node.children) {
           result = this.openTree(node.children, id);
           node.expanded = result;
         }
-      }
-      else{
+      } else {
         result =  true;
       }
     });

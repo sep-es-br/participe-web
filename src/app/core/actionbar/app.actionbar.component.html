@@ -3,8 +3,8 @@
     <div class="route-bar-breadcrumb">
       <ng-template ngFor let-item let-last="last" [ngForOf]="items">
         <li>
-          <span class="ui-link ui-widget" *ngIf="item.routerLink">{{item.label | translate}}</span>
-          <ng-container *ngIf="!item.routerLink">{{item.label | translate}}</ng-container>
+          <span class="ui-link ui-widget router-link" *ngIf="item.routerLink" [routerLink]="item.routerLink">{{ translateAllLabels(item.label) }}</span>
+          <ng-container *ngIf="!item.routerLink">{{ translateAllLabels(item.label) }}</ng-container>
         </li>
       </ng-template>
     </div>

@@ -1,3 +1,4 @@
+import { IAuthenticationProvider } from './../interface/IAuthenticationProvider';
 
 import { environment } from '../../../environments/environment';
 import { DOCUMENT } from '@angular/common';
@@ -12,6 +13,14 @@ import { ISocialLoginResult } from './../interface/ISocialLoginResult';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
+  providers: IAuthenticationProvider[] = [
+    { tag: 'participe', icon: 'assets/layout/images/icons/participe.svg', label: 'Participe' },
+    { tag: 'google', icon: 'assets/layout/images/icons/google.svg', label: 'Google' },
+    { tag: 'facebook', icon: 'assets/layout/images/icons/facebook.svg', label: 'Facebook' },
+    { tag: 'twitter', icon: 'assets/layout/images/icons/twitter.svg', label: 'Twitter' },
+    { tag: 'acessocidadao', icon: 'assets/layout/images/icons/acessocidadao.svg', label: 'Acesso Cidadão' },
+  ];
 
   constructor(
     public http: HttpClient,
@@ -109,4 +118,9 @@ export class AuthService {
     }
     return false;
   }
+
+  getAuthenticationIcon(authProvider: string): string {
+    return this.providers.find(p => p.tag === authProvider.toLowerCase()).icon;
+  }
+
 }

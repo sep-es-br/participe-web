@@ -1,0 +1,294 @@
+.attendance {
+  .card {
+    min-height: calc(100vh - 435px);
+    display: flex;
+    justify-content: center;
+
+    .card-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-flow: row wrap;
+      align-content: center;
+      flex-wrap: wrap;
+      max-width: 550px;
+      cursor: pointer;
+
+      .container-icon {
+        border: 1px solid #F48730;
+        color: #F48730;
+        width: 200px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        font-weight: 700;
+        margin: 20px;
+        box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
+        flex-direction: column;
+
+        fa-icon {
+            margin-bottom: 15px;
+            margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+$blue: #2196F3;
+$grey: #aaa;
+$loadingBG: #bbb;
+$loadingLineBG: #ccc;
+$textFilterColor: #666;
+
+.attendee-register,
+.edit-attendees {
+  min-height: 35vh;
+
+  .list-result {
+    margin: 0;
+    .result {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 10px;
+      margin: 1px 0;
+      background-color: white;
+      &:hover {
+        background-color: rgba(0,0,0,0.05);
+      }
+      > div {
+        padding: 0 15px;
+      }
+      .name-icon {
+        display: flex;
+        align-items: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.25rem;
+
+        .letter-icon {
+          background-color: $blue;
+          padding: 5px 12px;
+          border-radius: 30px;
+        }
+      }
+      .primary-info {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        justify-content: center;
+
+        .name {
+          text-transform: capitalize;
+          font-weight: 500;
+          margin: 1px;
+        }
+        .contact {
+          display: flex;
+          flex-wrap: wrap;
+          margin: 1px;
+          font-size: .75rem;
+          color: $grey;
+          white-space: nowrap;
+        }
+      }
+      .secondary-info {
+        display: flex;
+        flex: 1;
+
+        .info-place {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+
+          .locality {
+            margin: 1px;
+            font-weight: 500;
+          }
+          .region {
+            margin: 1px;
+            font-size: .75rem;
+            color: $grey;
+          }
+        }
+        .info-checkin {
+          display: flex;
+          text-align: right;
+          justify-content: flex-end;
+          align-items: center;
+          flex: 1;
+
+          .how-long-ago {
+            color: $grey;
+          }
+        }
+      }
+      .action {
+        display: flex;
+        align-items: center;
+        color: $blue;
+        fa-icon {
+          cursor: pointer;
+          &:active {
+            animation: bounce 150ms;
+          }
+        }
+        .disabled {
+          color: $grey;
+          cursor: auto;
+        }
+      }
+
+      @media screen and (max-width: 687px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 5px 0;
+
+        > div {
+          padding: 5px 0;
+          justify-content: center;
+          align-items: center;
+        }
+        .secondary-info {
+          flex-direction: column;
+          .info-place {
+            justify-content: center;
+            align-items: center;
+          }
+          .info-checkin {
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+    .result.loading {
+      filter: grayscale(.8);
+
+      .primary-info .name,
+      .primary-info .contact,
+      .info-place .locality,
+      .info-place .region,
+      .info-checkin .how-long-ago {
+        background-color: $loadingBG;
+        margin: 1px;
+        border-radius: 10px;
+        .loading {
+          background-color: $loadingLineBG;
+          border-radius: 10px;
+          animation: growing 1s infinite;
+        }
+      }
+      .info-checkin .how-long-ago {
+        flex-basis: 25%;
+      }
+      @media screen and (max-width: 687px) {
+        align-items: stretch;
+        > div,
+        .info-place,
+        .info-checkin {
+          align-items: stretch !important;
+        }
+        .info-checkin {
+          justify-content: center !important;
+        }
+        .loading {
+          animation: growing 1.5s infinite !important;
+        }
+      }
+    }
+    .no-result {
+      color: #888;
+      font-size: 1.25rem;
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .load-more {
+    overflow-anchor: none;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+  }
+  .required::after {
+    content: "*";
+  }
+}
+
+.modal-change-meeting {
+  display: flex;
+  flex: 1;
+  overflow: visible;
+
+  .label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  .ui-button {
+    margin-top: 30px;
+    display: flex;
+    flex: 1;
+    width: 100%;
+  }
+}
+
+::ng-deep {
+  .modal-change-meeting {
+    .ui-dialog {
+      max-width: 500px;
+      width: 100%;
+    }
+    .ui-dropdown {
+      display: flex;
+      flex: 1;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    .ui-button .ui-button-text {
+      flex: 1;
+    }
+    .change-button .pi.pi-sort-alt{
+      transform: rotate(90deg);
+    }
+    p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div {
+      box-shadow: none !important;
+    }
+    p-dropdown.ng-valid.ng-touched.ng-dirty > div {
+      border: 1px solid #E0E0E0 !important;
+    }
+  }
+  .tooltip-uncheck {
+    text-transform: capitalize;
+  }
+  .ui-link.ui-widget.router-link {
+    cursor: pointer;
+  }
+  .checkbox-reset {
+    padding: 10px 0;
+
+    label {
+      float: none !important;
+    }
+  }
+}
+
+@keyframes growing {
+  from {
+    width: 5%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes bounce {
+  to { transform: scale(.8); }
+}

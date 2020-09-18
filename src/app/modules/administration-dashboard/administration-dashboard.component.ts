@@ -8,7 +8,8 @@ import {
   faComments,
   faMapMarkedAlt,
   faSitemap,
-  IconDefinition
+  IconDefinition,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -26,7 +27,8 @@ export class AdministrationDashboardComponent implements OnInit {
       { name: 'administration.structure', url: '/administration/structures', icon: faSitemap },
       { name: 'administration.plan', url: '/administration/plans', icon: faClipboardList },
       { name: 'administration.conference', url: '/administration/conferences', icon: faComments },
-    ]
+      { name: 'administration.citizen', url: '/administration/citizen', icon: faUsers },
+    ];
   }
 
   constructor(

@@ -1,0 +1,161 @@
+@import '../attendance.component.scss';
+
+.attendee-register {
+
+  .top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+
+    .search {
+      display: flex;
+      flex: 2;
+      flex-wrap: wrap;
+      max-width: 45vw;
+      width: 100%;
+
+      .ui-inputtext {
+        background: white;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .ui-button {
+        max-width: 150px;
+        width: 25%;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      @media screen and (max-width: 786px){
+        max-width: 100vw;
+      }
+
+      @media screen and (max-width: 486px){
+        flex-direction: column;
+
+        .ui-inputtext {
+          border-top-right-radius: 3px;
+          border-bottom-left-radius: 0;
+        }
+        .ui-button {
+          display: flex;
+          flex: 1;
+          justify-content: center;
+          width: 100%;
+          max-width: 100%;
+          border-bottom-left-radius: 3px;
+          border-top-right-radius: 0;
+        }
+      }
+    }
+    .new {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      align-items: center;
+
+      .ui-button {
+        max-width: 250px;
+        min-width: 150px;
+
+        @media screen and (max-width: 486px) {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+
+    }
+
+    @media screen and (max-width: 786px) {
+      flex-direction: column;
+      > div {
+        margin: 5px 0;
+      }
+
+      .new {
+        justify-content: flex-start;
+      }
+    }
+  }
+  .form-new-account {
+    margin: 0;
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+    .auth-type {
+      display: flex;
+      flex-wrap: wrap;
+      img {
+        width: 20px;
+        margin-right: 5px;
+
+        &:last-of-type {
+          margin-right: 10px;
+        }
+      }
+      p-radiobutton {
+        margin-right: 10px;
+      }
+      label {
+        float: none;
+      }
+    }
+    .p-col-12 {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-actions {
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+      .ui-button {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        margin: 0 15px;
+
+        @media screen and (max-width: 387px) {
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep .form-new-account {
+  .ui-button .ui-button-text {
+    flex: 1;
+  }
+  .ui-dropdown {
+    width: 100%;
+  }
+}
+
+::ng-deep .attendee-register {
+  .ui-inputtext {
+    flex: 1;
+  }
+  .form-new-account {
+    .ui-inputtext {
+      width: 100%;
+      flex: 0;
+    }
+  }
+  .ui-autocomplete,
+  .ui-autocomplete-input {
+    width: 100%;
+  }
+  form.form-new-account .auth-type label{
+    float: none;
+  }
+  .top-bar .search {
+    input.ng-valid.ng-touched.ng-dirty:focus {
+      box-shadow: none !important;
+    }
+    input.ng-valid.ng-touched.ng-dirty {
+      border: 1px solid #E0E0E0 !important;
+    }
+  }
+}

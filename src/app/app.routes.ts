@@ -1,3 +1,4 @@
+import { MeetingComponent } from './modules/conference/meeting/meeting.component';
 
 import { AuthGuardService } from './shared/services/auth-guard.service';
 import { ModerateComponent } from './modules/moderation/moderate/moderate.component';
@@ -24,9 +25,11 @@ export const routes: Routes = [
     { path: 'administration/structures', component: StructureComponent },
     { path: 'administration/plans', component: PlanComponent },
     { path: 'administration/conferences', component: ConferenceComponent },
+    { path: 'administration/conferences/:id/meeting', component: MeetingComponent },
     { path: 'administration/citizen', component: CitizenComponent },
     { path: 'moderation/search', component: ModerationComponent },
     { path: 'moderation/moderate/:id/:conferenceId', component: ModerateComponent },
+    { path: 'attendance', loadChildren: async () => (await import('./modules/attendance/attendance.module')).AttendanceModule}
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, { useHash: true, scrollPositionRestoration: 'enabled' });

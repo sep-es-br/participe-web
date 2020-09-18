@@ -9,7 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     AppRoutingModule,
     CommonModule,
-    CoreModule, 
+    CoreModule,
     TranslateModule
   ],
   declarations: [

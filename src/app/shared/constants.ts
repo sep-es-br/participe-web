@@ -3,7 +3,7 @@ export const StoreKeys = {
     ACCESS_TOKEN: 'participe:ACCESS_TOKEN',
     REFRESH_TOKE: 'participe:REFRESH_TOKE',
     USER_INFO: 'participe:USER_INFO',
-}
+};
 
 export const calendar = {
     pt: {

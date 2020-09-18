@@ -70,9 +70,9 @@ export class StructureComponent implements OnInit {
   private async clearStructures(query) {
     try {
       this.loading = true;
-      if(!!query){
+      if (!!query) {
         query = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-        query = query.replace(/[^a-z0-9]/gi, " ");
+        query = query.replace(/[^a-z0-9]/gi, ' ');
       }
 
       const response = await this.structureService.listAll(query);
@@ -86,21 +86,21 @@ export class StructureComponent implements OnInit {
 
   private buildTree(items: any[], open = false, query = null): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
-    let root: TreeNode[] = [];
+    const root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
-        const name =item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+        const name = item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
         const foundQuery = open && query !== null && name.toLowerCase().includes(query.trim().toLowerCase());
         const expanded = foundQuery ? false : open;
-        
-        let node: TreeNode = {
+
+        const node: TreeNode = {
           data: {
             id: item.id,
             name: item.name,
             hasPlan: item.hasPlan
           },
           expanded
-        }
+        };
         if (item.items) {
           node.children = this.buildTree(item.items, open, query);
         }
@@ -115,7 +115,7 @@ export class StructureComponent implements OnInit {
 
   toggleSearch() {
     this.search = !this.search;
-    this.search ? setTimeout(() => document.getElementById('search-input').focus(), 100):null;
+    this.search ? setTimeout(() => document.getElementById('search-input').focus(), 100) : null;
   }
 
   clearSearchForm() {
@@ -198,7 +198,7 @@ export class StructureComponent implements OnInit {
   async saveStructure(formData) {
     try {
       this.markFormGroupTouched(this.structureForm);
-      if (!this.isValidForm(this.structureForm)) return;
+      if (!this.isValidForm(this.structureForm)) { return; }
       await this.structureService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
@@ -256,11 +256,12 @@ export class StructureComponent implements OnInit {
       });
     }
     await this.clearStructures(null);
-    if(deleteObject.parent)
+    if (deleteObject.parent) {
       this.openTree(this.structureTree, deleteObject.parent.id);
+    }
   }
 
-  async canceldeleteItem(rowNode){
+  async canceldeleteItem(rowNode) {
     await this.clearStructures(null);
     this.openTree(this.structureTree, rowNode.node.data.id);
   }
@@ -278,24 +279,23 @@ export class StructureComponent implements OnInit {
       this.structureItemBreadcrumb = '';
     }
 
-    if(this.edit && structureItem){
+    if (this.edit && structureItem) {
       this.tileChecked = structureItem.title ? true : false;
       this.subtileChecked = structureItem.subtitle ? true : false;
       this.linkChecked = structureItem.link ? true : false;
-    }
-    else{
+    } else {
       this.tileChecked = false;
       this.subtileChecked = false;
       this.linkChecked = false;
     }
 
-    let logo = structureItem && structureItem.logo ? true : false;
-    let locality = structureItem && structureItem.locality ? true : false;
-    let votes = structureItem && structureItem.votes ? true : false;
-    let comments = structureItem && structureItem.comments ? true : false;
-    let title = structureItem ? structureItem.title : null;
-    let subtitle = structureItem ? structureItem.subtitle : null;
-    let link = structureItem ? structureItem.link : null;
+    const logo = structureItem && structureItem.logo ? true : false;
+    const locality = structureItem && structureItem.locality ? true : false;
+    const votes = structureItem && structureItem.votes ? true : false;
+    const comments = structureItem && structureItem.comments ? true : false;
+    const title = structureItem ? structureItem.title : null;
+    const subtitle = structureItem ? structureItem.subtitle : null;
+    const link = structureItem ? structureItem.link : null;
 
     this.structureItems = [];
     this.structureItem = new StructureItem();
@@ -309,8 +309,8 @@ export class StructureComponent implements OnInit {
       title: [title],
       subtitle: [subtitle],
       link: [link],
-    });    
-    
+    });
+
     /*if(structureItem == null){
       this.tileChecked = false;
       this.subtileChecked = false;
@@ -319,7 +319,7 @@ export class StructureComponent implements OnInit {
   }
 
   cancelStructureItem() {
-    this.cancel()
+    this.cancel();
   }
 
   async saveStructureItem(formData) {
@@ -333,7 +333,7 @@ export class StructureComponent implements OnInit {
         return;
       }
       this.markFormGroupTouched(this.structureItemForm);
-      if (!this.isValidForm(this.structureItemForm)) return;
+      if (!this.isValidForm(this.structureItemForm)) { return; }
 
       formData = this.checkformData(formData);
       console.log(formData);
@@ -347,8 +347,8 @@ export class StructureComponent implements OnInit {
 
       this.clearStructureItemForm(null);
       await this.clearStructures(null);
-      //this.openTree(this.structureTree, structureItem.id);
-      
+      // this.openTree(this.structureTree, structureItem.id);
+
     } catch (err) {
       this.messageService.add({
         severity: 'error',
@@ -358,14 +358,14 @@ export class StructureComponent implements OnInit {
     }
   }
 
-  private checkformData(formData){
+  private checkformData(formData) {
     formData = {
       ...formData,
       structure: { id: this.structure.id },
       title: this.tileChecked ? formData.title : null,
       subtitle: this.subtileChecked ? formData.subtitle : null,
       link: this.linkChecked ? formData.link : null
-    }
+    };
 
     if (this.selectedStructureItem && !this.edit) {
       formData.parent = this.selectedStructureItem;
@@ -388,7 +388,7 @@ export class StructureComponent implements OnInit {
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    (<any>Object).values(formGroup.controls).forEach(control => {
+    (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 
       if (control.controls) {
@@ -401,7 +401,7 @@ export class StructureComponent implements OnInit {
     if (rowNode.node.children) {
       return true;
     }
-    let node = this.getSelectedNodeStructure(rowNode.node);
+    const node = this.getSelectedNodeStructure(rowNode.node);
     if (node) {
       return node.hasPlan;
     }
@@ -409,7 +409,7 @@ export class StructureComponent implements OnInit {
   }
 
   disableBtnDelete(rowNode) {
-    let node = this.getSelectedNodeStructure(rowNode.node);
+    const node = this.getSelectedNodeStructure(rowNode.node);
     if (node) {
       return node.hasPlan;
     }
@@ -429,7 +429,7 @@ export class StructureComponent implements OnInit {
   verifyNameStructure(id, name, nodes: TreeNode[]): boolean {
     let validName = true;
     for (let i = 0; i < nodes.length; i++) {
-      let node = nodes[i];
+      const node = nodes[i];
       if (node.data.id !== id && node.data.name === name) {
         validName = false;
         break;
@@ -449,27 +449,26 @@ export class StructureComponent implements OnInit {
     this.clearStructureForm(null);
     this.clearStructureItemForm(null);
     await this.clearStructures(null);
-    //this.openTree(this.structureTree, selected.id);
+    // this.openTree(this.structureTree, selected.id);
     this.showStructureForm = false;
     this.showStructureItemForm = false;
-    
+
   }
 
   loadingIcon(icon = 'pi pi-check') {
     return this.loading ? 'pi pi-spin pi-spinner' : icon;
   }
 
-  openTree(Tree, id){
+  openTree(Tree, id) {
     let result = false;
 
-    Tree.forEach(node =>{
-      if(node.data.id != id){
-        if(node.children){
+    Tree.forEach(node => {
+      if (node.data.id != id) {
+        if (node.children) {
           result = this.openTree(node.children, id);
           node.expanded = result;
         }
-      }
-      else{
+      } else {
         result =  true;
       }
     });

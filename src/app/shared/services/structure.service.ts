@@ -27,7 +27,7 @@ export class StructureService {
   }
 
   delete(id) {
-    let url = `${this.url}/${id}`;
+    const url = `${this.url}/${id}`;
     return this.http.delete(url, { headers: this.headers }).toPromise();
   }
 }

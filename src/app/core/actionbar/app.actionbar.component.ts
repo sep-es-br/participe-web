@@ -3,10 +3,11 @@ import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { Subscription } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 import { ActionButtonItem, ActionBarService } from './app.actionbar.actions.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-actionbar',
-    templateUrl: './app.actionbar.component.html'
+    templateUrl: './app.actionbar.component.html',
 })
 export class AppActionBarComponent implements OnDestroy {
 
@@ -19,7 +20,8 @@ export class AppActionBarComponent implements OnDestroy {
 
     constructor(
         private breadcrumbService: BreadcrumbService,
-        private actionBarService: ActionBarService
+        private actionBarService: ActionBarService,
+        private translateSrv: TranslateService
     ) {
         this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
             this.items = response;
@@ -38,6 +40,10 @@ export class AppActionBarComponent implements OnDestroy {
         if (this.isClickable(item)) {
             item.handle();
         }
+    }
+
+    translateAllLabels(labels): string {
+      return labels.split(' ').map(label => this.translateSrv.instant(label)).join(' ');
     }
 
     ngOnDestroy() {

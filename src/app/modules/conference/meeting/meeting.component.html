@@ -1,0 +1,255 @@
+<app-template>
+    <div class="p-grid ui-fluid">
+        <div class="p-col-12 p-md-12">
+            <section *ngIf="!edit">
+                <section>
+                    <div class="p-grid ui-fluid actions">
+                        <div class="ui-g-5 ui-md-2 ui-lg-2">
+                            <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
+                                (click)="handleCreateOrEdit()">
+                            </button>
+                        </div>
+                        <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
+                        <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+                            <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') |translate }}</a>
+                        </div>
+                    </div>
+                </section>
+                <div class="search-form card card-w-title" *ngIf="search">
+                    <form [formGroup]="searchForm" (submit)="handleSearch(searchForm.value)">
+                        <div class="p-grid ui-fluid">
+                            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                <label for="nameSearch">{{'conference.meeting.name'|translate}}</label>
+                                <input id="search-input" pInputText formControlName="name">
+                            </div>
+                            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                <label for="beginDate">{{'date.start'|translate}}</label>
+                                <p-calendar dateFormat="dd/mm/yy" formControlName="beginDate"
+                                    [locale]="calendarTranslate">
+                                </p-calendar>
+                            </div>
+                            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                <label for="endDate">{{'date.start'|translate}}</label>
+                                <p-calendar dateFormat="dd/mm/yy" formControlName="endDate"
+                                    [locale]="calendarTranslate">
+                                </p-calendar>
+                            </div>
+                            <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                <label for="plan">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
+                                <p-multiSelect [options]="localities" formControlName="localities"
+                                  [defaultLabel]="'placeholder.select'|translate" class="ng-dirty ng-invalid">
+                                </p-multiSelect>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-3 ui-lg-3 p-col-align-end">
+                                <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
+                            </div>
+                            <div class="ui-g-12 ui-md-4 ui-lg-3 p-col-align-end">
+                                <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
+                                    (click)="clearSearch()"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <section class="meetings-container">
+                    <div class="meeting-item" *ngFor="let meeting of meetings">
+                        <div class="info-container">
+                            <h2>{{meeting.name}}</h2>
+                            <div class="date-container">
+                                <span>Início: {{meeting.beginDate}}</span>
+                                <span>Fim: {{meeting.endDate}}</span>
+                            </div>
+                        </div>
+                        <div class="locality-container">
+                            <h2>{{meeting?.localityPlace?.name}}</h2>
+                            <span>{{meeting.address}}</span>
+                        </div>
+                        <div class="action-container">
+                            <button pButton (click)="handleCreateOrEdit(meeting.id)" icon="pi pi-pencil"></button>
+                            <button pButton (click)="handleDelete(meeting)" icon="pi pi-trash"></button>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <div class="card card-w-title" *ngIf="edit">
+                <section class="p-col-12 p-md-8">
+                    <form [formGroup]="form" (submit)="save(form.value)">
+                        <div class="p-col-12 p-md-12">
+                            <label for="name">{{'conference.meeting.name'|translate}}</label>
+                            <input pInputText formControlName="name">
+                            <tt-input-message [form]="form" field="name"></tt-input-message>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <label for="beginDate">{{'conference.meeting.beginDate'|translate}}</label>
+                            <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeBeginDate($event)"
+                              formControlName="beginDate" [showSeconds]="true" [showTime]="true" [locale]="calendarTranslate">
+                            </p-calendar>
+                            <tt-input-message [form]="form" field="beginDate"></tt-input-message>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <label for="endDate">{{'conference.meeting.endDate'|translate}}</label>
+                            <p-calendar dateFormat="dd/mm/yy" [showTime]="true" [minDate]="minDate"
+                              formControlName="endDate" [showSeconds]="true" [locale]="calendarTranslate">
+                            </p-calendar>
+                            <tt-input-message [form]="form" field="endDate"></tt-input-message>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <p-listbox styleClass="pListCustom" [options]="localities" formControlName="localityPlace"
+                                checkbox="checkbox" filter="filter">
+                                <p-header>
+                                    {{ localitySrv.getTranslatedLabelLocality(labelLocality) }}
+                                </p-header>
+                            </p-listbox>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <label for="address">{{'conference.meeting.address'|translate}}</label>
+                            <input pInputText formControlName="address">
+                            <tt-input-message [form]="form" field="address"></tt-input-message>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <label for="place">{{'conference.meeting.place'|translate}}</label>
+                            <input pInputText formControlName="place">
+                            <tt-input-message [form]="form" field="place"></tt-input-message>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <p-listbox styleClass="pListCustom" [options]="localitiesCover" formControlName="localityCovers"
+                                checkbox="checkbox" filter="filter" multiple="multiple">
+                                <p-header>
+                                    {{'conference.meeting.localityCovers'|translate}}
+                                </p-header>
+                            </p-listbox>
+                        </div>
+                        <p-accordion [multiple]="true">
+                            <p-accordionTab header="{{'conference.meeting.receptionists' | translate}}"
+                                styleClass="tabStyleClass">
+                                <form [formGroup]="searchFormReceptionists"
+                                    (submit)="handleSearchReceptionists(searchFormReceptionists.value)">
+                                    <div class="p-grid ui-fluid">
+                                        <div class="ui-g-12 ui-md-10">
+                                            <label for="name">{{'conference.meeting.name'|translate}}</label>
+                                            <input id="search-input" pInputText formControlName="name">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-2 p-col-align-end">
+                                            <button pButton type="submit" icon="pi pi-search"
+                                                [label]="'search'|translate"></button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class="header-table">{{'conference.meeting.receptionists' | translate}}</div>
+                                <p-table [value]="receptionistsSearch">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>E-mail</th>
+                                            <th></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-data>
+                                        <tr>
+                                            <td>{{data.name}}</td>
+                                            <td>{{data.contactEmail}}</td>
+                                            <td>
+                                                <button pButton icon="pi pi-plus" type="button"
+                                                    (click)="addReceptionist(data)"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="3">
+                                                {{ 'conference.meeting.receptionists-not-found' | translate }}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <div class="header-table">{{'conference.meeting.receptionists-active' | translate}}
+                                </div>
+                                <p-table [value]="receptionistsActived">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>E-mail</th>
+                                            <th></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-data let-i="rowIndex">
+                                        <tr>
+                                            <td>{{data.name}}</td>
+                                            <td>{{data.contactEmail}}</td>
+                                            <td>
+                                                <button pButton icon="pi pi-trash"
+                                                    (click)="removeReceptionist(i)"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="3">
+                                                {{ 'conference.meeting.receptionists-active-empty' | translate }}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </p-accordionTab>
+                        </p-accordion>
+                        <div class="p-col-12 p-md-6">
+                            <div class="form-actions">
+                                <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
+                                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
+                                    (click)="cancel()"></button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</app-template>
+
+<p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
+    [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
+    <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
+        (click)="selectOtherConference(conference)">
+        <h4>{{ conference.name }}</h4>
+        <small>{{ conference.description }}</small>
+        <div class="date-container">
+            <div class="date">
+                <i class="pi pi-calendar"></i>
+                {{ conference.beginDate }}
+            </div>
+            <div class="date">
+                <i class="pi pi-calendar"></i>
+                {{ conference.endDate }}
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="action-modal">
+            <button pButton label="Fechar" (click)="showSelectConference = false"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+<p-confirmDialog [header]="'conference.meeting.delete'|translate" icon="pi pi-exclamation-triangle" key="deleteConfirm">
+</p-confirmDialog>
+<p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
+  [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
+  <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
+    (click)="selectOtherConference(conference)">
+    <h4>{{ conference.name }}</h4>
+    <small>{{ conference.description }}</small>
+    <div class="date-container">
+      <div class="date">
+        <i class="pi pi-calendar"></i>
+        {{ conference.beginDate }}
+      </div>
+      <div class="date">
+        <i class="pi pi-calendar"></i>
+        {{ conference.endDate }}
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="action-modal">
+      <button pButton label="Fechar" (click)="showSelectConference = false"></button>
+    </div>
+  </p-footer>
+</p-dialog>

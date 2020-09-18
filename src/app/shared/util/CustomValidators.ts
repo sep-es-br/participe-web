@@ -41,4 +41,18 @@ export class CustomValidators {
 
     return { invalid: true };
   }
+
+  static AttendeeCitizenPassword(control: AbstractControl): ValidationErrors {
+    const password = control.value;
+    if (password === null || password === undefined) {
+      return null;
+    }
+    if (password.match(/\D/g)) {
+      return { custom: { invalid: true, message: 'attendance.error.onlyDigitsPassword' }};
+    }
+    if (password.length !== 6) {
+      return { custom: { invalid: true, message: 'attendance.error.lenghtOf6Password' }};
+    }
+    return null;
+  }
 }

@@ -14,7 +14,7 @@ export class Http {
   }
 
   get(url) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: this.headers
@@ -22,7 +22,7 @@ export class Http {
   }
 
   post(url, data) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.createAuthorizationHeader(headers);
     return this.http.post(url, data, {
       headers: this.headers

@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
     AppRoutingModule,
     CommonModule,
     ComponentsModule,
-    CoreModule, 
+    CoreModule,
     TranslateModule
   ],
   declarations: [

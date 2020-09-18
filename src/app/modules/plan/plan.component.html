@@ -135,7 +135,8 @@
             <div class="p-col-12 p-md-6" *ngIf="structureItem.logo && !planItem.file">
               <h3>{{'file.label'|translate}}</h3>
               <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" [url]="getUrlUploadFile()"
-                [headers]="getHeadersUploadFile()" (onUpload)="uploadFile($event)"
+                [headers]="getHeadersUploadFile()" customUpload="true"
+                (uploadHandler)="uploadFile($event)"
                 [chooseLabel]="'file.browse'|translate" [uploadLabel]="'file.send'|translate"
                 [cancelLabel]="'cancel'|translate"></p-fileUpload>
             </div>

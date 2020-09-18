@@ -1,1 +1,4 @@
 <router-outlet></router-outlet>
+<div *ngIf="isLoading || loadingPercentage < 100" class="loading-overlay">
+  <div class="loader" [ngStyle]="{'width': loadingPercentage +'%'}"></div>
+</div>

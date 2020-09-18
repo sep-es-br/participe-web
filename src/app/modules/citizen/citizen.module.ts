@@ -6,6 +6,7 @@ import { CoreModule } from '../../core/core.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { CitizenComponent } from './citizen.component';
 import { ConfirmationService } from 'primeng/api';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -13,7 +14,9 @@ import { ConfirmationService } from 'primeng/api';
     CommonModule,
     ComponentsModule,
     CoreModule,
-    TranslateModule
+    TranslateModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     CitizenComponent

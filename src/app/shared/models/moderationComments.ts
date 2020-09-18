@@ -7,7 +7,7 @@ export interface ModerationComments {
   time: string;
   type: string;
   localityName: string;
-  localityId:number;
+  localityId: number;
   planItemId: number;
   planItemName: string;
   citizenName: string;
@@ -19,7 +19,7 @@ export interface ModerationComments {
   moderatorId: number;
   disableModerate: boolean;
   structureItemId: number;
-  structureItemName: string
+  structureItemName: string;
   areaEstrategicaId: number;
   nameAreaEstrategica: string;
   conferenceId: number;
