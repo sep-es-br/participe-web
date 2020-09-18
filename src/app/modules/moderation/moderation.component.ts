@@ -4,7 +4,7 @@ import { ModerationComments } from './../../shared/models/moderationComments';
 import { ModerationFilter } from './../../shared/models/moderationFilter';
 import { ModerationService } from './../../shared/services/moderation.service';
 import { HelperUtils } from './../../shared/util/HelpersUtil';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreadcrumbService } from '../../core/breadcrumb/breadcrumb.service';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ import { AuthService } from '@app/shared/services/auth.service';
   templateUrl: './moderation.component.html',
   styleUrls: ['./moderation.component.scss']
 })
-export class ModerationComponent implements OnInit {
+export class ModerationComponent implements OnInit, OnDestroy {
 
   search: boolean;
   loading: boolean;
@@ -48,6 +48,10 @@ export class ModerationComponent implements OnInit {
     private route: Router,
     private userAuth: AuthService
   ) { }
+
+  ngOnDestroy(): void {
+    this.actionBarSrv.setItems([]);
+  }
 
   async ngOnInit() {
     await this.loadConferencesActives();
@@ -131,7 +135,7 @@ export class ModerationComponent implements OnInit {
   }
 
   timesAgo(time: string): string {
-    if(!time) {
+    if (!time) {
       return '';
     }
     try {
@@ -214,8 +218,8 @@ export class ModerationComponent implements OnInit {
   }
 
   private async _publish(comment: ModerationComments) {
-    let proposal = comment.classification && comment.classification === 'proposal';
-    let msg = proposal ? 'moderation.label.msg.publish_proposal' : 'moderation.label.msg.publish_comment';
+    const proposal = comment.classification && comment.classification === 'proposal';
+    const msg = proposal ? 'moderation.label.msg.publish_proposal' : 'moderation.label.msg.publish_comment';
     try {
       await this.moderationSrv.update({ status: 'Published', id: comment.commentId });
       await this.prepareScreen();
@@ -267,14 +271,14 @@ export class ModerationComponent implements OnInit {
   }
 
   async moderate(comment: ModerationComments) {
-    if(comment.moderatorId && !comment.moderated) {
-      let person = this.userAuth.getUserInfo;
-      if(person.id == comment.moderatorId) {
+    if (comment.moderatorId && !comment.moderated) {
+      const person = this.userAuth.getUserInfo;
+      if (person.id == comment.moderatorId) {
         this.begin(comment);
-      }else{
+      } else {
         this.alterModerator(comment);
       }
-    }else{
+    } else {
       this.begin(comment);
     }
   }
@@ -285,11 +289,11 @@ export class ModerationComponent implements OnInit {
       await this.moderationSrv.begin({
         id: comment.commentId
       } as any);
-      this.route.navigate(['/moderation/moderate', comment.commentId, this.conferenceSelect.id])
+      this.route.navigate(['/moderation/moderate', comment.commentId, this.conferenceSelect.id]);
     } catch (error) {
       console.log(error);
-      let msg = "moderation.error.begin"
-      if(error && error.code == 400) {
+      let msg = 'moderation.error.begin';
+      if (error && error.code == 400) {
         msg = error.message;
       }
       this.messageService.add({
@@ -300,8 +304,8 @@ export class ModerationComponent implements OnInit {
   }
 
   alterModerator(comment: ModerationComments) {
-    let proposal = comment.classification && comment.classification === 'proposal';
-    let msg = proposal ? 'moderation.label.confirm_alter_moderator_proposal' : 'moderation.label.confirm_alter_moderator_comment';
+    const proposal = comment.classification && comment.classification === 'proposal';
+    const msg = proposal ? 'moderation.label.confirm_alter_moderator_proposal' : 'moderation.label.confirm_alter_moderator_comment';
     this.confirmationService.confirm({
       message: this.translate.instant(msg),
       key: 'confirm_alter_moderator',

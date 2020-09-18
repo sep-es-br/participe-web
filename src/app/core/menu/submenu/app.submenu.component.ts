@@ -58,7 +58,7 @@ export class AppSubMenuComponent implements OnDestroy {
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
         this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
             this.routeItems = response;
-        });      
+        });
     }
 
     ngOnDestroy() {

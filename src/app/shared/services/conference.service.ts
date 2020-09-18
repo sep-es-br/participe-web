@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import Common from '@app/shared/util/Common';
-import { environment } from '@environments/environment';
 import { Conference } from '../models/conference';
+import { HttpClient } from '@angular/common/http';
+import { IConferenceWithMeetings } from '../interface/IConferenceWithMeetings';
+import { ILocalityConferente } from './../interface/ILocalityConference';
 import { IPerson } from './../interface/IPerson';
-
+import { Injectable } from '@angular/core';
+import { PrepareHttpQuery } from '../util/Query.utils';
+import { environment } from '@environments/environment';
 
 @Injectable()
 export class ConferenceService {
@@ -42,7 +44,7 @@ export class ConferenceService {
   }
 
   delete(id) {
-    let url = `${this.url}/${id}`;
+    const url = `${this.url}/${id}`;
     return this.http.delete(url, { headers: this.headers }).toPromise();
   }
 
@@ -56,9 +58,9 @@ export class ConferenceService {
     return this.http.get<IPerson[]>(url, { headers: this.headers }).toPromise();
   }
 
-  searchReceptionists(name, email) {
-    const url = this.url.concat('/receptionists').concat('?name=').concat(name ? name : '').concat(email ? `&email=${email}` : '');
-    return this.http.get<IPerson[]>(url, { headers: this.headers }).toPromise();
+  searchReceptionists(name: string, email: string) {
+    return this.http.get<IPerson[]>(`${this.url}/receptionists${PrepareHttpQuery({ search: { name, email } })}`,
+      { headers: this.headers }).toPromise();
   }
 
   comments(id) {
@@ -79,4 +81,16 @@ export class ConferenceService {
 
   }
 
+  getLocalitiesByConferenceId(conferenceId: number, localityName?: string) {
+    return this.http.get<ILocalityConferente>(
+      `${environment.apiEndpoint}/citizen/localities/${conferenceId}?name=${localityName || ''}`
+      , { headers: this.headers }).toPromise();
+  }
+
+  getConferencesWithMeetings(date?: string) {
+    return this.http.get<IConferenceWithMeetings[]>(
+      `${this.url}/with-meetings${PrepareHttpQuery({ search: { date } })}`,
+      { headers: this.headers }
+    ).toPromise();
+  }
 }

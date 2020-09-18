@@ -22,6 +22,79 @@
         width: 30px;
         margin-right: 5px;
       }
-    } }
+    }
+  }
 }
+
+.column-actions {
+  width: 100px;
+}
+
+.column-center {
+  text-align: center;
+}
+
+.table-field {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.search-form {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.reset-password-container {
+  display: flex;
+  padding: 10px 0px;
+}
+
+.required::after {
+  content: "*";
+}
+
+.pagesize-section {
+  .left-side {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+  }
+  .right-side {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+::ng-deep {
+  .authentication-icon {
+    width: 25px;
+    margin-right: 4px;
+  }
+  .col-attendance_count {
+    width: 110px;
+    text-align: center;
+  }
+  .col-authentication {
+    width: 150px;
+    text-align: center;
+  }
+  .radiobutton-status label {
+    float: none !important;
+
+    &.ui-radiobutton-label {
+      margin-right: 15px;
+    }
+  }
+  .pi.pi-lock.inactive {
+    font-size: 25px;
+  }
+  tr.citizen-inactive td {
+    color: #ef233c;
+  }
+}
+
 

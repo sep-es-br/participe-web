@@ -9,6 +9,6 @@ export class Plan {
   name: string;
   structure: Structure;
   domain: Domain;
-  localitytype: LocalityType; 
+  localitytype: LocalityType;
   items: PlanItem[];
 }

@@ -3,5 +3,6 @@ export class File {
   name: string;
   url: string;
   type: string;
+  mimeType: string;
   subtype: string;
 }

@@ -2,11 +2,13 @@
 	"administration": {
 		"citizen": "Citizen",
 		"conference": "Conference",
+		"conference-name": "Conference: {{name}}",
 		"domain": "Domain",
 		"label": "Administration",
 		"moderation": "Moderation",
 		"plan": "Plan",
-		"structure": "Structure"
+		"structure": "Structure",
+		"presential-meeting": "Presential Metting"
 	},
 	"cancel": "Cancel",
 	"citizen": {
@@ -15,7 +17,21 @@
 		"mail": "Mail",
 		"name": "Name",
 		"password": "Password",
-		"phone": "Phone"
+		"phone": "Phone",
+		"attendance_count": "Attendance Count",
+		"authentication": "Authentication",
+		"status": "Status",
+		"updated": "Updated citizen {{name}} ",
+		"inserted": "Inserted citizen {{name}} ",
+		"resetpassword": "Password reset",
+		"error": {
+			"saving": "Cannot save the citizen",
+			"empty.conference":"There is no conference for listing citizens",
+			"fetch": {
+				"conferenceActive": "Could not load active conferences",
+				"regionalization": "Unable to load active conference locations"
+			}
+		}
 	},
 	"clean": {
 		"search": "Clear Search"
@@ -48,15 +64,41 @@
 		"updated": "Updated conference {{name}} ",
 		"inserted": "Inserted conference {{name}} ",
 		"in-progress": "Conference in progress, cannot be deleted!",
-		"citizen-Authentication":"Citizen Authentication",
-		"participation-Pages":"Participation Pages",
-		"regionalization-Pages":"Regionalization Pages",
-    "moderators": "Moderators",
-    "moderator": {
-		"enabled": "Enabled Moderators",
-		"empty": "No records found",
-		"already-enabled": "{{name}} is already enabled as a moderator"
-	},
+		"meeting": {
+			"name": "Name",
+			"beginDate": "Initial Date",
+			"endDate": "End Date",
+			"locality": "Locality",
+			"address": "Address",
+			"place": "Place",
+			"localityCovers": "Coverage",
+			"receptionists": "Receptionists",
+			"receptionists-active": "Receptionists Enabled",
+			"receptionists-active-empty": "No receptionist was qualified for this meeting",
+			"receptionists-not-found": "No receptionist was found with the filter used",
+			"delete": "Remove?",
+			"error": {
+				"fetch": {
+					"plans": "Error fetching plans",
+					"localities": "Error fetching localities",
+					"conferenceActive": "Could not load active conferences"
+				},
+        "saving": "Error saving meeting",
+        "delete": "Error deleting meeting {{name}}"
+      },
+      "success": {
+        "delete": "Meeting {{name}} deleted"
+      }
+		},
+		"citizen-Authentication": "Citizen Authentication",
+		"participation-Pages": "Participation Pages",
+		"regionalization-Pages": "Regionalization Pages",
+		"moderators": "Moderators",
+		"moderator": {
+			"enabled": "Enabled Moderators",
+			"empty": "No records found",
+			"already-enabled": "{{name}} is already enabled as a moderator"
+		},
 		"image": "Image",
 		"title": "Title",
 		"sub-title": "Subtitle",
@@ -117,7 +159,10 @@
 		},
 		"required": {
 			"field": "Required field"
-		}
+    },
+    "email": {
+      "field": "Invalid E-Mail"
+    }
 	},
 	"error": "Error",
 	"warn": "Warn",
@@ -159,13 +204,13 @@
 				"planItems": "Error in load plan items"
 			},
 			"update_comment": "There was a problem saving moderation",
-      "publish_comment": "There was a problem publishing comments",
-      "begin": "The comment already is in moderation with another moderator",
-      "moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save"
+			"publish_comment": "There was a problem publishing comments",
+			"begin": "The comment already is in moderation with another moderator",
+			"moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save"
 		},
 		"label": {
-      "btnModerate": "Moderate",
-      "btnPublish": "Publish",
+			"btnModerate": "Moderate",
+			"btnPublish": "Publish",
 			"comment": "Comment",
 			"proposal": "Proposal",
 			"remote": "Remote",
@@ -178,21 +223,20 @@
 			"confirm_publish_title": "Publish?",
 			"confirm_change_tree_title": "Confirm?",
 			"confirm_change_tree": "Confirm the change to the comment tree?",
-      "saved_success": "Comment saved!",
-      "confirm_alter_moderator_title":"Alter moderator",
-      "confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
-      "confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
-      "msg": {
-        "pending_proposal": "Proposal pending",
-        "pending_comment": "Comment pending",
-        "publish_proposal": "Proposal published",
-        "publish_comment": "Comment published",
-        "filed_proposal": "Proposal filed",
-        "filed_comment": "Comment filed",
-        "removed_proposal": "Proposal in trash",
-        "removed_comment": "Comment in trash"
-
-      }
+			"saved_success": "Comment saved!",
+			"confirm_alter_moderator_title": "Alter moderator",
+			"confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
+			"confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
+			"msg": {
+				"pending_proposal": "Proposal pending",
+				"pending_comment": "Comment pending",
+				"publish_proposal": "Proposal published",
+				"publish_comment": "Comment published",
+				"filed_proposal": "Proposal filed",
+				"filed_comment": "Comment filed",
+				"removed_proposal": "Proposal in trash",
+				"removed_comment": "Comment in trash"
+			}
 		},
 		"moderate": {
 			"about": "About",
@@ -201,10 +245,10 @@
 				"moveFilter": ""
 			},
 			"save": {
-        "pending":"Pending",
+				"pending": "Pending",
 				"archived": "Archived",
 				"inTrash": "In the trash",
-        "published": "Published"
+				"published": "Published"
 			},
 			"saveAndTo": "Save and go to",
 			"title": "Text in moderation"
@@ -277,9 +321,9 @@
 		"removed": "Register removed"
 	},
 	"roles": {
-    "Administrator": "Administrator",
-    "Moderator": "Moderator",
-    "Recepcionist": "Recepcionist"
+		"Administrator": "Administrator",
+		"Moderator": "Moderator",
+		"Recepcionist": "Recepcionist"
 	},
 	"save": "Save",
 	"saveContinue": "Save and continue",
@@ -337,20 +381,72 @@
 		"profile": "Profile",
 		"settings": "Settings",
 		"yourhave": "You Have"
-	},
+  },
+  "attendance": {
+    "label": "Attendance List",
+    "saveAndRegister": "Save and Register Attendance",
+    "register": "Register",
+    "registerAttendance": "Register Attendance",
+    "registerAttendanceIn": "Register Attendance in ",
+    "editAttendance": "Edit attendance",
+    "removeAttendee": "Remove attendance",
+    "edit": "Edit Attendees",
+    "county": "County",
+    "authentication": "Authentication",
+    "error": {
+      "onlyDigitsPassword": "Password can only contain digits",
+      "lenghtOf6Password": "Password must have 6 digits",
+      "failedToCheckIn": "Error when trying to check-in, try again",
+      "couldNotUncheck": "Error when trying to uncheck attendance, try again",
+      "whenSearching": "Error when searching list of citizens, try again",
+      "whenSaving": "Error when trying to save, try again",
+      "couldNotConnectToServer": "Error trying to connect to server, try again",
+      "invalidForm": "Invalid form, fill all required fields",
+      "couldNotGetLocalities": "Error when trying to get conference localities, try again",
+      "couldNotGetCitizenInfo": "Error retrieving information about user, try again"
+    },
+    "successDetail": {
+      "saveAccount": "User saved!",
+      "checkin": "Checkin registered!",
+      "uncheckin": "Attendance removed!"
+    },
+    "noResult": "No result",
+    "loadMore": "Load more results",
+    "tooltipLabelView": "View ",
+    "tooltipLabelCheckin": "Register attendance of ",
+    "tooltipLabelUnchecking": "Remove attendance of ",
+    "selectMeeting": "Select meeting",
+    "attendant": "Attendants",
+    "orderBy": "Order by",
+    "arrival": "Arrival"
+  },
 	"type": "Type",
 	"years": "Years",
-  "yes": "Yes",
-  "pending": "Pending",
+	"yes": "Yes",
+	"pending": "Pending",
 	"filed": "Filed",
 	"removed": "In trash",
 	"published": "Published",
 	"all": "All",
+	"rowPerPage": "Row per page",
+	"select": "Selecione",
 	"enuns": {
 		"pending": "Pending",
 		"filed": "Filed",
 		"removed": "Removed",
 		"published": "Published",
 		"all": "All"
-	}
+	},
+	"generic.error": "We were unable to process your request",
+  "unauthorized.error": "You do not have permission to access this functionality",
+  "change": "Change",
+  "meeting": "Meeting",
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "activeUser": "Active User",
+    "inactiveUser": "Inactive User"
+  },
+  "of": "of",
+  "state": "State"
 }

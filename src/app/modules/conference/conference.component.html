@@ -75,6 +75,8 @@
                 <td class="column-actions">
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
                     (click)="showEdit(conference)"></button>
+                  <button pButton icon="pi pi-users" type="button" style="margin-right: 2px;"
+                    [routerLink]="goToMetting(conference)"></button>
                   <button pButton icon="pi pi-trash" type="button" (click)="delete(conference)" [disabled]="disableBtnDelete(conference)"></button>
                 </td>
               </tr>
@@ -125,15 +127,15 @@
                 <tt-input-message [form]="conferenceForm" field="plan"></tt-input-message>
               </div>
             </div>
-            
+
             <p-accordion [multiple]="true">
               <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
                               styleClass="tabStyleClass">
 
                 <div class="p-col-12 p-md-6" *ngIf="!conference.fileAuthentication">
                   <h3>{{'file.label'|translate}}</h3>
-                  <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" [url]="getUrlUploadFile()"
-                    [headers]="getHeadersUploadFile()" (onUpload)="uploadFileAuthentication($event)"
+                  <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
+                    (uploadHandler)="uploadFile($event, 'authentication')"
                     [chooseLabel]="'file.browse'|translate" [uploadLabel]="'file.send'|translate"
                     [cancelLabel]="'cancel'|translate"></p-fileUpload>
                 </div>
@@ -158,19 +160,19 @@
 
                 <div class="p-col-12 p-md-6">
                   <label for="plan">{{'conference.locality-citizen'|translate}}</label>
-                  <p-dropdown [options]="localitiesOfDomain" formControlName="localityType" [placeholder]="'placeholder.select'|translate" 
+                  <p-dropdown [options]="localitiesOfDomain" formControlName="localityType" [placeholder]="'placeholder.select'|translate"
                   class="ng-dirty ng-invalid" [disabled]="!localitycitizenSelected || selfdeclarations > 0">
                   </p-dropdown>
                   <tt-input-message [form]="conferenceForm" field="localityType"></tt-input-message>
                 </div>
- 
+
               </p-accordionTab>
 
               <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
                 <div class="p-col-12 p-md-6" *ngIf="!conference.fileParticipation">
                   <h3>{{'file.label'|translate}}</h3>
-                  <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" [url]="getUrlUploadFile()"
-                    [headers]="getHeadersUploadFile()" (onUpload)="uploadFileParticipation($event)"
+                  <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
+                    (uploadHandler)="uploadFile($event, 'participation')"
                     [chooseLabel]="'file.browse'|translate" [uploadLabel]="'file.send'|translate"
                     [cancelLabel]="'cancel'|translate"></p-fileUpload>
                 </div>
@@ -193,7 +195,7 @@
                 </div>
 
               </p-accordionTab>
-              
+
               <p-accordionTab header="{{'conference.regionalization-Pages' | translate}}">
 
                 <div class="p-col-12 p-md-6">
@@ -209,7 +211,7 @@
                 </div>
               </p-accordionTab>
 
-              
+
               <p-accordionTab header="{{'conference.moderators' | translate}}">
                 <form [formGroup]="searchModeratorsForm" (submit)="serachModerators(searchModeratorsForm.value)">
                   <div class="p-grid ui-fluid">
@@ -227,10 +229,10 @@
                       <label for="email" class="d-none">&nbsp;</label>
                       <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
                     </div>
-    
+
                   </div>
                 </form>
-                
+
                 <div *ngIf="moderators.length > 0">
                   <p-table [value]="moderators" selectionMode="single" dataKey="vin" [responsive]="true">
                     <ng-template pTemplate="caption">
@@ -259,7 +261,7 @@
                     </ng-template>
                   </p-table>
                 </div>
-                
+
                 <br *ngIf="moderators.length > 0 && moderatorsEnabled.length > 0" />
 
                 <div *ngIf="moderatorsEnabled.length > 0">

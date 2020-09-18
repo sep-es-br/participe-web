@@ -237,7 +237,7 @@ import { TranslateChangeService } from '../shared/services/translateChange.servi
     ReactiveFormsModule
    ],
    providers: [
-     MessageService, 
+     MessageService,
      TranslateChangeService
   ]
 })

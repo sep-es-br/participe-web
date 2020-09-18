@@ -9,6 +9,6 @@ export default class Common {
       'Access-Control-Allow-Origin': '*',
       Authorization: accessToken ? `Bearer ${accessToken}` : '',
       headers
-    })
+    });
   }
 }

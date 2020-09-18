@@ -4,6 +4,8 @@
     padding: 0px 15px;
 	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 	position: relative;
+  display: flex;
+  flex-wrap: wrap;
 
 	.breadcrumb {
 		float: left;
@@ -81,5 +83,11 @@
 				}
 			}
 		}
-	}
+  }
+  .actions-container {
+    flex: 1;
+    @media screen and (max-width: 687px) {
+      justify-content: space-around;
+    }
+  }
 }

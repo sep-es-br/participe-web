@@ -20,10 +20,17 @@ export class InputMessageComponent {
   }
 
   message() {
-    let message =  this.translate.instant('erro.invalid.field');
-
-    if (this.form.get(this.field).errors.required) message = this.translate.instant('erro.required.field');
-    
+    const errors = this.form.get(this.field).errors;
+    if (!errors) {
+      return;
+    }
+    let message = this.translate.instant(errors.custom ? errors.custom.message : 'erro.invalid.field');
+    if (errors.email) {
+      message = this.translate.instant('erro.email.field');
+    }
+    if (errors.required) {
+      message = this.translate.instant('erro.required.field');
+    }
     return message;
   }
 }

@@ -107,9 +107,9 @@ export class DomainComponent implements OnInit {
 
   private expandTree(tree: TreeNode[]) {
     let found = false;
-    if(tree && this.selectedNode) {
+    if (tree && this.selectedNode) {
       for (let i = 0; i < tree.length; i++) {
-        let node = tree[i];
+        const node = tree[i];
         if (node.data.id == this.selectedNode.data.id) {
           if (!this.edit) {
             node.expanded = true;
@@ -130,27 +130,27 @@ export class DomainComponent implements OnInit {
     return found;
   }
 
-  private findNode(domainTree: TreeNode[]) :boolean {
-    let found = false;
+  private findNode(domainTree: TreeNode[]): boolean {
+    const found = false;
 
     return found;
   }
 
   private buildTree(items: any[], open = false, query = null): TreeNode[] {
     items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
-    let root: TreeNode[] = [];
+    const root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
         const foundQuery = open && query !== null && item.name.toLowerCase().includes(query.toLowerCase());
         const expanded = foundQuery ? false : open;
-        let node: TreeNode = {
+        const node: TreeNode = {
           data: {
             id: item.id,
             name: item.name,
             type: item.type ? item.type : null
           },
           expanded
-        }
+        };
         if (item.localities) {
           node.children = this.buildTree(item.localities, open, query);
         }
@@ -216,7 +216,7 @@ export class DomainComponent implements OnInit {
   }
 
   private getSelectedNodeDomain(node) {
-    if (!node.parent) return node.data;
+    if (!node.parent) { return node.data; }
     return this.getSelectedNodeDomain(node.parent);
   }
 
@@ -235,7 +235,7 @@ export class DomainComponent implements OnInit {
       this.localityForm.setValue({
         ...this.localityForm.value,
         type: firstChild.data.type.id
-      })
+      });
     }
   }
 
@@ -250,7 +250,7 @@ export class DomainComponent implements OnInit {
   async saveDomain(formData) {
     try {
       this.markFormGroupTouched(this.domainForm);
-      if (!this.isValidForm(this.domainForm)) return;
+      if (!this.isValidForm(this.domainForm)) { return; }
       await this.domainService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
@@ -270,7 +270,7 @@ export class DomainComponent implements OnInit {
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    (<any>Object).values(formGroup.controls).forEach(control => {
+    (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 
       if (control.controls) {
@@ -293,7 +293,7 @@ export class DomainComponent implements OnInit {
   }
 
   delete(rowNode) {
-    if(rowNode.node.parent) {
+    if (rowNode.node.parent) {
       this.selectedNode = rowNode.node.parent;
     }
     this.selectNode(rowNode);
@@ -365,7 +365,7 @@ export class DomainComponent implements OnInit {
   }
 
   cancelLocality() {
-    this.cancel()
+    this.cancel();
   }
 
   async searchLocalities(event, type) {
@@ -390,7 +390,7 @@ export class DomainComponent implements OnInit {
         type: { id: formData.type },
         domain: { id: this.domain.id },
         domains: [{ id: this.domain.id }]
-      }
+      };
 
       if (this.selectedLocality && !this.edit) {
         formData.parents = [this.selectedLocality];

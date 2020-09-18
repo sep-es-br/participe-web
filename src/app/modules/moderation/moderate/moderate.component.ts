@@ -175,9 +175,9 @@ export class ModerateComponent implements OnInit {
 
       await this.moderationSrv.update(sender);
 
-      let proposal = this.comment.classification && this.comment.classification === 'proposal';
+      const proposal = this.comment.classification && this.comment.classification === 'proposal';
       let msg = null;
-      switch(status) {
+      switch (status) {
         case 'Pending':
           msg = proposal ? 'moderation.label.msg.pending_proposal' : 'moderation.label.msg.pending_comment';
           break;
@@ -191,23 +191,23 @@ export class ModerateComponent implements OnInit {
           msg = proposal ? 'moderation.label.msg.removed_proposal' : 'moderation.label.msg.removed_comment';
           break;
      }
-     this.messageService.add({
+      this.messageService.add({
        severity: 'success',
        summary: this.translate.instant('success'),
        detail: this.translate.instant(msg)
       });
-      setTimeout(()=>{ this.route.navigate(['/moderation/search'])}, 2000)
+      setTimeout(() => { this.route.navigate(['/moderation/search']); }, 2000);
 
     } catch (error) {
       let msg = 'moderation.error.moderator';
-      if(error && error.code == 400 && error.message != 'moderation.error.moderator') {
+      if (error && error.code == 400 && error.message != 'moderation.error.moderator') {
         msg = 'moderation.error.update_comment';
       }
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('success'),
         detail: this.translate.instant(msg)
       });
-      setTimeout(()=>{ this.route.navigate(['/moderation/search'])}, 5000)
+      setTimeout(() => { this.route.navigate(['/moderation/search']); }, 5000);
     }
   }
 
@@ -219,7 +219,7 @@ export class ModerateComponent implements OnInit {
       this.route.navigate(['/moderation/search']);
     } catch (error) {
       console.error(error);
-      this.route.navigate(['/moderation/search'])
+      this.route.navigate(['/moderation/search']);
     }
   }
 

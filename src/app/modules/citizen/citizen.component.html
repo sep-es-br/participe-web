@@ -2,16 +2,100 @@
   <div class="p-grid ui-fluid">
     <div class="p-col-12 p-lg-12">
       <div class="card card-w-title">
-        <section *ngIf="!formEdit"></section>
+        <section *ngIf="!formEdit">
+          <div class="p-grid ui-fluid actions">
+            <div class="ui-g-5 ui-md-2 ui-lg-2">
+              <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
+                (click)="showEditOrInsert()">
+              </button>
+            </div>
+            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
+            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+              <a class="search"
+                (click)="enableSearch = !enableSearch">{{ (enableSearch ? 'hide' : 'search') |translate }}</a>
+            </div>
+          </div>
+          <div class="search-form" *ngIf="enableSearch">
+            <div class="p-grid ui-fluid">
+              <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <label>{{'citizen.name'|translate}}</label>
+                <input pInputText [(ngModel)]="search.name">
+              </div>
+              <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <label>{{'citizen.mail'|translate}}</label>
+                <input pInputText [(ngModel)]="search.email">
+              </div>
+              <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <label>{{'citizen.authentication'|translate}}</label>
+                <p-dropdown [options]="authentications" [(ngModel)]="search.autentication"
+                  [placeholder]="'placeholder.select'|translate"></p-dropdown>
+              </div>
+              <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <label>{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
+                <p-autoComplete [suggestions]="filteredLocalities" [formControl]="selectedLocalities" (completeMethod)="filterLocalities($event)"
+                  [size]="30" [minLength]="1" field="label" [placeholder]="'search' | translate" [multiple]="true">
+                </p-autoComplete>
+              </div>
+              <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <label>{{'citizen.status'|translate}}</label>
+                <p-dropdown [options]="status" [(ngModel)]="search.status"
+                  [placeholder]="'placeholder.select'|translate"></p-dropdown>
+              </div>
+              <div class="ui-g-12 ui-md-3 ui-lg-3 p-col-align-end">
+                <button pButton icon="pi pi-search" (click)="searchHandle()" [label]="'search'|translate"></button>
+              </div>
+              <div class="ui-g-12 ui-md-4 ui-lg-3 p-col-align-end">
+                <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
+                  (click)="search = { conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities.setValue([]);"></button>
+              </div>
+            </div>
+          </div>
+          <p-table [columns]="cols" [value]="data" [lazy]="true" [lazyLoadOnInit]="false" [responsive]="true"
+            (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th [class]="col.styleClass" *ngFor="let col of columns" [pSortableColumn]="col.field"
+                  [pSortableColumnDisabled]="!col.sorteable">
+                  {{col.header | translate}}
+                  <p-sortIcon *ngIf="col.sorteable" [field]="col.field"></p-sortIcon>
+                </th>
+                <th class="column-actions"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [class.citizen-inactive]="!rowData.active" [pTooltip]="rowData.active ? '' : ('status.inactiveUser' | translate )"
+                tooltipPosition="bottom">
+                <td [class]="col.styleClass" *ngFor="let col of columns">
+                  <span class="ui-column-title">{{ col.header | translate }}</span>
+                  <span class="table-field" [innerHTML]="getValue(col.field, rowData, col.handleView)"></span>
+                </td>
+                <td class="column-actions">
+                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
+                    (click)="showEditOrInsert(rowData)"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <section class="pagesize-section">
+            <div class="left-side">
+              {{ (pageSize * page) + 1 }}-{{ getCurrentTotalOfRecords }} {{ 'of' | translate }} {{ totalRecords }}
+            </div>
+            <div class="right-side">
+              <label>{{'rowPerPage'|translate}}</label>
+              <p-dropdown [options]="pageSizeOptions" [(ngModel)]="pageSize"
+                [placeholder]="'placeholder.select'|translate" (ngModelChange)="loadData()"></p-dropdown>
+            </div>
+          </section>
+        </section>
         <section *ngIf="formEdit">
-          <form class="p-grid ui-fluid p-col-8" [formGroup]="citizenForm" (submit)="save(citizenForm.value)">
+          <form class="p-grid ui-fluid p-col-8" [formGroup]="citizenForm" (submit)="save(citizenForm)">
             <div class="p-col-12 p-md-12">
-              <label for="name">{{'citizen.name'|translate}}</label>
+              <label class="required" for="name">{{'citizen.name'|translate}}</label>
               <input pInputText formControlName="name">
               <tt-input-message [form]="citizenForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-12">
-              <label for="locality">{{'citizen.locality'|translate}}</label>
+              <label class="required" for="locality">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
               <p-dropdown [options]="localitys" formControlName="locality" class="ng-dirty ng-invalid"
                 [placeholder]="'placeholder.select'|translate"></p-dropdown>
               <tt-input-message [form]="citizenForm" field="locality"></tt-input-message>
@@ -20,42 +104,57 @@
               <label>Autenticação</label>
               <div class="container">
                 <div class="icons-container">
-                  <img src="../../assets/layout/images/icons/participe.svg" />
-                  <img src="../../assets/layout/images/icons/google.svg" />
-                  <img src="../../assets/layout/images/icons/facebook.svg" />
-                  <img src="../../assets/layout/images/icons/twitter.svg" />
+                  <img *ngIf="(idCitizen === 0 || (!citizenHasNativeAuth && getFormValue('ckResetPassword')))" src="../../assets/layout/images/icons/participe.svg" />
+                  <div [innerHTML]="getAuthenticationsFromCitizen"></div>
                 </div>
                 <div class="options-container">
-                  <p-radioButton name="optionsAuthentication" value="cpf" label="CPF"></p-radioButton>
-                  <p-radioButton name="optionsAuthentication" value="mail" label="E-mail"></p-radioButton>
+                  <p-radioButton name="optionsAuthentication" value="cpf" label="CPF"
+                    (onClick)="changeTypeAuthentication()" formControlName="typeAuthentication">
+                  </p-radioButton>
+                  <p-radioButton name="optionsAuthentication" value="mail" label="E-mail"
+                    (onClick)="changeTypeAuthentication()" formControlName="typeAuthentication">
+                  </p-radioButton>
                 </div>
               </div>
             </div>
-            <div class="p-col-12  p-sm-12 p-md-6">
-              <label for="cpf">{{'citizen.cpf'|translate}}</label>
-              <input pInputText formControlName="cpf">
+            <div class="p-col-12  p-sm-12 p-md-6" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'mail'}">
+              <label [class.required]="getFormValue('typeAuthentication') === 'cpf'" for="cpf">{{'citizen.cpf'|translate}}</label>
+              <p-inputMask formControlName="cpf" mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
+                (onBlur)="onBlurCpf()"></p-inputMask>
               <tt-input-message [form]="citizenForm" field="cpf"></tt-input-message>
             </div>
-            <div class="p-col-12  p-sm-12 p-md-6">
-              <label for="password">{{'citizen.password'|translate}}</label>
+            <div class="p-col-12  p-sm-12 p-md-6" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'mail'}">
+              <label [class.required]="getFormValue('typeAuthentication') === 'cpf'" for="password">{{'citizen.password'|translate}}</label>
               <input pInputText formControlName="password">
               <tt-input-message [form]="citizenForm" field="password"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-12">
-              <label for="mail">{{'citizen.mail'|translate}}</label>
+            <div class="p-col-12 p-md-12" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'cpf'}">
+              <label [class.required]="getFormValue('typeAuthentication') === 'mail'" for="mail">{{'citizen.mail'|translate}}</label>
               <input pInputText formControlName="mail">
               <tt-input-message [form]="citizenForm" field="mail"></tt-input-message>
+              <div class="reset-password-container"
+                *ngIf="idCitizen > 0 && getFormValue('typeAuthentication') === 'mail'">
+                <input type="checkbox" id="ckResetPassword" formControlName="resetPassword"/>
+                <label for="ckResetPassword">{{ 'citizen.resetpassword' | translate}}</label>
+              </div>
             </div>
             <div class="p-col-12 p-md-12">
               <label for="phone">{{'citizen.phone'|translate}}</label>
-              <p-inputMask formControlName="phone" mask="(99) 99999-9999"></p-inputMask>
-              <tt-input-message [form]="citizenForm" field="phone"></tt-input-message>
+              <p-inputMask formControlName="telephone" mask="(99) 99999-9999" unmask="true"></p-inputMask>
+              <tt-input-message [form]="citizenForm" field="telephone"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-12 radiobutton-status" *ngIf="idCitizen > 0">
+              <label for="status">Status</label>
+              <div>
+                <p-radioButton name="status" [value]="true" [label]="'status.active' | translate" formControlName="statusIsActive"></p-radioButton>
+                <p-radioButton name="status" [value]="false" [label]="'status.inactive' | translate" formControlName="statusIsActive"></p-radioButton>
+              </div>
             </div>
             <div class="p-col-12 p-md-12">
               <div class="form-actions">
                 <button [disabled]="citizenForm.invalid" [icon]="iconSave" pButton *ngIf="formEdit" type="submit"
                   [label]="'save'|translate"></button>
-                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate" (click)="cancel()"></button>
               </div>
             </div>
           </form>
@@ -64,3 +163,26 @@
     </div>
   </div>
 </app-template>
+<p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
+  [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
+  <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
+    (click)="selectOtherConference(conference)">
+    <h4>{{ conference.name }}</h4>
+    <small>{{ conference.description }}</small>
+    <div class="date-container">
+      <div class="date">
+        <i class="pi pi-calendar"></i>
+        {{ conference.beginDate }}
+      </div>
+      <div class="date">
+        <i class="pi pi-calendar"></i>
+        {{ conference.endDate }}
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="action-modal">
+      <button pButton label="Fechar" (click)="showSelectConference = false"></button>
+    </div>
+  </p-footer>
+</p-dialog>

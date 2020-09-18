@@ -104,7 +104,7 @@
   </div>
   <p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
     [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
-    <div class="conferences-item" *ngFor="let conference of conferencesActives"
+    <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
       (click)="selectOtherConference(conference)">
       <h4>{{ conference.name }}</h4>
       <small>{{ conference.description }}</small>
