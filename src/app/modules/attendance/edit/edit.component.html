@@ -34,7 +34,7 @@
           <div class="p-col-12 p-md-6">
             <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
             <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-              slotChar="000.000.000-00" formControlName="cpf"></p-inputMask>
+              slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
             <tt-input-message [form]="form" field="cpf"></tt-input-message>
           </div>
           <div class="p-col-12 p-md-6">

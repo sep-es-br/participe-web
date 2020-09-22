@@ -62,7 +62,7 @@ export class AttendanceModel {
   localityLabel: string;
   optionsLocalities: SelectItem[];
   authTypeEnum: string[] = Object.values(AuthTypeEnum);
-  cpfValidators = [ Validators.required, Validators.maxLength(11), CustomValidators.ValidateCPF ];
+  cpfValidators = [ Validators.required, Validators.maxLength(14), CustomValidators.ValidateCPF ];
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
   emailValidators = [Validators.required, Validators.email];
   valueChangeCPFSub: Subscription;

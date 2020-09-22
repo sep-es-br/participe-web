@@ -114,6 +114,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           detail: this.translate.instant('attendance.successDetail.saveAccount')
         });
       }
+      setTimeout(() => document.getElementById('btnSearchRegister').click(), 250);
     }
     return success;
   }
