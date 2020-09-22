@@ -29,7 +29,7 @@
           <div class="p-col-12 p-md-6">
             <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
             <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-              slotChar="000.000.000-00" formControlName="cpf"></p-inputMask>
+              slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
             <tt-input-message [form]="form" field="cpf"></tt-input-message>
           </div>
           <div class="p-col-12 p-md-6">
@@ -71,7 +71,7 @@
       <div class="top-bar">
         <div class="search">
           <input type="text" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
-          <button pButton [disabled]="!this.idMeeting" icon="pi pi-search" [label]="'search' | translate" (click)="searchByName()"></button>
+          <button id="btnSearchRegister" pButton [disabled]="!this.idMeeting" icon="pi pi-search" [label]="'search' | translate" (click)="searchByName()"></button>
         </div>
         <div class="new">
           <button pButton icon="pi pi-plus" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
