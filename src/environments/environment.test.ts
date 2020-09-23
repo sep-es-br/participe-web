@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   redirectAdmin: true,
-  apiEndpoint: 'https://orcamento.es.gov.br/participe'
+  apiEndpoint: 'https://hom.orcamento.es.gov.br/participe'
 };
