@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   redirectAdmin: false,
-  apiEndpoint: 'https://dev.totemti.com.br:9010/participe',
+  apiEndpoint: 'https://localhost:8443/participe',
 };
 
 /*
