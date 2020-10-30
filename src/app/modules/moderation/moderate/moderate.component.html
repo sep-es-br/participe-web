@@ -3,7 +3,7 @@
     <div class="p-col-12 p-lg-12">
       <h2 class="title-screen">{{ 'moderation.moderate.title' | translate }}</h2>
       <div class="p-col-12 p-md-12 info">
-        {{ comment?.citizenName }} | há 2 horas | {{ 'moderation.label.' + comment?.type?.toLowerCase() | translate }} |
+        {{ comment?.citizenName }} | {{ timesAgo(comment?.time) }} | {{ 'moderation.label.' + comment?.type?.toLowerCase() | translate }} |
         {{comment?.localityName}}
       </div>
       <div class="p-col-12 p-md-12 description">

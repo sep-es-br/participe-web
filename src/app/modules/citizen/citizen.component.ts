@@ -141,10 +141,14 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async loadConferencesActives() {
     try {
-      const data = await this.moderationSrv.getConferencesActive();
+      const data = await this.moderationSrv.getConferencesActive(false);
       this.conferencesActives = data;
       if (data.length > 0) {
-        this.conferenceSelect = data[0];
+        if(data.filter(conf => conf.isActive).length === 0) {
+          this.conferenceSelect = data[0];
+        } else {
+          this.conferenceSelect = data.filter(conf => conf.isActive)[0];
+        }
       }
     } catch (error) {
       console.error(error);

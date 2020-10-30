@@ -111,15 +111,6 @@ export class ModerateComponent implements OnInit {
     this.loadTreeView();
   }
 
-  timesAgo(time: string): string {
-    try {
-      moment.locale(this.language);
-      return moment(time).fromNow();
-    } catch (error) {
-      return '';
-    }
-  }
-
   async loadLocalitiesOptions() {
     try {
       const data = await this.moderationSrv.getLocalities(this.conferenceId);
@@ -223,4 +214,15 @@ export class ModerateComponent implements OnInit {
     }
   }
 
+  timesAgo(time: string): string {
+    if (!time) {
+      return '';
+    }
+    try {
+      moment.locale(this.language);
+      return moment(time).fromNow();
+    } catch (error) {
+      return '';
+    }
+  }
 }

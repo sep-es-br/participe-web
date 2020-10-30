@@ -124,7 +124,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   async loadConferencesActives() {
     try {
-      const data = await this.moderationSrv.getConferencesActive();
+      const data = await this.moderationSrv.getConferencesActive(true);
       this.conferencesActives = data;
       if (data.length > 0) {
         this.conferenceSelect = data[0];
@@ -248,7 +248,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   setFormSearchReceptionists(value?) {
     this.searchFormReceptionists = this.formBuilder.group({
-      name: [_.get(value, 'name', '')]
+      mail: [_.get(value, 'mail', '')]
     });
   }
 

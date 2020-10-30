@@ -51,8 +51,8 @@ export class ModerationService {
       { headers: this.headers }).toPromise();
   }
 
-  getConferencesActive() {
-    return this.http.get<Conference[]>(`${environment.apiEndpoint}/moderation/conferences`,
+  getConferencesActive(isActive: boolean) {
+    return this.http.get<Conference[]>(`${environment.apiEndpoint}/moderation/conferences?activeConferences=${isActive}`,
       { headers: this.headers }
     ).toPromise();
   }
