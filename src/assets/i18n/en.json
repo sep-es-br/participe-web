@@ -7,102 +7,144 @@
 		"label": "Administration",
 		"moderation": "Moderation",
 		"plan": "Plan",
-		"structure": "Structure",
-		"presential-meeting": "Presential Metting"
+		"presential-meeting": "Presential Metting",
+		"structure": "Structure"
+	},
+	"all": "All",
+	"attendance": {
+		"arrival": "Arrival",
+		"attendant": "Attendants",
+		"authentication": "Authentication",
+		"county": "County",
+		"edit": "Edit Attendees",
+		"editAttendance": "Edit attendance",
+		"error": {
+			"couldNotConnectToServer": "Error trying to connect to server, try again",
+			"couldNotGetCitizenInfo": "Error retrieving information about user, try again",
+			"couldNotGetLocalities": "Error when trying to get conference localities, try again",
+			"couldNotUncheck": "Error when trying to uncheck attendance, try again",
+			"failedToCheckIn": "Error when trying to check-in, try again",
+			"invalidForm": "Invalid form, fill all required fields",
+			"lenghtOf6Password": "Password must have 6 digits",
+			"onlyDigitsPassword": "Password can only contain digits",
+			"whenSaving": "Error when trying to save, try again",
+			"whenSearching": "Error when searching list of citizens, try again"
+		},
+		"label": "Attendance List",
+		"loadMore": "Load more results",
+		"noResult": "No result",
+		"orderBy": "Order by",
+		"register": "Register",
+		"registerAttendance": "Register Attendance",
+		"registerAttendanceIn": "Register Attendance in ",
+		"removeAttendee": "Remove attendance",
+		"saveAndRegister": "Save and Register Attendance",
+		"selectMeeting": "Select meeting",
+		"successDetail": {
+			"checkin": "Checkin registered!",
+			"saveAccount": "User saved!",
+			"uncheckin": "Attendance removed!"
+		},
+		"tooltipLabelCheckin": "Register attendance of ",
+		"tooltipLabelUnchecking": "Remove attendance of ",
+		"tooltipLabelView": "View "
 	},
 	"cancel": "Cancel",
+	"change": "Change",
 	"citizen": {
+		"attendance_count": "Attendance Count",
+		"authentication": "Authentication",
 		"cpf": "CPF",
+		"error": {
+			"empty.conference": "There is no conference for listing citizens",
+			"fetch": {
+				"conferenceActive": "Could not load active conferences",
+				"regionalization": "Unable to load active conference locations"
+			},
+			"saving": "Cannot save the citizen"
+		},
+		"inserted": "Inserted citizen {{name}} ",
 		"locality": "Locality",
 		"mail": "Mail",
 		"name": "Name",
 		"password": "Password",
 		"phone": "Phone",
-		"attendance_count": "Attendance Count",
-		"authentication": "Authentication",
-		"status": "Status",
-		"updated": "Updated citizen {{name}} ",
-		"inserted": "Inserted citizen {{name}} ",
 		"resetpassword": "Password reset",
-		"error": {
-			"saving": "Cannot save the citizen",
-			"empty.conference":"There is no conference for listing citizens",
-			"fetch": {
-				"conferenceActive": "Could not load active conferences",
-				"regionalization": "Unable to load active conference locations"
-			}
-		}
+		"status": "Status",
+		"updated": "Updated citizen {{name}} "
 	},
 	"clean": {
 		"search": "Clear Search"
 	},
 	"conference": {
+		"citizen-Authentication": "Citizen Authentication",
 		"confirm": {
 			"delete": "Are you sure that you want to delete {{name}}?"
 		},
 		"delete": "Delete Conference",
+		"email": "E-mail",
+		"enable": "Enable",
 		"error": {
 			"fetch": {
 				"plans": "Error fetching plans"
 			},
 			"saving": "Error saving conference"
 		},
-		"name": "Name",
-		"email": "E-mail",
-		"enable": "Enable",
-		"new": "New conference {{name}} registered",
-		"placeholder": {
-			"begin-date": "Select the start date of the conference",
-			"description": "Describe more details about the conference",
-			"end-date": "Select the conference end date",
-			"month": "Select a month",
-			"name": "Enter conference name",
-			"email": "Enter conference e-mail",
-			"plan": "Select the plan related to the conference",
-			"year": "Select a year"
-		},
-		"updated": "Updated conference {{name}} ",
-		"inserted": "Inserted conference {{name}} ",
+		"image": "Image",
 		"in-progress": "Conference in progress, cannot be deleted!",
+		"inserted": "Inserted conference {{name}} ",
+		"locality-citizen": "Type of citizen locality",
 		"meeting": {
-			"name": "Name",
-			"beginDate": "Initial Date",
-			"endDate": "End Date",
-			"locality": "Locality",
 			"address": "Address",
-			"place": "Place",
+			"beginDate": "Begin",
+			"delete": "Remove?",
+			"endDate": "End",
+			"error": {
+				"delete": "Error deleting meeting {{name}}",
+				"fetch": {
+					"conferenceActive": "Could not load active conferences",
+					"localities": "Error fetching localities",
+					"plans": "Error fetching plans"
+				},
+				"saving": "Error saving meeting"
+			},
+			"locality": "Locality",
 			"localityCovers": "Coverage",
+			"mail": "Email",
+			"name": "Name",
+			"place": "Place",
 			"receptionists": "Receptionists",
 			"receptionists-active": "Receptionists Enabled",
 			"receptionists-active-empty": "No receptionist was qualified for this meeting",
 			"receptionists-not-found": "No receptionist was found with the filter used",
-			"delete": "Remove?",
-			"error": {
-				"fetch": {
-					"plans": "Error fetching plans",
-					"localities": "Error fetching localities",
-					"conferenceActive": "Could not load active conferences"
-				},
-        "saving": "Error saving meeting",
-        "delete": "Error deleting meeting {{name}}"
-      },
-      "success": {
-        "delete": "Meeting {{name}} deleted"
-      }
+			"success": {
+				"delete": "Meeting {{name}} deleted"
+			},
+			"title": "New face-to-face Meeting"
 		},
-		"citizen-Authentication": "Citizen Authentication",
-		"participation-Pages": "Participation Pages",
-		"regionalization-Pages": "Regionalization Pages",
-		"moderators": "Moderators",
 		"moderator": {
-			"enabled": "Enabled Moderators",
+			"already-enabled": "{{name}} is already enabled as a moderator",
 			"empty": "No records found",
-			"already-enabled": "{{name}} is already enabled as a moderator"
+			"enabled": "Enabled Moderators"
 		},
-		"image": "Image",
-		"title": "Title",
+		"moderators": "Moderators",
+		"name": "Name",
+		"new": "New conference {{name}} registered",
+		"participation-Pages": "Participation Pages",
+		"placeholder": {
+			"begin-date": "Select the start date of the conference",
+			"description": "Describe more details about the conference",
+			"email": "Enter conference e-mail",
+			"end-date": "Select the conference end date",
+			"month": "Select a month",
+			"name": "Enter conference name",
+			"plan": "Select the plan related to the conference",
+			"year": "Select a year"
+		},
+		"regionalization-Pages": "Regionalization Pages",
 		"sub-title": "Subtitle",
-		"locality-citizen": "Type of citizen locality"
+		"title": "Title",
+		"updated": "Updated conference {{name}} "
 	},
 	"dashboard": "Dashboard",
 	"date": {
@@ -135,8 +177,8 @@
 		"locality": {
 			"inserted": "New locality {{name}} registered",
 			"name": "Name",
-			"updated": "Updated locality {{name}}",
-			"new": "New"
+			"new": "New",
+			"updated": "Updated locality {{name}}"
 		},
 		"name": "Name",
 		"new": "New domain {{name}} registered",
@@ -149,7 +191,17 @@
 			"contain-plan": "Domain cannot be deleted, because it is linked to a plan"
 		}
 	},
+	"enuns": {
+		"all": "All",
+		"filed": "Filed",
+		"pending": "Pending",
+		"published": "Published",
+		"removed": "Removed"
+	},
 	"erro": {
+		"email": {
+			"field": "Invalid E-Mail"
+		},
 		"invalid": {
 			"data": "Invalid data. Verify provided information and try again.",
 			"field": "Invalid field"
@@ -159,13 +211,9 @@
 		},
 		"required": {
 			"field": "Required field"
-    },
-    "email": {
-      "field": "Invalid E-Mail"
-    }
+		}
 	},
 	"error": "Error",
-	"warn": "Warn",
 	"exists": {
 		"name": "This name already exists"
 	},
@@ -176,16 +224,32 @@
 		"required": "File is required",
 		"send": "Send"
 	},
+	"filed": "Filed",
 	"footer": {
 		"label1": "Open source provided free of charge, without support, without certification, without maintenance, without warranty and without indemnity for",
 		"label2": "Secretariat of Economy and Planning of the Espirito Santo State Government"
 	},
+	"generic.error": "We were unable to process your request",
 	"hide": "Hide",
 	"home": "Home",
 	"label": {
 		"parent": "Parent"
 	},
+	"locality": "Locality",
+	"meeting": "Meeting",
 	"moderation": {
+		"error": {
+			"begin": "The comment already is in moderation with another moderator",
+			"fetch": {
+				"comments": "Error in load comments",
+				"conferences": "Error loading conferences",
+				"planItems": "Error in load plan items",
+				"regionalization": "Error in load regionalization"
+			},
+			"moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save",
+			"publish_comment": "There was a problem publishing comments",
+			"update_comment": "There was a problem saving moderation"
+		},
 		"filters": {
 			"all": "All",
 			"endAt": "EndAt",
@@ -197,46 +261,35 @@
 			"trash": "Trash",
 			"type_of_participation": "Type of participation"
 		},
-		"error": {
-			"fetch": {
-				"comments": "Error in load comments",
-				"regionalization": "Error in load regionalization",
-				"planItems": "Error in load plan items"
-			},
-			"update_comment": "There was a problem saving moderation",
-			"publish_comment": "There was a problem publishing comments",
-			"begin": "The comment already is in moderation with another moderator",
-			"moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save"
-		},
 		"label": {
 			"btnModerate": "Moderate",
 			"btnPublish": "Publish",
 			"comment": "Comment",
-			"proposal": "Proposal",
-			"remote": "Remote",
-			"presential": "Presential",
-			"strategic_area": "Strategic Area",
-			"in_moderation_by": "in moderation by",
-			"select_conference": "Select the conference you want to moderate",
-			"empty_comments": "There is no comment to moderate or the query did not return data",
+			"confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
+			"confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
+			"confirm_alter_moderator_title": "Alter moderator",
+			"confirm_change_tree": "Confirm the change to the comment tree?",
+			"confirm_change_tree_title": "Confirm?",
 			"confirm_publish": "Do you really want to post the {{text}} comment made by {{citizenName}}?",
 			"confirm_publish_title": "Publish?",
-			"confirm_change_tree_title": "Confirm?",
-			"confirm_change_tree": "Confirm the change to the comment tree?",
-			"saved_success": "Comment saved!",
-			"confirm_alter_moderator_title": "Alter moderator",
-			"confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
-			"confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
+			"empty_comments": "There is no comment to moderate or the query did not return data",
+			"in_moderation_by": "in moderation by",
 			"msg": {
-				"pending_proposal": "Proposal pending",
-				"pending_comment": "Comment pending",
-				"publish_proposal": "Proposal published",
-				"publish_comment": "Comment published",
-				"filed_proposal": "Proposal filed",
 				"filed_comment": "Comment filed",
-				"removed_proposal": "Proposal in trash",
-				"removed_comment": "Comment in trash"
-			}
+				"filed_proposal": "Proposal filed",
+				"pending_comment": "Comment pending",
+				"pending_proposal": "Proposal pending",
+				"publish_comment": "Comment published",
+				"publish_proposal": "Proposal published",
+				"removed_comment": "Comment in trash",
+				"removed_proposal": "Proposal in trash"
+			},
+			"presential": "Presential",
+			"proposal": "Proposal",
+			"remote": "Remote",
+			"saved_success": "Comment saved!",
+			"select_conference": "Select the conference you want to moderate",
+			"strategic_area": "Strategic Area"
 		},
 		"moderate": {
 			"about": "About",
@@ -245,9 +298,9 @@
 				"moveFilter": ""
 			},
 			"save": {
-				"pending": "Pending",
 				"archived": "Archived",
 				"inTrash": "In the trash",
+				"pending": "Pending",
 				"published": "Published"
 			},
 			"saveAndTo": "Save and go to",
@@ -272,13 +325,14 @@
 	"name": "Name",
 	"new": "New",
 	"new-a": "New",
-	"update": "Update",
-	"locality": "Locality",
 	"no": "No",
+	"of": "of",
+	"pending": "Pending",
 	"placeholder": {
 		"select": "Select"
 	},
 	"plan": {
+		"RegionalizedBy": "Regionalized by",
 		"confirm": {
 			"delete": "Are you sure that you want to delete {{name}}?"
 		},
@@ -304,7 +358,6 @@
 		},
 		"label": "Plan",
 		"locality": "Locality",
-		"RegionalizedBy": "Regionalized by",
 		"name": "Name",
 		"placeholder": {
 			"description": "Describe more details",
@@ -317,17 +370,28 @@
 			"contain-conference": "Plan cannot be deleted, because it is linked to a conference"
 		}
 	},
+	"published": "Published",
 	"register": {
 		"removed": "Register removed"
 	},
+	"removed": "In trash",
 	"roles": {
 		"Administrator": "Administrator",
 		"Moderator": "Moderator",
 		"Recepcionist": "Recepcionist"
 	},
+	"rowPerPage": "Row per page",
 	"save": "Save",
 	"saveContinue": "Save and continue",
 	"search": "Search",
+	"select": "Selecione",
+	"state": "State",
+	"status": {
+		"active": "Active",
+		"activeUser": "Active User",
+		"inactive": "Inactive",
+		"inactiveUser": "Inactive User"
+	},
 	"structure": {
 		"comments": "Comments",
 		"confirm": {
@@ -339,14 +403,15 @@
 			"saving": "Error saving structure"
 		},
 		"item": {
-			"name": "Name",
 			"item": "Item",
+			"name": "Name",
 			"new": "New structure item {{name}} registered",
 			"placeholder": {
 				"name": "Enter the name of the structure-item"
 			},
 			"updated": "Structure item {{name}} updated"
 		},
+		"link": "Link to alternative proposal",
 		"locality": "Locality",
 		"logo": "Image",
 		"name": "Name",
@@ -354,11 +419,10 @@
 		"placeholder": {
 			"name": "Enter the name of the structure"
 		},
-		"updated": "Updated {{name}} structure",
-		"votes": "Destaques",
-		"title": "Title",
 		"subTitle": "Subtitle",
-		"link": "Link to alternative proposal"
+		"title": "Title",
+		"updated": "Updated {{name}} structure",
+		"votes": "Destaques"
 	},
 	"success": "Success",
 	"topbar": {
@@ -381,72 +445,11 @@
 		"profile": "Profile",
 		"settings": "Settings",
 		"yourhave": "You Have"
-  },
-  "attendance": {
-    "label": "Attendance List",
-    "saveAndRegister": "Save and Register Attendance",
-    "register": "Register",
-    "registerAttendance": "Register Attendance",
-    "registerAttendanceIn": "Register Attendance in ",
-    "editAttendance": "Edit attendance",
-    "removeAttendee": "Remove attendance",
-    "edit": "Edit Attendees",
-    "county": "County",
-    "authentication": "Authentication",
-    "error": {
-      "onlyDigitsPassword": "Password can only contain digits",
-      "lenghtOf6Password": "Password must have 6 digits",
-      "failedToCheckIn": "Error when trying to check-in, try again",
-      "couldNotUncheck": "Error when trying to uncheck attendance, try again",
-      "whenSearching": "Error when searching list of citizens, try again",
-      "whenSaving": "Error when trying to save, try again",
-      "couldNotConnectToServer": "Error trying to connect to server, try again",
-      "invalidForm": "Invalid form, fill all required fields",
-      "couldNotGetLocalities": "Error when trying to get conference localities, try again",
-      "couldNotGetCitizenInfo": "Error retrieving information about user, try again"
-    },
-    "successDetail": {
-      "saveAccount": "User saved!",
-      "checkin": "Checkin registered!",
-      "uncheckin": "Attendance removed!"
-    },
-    "noResult": "No result",
-    "loadMore": "Load more results",
-    "tooltipLabelView": "View ",
-    "tooltipLabelCheckin": "Register attendance of ",
-    "tooltipLabelUnchecking": "Remove attendance of ",
-    "selectMeeting": "Select meeting",
-    "attendant": "Attendants",
-    "orderBy": "Order by",
-    "arrival": "Arrival"
-  },
-	"type": "Type",
-	"years": "Years",
-	"yes": "Yes",
-	"pending": "Pending",
-	"filed": "Filed",
-	"removed": "In trash",
-	"published": "Published",
-	"all": "All",
-	"rowPerPage": "Row per page",
-	"select": "Selecione",
-	"enuns": {
-		"pending": "Pending",
-		"filed": "Filed",
-		"removed": "Removed",
-		"published": "Published",
-		"all": "All"
 	},
-	"generic.error": "We were unable to process your request",
-  "unauthorized.error": "You do not have permission to access this functionality",
-  "change": "Change",
-  "meeting": "Meeting",
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "activeUser": "Active User",
-    "inactiveUser": "Inactive User"
-  },
-  "of": "of",
-  "state": "State"
+	"type": "Type",
+	"unauthorized.error": "You do not have permission to access this functionality",
+	"update": "Update",
+	"warn": "Warn",
+	"years": "Years",
+	"yes": "Yes"
 }

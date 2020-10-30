@@ -43,7 +43,9 @@ export class AppActionBarComponent implements OnDestroy {
     }
 
     translateAllLabels(labels): string {
-      return labels.split(' ').map(label => this.translateSrv.instant(label)).join(' ');
+        if(labels != null) {
+            return labels.split(' ').map(label => this.translateSrv.instant(label)).join(' ');
+        }
     }
 
     ngOnDestroy() {

@@ -21,4 +21,5 @@ export class Conference {
   locality: LocalityType;
   hasAttend: Boolean;
   moderators: IPerson[];
+  isActive: Boolean;
 }

@@ -7,102 +7,144 @@
 		"label": "Administração",
 		"moderation": "Moderação",
 		"plan": "Plano",
-		"structure": "Estrutura",
-		"presential-meeting": "Reuniões Presenciais"
+		"presential-meeting": "Reuniões Presenciais",
+		"structure": "Estrutura"
+	},
+	"all": "Todos",
+	"attendance": {
+		"arrival": "Ordem de Chegada",
+		"attendant": "Presentes",
+		"authentication": "Autenticação",
+		"county": "Município",
+		"edit": "Editar Lista de Presença",
+		"editAttendance": "Editar Presença",
+		"error": {
+			"couldNotConnectToServer": "Erro ao tentar conectar com o servidor, tente novamente",
+			"couldNotGetCitizenInfo": "Erro ao buscar as informações do usuário, tente novamente",
+			"couldNotGetLocalities": "Erro ao buscar as localidades da conferência, tente novamente",
+			"couldNotUncheck": "Erro ao tentar remover presença, tente novamente",
+			"failedToCheckIn": "Erro ao tentar registrar a presença, tente novamente",
+			"invalidForm": "Formulário inválido, preencha todos os dados necessários",
+			"lenghtOf6Password": "Senha deve conter 6 dígitos",
+			"onlyDigitsPassword": "Senha deve conter apenas dígitos",
+			"whenSaving": "Erro ao tentar salvar, tente novamente",
+			"whenSearching": "Erro ao tentar ao buscar a lista de cidadões, tente novamente"
+		},
+		"label": "Lista de Presença",
+		"loadMore": "Carregar mais resultados",
+		"noResult": "Sem resultado",
+		"orderBy": "Ordernar por",
+		"register": "Registrar",
+		"registerAttendance": "Registrar Presença",
+		"registerAttendanceIn": "Registrar presença em ",
+		"removeAttendee": "Remover presença",
+		"saveAndRegister": "Salvar e Registrar Presença",
+		"selectMeeting": "Selecionar Reunião",
+		"successDetail": {
+			"checkin": "Presença registrada!",
+			"saveAccount": "Usuário salvo!",
+			"uncheckin": "Prenseça removida!"
+		},
+		"tooltipLabelCheckin": "Registrar presença de ",
+		"tooltipLabelUnchecking": "Remover presença de ",
+		"tooltipLabelView": "Visualizar "
 	},
 	"cancel": "Cancelar",
+	"change": "Trocar",
 	"citizen": {
+		"attendance_count": "Acesso",
+		"authentication": "Autenticação",
 		"cpf": "CPF",
+		"error": {
+			"empty.conference": "Não existe nenhuma conferência para listagem dos cidadãos",
+			"fetch": {
+				"conferenceActive": "Não foi possível carregar as conferências ativas",
+				"regionalization": "Não foi possível carregar as localidades da conferência ativa"
+			},
+			"saving": "Não foi possível salvar o cidadão"
+		},
+		"inserted": "Cidadão {{name}} inserido",
 		"locality": "Localidade",
 		"mail": "E-mail",
 		"name": "Nome",
 		"password": "Senha",
 		"phone": "Telefone",
-		"attendance_count": "Acesso",
-		"authentication": "Autenticação",
-		"status": "Situação",
-		"inserted": "Cidadão {{name}} inserido",
-		"updated": "Cidadão {{name}} atualizado",
 		"resetpassword": "Resetar senha",
-		"error": {
-			"saving": "Não foi possível salvar o cidadão",
-			"empty.conference":"Não existe nenhuma conferência para listagem dos cidadãos",
-			"fetch": {
-				"conferenceActive": "Não foi possível carregar as conferências ativas",
-				"regionalization": "Não foi possível carregar as localidades da conferência ativa"
-			}
-		}
+		"status": "Situação",
+		"updated": "Cidadão {{name}} atualizado"
 	},
 	"clean": {
 		"search": "Limpar Pesquisa"
 	},
 	"conference": {
+		"citizen-Authentication": "Autenticação do Cidadão",
 		"confirm": {
 			"delete": "Deseja realmente excluir {{name}}?"
 		},
 		"delete": "Excluir Consulta",
+		"email": "E-mail",
+		"enable": "Habilitado",
 		"error": {
 			"fetch": {
 				"plans": "Erro ao carregar os planos"
 			},
 			"saving": "Erro ao salvar a consulta"
 		},
-		"name": "Nome",
-		"email": "E-mail",
-		"enable": "Habilitado",
-		"new": "Nova consulta {{name}} inserida",
-		"placeholder": {
-			"begin-date": "Selecione a data de início da consulta",
-			"description": "Descreva mais detalhes sobre a consulta",
-			"end-date": "Selecione a data de encerramento da consulta",
-			"month": "Selecione um mês",
-			"name": "Preencha com o nome da consulta",
-			"email": "Preencha com o e-mail da consulta",
-			"plan": "Selecione o plano relacionado à consulta",
-			"year": "Selecione um ano"
-		},
-		"updated": "Consulta {{name}} atualizada",
-		"inserted": "Consulta {{name}} inserida",
+		"image": "Imagem",
 		"in-progress": "Consulta em andamento, não pode ser excluída!",
-		"citizen-Authentication": "Autenticação do Cidadão",
-		"participation-Pages": "Páginas de Participação",
-		"regionalization-Pages": "Páginas de Regionalização",
+		"inserted": "Consulta {{name}} inserida",
+		"locality-citizen": "Tipo de localidade do cidadão",
 		"meeting": {
-			"name": "Nome",
-			"beginDate": "Data Inicial",
-			"endDate": "Data Final",
-			"locality": "Localidade",
 			"address": "Endereço",
-			"place": "Local",
+			"beginDate": "Início",
+			"delete": "Excluir?",
+			"endDate": "Fim",
+			"error": {
+				"delete": "Erro ao tentar excluír a reunião {{name}}",
+				"fetch": {
+					"conferenceActive": "Não foi possível carregar as conferências ativas",
+					"localities": "Erro ao carregar as localidades",
+					"plans": "Erro ao carregar os planos"
+				},
+				"saving": "Erro ao salvar a reunião"
+			},
+			"locality": "Localidade",
 			"localityCovers": "Abrangência",
+			"mail": "Email",
+			"name": "Nome",
+			"place": "Local",
 			"receptionists": "Recepcionistas",
 			"receptionists-active": "Recepcionistas Habilitados",
 			"receptionists-active-empty": "Nenhum recepcionista foi habilitado para esta reunião",
 			"receptionists-not-found": "Nenhum recepcionista foi encontrado com o filtro utilizado",
-			"delete": "Excluir?",
-			"error": {
-				"fetch": {
-					"plans": "Erro ao carregar os planos",
-					"localities": "Erro ao carregar as localidades",
-					"conferenceActive": "Não foi possível carregar as conferências ativas"
-				},
-        "saving": "Erro ao salvar a reunião",
-        "delete": "Erro ao tentar excluír a reunião {{name}}"
-      },
-      "success": {
-        "delete": "Reunião {{name}} excluída"
-      }
+			"success": {
+				"delete": "Reunião {{name}} excluída"
+			},
+			"title": "Nova Reunião Presencial"
+		},
+		"moderator": {
+			"already-enabled": "{{name}} já está habilitado como moderador",
+			"empty": "Não foram encontrados registros",
+			"enabled": "Moderadores Habilitados"
 		},
 		"moderators": "Moderadores",
-		"moderator": {
-			"enabled": "Moderadores Habilitados",
-			"empty": "Não foram encontrados registros",
-			"already-enabled": "{{name}} já está habilitado como moderador"
+		"name": "Nome",
+		"new": "Nova consulta {{name}} inserida",
+		"participation-Pages": "Páginas de Participação",
+		"placeholder": {
+			"begin-date": "Selecione a data de início da consulta",
+			"description": "Descreva mais detalhes sobre a consulta",
+			"email": "Preencha com o e-mail da consulta",
+			"end-date": "Selecione a data de encerramento da consulta",
+			"month": "Selecione um mês",
+			"name": "Preencha com o nome da consulta",
+			"plan": "Selecione o plano relacionado à consulta",
+			"year": "Selecione um ano"
 		},
-		"image": "Imagem",
-		"title": "Título",
+		"regionalization-Pages": "Páginas de Regionalização",
 		"sub-title": "Subtítulo",
-		"locality-citizen": "Tipo de localidade do cidadão"
+		"title": "Título",
+		"updated": "Consulta {{name}} atualizada"
 	},
 	"dashboard": "Painel de Controle",
 	"date": {
@@ -135,8 +177,8 @@
 		"locality": {
 			"inserted": "Nova localidade {{name}} inserida",
 			"name": "Nome",
-			"updated": "Localidade {{name}} atualizada",
-			"new": "Nova"
+			"new": "Nova",
+			"updated": "Localidade {{name}} atualizada"
 		},
 		"name": "Nome",
 		"new": "Novo domínio {{name}} registrado",
@@ -149,7 +191,17 @@
 			"contain-plan": "Domínio não pode ser excluído, pois está vinculado a um plano"
 		}
 	},
+	"enuns": {
+		"all": "",
+		"filed": "",
+		"pending": "",
+		"published": "",
+		"removed": ""
+	},
 	"erro": {
+		"email": {
+			"field": "E-mail inválido"
+		},
 		"invalid": {
 			"data": "Dados inválidos, corrija e tente novamente",
 			"field": "Campo inválido"
@@ -159,13 +211,9 @@
 		},
 		"required": {
 			"field": "Campo obrigatório"
-    },
-    "email": {
-      "field": "E-mail inválido"
-    }
+		}
 	},
 	"error": "Erro",
-	"warn": "Cuidado",
 	"exists": {
 		"name": "Esse nome já existe"
 	},
@@ -176,16 +224,32 @@
 		"required": "Imagem é obrigatória",
 		"send": "Enviar"
 	},
+	"filed": "Arquivado",
 	"footer": {
 		"label1": "Código aberto fornecido gratuitamente, sem suporte, sem certificação, sem manutenção, sem garantia e sem indenização por",
 		"label2": "Secretaria de Economia e Planejamento do Governo do Estado do Espirito Santo"
 	},
+	"generic.error": "Não foi possível processar sua solicitação",
 	"hide": "Ocultar",
 	"home": "Página Inicial",
 	"label": {
 		"parent": "Nível acima"
 	},
+	"locality": "Localidade",
+	"meeting": "Reunião",
 	"moderation": {
+		"error": {
+			"begin": "O comentário já está em moderação com outro moderador",
+			"fetch": {
+				"comments": "Erro ao carregar os comentários",
+				"conferences": "Erro ao carregar conferências",
+				"planItems": "Erro ao carregar os item de planos da consulta",
+				"regionalization": "Erro ao carregar a Regionalização"
+			},
+			"moderator": "A edição desta proposta foi cancelada pelo administrador do sistema e suas alterações não serão salvas",
+			"publish_comment": "Houve um problema ao publicar o comentários",
+			"update_comment": "Houve um problema ao salvar a moderação"
+		},
 		"filters": {
 			"all": "Todos",
 			"endAt": "Data Fim",
@@ -197,46 +261,35 @@
 			"trash": "Lixo",
 			"type_of_participation": "Tipo de Participação"
 		},
-		"error": {
-			"fetch": {
-				"comments": "Erro ao carregar os comentários",
-				"regionalization": "Erro ao carregar a Regionalização",
-				"planItems": "Erro ao carregar os item de planos da consulta"
-			},
-			"update_comment": "Houve um problema ao salvar a moderação",
-			"publish_comment": "Houve um problema ao publicar o comentários",
-			"begin": "O comentário já está em moderação com outro moderador",
-			"moderator": "A edição desta proposta foi cancelada pelo administrador do sistema e suas alterações não serão salvas"
-		},
 		"label": {
 			"btnModerate": "Moderar",
 			"btnPublish": "Publicar",
 			"comment": "Comentário",
-			"proposal": "Proposta",
-			"remote": "Remoto",
-			"presential": "Presencial",
-			"strategic_area": "Área Estratégica",
-			"in_moderation_by": "em moderação por",
-			"select_conference": "Selecione a consulta que deseja moderar",
-			"empty_comments": "Não existe nenhum comentário a ser moderado ou a consulta não retornou dados",
+			"confirm_alter_moderator_comment": "Comentário em moderação por outro usuário, deseja moderar mesmo assim?",
+			"confirm_alter_moderator_proposal": "Proposta em moderação por outro usuário, deseja moderar mesmo assim?",
+			"confirm_alter_moderator_title": "Alterar moderador",
+			"confirm_change_tree": "Confirma a alteração da árvore do comentário?",
+			"confirm_change_tree_title": "Confirma?",
 			"confirm_publish": "Deseja realmente publicar o comentário {{text}} feito por {{citizenName}}?",
 			"confirm_publish_title": "Publicar?",
-			"confirm_change_tree_title": "Confirma?",
-			"confirm_change_tree": "Confirma a alteração da árvore do comentário?",
-			"saved_success": "Comentário atualizado com sucesso!",
-			"confirm_alter_moderator_title": "Alterar moderador",
-			"confirm_alter_moderator_proposal": "Proposta em moderação por outro usuário, deseja moderar mesmo assim?",
-			"confirm_alter_moderator_comment": "Comentário em moderação por outro usuário, deseja moderar mesmo assim?",
+			"empty_comments": "Não existe nenhum comentário a ser moderado ou a consulta não retornou dados",
+			"in_moderation_by": "em moderação por",
 			"msg": {
-				"pending_proposal": "Proposta pendente",
-				"pending_comment": "Comentário pendente",
-				"publish_proposal": "Proposta publicada",
-				"publish_comment": "Comentário publicado",
-				"filed_proposal": "Proposta arquivada",
 				"filed_comment": "Comentário arquivado",
-				"removed_proposal": "Proposta no lixo",
-				"removed_comment": "Comentário no lixo"
-			}
+				"filed_proposal": "Proposta arquivada",
+				"pending_comment": "Comentário pendente",
+				"pending_proposal": "Proposta pendente",
+				"publish_comment": "Comentário publicado",
+				"publish_proposal": "Proposta publicada",
+				"removed_comment": "Comentário no lixo",
+				"removed_proposal": "Proposta no lixo"
+			},
+			"presential": "Presencial",
+			"proposal": "Proposta",
+			"remote": "Remoto",
+			"saved_success": "Comentário atualizado com sucesso!",
+			"select_conference": "Selecione a consulta que deseja moderar",
+			"strategic_area": "Área Estratégica"
 		},
 		"moderate": {
 			"about": "Sobre",
@@ -245,9 +298,9 @@
 				"moveFilter": ""
 			},
 			"save": {
-				"pending": "Pendente",
 				"archived": "Arquivado",
 				"inTrash": "No lixo",
+				"pending": "Pendente",
 				"published": "Publicado"
 			},
 			"saveAndTo": "Salvar e ir para",
@@ -272,13 +325,14 @@
 	"name": "Nome",
 	"new": "Novo",
 	"new-a": "Novo (a)",
-	"update": "Editar",
-	"locality": "Localidade",
 	"no": "Não",
+	"of": "de",
+	"pending": "Pendente",
 	"placeholder": {
 		"select": "Selecione"
 	},
 	"plan": {
+		"RegionalizedBy": "Regionalizado por",
 		"confirm": {
 			"delete": "Deseja realmente excluir {{name}}?"
 		},
@@ -304,7 +358,6 @@
 		},
 		"label": "Plano",
 		"locality": "Regionalização",
-		"RegionalizedBy": "Regionalizado por",
 		"name": "Nome",
 		"placeholder": {
 			"description": "Descreva mais detalhes",
@@ -317,17 +370,28 @@
 			"contain-conference": "Plano não pode ser excluído, pois está vinculado a uma consulta"
 		}
 	},
+	"published": "Publicado",
 	"register": {
 		"removed": "Registro removido"
 	},
+	"removed": "No lixo",
 	"roles": {
 		"Administrator": "Administrador",
 		"Moderator": "Moderador",
 		"Recepcionist": "Recepcionista"
 	},
+	"rowPerPage": "Linhas por página",
 	"save": "Salvar",
 	"saveContinue": "Salvar e continuar",
 	"search": "Pesquisar",
+	"select": "Selecione",
+	"state": "Estado",
+	"status": {
+		"active": "Ativo",
+		"activeUser": "Usuário Ativo",
+		"inactive": "Inativo",
+		"inactiveUser": "Usuário Inativo"
+	},
 	"structure": {
 		"comments": "Comentários",
 		"confirm": {
@@ -339,14 +403,15 @@
 			"saving": "Erro ao salvar a estrutura"
 		},
 		"item": {
-			"name": "Nome",
 			"item": "Item",
+			"name": "Nome",
 			"new": "Novo item da estrutura {{name}} inserido",
 			"placeholder": {
 				"name": "Preencha com o nome do item da estrutura"
 			},
 			"updated": "Item da estrutura {{name}} atualizado"
 		},
+		"link": "Link para proposta alternativa",
 		"locality": "Regionalizável",
 		"logo": "Imagem",
 		"name": "Nome",
@@ -354,11 +419,10 @@
 		"placeholder": {
 			"name": "Preencha com o nome da estrutura"
 		},
-		"updated": "Estrutura {{name}} atualizada",
-		"votes": "Destaques",
-		"title": "Título",
 		"subTitle": "Subtítulo",
-		"link": "Link para proposta alternativa"
+		"title": "Título",
+		"updated": "Estrutura {{name}} atualizada",
+		"votes": "Destaques"
 	},
 	"success": "Sucesso",
 	"topbar": {
@@ -381,65 +445,11 @@
 		"profile": "Perfil",
 		"settings": "Configurações",
 		"yourhave": "Você possui"
-  },
-  "attendance": {
-    "label": "Lista de Presença",
-    "saveAndRegister": "Salvar e Registrar Presença",
-    "register": "Registrar",
-    "registerAttendance": "Registrar Presença",
-    "registerAttendanceIn": "Registrar presença em ",
-    "editAttendance": "Editar Presença",
-    "removeAttendee": "Remover presença",
-    "edit": "Editar Lista de Presença",
-    "county": "Município",
-    "authentication": "Autenticação",
-    "error": {
-      "onlyDigitsPassword": "Senha deve conter apenas dígitos",
-      "lenghtOf6Password": "Senha deve conter 6 dígitos",
-      "failedToCheckIn": "Erro ao tentar registrar a presença, tente novamente",
-      "couldNotUncheck": "Erro ao tentar remover presença, tente novamente",
-      "whenSearching": "Erro ao tentar ao buscar a lista de cidadões, tente novamente",
-      "whenSaving": "Erro ao tentar salvar, tente novamente",
-      "couldNotConnectToServer": "Erro ao tentar conectar com o servidor, tente novamente",
-      "invalidForm": "Formulário inválido, preencha todos os dados necessários",
-      "couldNotGetLocalities": "Erro ao buscar as localidades da conferência, tente novamente",
-      "couldNotGetCitizenInfo": "Erro ao buscar as informações do usuário, tente novamente"
-    },
-    "successDetail": {
-      "saveAccount": "Usuário salvo!",
-      "checkin": "Presença registrada!",
-      "uncheckin": "Prenseça removida!"
-    },
-    "noResult": "Sem resultado",
-    "loadMore": "Carregar mais resultados",
-    "tooltipLabelView": "Visualizar ",
-    "tooltipLabelCheckin": "Registrar presença de ",
-    "tooltipLabelUnchecking": "Remover presença de ",
-    "selectMeeting": "Selecionar Reunião",
-    "attendant": "Presentes",
-    "orderBy": "Ordernar por",
-    "arrival": "Ordem de Chegada"
-  },
+	},
 	"type": "Tipo",
+	"unauthorized.error": "Você não possui permissão de acesso à essa funcionalidade",
+	"update": "Editar",
+	"warn": "Cuidado",
 	"years": "Anos",
-	"yes": "Sim",
-	"pending": "Pendente",
-	"filed": "Arquivado",
-	"removed": "No lixo",
-	"published": "Publicado",
-	"all": "Todos",
-	"rowPerPage": "Linhas por página",
-	"select": "Selecione",
-	"generic.error": "Não foi possível processar sua solicitação",
-  "unauthorized.error": "Você não possui permissão de acesso à essa funcionalidade",
-  "change": "Trocar",
-  "meeting": "Reunião",
-  "status": {
-    "active": "Ativo",
-    "inactive": "Inativo",
-    "activeUser": "Usuário Ativo",
-    "inactiveUser": "Usuário Inativo"
-  },
-  "of": "de",
-  "state": "Estado"
+	"yes": "Sim"
 }

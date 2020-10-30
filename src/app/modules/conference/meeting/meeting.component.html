@@ -73,6 +73,7 @@
             </section>
             <div class="card card-w-title" *ngIf="edit">
                 <section class="p-col-12 p-md-8">
+                    <div class="p-col-12 p-md-12" style="height: 60px;">{{ 'conference.meeting.title' | translate }}</div>
                     <form [formGroup]="form" (submit)="save(form.value)">
                         <div class="p-col-12 p-md-12">
                             <label for="name">{{'conference.meeting.name'|translate}}</label>
@@ -94,11 +95,9 @@
                             <tt-input-message [form]="form" field="endDate"></tt-input-message>
                         </div>
                         <div class="p-col-12 p-md-12">
+                            <div style="padding-bottom:5px;">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</div>
                             <p-listbox styleClass="pListCustom" [options]="localities" formControlName="localityPlace"
                                 checkbox="checkbox" filter="filter">
-                                <p-header>
-                                    {{ localitySrv.getTranslatedLabelLocality(labelLocality) }}
-                                </p-header>
                             </p-listbox>
                         </div>
                         <div class="p-col-12 p-md-12">
@@ -112,11 +111,9 @@
                             <tt-input-message [form]="form" field="place"></tt-input-message>
                         </div>
                         <div class="p-col-12 p-md-12">
+                            <div style="padding-bottom:5px;">{{ 'conference.meeting.localityCovers' | translate }}</div>
                             <p-listbox styleClass="pListCustom" [options]="localitiesCover" formControlName="localityCovers"
                                 checkbox="checkbox" filter="filter" multiple="multiple">
-                                <p-header>
-                                    {{'conference.meeting.localityCovers'|translate}}
-                                </p-header>
                             </p-listbox>
                         </div>
                         <p-accordion [multiple]="true">
@@ -126,8 +123,8 @@
                                     (submit)="handleSearchReceptionists(searchFormReceptionists.value)">
                                     <div class="p-grid ui-fluid">
                                         <div class="ui-g-12 ui-md-10">
-                                            <label for="name">{{'conference.meeting.name'|translate}}</label>
-                                            <input id="search-input" pInputText formControlName="name">
+                                            <label for="mail"> {{ 'conference.meeting.mail' | translate }}</label>
+                                            <input id="search-input" pInputText formControlName="mail">
                                         </div>
                                         <div class="ui-g-12 ui-md-2 p-col-align-end">
                                             <button pButton type="submit" icon="pi pi-search"

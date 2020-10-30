@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/shared/services/auth.service';
+
 @Component({
   selector: 'app-moderation',
   templateUrl: './moderation.component.html',
@@ -108,29 +109,44 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async loadConferencesActives() {
     try {
-      const data = await this.moderationSrv.getConferencesActive();
+      const data = await this.moderationSrv.getConferencesActive(false);
       this.conferencesActives = data;
       if (data.length > 0) {
-        this.conferenceSelect = data[0];
+        if(data.filter(conf => conf.isActive).length === 0) {
+          this.conferenceSelect = data[0];
+        } else {
+          this.conferenceSelect = data.filter(conf => conf.isActive)[0];
+        }
       }
     } catch (error) {
       console.error(error);
       this.messageService.add({
         severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.comments')
+        detail: this.translate.instant('moderation.error.fetch.conferences')
       });
     }
   }
 
   async loadComments() {
+    if(this.conferenceSelect.id == null) {
+      return null;
+    }
+
     try {
       const data = await this.moderationSrv.getCommentsForModeration(this.conferenceSelect.id, this.filter);
       this.conferenceComments = data;
     } catch (error) {
-      this.messageService.add({
-        severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.comments')
-      });
+      if(this.conferenceSelect.id != null) {
+        this.messageService.add({
+          severity: 'error', summary: 'Erro',
+          detail: this.translate.instant('moderation.error.fetch.comments')
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error', summary: 'Erro',
+          detail: this.translate.instant('moderation.error.fetch.conferences')
+        });
+      }
     }
   }
 
@@ -148,10 +164,12 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async loadLocalitiesOptions() {
     try {
-      const data = await this.moderationSrv.getLocalities(this.conferenceSelect.id);
-      this.microregion = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
-      this.microregion.unshift({ value: '', label: 'Todos' });
-      this.labelMicroregion = data.regionalizable;
+      if(this.conferenceSelect.id != null) {
+        const data = await this.moderationSrv.getLocalities(this.conferenceSelect.id);
+        this.microregion = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
+        this.microregion.unshift({ value: '', label: 'Todos' });
+        this.labelMicroregion = data.regionalizable;
+      }
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: 'Erro',
@@ -162,11 +180,13 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async loadPlanItems() {
     try {
-      const data = await this.moderationSrv.getPlanItem(this.conferenceSelect.id);
-      this.planItem = _.map(_.get(data, 'planItems', []),
+      if(this.conferenceSelect.id != null) {
+        const data = await this.moderationSrv.getPlanItem(this.conferenceSelect.id);
+        this.planItem = _.map(_.get(data, 'planItems', []), 
         ({ planItemId, planItemName }) => ({ value: planItemId, label: planItemName }));
-      this.planItem.unshift({ value: '', label: 'Todos' });
-      this.labelPlanItem = _.get(data, 'structureItemName');
+        this.planItem.unshift({ value: '', label: 'Todos' });
+        this.labelPlanItem = _.get(data, 'structureItemName');
+      }
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: 'Erro',
