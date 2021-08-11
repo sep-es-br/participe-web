@@ -16,24 +16,24 @@
      word-break: normal;
      word-wrap: normal;
      line-height: 1.5;
- 
+
      -moz-tab-size: 4;
      -o-tab-size: 4;
      tab-size: 4;
- 
+
      -webkit-hyphens: none;
      -moz-hyphens: none;
      -ms-hyphens: none;
      hyphens: none;
  }
- 
+
  /* Code blocks */
  pre[class*="language-"] {
      position: relative;
      margin: .5em 0;
-     -webkit-box-shadow: -1px 0px 0px 0px #dae8ef, 0px 0px 0px 1px #dfdfdf;
-     -moz-box-shadow: -1px 0px 0px 0px #dae8ef, 0px 0px 0px 1px #dfdfdf;
-     box-shadow: -1px 0px 0px 0px #dae8ef, 0px 0px 0px 1px #dfdfdf;
+     -webkit-box-shadow: -1px 0 0 0 #dae8ef, 0 0 0 1px #dfdfdf;
+     -moz-box-shadow: -1px 0 0 0 #dae8ef, 0 0 0 1px #dfdfdf;
+     box-shadow: -1px 0 0 0 #dae8ef, 0 0 0 1px #dfdfdf;
      border-left: 10px solid #dae8ef;
      background-color: #fdfdfd;
      background-image: -webkit-linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%);
@@ -46,7 +46,7 @@
      overflow: visible;
      padding: 0;
  }
- 
+
  code[class*="language"] {
      max-height: inherit;
      height: 100%;
@@ -54,7 +54,7 @@
      display: block;
      overflow: auto;
  }
- 
+
  /* Margin bottom to accomodate shadow */
  :not(pre) > code[class*="language-"],
  pre[class*="language-"] {
@@ -64,7 +64,7 @@
      box-sizing: border-box;
      margin-bottom: 1em;
  }
- 
+
  /* Inline code */
  :not(pre) > code[class*="language-"] {
      position: relative;
@@ -79,7 +79,7 @@
      display: inline;
      white-space: normal;
  }
- 
+
  pre[class*="language-"]::before,
  pre[class*="language-"]::after {
      content: '';
@@ -97,7 +97,7 @@
      -o-transform: rotate(-2deg);
      transform: rotate(-2deg);
  }
- 
+
  :not(pre) > code[class*="language-"]::after,
  pre[class*="language-"]::after {
      right: 0.75em;
@@ -108,7 +108,7 @@
      -o-transform: rotate(2deg);
      transform: rotate(2deg);
  }
- 
+
  .token.comment,
  .token.block-comment,
  .token.prolog,
@@ -116,11 +116,11 @@
  .token.cdata {
      color: #7D8B99;
  }
- 
+
  .token.punctuation {
      color: #5F6364;
  }
- 
+
  .token.property,
  .token.tag,
  .token.boolean,
@@ -131,7 +131,7 @@
  .token.deleted {
      color: #c92c2c;
  }
- 
+
  .token.selector,
  .token.attr-name,
  .token.string,
@@ -141,7 +141,7 @@
  .token.inserted {
      color: #2f9c0a;
  }
- 
+
  .token.operator,
  .token.entity,
  .token.url,
@@ -149,44 +149,44 @@
      color: #a67f59;
      background: rgba(255, 255, 255, 0.5);
  }
- 
+
  .token.atrule,
  .token.attr-value,
  .token.keyword,
  .token.class-name {
      color: #1990b8;
  }
- 
+
  .token.regex,
  .token.important {
      color: #e90;
  }
- 
+
  .language-css .token.string,
  .style .token.string {
      color: #a67f59;
      background: rgba(255, 255, 255, 0.5);
  }
- 
+
  .token.important {
      font-weight: normal;
  }
- 
+
  .token.bold {
      font-weight: bold;
  }
  .token.italic {
      font-style: italic;
  }
- 
+
  .token.entity {
      cursor: help;
  }
- 
+
  .namespace {
      opacity: .7;
  }
- 
+
  @media screen and (max-width: 767px) {
      pre[class*="language-"]::before,
      pre[class*="language-"]::after {
@@ -195,29 +195,29 @@
          -moz-box-shadow: none;
          box-shadow: none;
      }
- 
+
  }
- 
+
  /* Plugin styles */
  .token.tab:not(:empty)::before,
  .token.cr::before,
  .token.lf::before {
      color: #e0d7d1;
  }
- 
+
  /* Plugin styles: Line Numbers */
  pre[class*="language-"].line-numbers {
      padding-left: 0;
  }
- 
+
  pre[class*="language-"].line-numbers code {
      padding-left: 3.8em;
  }
- 
+
  pre[class*="language-"].line-numbers .line-numbers-rows {
      left: 0;
  }
- 
+
  /* Plugin styles: Line Highlight */
  pre[class*="language-"][data-line] {
      padding-top: 0;
@@ -231,5 +231,4 @@
  pre .line-highlight {
      margin-top: 0;
  }
- 
- 
+

@@ -1,34 +1,28 @@
 .exception-body {
 
     &.notfound {
-        background: url("../../layout/images/pages/bg-404.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: bottom;
+      background-size: cover;
+      background: url("../../layout/images/pages/bg-404.jpg") no-repeat bottom;
 
-        .top-border {
+      .top-border {
             background:linear-gradient(to right, #3ca4e7, #3c71dd);
         }
     }
 
     &.error {
-        background: url("../../layout/images/pages/bg-error.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: bottom;
+      background-size: cover;
+      background: url("../../layout/images/pages/bg-error.jpg") no-repeat bottom;
 
-        .top-border {
+      .top-border {
             background:linear-gradient(to right, #e73c3c, #c62020);
         }
     }
 
     &.accessdenied {
-        background: url("../../layout/images/pages/bg-access.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: bottom;
+      background-size: cover;
+      background: url("../../layout/images/pages/bg-access.jpg") no-repeat bottom;
 
-        .top-border {
+      .top-border {
             background:linear-gradient(to right, #e7983c, #ef7b14);
         }
     }
@@ -109,7 +103,7 @@
 
         .exception-card {
             width: 100%;
-            min-width: 100%;           
+            min-width: 100%;
             left: 0;
             bottom: 0;
             top: auto;
@@ -119,5 +113,5 @@
                 padding: 30px 30px;
             }
         }
-    }    
+    }
 }

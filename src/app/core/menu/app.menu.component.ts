@@ -30,7 +30,7 @@ export class AppMenuComponent implements OnInit {
   ngOnInit() {
     const person = this.userAuth.getUserInfo;
     this.model = [
-      { label: 'dashboard', icon: faTachometerAlt, routerLink: ['/home'] }
+      { label: 'control-panel', icon: faTachometerAlt, routerLink: ['/home'] }
     ];
     if (person.roles.includes('Moderator') || person.roles.includes('Administrator')) {
       this.model.push({ label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search'] });

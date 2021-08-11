@@ -1,6 +1,6 @@
 import { IAuthenticationProvider } from './../interface/IAuthenticationProvider';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
 import { DOCUMENT } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -29,12 +29,12 @@ export class AuthService {
     @Inject(DOCUMENT) private document: Document
   ) { }
 
-  private getUrlForSocialAuth(origin: string) {
-    return `${environment.apiEndpoint}/oauth2/authorization/${origin}?front_callback_url=${this.getFrontFallbackUrl()}`;
+  private static getUrlForSocialAuth(origin: string) {
+    return `${environment.apiEndpoint}/oauth2/authorization/${origin}?front_callback_url=${AuthService.getFrontFallbackUrl()}`;
   }
 
   signInAcessoCidadao() {
-    this.document.location.href = this.getUrlForSocialAuth('idsvr');
+    this.document.location.href = AuthService.getUrlForSocialAuth('idsvr');
   }
 
   async refresh() {
@@ -55,7 +55,7 @@ export class AuthService {
 
   async signOut() {
     this.clearTokens();
-    this.router.navigate(['/login']);
+    await this.router.navigate(['/login']);
   }
 
   saveToken(data: ISocialLoginResult) {
@@ -84,7 +84,7 @@ export class AuthService {
     return jwtDecode(this.getAccessToken());
   }
 
-  private getFrontFallbackUrl(): string {
+  private static getFrontFallbackUrl(): string {
     const { protocol, host } = window.location;
     let url = `${protocol}//${host}`;
 

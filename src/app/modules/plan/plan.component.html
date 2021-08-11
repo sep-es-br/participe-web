@@ -35,7 +35,7 @@
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-              <tr>
+              <tr [ngClass]="rowData.created ? 'background-orange' : ''">
                 <td >
                   <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                   <span style="vertical-align: middle">{{rowData.name}}</span>
@@ -50,7 +50,7 @@
                   <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
                     [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
                     (click)="showCreatePlanItem(rowNode)">
-                    <img src="assets/layout/images/icons/triangule_plus.png" />
+                    <img src="assets/layout/images/icons/triangule_plus.png"  alt=""/>
                   </button>
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
                     (click)="showEdit(rowNode)"></button>
@@ -72,7 +72,7 @@
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'plan.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="planForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
@@ -83,7 +83,7 @@
             </div>
             <div class="p-col-12 p-md-6">
               <label for="domain">{{'administration.domain'|translate}}</label>
-              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate" 
+              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate"
               class="ng-dirty ng-invalid" (onChange)="onChangeDomains($event.value)"></p-dropdown>
             </div>
 
@@ -93,7 +93,7 @@
               class="ng-dirty ng-invalid" ></p-dropdown>
               <tt-input-message [form]="planForm" field="localitytype" *ngIf="domainSelected"></tt-input-message>
             </div>
-            
+
             <div class="p-col-12 p-md-4">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
@@ -127,7 +127,7 @@
 
             <div class="p-col-12 p-md-6" *ngIf="loadRegionFineshed && structureItem.locality">
               <h3>{{'plan.locality'|translate}}</h3>
-              <p-listbox [options]="localitiesPlanItem"  [multiple]="true" [checkbox]="true" 
+              <p-listbox [options]="localitiesPlanItem"  [multiple]="true" [checkbox]="true"
               [filter]="true"  optionLabel="name" [(ngModel)]="localitiesPlanItemSelected" [ngModelOptions]="{standalone: true}">
               </p-listbox>
             </div>
@@ -155,7 +155,7 @@
                   (click)="setSaveAndContinue(false)"></button>
 
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
-                  (click)="canclePlanItem()"></button>
+                  (click)="cancelPlanItem()"></button>
               </div>
             </div>
           </form>

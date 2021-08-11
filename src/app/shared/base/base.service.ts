@@ -4,7 +4,7 @@ import { IHttpResult } from './../interface/IHttpResult';
 import { IResultPaginated } from './../interface/IResultPaginated';
 import { IQueryOptions } from './../interface/IQueryOptions';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
 import { ConfirmationService } from 'primeng/api';
 import { Inject, Injector } from '@angular/core';
 import * as _ from 'lodash';
@@ -19,7 +19,7 @@ export abstract class BaseService<T> {
   http: HttpClient;
   confirmationSrv: ConfirmationService;
 
-  constructor(
+  protected constructor(
     public url: string,
     @Inject(Injector) injector: Injector
   ) {

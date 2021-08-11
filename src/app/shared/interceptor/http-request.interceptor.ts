@@ -5,7 +5,6 @@ import {
   HttpEvent,
   HttpEventType,
   HttpHandler,
-  HttpHeaders,
   HttpInterceptor,
   HttpRequest,
   HttpResponse,
@@ -44,10 +43,10 @@ export class HttpRequestInterceptor implements HttpInterceptor {
       }),
       catchError((error: HttpErrorResponse) => {
         if ([422, 404, 400].indexOf(error.status) > -1) {
-          const message = _.get(error, 'error.message') || _.get(error, 'message') || this.translateSrv.instant('generic.error')
+          const message = _.get(error, 'error.message') || _.get(error, 'message') || this.translateSrv.instant('generic.error');
           this.messageSrv.add({
             severity: 'warn',
-            detail: message
+            detail: this.translateSrv.instant(message)
           });
         } else if (error.status === 403) {
           this.messageSrv.add({

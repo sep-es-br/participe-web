@@ -26,7 +26,7 @@
             <p-dropdown [options]="typeOfParticipation" [(ngModel)]="filter.type"
               [placeholder]="'placeholder.select'|translate"></p-dropdown>
           </div>
-          <div class="p-col-12 p-md-3 form-group">
+          <div class="p-col-12 p-md-3 form-group" *ngIf="regionalization">
             <label>{{ labelMicroregion }}</label>
             <p-dropdown [options]="microregion" (onChange)="selectLocality($event)"
               [placeholder]="'placeholder.select'|translate"></p-dropdown>
@@ -91,11 +91,11 @@
           </div>
           <div class="p-col-12 p-md-1 p-col-align-center actions">
             <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
-              <img src="assets/layout/images/icons/internet.svg" />
+              <img src="assets/layout/images/icons/internet.svg"  alt=""/>
             </button>
             <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" icon="" [pTooltip]="'moderation.label.btnModerate' | translate"
               (click)="moderate(comment)">
-              <img src="assets/layout/images/icons/king.svg" />
+              <img src="assets/layout/images/icons/king.svg"  alt=""/>
             </button>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { CoreModule } from '@app/core/core.module';
 import { ComponentsModule } from '@app/shared/components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService } from 'primeng/api';
-import { MeetingService } from './../../../shared/services/meeting.service';
+import { MeetingService } from '@app/shared/services/meeting.service';
 import { MeetingComponent } from './meeting.component';
 
 @NgModule({
@@ -14,18 +14,19 @@ import { MeetingComponent } from './meeting.component';
     CommonModule,
     ComponentsModule,
     CoreModule,
-    TranslateModule
+    TranslateModule,
   ],
   declarations: [
-    MeetingComponent
+    MeetingComponent,
   ],
   exports: [
-    MeetingComponent
+    MeetingComponent,
   ],
   providers: [
     ConfirmationService,
     MeetingService,
-    DatePipe
-  ]
+    DatePipe,
+  ],
 })
-export class MeetingModule { }
+export class MeetingModule {
+}

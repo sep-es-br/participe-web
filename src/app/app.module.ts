@@ -25,6 +25,7 @@ import { ModerationModule } from './modules/moderation/moderation.module';
 import { NgModule } from '@angular/core';
 import { PlanModule } from './modules/plan/plan.module';
 import { StructureModule } from './modules/structure/structure.module';
+import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/control-panel-dashboard.module';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { StructureModule } from './modules/structure/structure.module';
     StructureModule,
     CitizenModule,
     ModerationModule,
+    ControlPanelDashboardModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

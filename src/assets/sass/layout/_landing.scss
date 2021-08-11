@@ -151,9 +151,8 @@
                         text-align: center;
                         border: solid 3px #eaf0f6;
                         @include border-radius(50%);
-                        margin: auto;
-                        margin-bottom: 20px;
-                        cursor: pointer;
+                      margin: auto auto 20px;
+                      cursor: pointer;
 
                         &:hover {
                             background-color: rgba(234, 240, 246, 0.3);
@@ -213,15 +212,13 @@
             > p {
                 font-size: 20px;
                 opacity: 0.8;
-                margin: 0;
-                margin-bottom: 35px;
+              margin: 0 0 35px;
             }
 
             .p-grid {
-                margin-top: 42px;
-                margin: 0 0 6px 0;
+              margin: 0 0 6px;
 
-                .p-col-12 {
+              .p-col-12 {
                     padding: 28px;
                 }
             }
@@ -234,8 +231,7 @@
                 width: 100px;
                 background-color: #eaf0f6;
                 border-radius: 5px 5px 0 0;
-                margin: auto;
-                margin-top: -24px;
+              margin: -24px auto auto;
 
             }
 
@@ -293,7 +289,7 @@
                 ul {
                     list-style-type: none;
                     margin: 0;
-                    padding: 0px 15px;
+                    padding: 0 15px;
                     text-align: left;
 
                     li {
@@ -403,7 +399,7 @@
                 }
                 .header-content {
                     @include transition( 0.4s);
-                    padding:85px 0px 0 10px;
+                    padding:85px 0 0 10px;
 
                     .header-content-text {
                         float: none;
@@ -422,7 +418,7 @@
             }
 
             #features {
-                padding: 42px 0px;
+                padding: 42px 0;
             }
 
             #promo {
@@ -470,7 +466,7 @@
             }
 
             #pricing {
-                padding: 45px 0px;
+                padding: 45px 0;
             }
         }
     }

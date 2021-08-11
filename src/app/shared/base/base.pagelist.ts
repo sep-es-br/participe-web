@@ -18,7 +18,7 @@ export abstract class BasePageList<T> {
   service: BaseService<T>;
   mapElementHandle: any;
 
-  constructor(
+  protected constructor(
     @Inject(BaseService) service: BaseService<T>
   ) {
     this.service = service;
@@ -56,8 +56,8 @@ export abstract class BasePageList<T> {
     setTimeout(() => document.getElementById('search-input').focus(), 100);
   }
 
-  searchHandle() {
-    this.loadData();
+  async searchHandle() {
+    await this.loadData();
   }
 
   async delete(record: T) {
@@ -70,11 +70,11 @@ export abstract class BasePageList<T> {
   }
 
   get getCurrentTotalOfRecords() {
-    let total = this.pageSize * (this.page + 1);
-    if (total > this.totalRecords) {
-      const remainingRecods = this.totalRecords - total;
-      total = total - remainingRecods;
-    }
+    // let total = this.pageSize * (this.page + 1);
+    // if (total > this.totalRecords) {
+    //   const remainingRecods = this.totalRecords - total;
+    //   total = total - remainingRecods;
+    // }
     return this.pageSize * (this.page + 1);
   }
 }

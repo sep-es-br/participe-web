@@ -1,0 +1,166 @@
+<app-template>
+  <div class="app-dashboard">
+    <div class="p-grid p-fluid" *ngIf="loadTranslate">
+      <div class="p-col-12 p-md-2 item-filter">
+        <label>{{'dashboard.conference'|translate}}</label>
+        <p-dropdown [options]="conferenceOptions" [autoDisplayFirst]="false" (onChange)="handleConferenceSelected()"
+          [(ngModel)]="filters.selectedConference">
+        </p-dropdown>
+      </div>
+      <div class="p-col-12 p-md-2 item-filter">
+        <label>{{'dashboard.result'|translate}}</label>
+        <p-dropdown [options]="resultOptions" (onChange)="loadChartsSelectedResult()" 
+          [(ngModel)]="filters.selectedResult" [autoDisplayFirst]="false"></p-dropdown>
+      </div>
+      <div class="p-col-12 p-md-2 item-filter">
+        <label>{{'dashboard.origin'|translate}}</label>
+        <p-dropdown [options]="originOptions" (onChange)="handleOriginSelected()" [(ngModel)]="filters.selectedOrigin"
+          [autoDisplayFirst]="false"></p-dropdown>
+      </div>
+      <div class="p-col-12 p-md-2 item-filter">
+        <label>{{'dashboard.presential'|translate}}</label>
+        <p-multiSelect [options]="meetingListOptions" [(ngModel)]="filters.selectedMeeting" [disabled]="validateOriginSelectedPresential()"
+          [defaultLabel]="'select'|translate" [filter]="true" (onChange)="loadCharts()">
+        </p-multiSelect>
+      </div>
+      <div class="p-col-12 p-md-4 refresh-filter">
+        <div class="refresh-filter-container" (click)="clearFilters(true)">
+          <i class="pi pi-refresh"></i>
+          <span>{{'dashboard.restore'|translate}}</span>
+        </div>
+      </div>
+
+      <div class="p-col-12 card-indicators-container" *ngIf="dashboardData">
+        <div class="card-indicator">
+          <span>{{dashboardData.participants}}</span>
+          <label>{{'dashboard.participants'|translate}}</label>
+        </div>
+        <div class="card-indicator">
+          <span>{{dashboardData.proposals}}</span>
+          <label>{{'dashboard.proposals'|translate}}</label>
+        </div>
+        <div class="card-indicator">
+          <span>{{dashboardData.highlights}}</span>
+          <label>{{'dashboard.highlights'|translate}}</label>
+        </div>
+        <div class="card-indicator">
+          <span>{{dashboardData.counties}}</span>
+          <label>{{'dashboard.counties'|translate}}</label>
+        </div>
+      </div>
+      <div class="p-col-12 charts-container" *ngIf="conference">
+        <div class="chart-container">
+          <div class="chart-header-container">
+            <div class="chart-header">
+              <div class="chart-navigation-header">
+                <div class="chart-title">
+                  <span class="title">{{chartsTitleSelected}} {{'dashboard.by'|translate}}:</span>
+                  <span class="subtitle">{{microregionAgroupLocalityTypeSelected?.name}}</span>
+                </div>
+                <div class="bar-navigation" *ngIf="barRegionSelecteds && barRegionSelecteds.length > 0">
+                  <fa-icon [icon]="arrowLeftIcon" class="fas-icon" (click)="handleBackRegionChartClicked()"></fa-icon>
+                  <span class="description">{{barRegionSelecteds[barRegionSelecteds.length - 1].description}}</span>
+                </div>
+              </div>
+              <div class="chart-params">
+                <div class="chart-param">
+                  <label>{{'dashboard.agroup'|translate}}:</label>
+                  <p-dropdown class="param" [options]="microregionChartAgroupOptions"
+                    (onChange)="handleMicroregionChartAgroupClicked()" [autoDisplayFirst]="false"
+                    [(ngModel)]="microregionChartAgroupSelected"></p-dropdown>
+                </div>
+                <div class="chart-param">
+                  <label>{{'dashboard.display'|translate}}:</label>
+                  <p-dropdown class="param" (onChange)="handleDisplayModeMicroregionChartChange()"
+                    [autoDisplayFirst]="false" [options]="chartDisplayOptions" [group]="true"
+                    [(ngModel)]="microregionChartDisplaySelected">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="header-sub-description"
+              *ngIf="barStrategicAreaSelecteds && barStrategicAreaSelecteds.length > 0">
+              <span>{{barStrategicAreaSelecteds[barStrategicAreaSelecteds.length - 1].description}}</span>
+            </div>
+          </div>
+          <div class="divisor" *ngIf="conference">
+            <hr />
+          </div>
+          <div class="chart" *ngIf="dashboardData && dashboardData.microregionChart">
+            <app-horizontal-bar-graph [chartData]="dashboardData?.microregionChart"
+              (graphClicked)="handleMicroregionChartClicked($event)">
+            </app-horizontal-bar-graph>
+          </div>
+          <div class="selected-bar-values" *ngIf="!showMicroregionChart">
+            <span class="description">{{barRegionSelecteds[barRegionSelecteds.length - 1].description}}</span>
+            <span class="value">{{barRegionSelecteds[barRegionSelecteds.length - 1].quantity}}</span>
+          </div>
+        </div>
+        <div class="chart-container chart-heatmap-container">
+          <div class="chart-header-container">
+            <div class="chart-header">
+              <div class="chart-heatmap-title">
+                <span class="subtitle">{{chartsTitleSelected}}</span>
+              </div>
+              <div class="chart-pararms">
+                <div class="chart-param">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-heatmap-divisor" *ngIf="conference">
+            <hr />
+          </div>
+          <div class="chart-heatmap" *ngIf="dashboardData ">
+            <app-heat-map [locations]="dashboardData.heatMapChart" [center]="heatMapCenter" [zoom]="heatmapZoom">
+            </app-heat-map>
+          </div>
+        </div>
+        <div class="chart-container">
+          <div class="chart-header-container">
+            <div class="chart-header">
+              <div class="chart-navigation-header">
+                <div class="chart-title">
+                  <span class="title">{{chartsTitleSelected}} {{'dashboard.by'|translate}}:</span>
+                  <span class="subtitle">{{itemStructureSelected?.name}}</span>
+                </div>
+                <div class="bar-navigation" *ngIf="barStrategicAreaSelecteds && barStrategicAreaSelecteds.length > 0">
+                  <fa-icon [icon]="arrowLeftIcon" class="fas-icon" (click)="handleBackStrategicAreaChartClicked()">
+                  </fa-icon>
+                  <span class="description">{{barStrategicAreaSelecteds[barStrategicAreaSelecteds.length -
+                    1].description}}</span>
+                </div>
+              </div>
+              <div class="chart-params">
+                <div class="chart-param">
+                  <label>{{'dashboard.display'|translate}}:</label>
+                  <p-dropdown class="param" (onChange)="handleDisplayModeStrategicAreaChartChange()"
+                    [autoDisplayFirst]="false" [options]="chartDisplayOptions" [group]="true"
+                    [(ngModel)]="strategicAreaChartDisplaySelected">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="header-sub-description" *ngIf="barRegionSelecteds && barRegionSelecteds.length > 0">
+              <span>{{barRegionSelecteds[barRegionSelecteds.length - 1].description}}</span>
+            </div>
+          </div>
+          <div class="divisor" *ngIf="conference">
+            <hr />
+          </div>
+          <div class="chart" *ngIf="dashboardData && dashboardData.strategicAreaChart">
+            <app-horizontal-bar-graph [chartData]="dashboardData?.strategicAreaChart"
+              (graphClicked)="handleStrategicAreaChartClicked($event)">
+            </app-horizontal-bar-graph>
+          </div>
+          <div class="selected-bar-values" *ngIf="!showStrategicAreaChart">
+            <span class="description">{{barStrategicAreaSelecteds[barStrategicAreaSelecteds.length -
+              1].description}}</span>
+            <span class="value">{{barStrategicAreaSelecteds[barStrategicAreaSelecteds.length - 1].quantity}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-template>

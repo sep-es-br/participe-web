@@ -6,7 +6,6 @@ import { AttendanceComponent } from './attendance.component';
 import { RegisterComponent } from './register/register.component';
 import { EditComponent } from './edit/edit.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { PersonService } from '@app/shared/services/person.service';
 import { ComponentsModule } from '@app/shared/components/components.module';
 
 @NgModule({

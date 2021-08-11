@@ -4,20 +4,20 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService, SelectItem } from 'primeng/api';
 
-import { ActionBarService } from './../../core/actionbar/app.actionbar.actions.service';
+import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
 import { AuthService } from '@app/shared/services/auth.service';
-import { BasePageList } from '../../shared/base/base.pagelist';
-import { BreadcrumbService } from '../../core/breadcrumb/breadcrumb.service';
-import { CitizenAuthenticationModel } from '../../shared/models/CitizenAuthenticationModel';
-import { CitizenFilterModel } from '../../shared/models/CitizenFilterModel';
-import { CitizenModel } from '../../shared/models/CitizenModel';
-import { CitizenSenderModel } from './../../shared/models/CitizenSenderModel';
-import { CitizenService } from './../../shared/services/citizen.service';
-import { Conference } from '../../shared/models/conference';
-import { CustomValidators } from './../../shared/util/CustomValidators';
-import { HelperUtils } from './../../shared/util/HelpersUtil';
-import { ITableCol } from './../../shared/interface/ITableCol';
-import { ModerationService } from '../../shared/services/moderation.service';
+import { BasePageList } from '@app/shared/base/base.pagelist';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
+import { CitizenAuthenticationModel } from '@app/shared/models/CitizenAuthenticationModel';
+import { CitizenFilterModel } from '@app/shared/models/CitizenFilterModel';
+import { CitizenModel } from '@app/shared/models/CitizenModel';
+import { CitizenSenderModel } from '@app/shared/models/CitizenSenderModel';
+import { CitizenService } from '@app/shared/services/citizen.service';
+import { Conference } from '@app/shared/models/conference';
+import { CustomValidators } from '@app/shared/util/CustomValidators';
+import { HelperUtils } from '@app/shared/util/HelpersUtil';
+import { ITableCol } from '@app/shared/interface/ITableCol';
+import { ModerationService } from '@app/shared/services/moderation.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { LocalityService } from '@app/shared/services/locality.service';
@@ -31,7 +31,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   formEdit: boolean = false;
   citizenForm: FormGroup;
-  localitys: SelectItem[] = [];
+  localities: SelectItem[] = [];
   filteredLocalities: SelectItem[] = [];
   authentications: SelectItem[] = [];
   loading: boolean = false;
@@ -74,7 +74,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       field: 'autentication', header: 'citizen.authentication', styleClass: 'col-authentication', handleView: (value, row) => {
         let container = '';
         row.autentication.filter(a => a.acesses > 0).forEach(({ loginName }) => {
-          container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}" />`;
+          container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
         });
         return container;
       }
@@ -100,10 +100,10 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     this.actionbarSrv.setItems([]);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.setForm({});
-    this.authentications = this.authSrv.providers.map(p => ({ label: p.label, value: p.tag }));
-    this.prepareScreen();
+    this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
+    await this.prepareScreen();
     this.selectedLocalitiesSub = this.selectedLocalities.valueChanges.subscribe(change => this.search.locality = change.map(v => v.value));
   }
 
@@ -121,7 +121,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     this.showSelectConference = false;
-    this.prepareScreen();
+    await this.prepareScreen();
   }
 
   async prepareScreen() {
@@ -135,7 +135,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       await this.loadData();
     }
     this.buildBreadcrumb();
-    this.loadLocalitiesOptions();
+    await this.loadLocalitiesOptions();
     this.configureActionBar();
   }
 
@@ -144,7 +144,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       const data = await this.moderationSrv.getConferencesActive(false);
       this.conferencesActives = data;
       if (data.length > 0) {
-        if(data.filter(conf => conf.isActive).length === 0) {
+        if (data.filter(conf => conf.isActive).length === 0) {
           this.conferenceSelect = data[0];
         } else {
           this.conferenceSelect = data.filter(conf => conf.isActive)[0];
@@ -172,13 +172,14 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   setForm(value) {
     this.citizenForm = this.formBuilder.group({
-      name: [_.get(value, 'name', ''), Validators.required],
+      name: [_.get(value, 'name', ''), [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator]],
       locality: [_.get(value, 'locality', '') || _.get(value, 'localityId', ''), Validators.required],
       cpf: [_.get(value, 'cpf', ''), this.cpfValidators],
       password: [_.get(value, 'password', ''), this.passwordValidators],
       mail: [_.get(value, 'mail', '') || _.get(value, 'email', ''), this.mailValidators],
       telephone: [_.get(value, 'telephone', '')],
       typeAuthentication: [_.get(value, 'typeAuthentication', this.typeAuthentication) || 'mail', Validators.required],
+      receiveInformational: [_.get(value, 'receiveInformational', false)],
       resetPassword: false,
       statusIsActive: _.get(value, 'active', true)
     });
@@ -223,11 +224,13 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async save(formData) {
     if (!this.isValidForm(formData)) { return; }
-    const { cpf, mail, password, typeAuthentication, locality, name, telephone, resetPassword, statusIsActive } = formData.value;
+    const { cpf, mail, password, typeAuthentication, locality, name, telephone, resetPassword, statusIsActive, receiveInformational }
+    = formData.value;
     const MAIL = typeAuthentication === 'cpf' ? `${cpf}@cpf` : mail;
     const sender: CitizenSenderModel = {
       name,
       telephone,
+      receiveInformational,
       typeAuthentication,
       cpf,
       contactEmail: MAIL,
@@ -249,7 +252,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
         this.translateSrv.instant('citizen.inserted', { name })
     });
     this.cancel();
-    this.loadData();
+    await this.loadData();
   }
 
   get iconSave() {
@@ -294,8 +297,8 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
         return;
       }
       const data = await this.localitySrv.getLocalitiesBasedOnConferenceCitizenAuth(this.conferenceSelect.id);
-      this.localitys = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
-      this.filteredLocalities = this.localitys;
+      this.localities = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
+      this.filteredLocalities = this.localities;
       this.labelLocality = data.nameType;
       const indexCol = this.cols.findIndex(col => col.field === 'localityName');
       this.cols[indexCol].header = this.localitySrv.getTranslatedLabelLocality(this.labelLocality);
@@ -311,7 +314,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     let container = '';
     if (this.idCitizen > 0) {
       this.authenticationsCitizen.forEach(({ loginName }) => {
-        container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}" />`;
+        container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
       });
     }
     return container;
@@ -319,9 +322,9 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   filterLocalities({ query }) {
     if (!query) {
-      return this.filteredLocalities = this.localitys;
+      return this.filteredLocalities = this.localities;
     }
-    this.filteredLocalities = this.localitys
+    this.filteredLocalities = this.localities
       .filter(l => !this.selectedLocalities.value.length || !this.selectedLocalities.value.find(s => s.label === l.label))
       .filter(l => this.toStandardText(l.label).indexOf(this.toStandardText(query)) !== -1);
   }
@@ -332,5 +335,18 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   get citizenHasNativeAuth() {
     return !!this.authenticationsCitizen && !!this.authenticationsCitizen.filter(a => a.loginName === 'Participe').length;
+  }
+
+  onInput($event) {
+    this.citizenForm.patchValue(
+      {'name': $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
+      {emitEvent: false}
+    );
+  }
+
+  onBlur($event) {
+    this.citizenForm.patchValue(
+      {'name': $event.target.value.replace(/\s+$/gm, '')},
+      {emitEvent: false});
   }
 }

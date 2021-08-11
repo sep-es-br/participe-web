@@ -20,6 +20,7 @@ export interface ModerationComments {
   disableModerate: boolean;
   structureItemId: number;
   structureItemName: string;
+  structureRegionalization: boolean;
   areaEstrategicaId: number;
   nameAreaEstrategica: string;
   conferenceId: number;

@@ -5,6 +5,7 @@ export class ModerationPlanItem {
   conferenceDescription: string;
   structureItemId: number;
   structureItemName: string;
+  structureRegionalization: boolean;
   planItems: PlanItem[];
 
   constructor() {

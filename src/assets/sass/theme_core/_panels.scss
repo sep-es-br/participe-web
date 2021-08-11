@@ -39,19 +39,17 @@ body {
 
         .ui-panel-content {
             padding: $panelContentPadding;
-            border: $panelContentBorder;
-            background-color: $panelContentBgColor;
+          background-color: $panelContentBgColor;
             color: $panelContentTextColor;
-            border-top: 0 none;
+          border-top: 0 none;
         }
 
         .ui-panel-footer {
             padding: $panelFooterPadding;
-            border: $panelFooterBorder;
-            background-color: $panelFooterBgColor;
+          background-color: $panelFooterBgColor;
             color: $panelFooterTextColor;
-            border-top: 0 none;
-            margin: 0;
+          border-top: 0 none;
+          margin: 0;
         }
     }
 
@@ -75,7 +73,7 @@ body {
                     vertical-align: middle;
                     margin-right: .5em;
                 }
-    
+
                 .ui-fieldset-legend-text{
                     padding: 0;
                     font-weight: $panelHeaderFontWeight;
@@ -90,7 +88,7 @@ body {
                         background-color: $clickablePanelHeaderHoverBgColor;
                         border: $clickablePanelHeaderHoverBorder;
                         color: $clickablePanelHeaderHoverTextColor;
-    
+
                         .ui-fieldset-toggler {
                             color: $clickablePanelHeaderHoverIconColor;
                         }
@@ -123,7 +121,7 @@ body {
                     &.pi-caret-right {
                         @include icon_override("\e901");
                     }
-        
+
                     &.pi-caret-down {
                         @include icon_override("\e902");
                     }
@@ -152,7 +150,7 @@ body {
                     background-color: $clickablePanelHeaderActiveBgColor;
                     border: $clickablePanelHeaderActiveBorder;
                     color: $clickablePanelHeaderActiveTextColor;
-                    
+
                     .ui-accordion-toggle-icon {
                         color: $clickablePanelHeaderActiveIconColor;
                     }
@@ -163,7 +161,7 @@ body {
                         border: $clickablePanelHeaderActiveHoverBorder;
                         background-color: $clickablePanelHeaderActiveHoverBgColor;
                         color: $clickablePanelHeaderActiveHoverTextColor;
-                        
+
                         .ui-accordion-toggle-icon {
                             color: $clickablePanelHeaderActiveHoverIconColor;
                         }
@@ -223,7 +221,7 @@ body {
                     &:not(.ui-state-active):not(.ui-state-disabled):hover {
                         background-color: $clickablePanelHeaderHoverBgColor;
                         border: $clickablePanelHeaderHoverBorder;
-                        
+
                         a {
                             color: $clickablePanelHeaderHoverTextColor;
                         }
@@ -251,7 +249,7 @@ body {
 
                             a {
                                 color: $clickablePanelHeaderActiveHoverTextColor;
-                                
+
                                 .ui-tabview-left-icon, .ui-tabview-right-icon{
                                     color: $clickablePanelHeaderActiveHoverIconColor;
                                 }
@@ -306,7 +304,7 @@ body {
                     margin-bottom: $tabHeaderSpacing;
                 }
             }
-        }     
+        }
 
         .ui-tabview-panels {
             background-color: $panelContentBgColor;
@@ -342,5 +340,5 @@ body {
         background-color: $panelContentBgColor;
         color: $panelContentTextColor;
         @include shadow($cardShadow);
-    } 
+    }
 }

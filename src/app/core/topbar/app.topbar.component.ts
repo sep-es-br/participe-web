@@ -1,11 +1,9 @@
-import { AuthService } from './../../shared/services/auth.service';
+import { AuthService } from '@app/shared/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { AppTemplateComponent } from '../template/app.template.component';
-import { TranslateService } from '@ngx-translate/core';
-import { StoreKeys } from '../../shared/constants';
-import { EventEmitter } from 'protractor';
-import { TranslateChangeService } from '../../shared/services/translateChange.service';
-import { IPerson } from '../../shared/interface/IPerson';
+import { StoreKeys } from '@app/shared/constants';
+import { TranslateChangeService } from '@app/shared/services/translateChange.service';
+import { IPerson } from '@app/shared/interface/IPerson';
 
 @Component({
   selector: 'app-topbar',
@@ -40,7 +38,7 @@ export class AppTopBarComponent implements OnInit {
   }
 
   isSelectLanguage(lang: string) {
-    const defaultLang = localStorage.getItem(StoreKeys.defaultLanguage) || 'en';
+    const defaultLang = localStorage.getItem(StoreKeys.defaultLanguage) || 'pt';
     return defaultLang === lang;
   }
 

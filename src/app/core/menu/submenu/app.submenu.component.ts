@@ -5,7 +5,6 @@ import { MenuItem } from 'primeng/api';
 
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 
-import { AppMenuComponent } from '@app/core/menu/app.menu.component';
 import { AppTemplateComponent } from '@app/core/template/app.template.component';
 import { Router } from '@angular/router';
 
@@ -54,7 +53,7 @@ export class AppSubMenuComponent implements OnDestroy {
 
     routeItems: MenuItem[];
 
-    constructor(public template: AppTemplateComponent, public appMenu: AppMenuComponent, public breadcrumbService: BreadcrumbService, private router: Router) {
+    constructor(public template: AppTemplateComponent, public breadcrumbService: BreadcrumbService, private router: Router) {
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
         this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
             this.routeItems = response;
@@ -92,11 +91,7 @@ export class AppSubMenuComponent implements OnDestroy {
 
         // hide menu
         if (!item.items) {
-            if (this.template.isHorizontal()) {
-                this.template.resetMenu = true;
-            } else {
-                this.template.resetMenu = false;
-            }
+            this.template.resetMenu = this.template.isHorizontal();
 
             this.template.overlayMenuActive = false;
             this.template.overlayMenuMobileActive = false;

@@ -18,7 +18,7 @@
           [label]="'moderation.label.comment'| translate ">
         </p-radioButton>
       </div>
-      <div class="p-col-12 p-md-3 form-group">
+      <div class="p-col-12 p-md-3 form-group" *ngIf="regionalization">
         <label>{{ labelMicroregion }}</label>
         <p-dropdown [options]="microregion" [(ngModel)]="comment.localityId"
           [placeholder]="'placeholder.select'|translate"></p-dropdown>
@@ -42,7 +42,7 @@
       </div>
       <div class="p-col-12 p-md-6" *ngIf="moving">
         <p-tree [value]="strategyArea" [filter]="true" selectionMode="single" [propagateSelectionUp]="true"
-          [propagateSelectionDown]="true" [(selection)]="selectedStratgyArea"
+          [propagateSelectionDown]="true" [(selection)]="selectedStrategyArea"
           [filterPlaceholder]="'moderation.moderate.placeholder.moveFilter' | translate"></p-tree>
       </div>
       <div class="p-col-12">

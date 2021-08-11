@@ -7,16 +7,23 @@ import { IPerson } from './../interface/IPerson';
 import { Injectable } from '@angular/core';
 import { PrepareHttpQuery } from '../util/Query.utils';
 import { environment } from '@environments/environment';
+import { IResultRegionalizationConference } from '../interface/IResultRegionalizationConference';
 
 @Injectable()
 export class ConferenceService {
   private url = `${environment.apiEndpoint}/conferences`;
   private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getById(id: number) {
     return this.http.get<Conference>(`${this.url}/${id}`, { headers: this.headers }).toPromise();
+  }
+
+  getRegionalization(idConference: number) {
+    return this.http.get<IResultRegionalizationConference>
+    (`${this.url}/${idConference}/regionalization`, { headers: this.headers }).toPromise();
   }
 
   listAll() {
@@ -25,11 +32,11 @@ export class ConferenceService {
 
   show(id) {
     const url = this.url.concat(`/${id}`);
-    return this.http.get<IPerson>(url, { headers: this.headers }).toPromise();
+    return this.http.get<Conference>(url, { headers: this.headers }).toPromise();
   }
 
   search(name, plan, year, month) {
-    const url = this.url.concat('?name=').concat(name ? name : '').concat(plan ? `&plan=${plan}` : '')
+    const url = this.url.concat('?name=').concat(name ? name : '').concat(plan ? `&plan=${plan.id}` : '')
       .concat(year ? `&year=${year}` : '').concat(month ? `&month=${month}` : '');
     return this.http.get<Conference[]>(url, { headers: this.headers }).toPromise();
   }
@@ -51,6 +58,11 @@ export class ConferenceService {
   validate(name, id) {
     const url = this.url.concat('/validate?name=').concat(name ? name : '').concat(id ? `&id=${id}` : '');
     return this.http.get<boolean>(url, { headers: this.headers }).toPromise();
+  }
+
+  validateDefaultConferenceServer(serverName: string, id?: number) {
+    const url = this.url.concat('/validateDefaultConference?serverName=').concat(serverName).concat(id ? `&id=${id}` : '');
+    return this.http.get<{ conferenceName: string }>(url, { headers: this.headers }).toPromise();
   }
 
   searchModerators(name, email) {
@@ -90,7 +102,14 @@ export class ConferenceService {
   getConferencesWithMeetings(date?: string) {
     return this.http.get<IConferenceWithMeetings[]>(
       `${this.url}/with-meetings${PrepareHttpQuery({ search: { date } })}`,
-      { headers: this.headers }
+      { headers: this.headers },
+    ).toPromise();
+  }
+
+  getConferencesWithPresentialMeetings(date?: string) {
+    return this.http.get<IConferenceWithMeetings[]>(
+      `${this.url}/with-presential-meetings${PrepareHttpQuery({ search: { date } })}`,
+      { headers: this.headers },
     ).toPromise();
   }
 }

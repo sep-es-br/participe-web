@@ -16,7 +16,7 @@
                     </div>
                 </section>
                 <div class="search-form card card-w-title" *ngIf="search">
-                    <form [formGroup]="searchForm" (submit)="handleSearch(searchForm.value)">
+                    <form [formGroup]="searchForm" (submit)="loadMeetings(searchForm.value)">
                         <div class="p-grid ui-fluid">
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
                                 <label for="nameSearch">{{'conference.meeting.name'|translate}}</label>
@@ -24,13 +24,14 @@
                             </div>
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
                                 <label for="beginDate">{{'date.start'|translate}}</label>
-                                <p-calendar dateFormat="dd/mm/yy" formControlName="beginDate"
+                                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="true" [showTime]="true"
+                                            formControlName="beginDate"
                                     [locale]="calendarTranslate">
                                 </p-calendar>
                             </div>
                             <div class="ui-g-12 ui-md-6 ui-lg-3">
-                                <label for="endDate">{{'date.start'|translate}}</label>
-                                <p-calendar dateFormat="dd/mm/yy" formControlName="endDate"
+                                <label for="endDate">{{'date.end'|translate}}</label>
+                                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="true" [showTime]="true" formControlName="endDate"
                                     [locale]="calendarTranslate">
                                 </p-calendar>
                             </div>
@@ -74,38 +75,48 @@
             <div class="card card-w-title" *ngIf="edit">
                 <section class="p-col-12 p-md-8">
                     <div class="p-col-12 p-md-12" style="height: 60px;">{{ 'conference.meeting.title' | translate }}</div>
-                    <form [formGroup]="form" (submit)="save(form.value)">
-                        <div class="p-col-12 p-md-12">
-                            <label for="name">{{'conference.meeting.name'|translate}}</label>
-                            <input pInputText formControlName="name">
-                            <tt-input-message [form]="form" field="name"></tt-input-message>
-                        </div>
-                        <div class="p-col-12 p-md-12">
+                    <form [formGroup]="form" (submit)="save(form.value)" *ngIf="form">
+                      <div class="p-col-9">
+                        <span class="p-col-3" *ngFor="let type of optionsTypesMeeting">
+                          <p-radioButton [disabled]="typeMeetingAlreadySet" [id]="type.value" name="type" [value]="type.value"
+                                         formControlName="type"
+                                          (onClick)="changeTypeMeeting()"></p-radioButton>
+                          <label [for]="type.value" class="label-type-meeting">{{type.label}}</label>
+                        </span>
+                      </div>
+                      <div class="p-col-12 p-md-12">
+                          <label for="name">{{'conference.meeting.name'|translate}}</label>
+                          <input pInputText formControlName="name">
+                          <tt-input-message [form]="form" field="name"></tt-input-message>
+                      </div>
+                      <div class="p-col-8 inline">
+                        <div class="p-col-12 p-md-6">
                             <label for="beginDate">{{'conference.meeting.beginDate'|translate}}</label>
-                            <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeBeginDate($event)"
+                            <p-calendar *ngIf="calendarTranslate" dateFormat="dd/mm/yy" (onSelect)="changeBeginDate($event)"
                               formControlName="beginDate" [showSeconds]="true" [showTime]="true" [locale]="calendarTranslate">
                             </p-calendar>
                             <tt-input-message [form]="form" field="beginDate"></tt-input-message>
                         </div>
-                        <div class="p-col-12 p-md-12">
+                        <div class="p-col-12 p-md-6">
                             <label for="endDate">{{'conference.meeting.endDate'|translate}}</label>
-                            <p-calendar dateFormat="dd/mm/yy" [showTime]="true" [minDate]="minDate"
+                            <p-calendar  *ngIf="calendarTranslate" dateFormat="dd/mm/yy" [showTime]="true" [minDate]="minDate"
                               formControlName="endDate" [showSeconds]="true" [locale]="calendarTranslate">
                             </p-calendar>
                             <tt-input-message [form]="form" field="endDate"></tt-input-message>
                         </div>
-                        <div class="p-col-12 p-md-12">
+                      </div>
+                        <div class="p-col-12 p-md-12" *ngIf="validTypeDifferentFromVirtual()">
                             <div style="padding-bottom:5px;">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</div>
                             <p-listbox styleClass="pListCustom" [options]="localities" formControlName="localityPlace"
                                 checkbox="checkbox" filter="filter">
                             </p-listbox>
                         </div>
-                        <div class="p-col-12 p-md-12">
+                        <div class="p-col-12 p-md-12" *ngIf="validTypeDifferentFromVirtual()">
                             <label for="address">{{'conference.meeting.address'|translate}}</label>
                             <input pInputText formControlName="address">
                             <tt-input-message [form]="form" field="address"></tt-input-message>
                         </div>
-                        <div class="p-col-12 p-md-12">
+                        <div class="p-col-12 p-md-12" *ngIf="validTypeDifferentFromVirtual()">
                             <label for="place">{{'conference.meeting.place'|translate}}</label>
                             <input pInputText formControlName="place">
                             <tt-input-message [form]="form" field="place"></tt-input-message>
@@ -116,7 +127,83 @@
                                 checkbox="checkbox" filter="filter" multiple="multiple">
                             </p-listbox>
                         </div>
-                        <p-accordion [multiple]="true">
+                        <div class="p-col-12 p-md-12" *ngIf="planItems.length > 0">
+                            <div style="padding-bottom:5px;">{{ 'conference.meeting.segmentation' | translate }}</div>
+                            <p-listbox styleClass="pListCustom" [options]="planItems" formControlName="segmentations"
+                                checkbox="checkbox" filter="filter" multiple="multiple">
+                            </p-listbox>
+                        </div>
+                        <p-accordion [multiple]="true" *ngIf="validTypeDifferentFromPresential()">
+                          <p-accordionTab header="{{'conference.meeting.broadcast-channels' | translate}}"
+                              styleClass="tabStyleClass">
+                              <form [formGroup]="formChannels" *ngIf="formChannels" (submit)="handleAddChannel()">
+                                  <tt-input-message [form]="formChannels" field="containsChannel"></tt-input-message>
+                                  <div class="p-grid ui-fluid">
+                                      <div class="ui-g-12 ui-md-5 flex-1">
+                                          <label for="name"> {{ 'conference.meeting.name' | translate }}</label>
+                                          <input id="name" pInputText formControlName="name">
+                                          <tt-input-message [form]="formChannels" field="name"></tt-input-message>
+                                      </div>
+                                      <div class="ui-g-12 ui-md-5 flex-1">
+                                          <label for="url"> {{ 'conference.meeting.url' | translate }}</label>
+                                          <input id="url" pInputText formControlName="url">
+                                        <tt-input-message [form]="formChannels" field="url"></tt-input-message>
+                                      </div>
+                                      <div class="ui-g-12 ui-md-1 p-col-align-end flex-0">
+                                          <button pButton type="submit" icon="pi pi-plus"></button>
+                                      </div>
+                                  </div>
+                              </form>
+                              <div class="broadcast-channels-table-container" *ngIf="channels && channels.length > 0">
+                                <p-table [value]="channels" dataKey="tableId" editMode="row">
+                                  <ng-template pTemplate="header">
+                                      <tr>
+                                          <th class="col-name">Nome</th>
+                                          <th class="col-url">URL</th>
+                                          <th class="col-action"></th>
+                                      </tr>
+                                  </ng-template>
+                                  <ng-template pTemplate="body" let-channel let-editing="editing" let-index="rowIndex">
+                                      <tr [pEditableRow]="channel">
+                                          <td>
+                                              <p-cellEditor>
+                                                  <ng-template pTemplate="input">
+                                                      <input pInputText type="text" [(ngModel)]="channel.name" [ngModelOptions]="{standalone: true}">
+                                                  </ng-template>
+                                                  <ng-template pTemplate="output">
+                                                      {{channel.name}}
+                                                  </ng-template>
+                                              </p-cellEditor>
+                                          </td>
+                                          <td>
+                                              <p-cellEditor>
+                                                  <ng-template pTemplate="input">
+                                                      <input pInputText type="text" [(ngModel)]="channel.url" [ngModelOptions]="{standalone: true}">
+                                                  </ng-template>
+                                                  <ng-template pTemplate="output">
+                                                        <span (click)="goToLink(channel.url)" class="link-channel">
+                                                          {{channel.url}}
+                                                        </span>
+                                                  </ng-template>
+                                              </p-cellEditor>
+                                          </td>
+                                          <td style="text-align:center">
+                                              <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
+                                              class="ui-button-info" (click)="onRowEditChannelInit(channel)"></button>
+                                              <button *ngIf="!editing" pButton type="button" icon="pi pi-trash"
+                                              class="ui-button-info button-delete" (click)="onDeleteChannel(index)"></button>
+                                              <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+                                              class="ui-button-success" style="margin-right: .5em" (click)="onRowEditChannelSave(channel)"></button>
+                                              <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                                              class="ui-button-danger" (click)="onRowEditChannelCancel(channel, index)"></button>
+                                          </td>
+                                      </tr>
+                                  </ng-template>
+                              </p-table>
+                              </div>
+                          </p-accordionTab>
+                      </p-accordion>
+                        <p-accordion [multiple]="true" *ngIf="validTypeDifferentFromVirtual()">
                             <p-accordionTab header="{{'conference.meeting.receptionists' | translate}}"
                                 styleClass="tabStyleClass">
                                 <form [formGroup]="searchFormReceptionists"

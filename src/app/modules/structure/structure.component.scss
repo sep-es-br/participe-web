@@ -53,6 +53,10 @@ form {
   display: inline-block;
 }
 
+.background-orange {
+  background-color: #ffa5004d !important;
+}
+
 @media only screen and (max-width: 760px) {
   .column-actions {
     flex-direction: column;
@@ -68,7 +72,7 @@ form {
     flex-direction: column;
 
     * + * {
-      margin-left: 0px;
+      margin-left: 0;
       margin-top: 14px;
     }
   }

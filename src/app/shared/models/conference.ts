@@ -2,6 +2,9 @@ import { IPerson } from './../interface/IPerson';
 import { Plan } from './plan';
 import { File } from './file';
 import { LocalityType } from './locality-type';
+import { IHowItWorkStep } from '../interface/IHowItWorkStep';
+import { IExternalLinks } from '../interface/IExternalLinks';
+import { Meeting } from './Meeting';
 
 export class Conference {
   id: number;
@@ -19,7 +22,30 @@ export class Conference {
   fileParticipation: File;
   fileAuthentication: File;
   locality: LocalityType;
-  hasAttend: Boolean;
+  hasAttend: boolean;
   moderators: IPerson[];
-  isActive: Boolean;
+  isActive: boolean;
+  serverName: string;
+  defaultServerConference: boolean;
+  segmentation: boolean;
+  targetedByItems: number[];
+  displayMode: string;  // AUTOMATIC || MANUAL
+  displayStatusConference: string; // PRE_OPENING || OPEN || POST_CLOSURE
+  preOpeningText: string;
+  postClosureText: string;
+  howItWork: IHowItWorkStep[];
+  externalLinksMenuLabel: string;
+  externalLinks: IExternalLinks[];
+  backgroundImages: File[];
+  meeting?: Meeting[];
+  researchConfiguration: {
+    beginDate: Date;
+    endDate: Date;
+    displayModeResearch: string; // AUTOMATIC || MANUAL
+    researchDisplayStatus: string; // INACTIVE || ACTIVE
+    researchLink: string;
+    estimatedTimeResearch: string;
+  };
+  localityType?: LocalityType;
 }
+

@@ -1,0 +1,94 @@
+<app-template>
+  <div class="p-grid ui-fluid">
+    <div class="p-col-12 p-lg-12">
+      <div class="card card-w-title">
+        <section>
+          <div class="p-grid ui-fluid actions">
+            <div class="ui-g-5 ui-md-2 ui-lg-2">
+              <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
+                (click)="handleCreateConference()">
+              </button>
+            </div>
+            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
+            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+              <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') |translate }}</a>
+            </div>
+          </div>
+          <div class="search-form" *ngIf="search">
+            <form [formGroup]="searchForm" (submit)="searchConferences(searchForm.value)">
+              <div class="p-grid ui-fluid">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="nameSearch">{{'conference.name'|translate}}</label>
+                  <input id="search-input" pInputText formControlName="nameSearch">
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="planSearch">{{'plan.label'|translate}}</label>
+                  <p-dropdown [options]="plans" formControlName="planSearch" class="ng-dirty ng-invalid"
+                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="monthSearch">{{'month.label'|translate}}</label>
+                  <p-dropdown [options]="months" formControlName="monthSearch" class="ng-dirty ng-invalid"
+                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                  <label for="yearSearch">{{'years'|translate}}</label>
+                  <p-dropdown [options]="years" formControlName="yearSearch" class="ng-dirty ng-invalid"
+                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                </div>
+
+                <div class="ui-g-12 ui-md-3 ui-lg-3">
+                  <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
+                </div>
+                <div class="ui-g-12 ui-md-4 ui-lg-3">
+                  <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
+                    (click)="clearSearch()"></button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <p-table [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
+            [responsive]="true" paginatorPosition="both">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>{{'name'|translate}}</th>
+                <th>{{'plan.label'|translate}}</th>
+                <th>{{'date.start'|translate}}</th>
+                <th>{{'date.end'|translate}}</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-conference>
+              <tr>
+                <td>
+                  <span style="vertical-align: middle">{{conference.name}}</span>
+                </td>
+                <td>
+                  <span style="vertical-align: middle">{{conference.plan?.name}}</span>
+                </td>
+                <td>
+                  <span style="vertical-align: middle">{{conference.beginDate}}</span>
+                </td>
+                <td>
+                  <span style="vertical-align: middle">{{conference.endDate}}</span>
+                </td>
+                <td class="column-actions">
+                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
+                    (click)="handleEditConference(conference)"></button>
+                  <button pButton icon="pi pi-users" type="button" style="margin-right: 2px;"
+                    [routerLink]="goToMetting(conference)"></button>
+                  <button pButton icon="pi pi-trash" type="button" (click)="delete(conference)"
+                    [disabled]="disableBtnDelete(conference)"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </section>
+      </div>
+    </div>
+  </div>
+  <p-confirmDialog [header]="'conference.delete'|translate" icon="pi pi-exclamation-triangle" key="deleteConference">
+  </p-confirmDialog>
+  <p-confirmDialog [header]="'conference.delete'|translate" icon="pi pi-exclamation-triangle" key="defaultConference">
+  </p-confirmDialog>
+</app-template>

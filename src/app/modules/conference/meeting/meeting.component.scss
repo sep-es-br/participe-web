@@ -2,78 +2,78 @@ body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {
     background-color: #2196F3 !important;
     border-color: #2196F3 !important;
   }
-  
+
   .actions {
     margin-bottom: 14px;
   }
-  
+
   .pesquisar {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  
+
     a {
       font-size: 16px;
     }
   }
-  
+
   form {
     width: 100%;
   }
-  
+
   .form-actions {
     display: flex;
     margin-top: 14px;
-  
+
     * + * {
       margin-left: 14px;
     }
   }
-  
+
   .column-actions {
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
     * + * {
       margin-left: 10px;
     }
   }
-  
+
   .search {
     cursor: pointer;
     text-align: right;
   }
-  
+
   .search-form {
     border: 1px solid #e0e0e0;
     border-radius: 3px;
     padding: 14px;
     margin-bottom: 14px;
   }
-  
+
   .input-switch > label {
     width: 100px;
     display: inline-block;
   }
-  
+
   @media only screen and (max-width: 760px) {
     .column-actions {
       flex-direction: column;
       padding: 10px 0 !important;
-  
+
       * + * {
         margin-left: 0;
         margin-top: 10px;
       }
     }
-  
+
     .form-actions {
       flex-direction: column;
-  
+
       * + * {
-        margin-left: 0px;
+        margin-left: 0;
         margin-top: 14px;
       }
     }
@@ -84,17 +84,16 @@ section.meetings-container {
   flex-direction: column;
   .meeting-item {
     display: flex;
-    margin: 2px;
     align-items: center;
     justify-content: space-between;
     padding: 5px 10px;
-    margin-bottom: 5px;
+    margin: 2px 2px 5px;
     flex-wrap: wrap;
     border: 1px solid #ccc;
     background: white;
     h2 {
       margin-bottom: 4px;
-      margin-top: 0px;
+      margin-top: 0;
       font-size: 1.2rem;
       text-transform: capitalize;
       color: #666;
@@ -131,11 +130,56 @@ section.meetings-container {
 
 .form-actions button {
   width: auto !important;
-  margin-right: 0px !important;
+  margin-right: 0 !important;
 }
 
 ::ng-deep {
   .pListCustom .ui-listbox-list {
     max-height: 150px;
+  }
+  .label-type-meeting {
+    margin-left: 10px;
+    float: none;
+  }
+  .broadcast-channels-table-container {
+    padding: 1em 0.3em;
+      .ui-table {
+        .ui-table-thead tr {
+          th.col-name {
+            width: 25%;
+          }
+          th.col-url {
+            width: 60%;
+          }
+          th.col-action {
+            width: 15%;
+          }
+        }
+        .ui-table-tbody tr {
+          .ui-inputtext {
+            background-color: white;
+          }
+          .button-delete {
+            margin-left: 0.5em;
+          }
+        }
+      }
+    }
+
+}
+
+@media screen and (min-width: 40.063em) {
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-0 {
+    flex: 0;
+  }
+  .inline {
+    display: flex;
+    padding: 0;
+  }
+  .link-channel {
+    cursor: pointer;
   }
 }

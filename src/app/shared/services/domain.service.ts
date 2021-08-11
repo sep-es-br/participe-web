@@ -10,7 +10,7 @@ export class DomainService {
   private url = `${environment.apiEndpoint}/domains`;
   private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   listAll(query) {
     const url = this.url.concat(query ? `?query=${query}` : '');
@@ -30,4 +30,5 @@ export class DomainService {
     const url = `${this.url}/${id}`;
     return this.http.delete(url, { headers: this.headers }).toPromise();
   }
+
 }

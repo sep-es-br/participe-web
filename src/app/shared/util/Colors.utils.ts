@@ -7,10 +7,11 @@ export const getColorBasedOnText = (text: string) => {
   if (typeof text !== 'string') {
     return colorsPalette[0];
   }
-  const totalCharCode = text.toLowerCase().replace(/ /g, '').split('').reduce((a, b) => a += b.charCodeAt(0), 0);
+  const totalCharCode = text.toLowerCase().replace(/ /g, '').split('').reduce((a, b) => a + b.charCodeAt(0), 0);
   return colorsPalette[totalCharCode % colorsPalette.length];
 };
 
 export const getRandomColor = () => {
   return colorsPalette[Math.floor(Math.random() * colorsPalette.length)];
 };
+
