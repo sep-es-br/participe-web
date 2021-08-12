@@ -282,7 +282,7 @@ export class PlanComponent implements OnInit {
     this.plan = new Plan();
     this.planForm = this.formBuilder.group({
       id: [ plan && plan.id ],
-      name: [ plan && plan.name, [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator] ],
+      name: [ plan && plan.name, [Validators.required, CustomValidators.noWhitespaceValidator] ],
       structure: [ plan && plan.structure && plan.structure.id, Validators.required ],
       domain: [ plan && plan.domain && plan.domain.id ],
       localitytype: [ plan && plan.localitytype && plan.localitytype.id ],

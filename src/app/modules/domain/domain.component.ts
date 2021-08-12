@@ -190,7 +190,7 @@ export class DomainComponent implements OnInit {
     this.domain = new Domain();
     this.domainForm = this.formBuilder.group({
       id: [domain && domain.id],
-      name: [domain && domain.name, [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator]]
+      name: [domain && domain.name, [Validators.required, CustomValidators.noWhitespaceValidator]]
     });
   }
 
