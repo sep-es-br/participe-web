@@ -3,6 +3,7 @@ import { CitizenSelfDeclarationSenderModel } from './CitizenSelfDeclarationSende
 export class CitizenSenderModel {
   name: string;
   telephone?: string;
+  receiveInformational?: boolean;
   typeAuthentication: string;
   cpf: string;
   contactEmail: string;

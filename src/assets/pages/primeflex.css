@@ -215,7 +215,7 @@
   margin-left: 8.33333333%; }
 
 .p-offset-0 {
-  margin-left: 0%; }
+  margin-left: 0; }
 
 .p-sm-1,
 .p-sm-2,
@@ -360,7 +360,7 @@
     margin-left: 8.33333333%; }
 
   .p-sm-offset-0 {
-    margin-left: 0%; } }
+    margin-left: 0; } }
 @media screen and (min-width: 768px) {
   .p-md-1,
   .p-md-2,
@@ -451,7 +451,7 @@
     margin-left: 8.33333333%; }
 
   .p-md-offset-0 {
-    margin-left: 0%; } }
+    margin-left: 0; } }
 @media screen and (min-width: 992px) {
   .p-lg-1,
   .p-lg-2,
@@ -542,7 +542,7 @@
     margin-left: 8.33333333%; }
 
   .p-lg-offset-0 {
-    margin-left: 0%; } }
+    margin-left: 0; } }
 @media screen and (min-width: 1200px) {
   .p-xl-1,
   .p-xl-2,
@@ -633,6 +633,6 @@
     margin-left: 8.33333333%; }
 
   .p-xl-offset-0 {
-    margin-left: 0%; } }
+    margin-left: 0; } }
 
 /*# sourceMappingURL=primeflex.css.map */

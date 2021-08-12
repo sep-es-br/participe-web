@@ -78,7 +78,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
           detail: this.translate.instant('attendance.successDetail.uncheckin')
         });
         this.listAttendees.splice(this.listAttendees.findIndex(att => att === attendee), 1);
-        this.setActionBar();
+        await this.setActionBar();
         this.toggleSelectedAttendee();
       } else {
         throw new Error();

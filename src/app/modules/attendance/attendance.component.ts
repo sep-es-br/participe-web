@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faUserPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
 import { AuthService } from '@app/shared/services/auth.service';
 
 @Component({

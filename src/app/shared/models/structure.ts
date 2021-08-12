@@ -5,5 +5,7 @@ export class Structure {
   name: string;
   items: StructureItem[];
   level: number;
+  hasLocalityWithItem: boolean;
+  regionalization: boolean;
   hasPlan: boolean;
 }

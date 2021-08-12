@@ -33,4 +33,9 @@ export class StructureItemService {
     const url = `${this.url}/${id}`;
     return this.http.delete(url, { headers: this.headers }).toPromise();
   }
+
+  listStructureItems(idStructure: number) {
+    return this.http.get<StructureItem[]>
+      (`${this.url}/list?id=${idStructure && idStructure.toString()}`, { headers: this.headers }).toPromise();
+  }
 }

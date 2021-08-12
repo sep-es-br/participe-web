@@ -11,6 +11,7 @@ export class CitizenModel {
   localityName?: string;
   typeAuthentication: string;
   telephone?: string;
+  receiveInformational: boolean;
   numberOfAcesses?: number;
   password?: string;
   active?: boolean;

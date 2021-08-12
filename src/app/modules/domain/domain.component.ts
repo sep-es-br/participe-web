@@ -9,8 +9,7 @@ import { Locality } from '@app/shared/models/locality';
 import { LocalityService } from '@app/shared/services/locality.service';
 import { LocalityTypeService } from '@app/shared/services/locality-type.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
-
+import {CustomValidators} from "@app/shared/util/CustomValidators";
 
 @Component({
   selector: 'tt-domain',
@@ -21,6 +20,7 @@ export class DomainComponent implements OnInit {
   searchForm: FormGroup;
 
   domains: Domain[] = [];
+  domainCreated: Domain;
   domainTree: TreeNode[];
   selectedNode: TreeNode;
   domainForm: FormGroup;
@@ -50,15 +50,14 @@ export class DomainComponent implements OnInit {
     private localityService: LocalityService,
     private localityTypeService: LocalityTypeService,
     private messageService: MessageService,
-    private translate: TranslateService,
-    private router: Router
+    private translate: TranslateService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.buildBreadcrumb();
-    this.listAllTypes();
+    await this.listAllTypes();
     this.clearSearchForm();
-    this.clearDomains(null);
+    await this.clearDomains(null);
     this.clearDomainForm(null);
     this.clearLocalityForm(null);
   }
@@ -99,6 +98,9 @@ export class DomainComponent implements OnInit {
       this.loading = false;
       await this.expandTree(this.domainTree);
       this.selectedNode = null;
+      if (this.domainCreated) {
+        this.paintDomainCreated();
+      }
     } catch (err) {
       console.error(err);
       this.loading = false;
@@ -108,9 +110,8 @@ export class DomainComponent implements OnInit {
   private expandTree(tree: TreeNode[]) {
     let found = false;
     if (tree && this.selectedNode) {
-      for (let i = 0; i < tree.length; i++) {
-        const node = tree[i];
-        if (node.data.id == this.selectedNode.data.id) {
+      for (const node of tree) {
+        if (node.data.id === this.selectedNode.data.id) {
           if (!this.edit) {
             node.expanded = true;
           }
@@ -137,7 +138,11 @@ export class DomainComponent implements OnInit {
   }
 
   private buildTree(items: any[], open = false, query = null): TreeNode[] {
-    items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
+    items.sort((a, b) => {
+      const aName = a.name ? a.name : '';
+      const bName = b.name ? b.name : '';
+      return aName.toUpperCase() > bName.toUpperCase() ? 1 : -1;
+    });
     const root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
@@ -146,8 +151,9 @@ export class DomainComponent implements OnInit {
         const node: TreeNode = {
           data: {
             id: item.id,
-            name: item.name,
-            type: item.type ? item.type : null
+            name: item.name ? item.name : null,
+            type: item.type ? item.type : null,
+            latitudeLongitude: item.latitudeLongitude ? item.latitudeLongitude : null
           },
           expanded
         };
@@ -174,9 +180,9 @@ export class DomainComponent implements OnInit {
     });
   }
 
-  searchDomains(formData) {
+  async searchDomains(formData) {
     const query = formData && formData.query ? formData.query : null;
-    this.clearDomains(query);
+    await this.clearDomains(query);
   }
 
   clearDomainForm(domain) {
@@ -184,7 +190,7 @@ export class DomainComponent implements OnInit {
     this.domain = new Domain();
     this.domainForm = this.formBuilder.group({
       id: [domain && domain.id],
-      name: [domain && domain.name, Validators.required]
+      name: [domain && domain.name, [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator]]
     });
   }
 
@@ -212,7 +218,7 @@ export class DomainComponent implements OnInit {
 
   private selectNode(rowNode) {
     this.domain = this.getSelectedNodeDomain(rowNode.node);
-    this.selectedLocality = this.getSelectedNodeLocality(rowNode.node);
+    this.selectedLocality = DomainComponent.getSelectedNodeLocality(rowNode.node);
   }
 
   private getSelectedNodeDomain(node) {
@@ -220,7 +226,7 @@ export class DomainComponent implements OnInit {
     return this.getSelectedNodeDomain(node.parent);
   }
 
-  private getSelectedNodeLocality(node) {
+  private static getSelectedNodeLocality(node) {
     return node.parent ? node.data : null;
   }
 
@@ -239,6 +245,20 @@ export class DomainComponent implements OnInit {
     }
   }
 
+  validateLatitudeLongitude(text: string) {
+    const regexUri = /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/;
+    if (regexUri.test(text)) {
+      return true;
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: this.translate.instant('domain.error.locality.invalid-latitude-longitude')
+      });
+      return false;
+    }
+  }
+
   buildLocalityBreadcrumb(rowNode, breadcrumb) {
     breadcrumb = (breadcrumb ? ' > ' : '').concat(breadcrumb);
     this.localityBreadcrumb = (rowNode.node ? rowNode.node.data.name : rowNode.data.name).concat(breadcrumb);
@@ -251,14 +271,17 @@ export class DomainComponent implements OnInit {
     try {
       this.markFormGroupTouched(this.domainForm);
       if (!this.isValidForm(this.domainForm)) { return; }
-      await this.domainService.save(formData, this.edit);
+      const resultDomain = await this.domainService.save(formData, this.edit);
+      if (!this.edit) {
+        this.domainCreated = resultDomain;
+      }
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
         detail: this.translate.instant(this.edit ? 'domain.updated' : 'domain.new', { name: formData.name })
       });
       this.clearDomainForm(null);
-      this.clearDomains(null);
+      await this.clearDomains(null);
     } catch (err) {
       console.error(err);
       this.messageService.add({
@@ -267,6 +290,14 @@ export class DomainComponent implements OnInit {
         detail: this.translate.instant('domain.error.saving')
       });
     }
+  }
+
+  paintDomainCreated() {
+    const indexDomain = this.domainTree.findIndex(domain => domain.data.id === this.domainCreated.id);
+    this.domainTree[indexDomain].data = {...this.domainTree[indexDomain].data, created: true};
+    setTimeout(() => {
+      this.domainTree[indexDomain].data = {...this.domainTree[indexDomain].data, created: false};
+    }, 3000);
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
@@ -303,11 +334,11 @@ export class DomainComponent implements OnInit {
       key: 'deleteDomain',
       acceptLabel: this.translate.instant('yes'),
       rejectLabel: this.translate.instant('no'),
-      accept: () => {
-        this.confirmDelete(deleteObject.id);
+      accept: async () => {
+        await this.confirmDelete(deleteObject.id);
       },
-      reject: () => {
-        this.clearDomains(null);
+      reject: async () => {
+        await this.clearDomains(null);
       }
     });
   }
@@ -332,7 +363,7 @@ export class DomainComponent implements OnInit {
         detail: this.translate.instant('domain.warn.contain-plan')
       });
     }
-    this.clearDomains(null);
+    await this.clearDomains(null);
   }
 
   showCreateLocality(rowNode) {
@@ -355,8 +386,9 @@ export class DomainComponent implements OnInit {
     this.disableSelectLocalityType = true;
     this.localityForm = this.formBuilder.group({
       id: [locality && locality.id],
-      name: [locality && locality.name, Validators.required],
-      type: [locality && locality.type.id, Validators.required]
+      name: [locality && locality.name, Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
+      type: [locality && locality.type.id, Validators.required],
+      latitudeLongitude: [locality && locality.latitudeLongitude, Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
     });
   }
 
@@ -364,8 +396,8 @@ export class DomainComponent implements OnInit {
     this.saveAndContinue = saveAndContinue;
   }
 
-  cancelLocality() {
-    this.cancel();
+  async cancelLocality() {
+    await this.cancel();
   }
 
   async searchLocalities(event, type) {
@@ -381,7 +413,7 @@ export class DomainComponent implements OnInit {
     try {
       this.loading = true;
       this.markFormGroupTouched(this.localityForm);
-      if (!this.isValidForm(this.localityForm)) {
+      if (!this.isValidForm(this.localityForm) || !this.validateLatitudeLongitude(this.localityForm.get('latitudeLongitude').value)) {
         this.loading = false;
         return;
       }
@@ -401,17 +433,18 @@ export class DomainComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.edit ? this.translate.instant('domain.locality.updated', { name: formData.name }) : this.translate.instant('domain.locality.inserted', { name: formData.name })
+        detail: this.edit ? this.translate.instant
+        ('domain.locality.updated', { name: formData.name }) : this.translate.instant('domain.locality.inserted', { name: formData.name })
       });
 
       let data = null;
       if (this.saveAndContinue) {
-        data = { type: formData.type },
-          this.edit = false;
+        data = { type: formData.type }
+        this.edit = false;
       }
 
       this.clearLocalityForm(data);
-      this.clearDomains(null);
+      await this.clearDomains(null);
       this.loading = false;
     } catch (err) {
       this.loading = false;
@@ -424,11 +457,24 @@ export class DomainComponent implements OnInit {
     }
   }
 
-  cancel() {
-    this.ngOnInit();
+  async cancel() {
+    await this.ngOnInit();
   }
 
   loadingIcon(icon = 'pi pi-check') {
     return this.loading ? 'pi pi-spin pi-spinner' : icon;
+  }
+
+  onInput($event) {
+    this.domainForm.patchValue(
+      {'name': $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
+      {emitEvent: false}
+    );
+  }
+
+  onBlur($event) {
+    this.domainForm.patchValue(
+      {'name': $event.target.value.replace(/\s+$/gm, '')},
+      {emitEvent: false});
   }
 }

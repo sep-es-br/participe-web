@@ -1,4 +1,3 @@
-import { IHttpResult } from './../interface/IHttpResult';
 import { Inject, Injectable, Injector } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import { Meeting } from '../models/Meeting';
@@ -9,6 +8,7 @@ import { IAttendee } from '../interface/IAttendee';
 import { IQueryOptions } from '../interface/IQueryOptions';
 import Common from '../util/Common';
 import { IPerson } from '../interface/IPerson';
+import { IResultPlanItemByConference } from '../interface/IResultPlanItemByConference';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
@@ -23,8 +23,8 @@ export class MeetingService extends BaseService<Meeting> {
     return this.http.get<Meeting>(`${this.urlBase}/?meetingId=${meetingId}`, { headers: Common.buildHeaders() }).toPromise();
   }
 
-  getSearch(conferenceId: number, filter?: MeetingFilterModel) {
-    return this.http.get<IResultPaginated<Meeting>>(`${this.urlBase}/${conferenceId}${PrepareHttpQuery({ search: filter })}`,
+  getSearch(conferenceId: number, filter?: MeetingFilterModel, options?: IQueryOptions) {
+    return this.http.get<IResultPaginated<Meeting>>(`${this.urlBase}/${conferenceId}${PrepareHttpQuery({ ...options, search: filter })}`,
       { headers: Common.buildHeaders() }).toPromise();
   }
 
@@ -32,8 +32,17 @@ export class MeetingService extends BaseService<Meeting> {
     return this.http.get<Meeting[]>(`${this.urlBase}/${conferenceId}`, { headers: Common.buildHeaders() }).toPromise();
   }
 
+  getAllMeetingByConferenceCombo(conferenceId: number) {
+    return this.http.get<IResultPaginated<Meeting>>(`${this.urlBase}/${conferenceId}`, { headers: Common.buildHeaders() }).toPromise();
+  }
+
   getReceptionistByEmail(email: string) {
     return this.http.get<IPerson>(`${this.urlBase}/receptionistByEmail?email=${email}`, { headers: Common.buildHeaders() }).toPromise();
+  }
+
+  getPlanItemsTargetedByConference(conferenceId: number) {
+    return this.http.get<IResultPlanItemByConference[]>(`${this.urlBase}/${conferenceId}/targeted-by/plan-items`,
+    { headers: Common.buildHeaders() }).toPromise();
   }
 
 
@@ -51,12 +60,13 @@ export class MeetingService extends BaseService<Meeting> {
     ).toPromise();
   }
 
-  postCheckIn(meetingId: number, personId: number): Promise<any> {
+  postCheckIn(meetingId: number, personId: number, timeZone: string): Promise<any> {
     return this.http.post(
       `${this.urlBase}/checkIn`,
       {
         meetingId,
-        personId
+        personId,
+        timeZone
       },
       { headers: Common.buildHeaders() }
     ).toPromise();

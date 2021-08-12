@@ -2,8 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { AuthService } from '../../shared/services/auth.service';
-import { ISocialLoginResult } from '../../shared/interface/ISocialLoginResult';
+import { AuthService } from '@app/shared/services/auth.service';
+import { ISocialLoginResult } from '@app/shared/interface/ISocialLoginResult';
 
 @Component({
   selector: 'tt-home',
@@ -18,29 +18,30 @@ export class HomeComponent implements OnInit {
     private router: Router
   ) {
     this.breadcrumbService.setItems([
-      { label: 'dashboard' },
+      { label: 'control-panel' },
       { label: 'home', routerLink: ['/home'] }
     ]);
   }
 
-  ngOnInit() {
-    this.processSocialLogin();
+  async ngOnInit() {
+    await this.processSocialLogin();
   }
 
-  private processSocialLogin() {
+  private async processSocialLogin() {
     try {
       const returnSocial = location.hash.split('=');
       const isLoginProcess = Array.isArray(returnSocial) && returnSocial.length === 2;
       if (isLoginProcess) {
-        console.log(atob(returnSocial[1]));
-        const userInfo = JSON.parse(atob(returnSocial[1])) as ISocialLoginResult;
+        console.log(decodeURIComponent(escape(atob(returnSocial[1]))));
+        const userInfo = JSON.parse(decodeURIComponent(escape(atob(returnSocial[1])))) as ISocialLoginResult;
         this.authSrv.saveToken(userInfo);
         this.authSrv.saveUserInfo(userInfo.person);
-        this.router.navigate(['/home']);
+        await this.router.navigate(['/control-panel-dashboard']);
       }
-      if (!this.authSrv.isAuthenticated() && !isLoginProcess) {
-        this.router.navigate(['/login']);
+      if (!await this.authSrv.isAuthenticated() && !isLoginProcess) {
+        await this.router.navigate(['/login']);
       }
+      await this.router.navigate(['/control-panel-dashboard']);
     } catch (error) {
       console.log('Social login error: ', error);
     }

@@ -9,11 +9,12 @@ import { StructureItem } from '@app/shared/models/structure-item';
 import { StructureItemService } from '@app/shared/services/structure-item.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { CustomValidators } from '@app/shared/util/CustomValidators';
 
 @Component({
   selector: 'tt-structure',
   templateUrl: './structure.component.html',
-  styleUrls: ['./structure.component.scss']
+  styleUrls: [ './structure.component.scss' ],
 })
 export class StructureComponent implements OnInit {
   searchForm: FormGroup;
@@ -23,6 +24,7 @@ export class StructureComponent implements OnInit {
   structureForm: FormGroup;
   structure: Structure;
   selectedRootNode: TreeNode;
+  structureCreated: Structure;
 
   structureItemForm: FormGroup;
   structureItems: string[];
@@ -38,7 +40,7 @@ export class StructureComponent implements OnInit {
   disableBtnSave = false;
   loading = false;
   tileChecked = false;
-  subtileChecked = false;
+  subtitleChecked = false;
   linkChecked = false;
 
   constructor(
@@ -49,28 +51,29 @@ export class StructureComponent implements OnInit {
     private structureItemService: StructureItemService,
     private messageService: MessageService,
     private translate: TranslateService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.buildBreadcrumb();
     this.clearSearchForm();
-    this.clearStructures(null);
-    this.clearStructureForm(null);
+    await this.clearStructures(null);
+    this.clearStructureForm();
     this.clearStructureItemForm(null);
   }
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
       { label: 'administration.label' },
-      { label: 'administration.structure', routerLink: ['/administration/structures'] }
+      { label: 'administration.structure', routerLink: [ '/administration/structures' ] },
     ]);
   }
 
   private async clearStructures(query) {
     try {
       this.loading = true;
-      if (!!query) {
+      if ( !!query) {
         query = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
         query = query.replace(/[^a-z0-9]/gi, ' ');
       }
@@ -78,6 +81,9 @@ export class StructureComponent implements OnInit {
       const response = await this.structureService.listAll(query);
       this.structureTree = this.buildTree(response, !!query, query);
       this.loading = false;
+      if (this.structureCreated) {
+        this.paintStructureCreated();
+      }
     } catch (err) {
       console.error(err);
       this.loading = false;
@@ -85,11 +91,15 @@ export class StructureComponent implements OnInit {
   }
 
   private buildTree(items: any[], open = false, query = null): TreeNode[] {
-    items.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
+    items.sort((a, b) => {
+      const aName = a.name ? a.name.toUpperCase() : '';
+      const bName = b.name ? b.name.toUpperCase() : '';
+      return aName > bName ? 1 : -1;
+    });
     const root: TreeNode[] = [];
     if (items) {
       items.forEach(item => {
-        const name = item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+        const name = item.name ? item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase() : '';
         const foundQuery = open && query !== null && name.toLowerCase().includes(query.trim().toLowerCase());
         const expanded = foundQuery ? false : open;
 
@@ -97,9 +107,11 @@ export class StructureComponent implements OnInit {
           data: {
             id: item.id,
             name: item.name,
-            hasPlan: item.hasPlan
+            hasPlan: item.hasPlan,
+            regionalization: item.regionalization,
+            hasLocalityWithItem: this.hasLocalityWithItemStructure(item.items),
           },
-          expanded
+          expanded,
         };
         if (item.items) {
           node.children = this.buildTree(item.items, open, query);
@@ -113,28 +125,53 @@ export class StructureComponent implements OnInit {
     return root;
   }
 
+  hasLocalityWithItemStructure(children: StructureItem[]): boolean {
+    if (children) {
+      if (children[0].locality) {
+        return true;
+      }
+      if (this.hasLocalityWithItemStructure(children[0].children)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   toggleSearch() {
     this.search = !this.search;
-    this.search ? setTimeout(() => document.getElementById('search-input').focus(), 100) : null;
+    if (this.search) {
+      setTimeout(() => document.getElementById('search-input').focus(), 100);
+    }
+
   }
 
   clearSearchForm() {
     this.searchForm = this.formBuilder.group({
-      query: ['']
+      query: [ '' ],
     });
   }
 
-  searchStructures(formData) {
+  async searchStructures(formData) {
     const query = formData && formData.query ? formData.query : null;
-    this.clearStructures(query);
+    await this.clearStructures(query);
   }
 
-  clearStructureForm(structure) {
+  clearStructureForm() {
     this.showStructureForm = false;
     this.structure = new Structure();
     this.structureForm = this.formBuilder.group({
-      id: [structure && structure.id],
-      name: [structure && structure.name, Validators.required]
+      id: [ null ],
+      name: [ '', [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator ] ],
+      regionalization: [ false ],
+    });
+  }
+
+  setStructureForm(structure: Structure) {
+    this.showStructureForm = false;
+    this.structureForm = this.formBuilder.group({
+      id: [ structure && structure.id ],
+      name: [ structure && structure.name, Validators.required ],
+      regionalization: [ structure && structure.regionalization ],
     });
   }
 
@@ -153,7 +190,7 @@ export class StructureComponent implements OnInit {
       this.showStructureItemForm = true;
       this.buildStructureItemBreadcrumb(rowNode.parent, '');
     } else {
-      this.clearStructureForm(this.structure);
+      this.setStructureForm(this.structure);
       this.showStructureForm = true;
     }
   }
@@ -166,14 +203,14 @@ export class StructureComponent implements OnInit {
   }
 
   private getSelectedNode(rowNode) {
-    if (!rowNode.parent) {
+    if ( !rowNode.parent) {
       return rowNode;
     }
     return this.getSelectedNode(rowNode.parent);
   }
 
   private getSelectedNodeStructure(node) {
-    if (!node.parent) {
+    if ( !node.parent) {
       return node.data;
     }
     return this.getSelectedNodeStructure(node.parent);
@@ -198,21 +235,26 @@ export class StructureComponent implements OnInit {
   async saveStructure(formData) {
     try {
       this.markFormGroupTouched(this.structureForm);
-      if (!this.isValidForm(this.structureForm)) { return; }
-      await this.structureService.save(formData, this.edit);
+      if ( !this.isValidForm(this.structureForm)) {
+        return;
+      }
+      const resultStructure = await this.structureService.save(formData, this.edit);
+      if ( !this.edit) {
+        this.structureCreated = resultStructure;
+      }
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant(this.edit ? 'structure.updated' : 'structure.new', { name: formData.name })
+        detail: this.translate.instant(this.edit ? 'structure.updated' : 'structure.new', { name: formData.name }),
       });
-      this.clearStructureForm(null);
-      this.clearStructures(null);
+      this.clearStructureForm();
+      await this.clearStructures(null);
     } catch (err) {
       console.error(err);
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('structure.error.saving')
+        detail: this.translate.instant('structure.error.saving'),
       });
     }
   }
@@ -230,8 +272,8 @@ export class StructureComponent implements OnInit {
         this.confirmDelete(deleteObject);
       },
       reject: () => {
-        this.canceldeleteItem(rowNode);
-      }
+        this.cancelDeleteItem(rowNode);
+      },
     });
   }
 
@@ -246,13 +288,13 @@ export class StructureComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('register.removed')
+        detail: this.translate.instant('register.removed'),
       });
     } catch (err) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('erro.removing.register')
+        detail: this.translate.instant('erro.removing.register'),
       });
     }
     await this.clearStructures(null);
@@ -261,38 +303,46 @@ export class StructureComponent implements OnInit {
     }
   }
 
-  async canceldeleteItem(rowNode) {
+  async cancelDeleteItem(rowNode) {
     await this.clearStructures(null);
     this.openTree(this.structureTree, rowNode.node.data.id);
   }
 
-  showCreateStructureItem(rowNode) {
-    this.selectNode(rowNode);
+  paintStructureCreated() {
+    const indexStructure = this.structureTree.findIndex(structure => structure.data.id === this.structureCreated.id);
+    this.structureTree[indexStructure].data = { ...this.structureTree[indexStructure].data, created: true };
+    setTimeout(() => {
+      this.structureTree[indexStructure].data = { ...this.structureTree[indexStructure].data, created: false };
+    }, 3000);
+  }
+
+  async showCreateStructureItem(rowNode) {
+    await this.selectNode(rowNode);
     this.buildStructureItemBreadcrumb(rowNode, '');
     this.edit = false;
     this.showStructureItemForm = true;
   }
 
   clearStructureItemForm(structureItem) {
-    if (!this.saveAndContinue) {
+    if ( !this.saveAndContinue) {
       this.showStructureItemForm = false;
       this.structureItemBreadcrumb = '';
     }
 
     if (this.edit && structureItem) {
-      this.tileChecked = structureItem.title ? true : false;
-      this.subtileChecked = structureItem.subtitle ? true : false;
-      this.linkChecked = structureItem.link ? true : false;
+      this.tileChecked = !!structureItem.title;
+      this.subtitleChecked = !!structureItem.subtitle;
+      this.linkChecked = !!structureItem.link;
     } else {
       this.tileChecked = false;
-      this.subtileChecked = false;
+      this.subtitleChecked = false;
       this.linkChecked = false;
     }
 
-    const logo = structureItem && structureItem.logo ? true : false;
-    const locality = structureItem && structureItem.locality ? true : false;
-    const votes = structureItem && structureItem.votes ? true : false;
-    const comments = structureItem && structureItem.comments ? true : false;
+    const logo = !!(structureItem && structureItem.logo);
+    const locality = structureItem && structureItem.locality && this.structure.regionalization;
+    const votes = !!(structureItem && structureItem.votes);
+    const comments = !!(structureItem && structureItem.comments);
     const title = structureItem ? structureItem.title : null;
     const subtitle = structureItem ? structureItem.subtitle : null;
     const link = structureItem ? structureItem.link : null;
@@ -300,71 +350,66 @@ export class StructureComponent implements OnInit {
     this.structureItems = [];
     this.structureItem = new StructureItem();
     this.structureItemForm = this.formBuilder.group({
-      id: [structureItem && structureItem.id],
-      name: [structureItem && structureItem.name, Validators.compose([Validators.required])],
-      logo: [logo, Validators.compose([Validators.required])],
-      locality: [locality, Validators.compose([Validators.required])],
-      votes: [votes, Validators.compose([Validators.required])],
-      comments: [comments, Validators.compose([Validators.required])],
-      title: [title],
-      subtitle: [subtitle],
-      link: [link],
+      id: [ structureItem && structureItem.id ],
+      name: [ structureItem && structureItem.name, Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
+      logo: [ logo, Validators.compose([ Validators.required ]) ],
+      locality: [ locality, Validators.compose([ Validators.required ]) ],
+      votes: [ votes, Validators.compose([ Validators.required ]) ],
+      comments: [ comments, Validators.compose([ Validators.required ]) ],
+      title: [ title ],
+      subtitle: [ subtitle ],
+      link: [ link ],
     });
-
-    /*if(structureItem == null){
-      this.tileChecked = false;
-      this.subtileChecked = false;
-      this.linkChecked = false;
-    }*/
   }
 
-  cancelStructureItem() {
-    this.cancel();
+
+  async cancelStructureItem() {
+    await this.cancel();
   }
 
   async saveStructureItem(formData) {
     try {
-      if (!this.validName(formData.id, formData.name)) {
+      if ( !this.validName(formData.id, formData.name)) {
         this.messageService.add({
           severity: 'error',
           summary: this.translate.instant('error'),
-          detail: this.translate.instant('exists.name')
+          detail: this.translate.instant('exists.name'),
         });
         return;
       }
       this.markFormGroupTouched(this.structureItemForm);
-      if (!this.isValidForm(this.structureItemForm)) { return; }
+      if ( !this.isValidForm(this.structureItemForm)) {
+        return;
+      }
 
-      formData = this.checkformData(formData);
-      console.log(formData);
+      formData = this.checkFormData(formData);
 
       const structureItem = await this.structureItemService.save(formData, this.edit);
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant(this.edit ? 'structure.item.updated' : 'structure.item.new', { name: formData.name })
+        detail: this.translate.instant(this.edit ? 'structure.item.updated' : 'structure.item.new', { name: formData.name }),
       });
 
       this.clearStructureItemForm(null);
       await this.clearStructures(null);
-      // this.openTree(this.structureTree, structureItem.id);
 
     } catch (err) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('structure.error.item')
+        detail: this.translate.instant('structure.error.item'),
       });
     }
   }
 
-  private checkformData(formData) {
+  private checkFormData(formData) {
     formData = {
       ...formData,
       structure: { id: this.structure.id },
       title: this.tileChecked ? formData.title : null,
-      subtitle: this.subtileChecked ? formData.subtitle : null,
-      link: this.linkChecked ? formData.link : null
+      subtitle: this.subtitleChecked ? formData.subtitle : null,
+      link: this.linkChecked ? formData.link : null,
     };
 
     if (this.selectedStructureItem && !this.edit) {
@@ -375,11 +420,11 @@ export class StructureComponent implements OnInit {
   }
 
   private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
-    if (!form.valid) {
+    if ( !form.valid) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
-        detail: errorMessage
+        detail: errorMessage,
       });
       return false;
     }
@@ -420,7 +465,7 @@ export class StructureComponent implements OnInit {
     if (name === this.structure.name) {
       return false;
     }
-    if (!this.selectedRootNode.children) {
+    if ( !this.selectedRootNode.children) {
       return true;
     }
     return this.verifyNameStructure(id, name, this.selectedRootNode.children);
@@ -428,15 +473,14 @@ export class StructureComponent implements OnInit {
 
   verifyNameStructure(id, name, nodes: TreeNode[]): boolean {
     let validName = true;
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i];
+    for (const node of nodes) {
       if (node.data.id !== id && node.data.name === name) {
         validName = false;
         break;
       }
       if (node.children) {
         validName = this.verifyNameStructure(id, name, node.children);
-        if (!validName) {
+        if ( !validName) {
           break;
         }
       }
@@ -446,10 +490,9 @@ export class StructureComponent implements OnInit {
 
   async cancel() {
     this.router.navigated = false;
-    this.clearStructureForm(null);
+    this.clearStructureForm();
     this.clearStructureItemForm(null);
     await this.clearStructures(null);
-    // this.openTree(this.structureTree, selected.id);
     this.showStructureForm = false;
     this.showStructureItemForm = false;
 
@@ -463,15 +506,28 @@ export class StructureComponent implements OnInit {
     let result = false;
 
     Tree.forEach(node => {
-      if (node.data.id != id) {
+      if (node.data.id !== id) {
         if (node.children) {
           result = this.openTree(node.children, id);
           node.expanded = result;
         }
       } else {
-        result =  true;
+        result = true;
       }
     });
     return result;
+  }
+
+  onInput($event) {
+    this.structureForm.patchValue(
+      {'name': $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
+      {emitEvent: false}
+    );
+  }
+
+  onBlur($event) {
+    this.structureForm.patchValue(
+      {'name': $event.target.value.replace(/\s+$/gm, '')},
+      {emitEvent: false});
   }
 }

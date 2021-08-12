@@ -14,6 +14,8 @@ import { MeetingService } from '@app/shared/services/meeting.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@app/shared/services/auth.service';
 import { LocalityService } from '@app/shared/services/locality.service';
+import * as moment from 'moment';
+import 'moment-timezone';
 
 @Component({
   selector: 'app-register',
@@ -70,8 +72,11 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
     try {
-      const result = await this.meetingSrv.postCheckIn(this.idMeeting, attendee.personId);
+      const timeZone = moment.tz.guess(true);
+      const result = await this.meetingSrv.postCheckIn(this.idMeeting, attendee.personId, timeZone);
       if (result) {
+        console.log(result.time);
+
         attendee.checkedIn = true;
         attendee.checkedInDate = result.time;
         this.messageSrv.add({
@@ -81,7 +86,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         });
         this.isAttendeeSelected = false;
         this.selectedAttende = null;
-        this.setActionBar();
+        await this.setActionBar();
       } else {
         throw new Error();
       }
@@ -105,7 +110,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           email: result.email,
           checkedIn: false
         };
-        this.checkIn(newAttendee);
+        await this.checkIn(newAttendee);
         this.toggleNewAccount();
       } else {
         this.messageSrv.add({
@@ -123,5 +128,18 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.newAccount = !this.newAccount;
     this.form.reset();
     this.form.controls.authType.setValue(AuthTypeEnum.CPF);
+  }
+
+  onInput($event) {
+    this.form.patchValue(
+      {name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
+      {emitEvent: false}
+    );
+  }
+
+  onBlur($event) {
+    this.form.patchValue(
+      {name: $event.target.value.replace(/\s+$/gm, '')},
+      {emitEvent: false});
   }
 }

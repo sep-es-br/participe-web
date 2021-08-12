@@ -6,7 +6,7 @@ import { ModerationLocatliy } from './../models/moderationLocality';
 import { ModerationFilter } from './../models/moderationFilter';
 import { ModerationComments } from './../models/moderationComments';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
 import Common from '../util/Common';
 import * as qs from 'qs';

@@ -1,0 +1,10 @@
+<div class="chartHorizontalBar" *ngIf="config">
+  <p-chart #graphBar type="horizontalBar" *ngIf="height && data && config && plugins"
+    responsive="true"
+    [height]="height"
+    [data]="data" 
+    [options]="config" 
+    [plugins]="plugins"
+    class="barChart"
+  ></p-chart>
+</div>

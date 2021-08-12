@@ -5,6 +5,7 @@ export class StructureItem {
   name: string;
   logo: boolean;
   locality: boolean;
+  regionalization: boolean;
   votes: boolean;
   comments: boolean;
   title: string;

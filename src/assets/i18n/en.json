@@ -11,6 +11,10 @@
 		"structure": "Structure"
 	},
 	"all": "All",
+	"begin": "Begin",
+	"end": "End",
+	"add": "Add",
+	"attention": "Attention",
 	"attendance": {
 		"arrival": "Arrival",
 		"attendant": "Attendants",
@@ -51,6 +55,8 @@
 	},
 	"cancel": "Cancel",
 	"change": "Change",
+	"automatic": "Automatic",
+	"manual": "Manual",
 	"citizen": {
 		"attendance_count": "Attendance Count",
 		"authentication": "Authentication",
@@ -71,16 +77,44 @@
 		"phone": "Phone",
 		"resetpassword": "Password reset",
 		"status": "Status",
-		"updated": "Updated citizen {{name}} "
+		"updated": "Updated citizen {{name}} ",
+    "receive_informational": "I want to receive informational messages"
 	},
 	"clean": {
 		"search": "Clear Search"
 	},
 	"conference": {
 		"citizen-Authentication": "Citizen Authentication",
+		"citizenPortal": "Citizen Portal",
+		"segmentation": "Meetig Segmentation",
+		"targetedBy": "Targeted by",
+		"display": "Display",
+		"preOpening": "Pre Opening",
+		"postClosure": "Post Closure",
+		"open": "Open",
+		"text": "Text",
+		"label": "Label",
+		"howWork": "How it works",
+		"research": "Research",
+		"backgroundImages": "Background Images",
+		"externalLinks": "External Links",
+		"mode": "Mode",
+		"step": "Step",
+		"opening": "Opening",
+		"closure": "Closure",
+		"displayOfTheCitizenPortal": "Display of the citizen's portal",
+		"estimatedTime": "Estimated time (Text)",
+		"serverName": "Server name",
+		"conferenceName": "Conference name",
+		"defaultServerConference": "Default server conference",
+		"stepUpdated": "Step is updated",
+		"externalLinkUpdated": "External link updated",
+		"requiredInputs": "Fill in all the information",
 		"confirm": {
-			"delete": "Are you sure that you want to delete {{name}}?"
+			"delete": "Are you sure that you want to delete {{name}}?",
+			"defaultConferenceServer": "Another active conference already exists for that server name ({{name}}). If you continue, the other conferece will be disabled."
 		},
+		"menuLabel": "Menu label",
 		"delete": "Delete Conference",
 		"email": "E-mail",
 		"enable": "Enable",
@@ -88,7 +122,13 @@
 			"fetch": {
 				"plans": "Error fetching plans"
 			},
-			"saving": "Error saving conference"
+			"saving": "Error saving conference",
+			"savingStep": "Error saving step",
+			"savingExternalLink": "Error saving external link",
+			"serverNameInvalid": "Invalid server name",
+      "externalLinkInvalid": "Invalid external link",
+      "researchLinkInvalid": "Research link invalid",
+      "plan-regionalizable": "The plan must be regionalizable"
 		},
 		"image": "Image",
 		"in-progress": "Conference in progress, cannot be deleted!",
@@ -104,21 +144,39 @@
 				"fetch": {
 					"conferenceActive": "Could not load active conferences",
 					"localities": "Error fetching localities",
-					"plans": "Error fetching plans"
+					"plans": "Error fetching plans",
+					"plan-items": "Error fetching plan items"
 				},
-				"saving": "Error saving meeting"
+        "edit-channel": "Name and URL is required",
+				"saving": "Error saving meeting",
+        "beginDateOutOfRange": "Meeting begin date must be in Conference date range",
+        "endDateOutOfRange": "Meeting end date must be in Conference date range",
+        "beginDateAfterEndDate": "Meeting begin date must be before end date",
+        "channelUrlInvalid": "Channel Url Invalid",
+        "doesNotContainChannel": "At least one transmission channel is required"
 			},
+      "type": {
+        "presential": "Presential",
+        "virtual": "Virtual",
+        "presential-virtual": "Presential and Virtual"
+      },
+      "segmentation": "Segmentation",
 			"locality": "Locality",
 			"localityCovers": "Coverage",
 			"mail": "Email",
 			"name": "Name",
+      "url": "URL",
 			"place": "Place",
 			"receptionists": "Receptionists",
 			"receptionists-active": "Receptionists Enabled",
 			"receptionists-active-empty": "No receptionist was qualified for this meeting",
 			"receptionists-not-found": "No receptionist was found with the filter used",
+      "broadcast-channels": "Broadcast Channels",
 			"success": {
-				"delete": "Meeting {{name}} deleted"
+				"delete": "Meeting {{name}} deleted",
+        "update": "Updated broadcast channel",
+				"updated": "Meeting {{name}} updated",
+				"created": "Meeting {{name}} created"
 			},
 			"title": "New face-to-face Meeting"
 		},
@@ -146,7 +204,33 @@
 		"title": "Title",
 		"updated": "Updated conference {{name}} "
 	},
-	"dashboard": "Dashboard",
+	"dashboard": {
+		"result": "Result",
+		"conference": "Conference",
+		"universe": "Universe",
+		"restore": "Restore",
+		"by": "by",
+		"agroup": "Agroup",
+		"value": "Value",
+		"display": "Display",
+		"county": "County",
+		"descendent": "Descending",
+		"ascendent": "Ascendent",
+		"microregion": "Microregion",
+		"alphabetic": "Alphabetic",
+		"presential": "Presential",
+		"origin": "Origin",
+		"remote": "Remote",
+		"counties": "Counties",
+		"participants": "Participants",
+		"highlights": "Highlights",
+		"proposals": "Proposals",
+		"strategicArea": "Strategic Area",
+		"error": {
+			"notSeletedConference": "Select a conference to show dashboard"
+		}
+	},
+	"control-panel": "Control Panel",
 	"date": {
 		"end": "End Date",
 		"start": "Begin Date"
@@ -163,7 +247,8 @@
 			},
 			"locality": {
 				"invalid-type-level": "Invalid type. This type has already been used on another level or this level must be of a specific type.",
-				"save": "Error saving locality"
+				"save": "Error saving locality",
+        "invalid-latitude-longitude": "Invalid latitude and longitude format, correct: latitude,longitude"
 			},
 			"locality-type": {
 				"not-found": "Locality type not found"
@@ -177,6 +262,7 @@
 		"locality": {
 			"inserted": "New locality {{name}} registered",
 			"name": "Name",
+			"latitudeLongitude": "Latitude and Longitude",
 			"new": "New",
 			"updated": "Updated locality {{name}}"
 		},
@@ -211,7 +297,9 @@
 		},
 		"required": {
 			"field": "Required field"
-		}
+		},
+    "field-cannot-be-empty": "The field cannot be empty",
+    "field-must-contain-only-letters": "The field must contain only letters"
 	},
 	"error": "Error",
 	"exists": {
@@ -384,7 +472,7 @@
 	"save": "Save",
 	"saveContinue": "Save and continue",
 	"search": "Search",
-	"select": "Selecione",
+	"select": "Select",
 	"state": "State",
 	"status": {
 		"active": "Active",
@@ -413,6 +501,7 @@
 		},
 		"link": "Link to alternative proposal",
 		"locality": "Locality",
+    "regionalization": "Regionalization",
 		"logo": "Image",
 		"name": "Name",
 		"new": "New structure {{name}} registered",
@@ -453,3 +542,4 @@
 	"years": "Years",
 	"yes": "Yes"
 }
+

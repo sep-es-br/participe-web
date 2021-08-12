@@ -11,6 +11,10 @@
 		"structure": "Estrutura"
 	},
 	"all": "Todos",
+	"begin": "Início",
+	"end": "Fim",
+	"add": "Adicionar",
+	"attention": "Atenção",
 	"attendance": {
 		"arrival": "Ordem de Chegada",
 		"attendant": "Presentes",
@@ -28,7 +32,7 @@
 			"lenghtOf6Password": "Senha deve conter 6 dígitos",
 			"onlyDigitsPassword": "Senha deve conter apenas dígitos",
 			"whenSaving": "Erro ao tentar salvar, tente novamente",
-			"whenSearching": "Erro ao tentar ao buscar a lista de cidadões, tente novamente"
+			"whenSearching": "Erro ao tentar ao buscar a lista de cidadãos, tente novamente"
 		},
 		"label": "Lista de Presença",
 		"loadMore": "Carregar mais resultados",
@@ -50,6 +54,8 @@
 		"tooltipLabelView": "Visualizar "
 	},
 	"cancel": "Cancelar",
+	"automatic": "Automático",
+	"manual": "Manual",
 	"change": "Trocar",
 	"citizen": {
 		"attendance_count": "Acesso",
@@ -71,16 +77,44 @@
 		"phone": "Telefone",
 		"resetpassword": "Resetar senha",
 		"status": "Situação",
-		"updated": "Cidadão {{name}} atualizado"
+		"updated": "Cidadão {{name}} atualizado",
+		"receive_informational": "Desejo receber mensagens informativas"
 	},
 	"clean": {
 		"search": "Limpar Pesquisa"
 	},
 	"conference": {
 		"citizen-Authentication": "Autenticação do Cidadão",
+		"citizenPortal": "Portal do cidadão",
+		"segmentation": "Segmentação das Reuniões",
+		"targetedBy": "Segmentadas por",
+		"display": "Exibição",
+		"preOpening": "Pré-abertura",
+		"postClosure": "Pós-encerramento",
+		"open": "Aberta",
+		"text": "Texto",
+		"label": "Rótulo",
+		"howWork": "Como funciona",
+		"research": "Pesquisa",
+		"backgroundImages": "Imagens de Fundo",
+		"externalLinks": "Links Externos",
+		"mode": "Modo",
+		"step": "Passo",
+		"opening": "Abertura",
+		"closure": "Encerramento",
+		"displayOfTheCitizenPortal": "Exibição do Portal do Cidadão",
+		"estimatedTime": "Tempo estimado (Texto)",
+		"serverName": "Nome do servidor",
+		"conferenceName": "Nome da consulta",
+		"defaultServerConference": "Consulta padrão do servidor",
+		"stepUpdated": "Passo alterado",
+		"externalLinkUpdated": "Link externo alterado",
+		"requiredInputs": "Preencha todas as informações",
 		"confirm": {
-			"delete": "Deseja realmente excluir {{name}}?"
+			"delete": "Deseja realmente excluir {{name}}?",
+			"defaultConferenceServer": "Já existe outra consulta ativa para esse nome de servidor ({{name}}). Se você continuar, a outra consulta será desativada."
 		},
+		"menuLabel": "Rótulo do menu",
 		"delete": "Excluir Consulta",
 		"email": "E-mail",
 		"enable": "Habilitado",
@@ -88,7 +122,13 @@
 			"fetch": {
 				"plans": "Erro ao carregar os planos"
 			},
-			"saving": "Erro ao salvar a consulta"
+			"saving": "Erro ao salvar a consulta",
+			"savingStep": "Erro ao salvar passo",
+			"savingExternalLink": "Erro ao salvar link externo",
+			"serverNameInvalid": "Nome do servidor inválido",
+      "externalLinkInvalid": "Link externo inválido",
+      "researchLinkInvalid": "Link da pesquisa inválido",
+      "plan-regionalizable": "É necessário que o plano seja regionalizável"
 		},
 		"image": "Imagem",
 		"in-progress": "Consulta em andamento, não pode ser excluída!",
@@ -104,21 +144,40 @@
 				"fetch": {
 					"conferenceActive": "Não foi possível carregar as conferências ativas",
 					"localities": "Erro ao carregar as localidades",
-					"plans": "Erro ao carregar os planos"
+					"plans": "Erro ao carregar os planos",
+					"plan-items": "Erro ao carregar os itens do plano"
 				},
-				"saving": "Erro ao salvar a reunião"
+				"edit-channel": "Name and URL is required",
+        "channel-name-empty": "Nome do canal não foi inserido",
+				"saving": "Erro ao salvar a reunião",
+        "beginDateOutOfRange": "A data de início da reunião deve estar no intervalo de datas da Conferência",
+        "endDateOutOfRange": "A data de término da reunião deve estar no intervalo de datas da Conferência",
+        "beginDateAfterEndDate": "A data de início da reunião deve ser anterior à data de término",
+        "channelUrlInvalid": "Url do canal inválida",
+        "doesNotContainChannel": "É necessário ter pelo menos um canal de transmissão"
 			},
+			"type": {
+				"presential": "Presencial",
+				"virtual": "Virtual",
+				"presential-virtual": "Presencial e Virtual"
+			},
+			"segmentation": "Segmentação",
 			"locality": "Localidade",
 			"localityCovers": "Abrangência",
 			"mail": "Email",
 			"name": "Nome",
+			"url": "URL",
 			"place": "Local",
 			"receptionists": "Recepcionistas",
 			"receptionists-active": "Recepcionistas Habilitados",
 			"receptionists-active-empty": "Nenhum recepcionista foi habilitado para esta reunião",
 			"receptionists-not-found": "Nenhum recepcionista foi encontrado com o filtro utilizado",
+			"broadcast-channels": "Canais de transmissão",
 			"success": {
-				"delete": "Reunião {{name}} excluída"
+				"delete": "Reunião {{name}} excluída",
+				"update": "Canal de transmissão atualizado",
+        "updated": "Reunião {{name}} atualizada",
+				"created": "Reunião {{name}} criada"
 			},
 			"title": "Nova Reunião Presencial"
 		},
@@ -146,7 +205,33 @@
 		"title": "Título",
 		"updated": "Consulta {{name}} atualizada"
 	},
-	"dashboard": "Painel de Controle",
+	"dashboard": {
+		"result": "Resultado",
+		"conference": "Consulta",
+		"universe": "Universo",
+		"restore": "Restaurar",
+		"by": "por",
+		"agroup": "Agrupar",
+		"value": "Valor",
+		"display": "Exibir",
+		"county": "Município",
+		"descendent": "Decrescente",
+		"ascendent": "Crescente",
+		"microregion": "Microrregião",
+		"alphabetic": "Alfabética",
+		"presential": "Presencial",
+		"participants": "Participantes",
+		"highlights": "Destaques",
+		"proposals": "Propostas",
+		"origin": "Origem",
+		"remote": "Remota",
+		"counties": "Municípios",
+		"strategicArea": "Área Estratégica",
+		"error": {
+			"notSeletedConference": "Selecione uma consulta para o dashboard"
+		}
+	},
+	"control-panel": "Painel de Controle",
 	"date": {
 		"end": "Data Final",
 		"start": "Data Inicial"
@@ -163,7 +248,8 @@
 			},
 			"locality": {
 				"invalid-type-level": "Tipo inválido. Este tipo já foi utilizado em outro nível ou este nível precisa ser de um tipo específico.",
-				"save": "Erro ao salvar a localidade"
+				"save": "Erro ao salvar a localidade",
+        "invalid-latitude-longitude": "Formato de latitude e longitude inválido, correto: latitude,longitude"
 			},
 			"locality-type": {
 				"not-found": "Tipo de localidade não encontrado"
@@ -177,6 +263,7 @@
 		"locality": {
 			"inserted": "Nova localidade {{name}} inserida",
 			"name": "Nome",
+			"latitudeLongitude": "Latitude e Longitude",
 			"new": "Nova",
 			"updated": "Localidade {{name}} atualizada"
 		},
@@ -211,7 +298,9 @@
 		},
 		"required": {
 			"field": "Campo obrigatório"
-		}
+		},
+    "field-cannot-be-empty": "O campo não pode estar vazio",
+    "field-must-contain-only-letters": "O campo deve conter apenas letras"
 	},
 	"error": "Erro",
 	"exists": {
@@ -413,6 +502,7 @@
 		},
 		"link": "Link para proposta alternativa",
 		"locality": "Regionalizável",
+		"regionalization": "Regionalização",
 		"logo": "Imagem",
 		"name": "Nome",
 		"new": "Nova estrutura {{name}} inserida",

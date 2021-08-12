@@ -34,7 +34,7 @@
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-              <tr>
+              <tr [ngClass]="rowData.created ? 'background-orange' : ''">
                 <td>
                   <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                   <span style="vertical-align: middle">{{rowData.name}}</span>
@@ -43,7 +43,7 @@
                   <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
                     [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
                     (click)="showCreateStructureItem(rowNode)">
-                    <img src="assets/layout/images/icons/triangule_plus.png" />
+                    <img src="assets/layout/images/icons/triangule_plus.png"  alt=""/>
                   </button>
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
                     (click)="showEdit(rowNode)"></button>
@@ -66,8 +66,13 @@
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'structure.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="structureForm" field="name"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-6 input-switch">
+              <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
+              <p-inputSwitch id="input-switch-logo" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+              </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">
@@ -103,7 +108,7 @@
             </div>
             <div class="p-col-12 p-md-6 input-switch">
               <label for="input-switch-locality">{{'structure.locality'|translate}}</label>
-              <p-inputSwitch id="input-switch-logo" formControlName="locality">
+              <p-inputSwitch id="input-switch-locality" formControlName="locality" [disabled]="!structure?.regionalization">
               </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-6 input-switch">
@@ -128,10 +133,10 @@
 
             <div class="p-col-12 p-md-6 input-switch">
               <label for="input-switch-subtitle">{{'structure.subTitle'|translate}}</label>
-              <p-inputSwitch id="input-switch-subtitle"  [(ngModel)]="subtileChecked" [ngModelOptions]="{standalone: true}">
+              <p-inputSwitch id="input-switch-subtitle" [(ngModel)]="subtitleChecked" [ngModelOptions]="{standalone: true}">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6" *ngIf="subtileChecked">
+            <div class="p-col-12 p-md-6" *ngIf="subtitleChecked">
               <input pInputText formControlName="subtitle">
               <tt-input-message [form]="structureItemForm" field="subtitle"></tt-input-message>
             </div>

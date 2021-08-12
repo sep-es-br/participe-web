@@ -1,0 +1,106 @@
+body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {
+  background-color: #2196F3 !important;
+  border-color: #2196F3 !important;
+}
+
+.actions {
+  margin-bottom: 14px;
+}
+
+.pesquisar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    font-size: 16px;
+  }
+}
+
+form {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  margin-top: 14px;
+
+  * + * {
+    margin-left: 14px;
+  }
+}
+
+.column-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  * + * {
+    margin-left: 10px;
+  }
+}
+
+.search {
+  cursor: pointer;
+  text-align: right;
+}
+
+.search-form {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.citizen-portal-section {
+  margin-top: 2em;
+}
+
+.citizen-portal-section {
+  .citizen-portal-section-title {
+    font-size: 27px;
+    font-weight: bold;
+    padding: 0 0.5em;
+  }
+  .accordion-citizen-portal-container {
+    margin-top: 1em;
+  }
+}
+
+.input-switch > label {
+  width: 100px;
+  display: inline-block;
+}
+
+.server-name, .switch-default-conference {
+  margin-top: 1em;
+}
+
+
+
+@media only screen and (max-width: 760px) {
+  .column-actions {
+    flex-direction: column;
+    padding: 10px 0 !important;
+
+    * + * {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+  .form-actions {
+    flex-direction: column;
+
+    * + * {
+      margin-left: 0;
+      margin-top: 14px;
+    }
+  }
+  .begin-date {
+    padding-right: 0.5em !important;
+  }
+  .end-date {
+    padding-left: 0.5em !important;
+  }
+}

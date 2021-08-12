@@ -25,7 +25,7 @@
           <div class="p-col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
-              <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth" src="/assets/layout/images/icons/participe.svg" title="Participe"/>
+              <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth" src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
               <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)" [title]="auth.loginName" [alt]="auth.loginName"/>
               <p-radioButton *ngFor="let type of authTypeEnum" name="authType" [value]="type" [label]="type"
                 formControlName="authType"></p-radioButton>
@@ -52,7 +52,7 @@
           <div class="p-col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
             <p-inputMask mask="(99) 99999-9999" placeholder="(00) 00000-0000" unmask="true"
-              slotChar="(00) 00000-0000" formControlName="phone"></p-inputMask>
+              formControlName="phone"></p-inputMask>
             <tt-input-message [form]="form" field="phone"></tt-input-message>
           </div>
           <div class="p-col-12">

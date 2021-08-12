@@ -456,9 +456,8 @@ body {
         }
 
         .ui-multiselect-label {
-            padding: $inputPadding;
-            padding-right: 2em;
-            color: $textColor;
+          padding: $inputPadding 2em $inputPadding $inputPadding;
+          color: $textColor;
         }
 
         .ui-multiselect-trigger {
@@ -496,8 +495,7 @@ body {
                 margin-left: 0;
 
                 .ui-inputtext {
-                    padding: $inputPadding;
-                    padding-right: 2em;
+                  padding: $inputPadding 2em $inputPadding $inputPadding;
                 }
 
                 .ui-multiselect-filter-icon {
@@ -555,7 +553,7 @@ body {
                         &:hover {
                             border: $inputBorder;
                         }
-                        
+
                         &.ui-state-active:hover {
                             border-color: $checkboxActiveBorderColor;
                         }
@@ -598,8 +596,7 @@ body {
                 width: calc(100% - (#{$inputListHeaderPaddingLeft} + #{$inputListHeaderPaddingLeft} + #{$inlineSpacing}));
 
                 input {
-                    padding: $inputPadding;
-                    padding-right: 2em;
+                  padding: $inputPadding 2em $inputPadding $inputPadding;
                 }
 
                 .ui-listbox-filter-icon {
@@ -681,7 +678,7 @@ body {
                 background-color: $inputBgColor;
                 color: $textColor;
             }
-        } 
+        }
 
         .ql-picker.ql-expanded {
             .ql-picker-label {
@@ -955,7 +952,7 @@ body {
 
             td {
                 padding: $calendarCellDatePadding;
-                
+
                 > a, > span {
                     display: block;
                     text-align: center;
@@ -998,9 +995,8 @@ body {
         }
 
         .ui-timepicker {
-            border: 0 none;
-            border-top: $calendarTimePickerDivider;
-            padding: $calendarTimePickerPadding;
+          border: 0 none;
+          padding: $calendarTimePickerPadding;
 
             a {
                 color:$calendarTimePickerIconColor;
@@ -1038,12 +1034,9 @@ body {
         &.ui-datepicker-multiple-month {
             .ui-datepicker-group {
                 border-right: $calendarMultipleMonthDivider;
-                padding-right: $calendarPadding;
-                padding-left: $calendarPadding;
-                padding-top: 0;
-                padding-bottom: 0;
+              padding: 0 $calendarPadding;
 
-                &:first-child {
+              &:first-child {
                     padding-left: 0;
                 }
 
@@ -1084,11 +1077,10 @@ body {
         .ui-fileupload-buttonbar {
             background-color: $panelHeaderBgColor;
             padding: $panelHeaderPadding;
-            border: $panelHeaderBorder;
-            color: $panelHeaderTextColor;
-            border-bottom: 0 none;
+          color: $panelHeaderTextColor;
+          border-bottom: 0 none;
 
-            .ui-button {
+          .ui-button {
                 margin-right: 8px;
             }
         }

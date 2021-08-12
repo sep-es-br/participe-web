@@ -2,3 +2,9 @@
     padding: 2em;
     background: $contentBgColor;
 }
+
+@media only screen and (max-width: 760px) {
+  .layout-content {
+   padding: 1em;
+  }
+}

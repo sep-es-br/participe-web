@@ -1,32 +1,33 @@
-import { ModerateUpdate } from './../../../shared/models/moderateUpdate';
-import { ModerationTreeViewItem } from './../../../shared/models/moderationTreeViewItem';
+import { ModerateUpdate } from '@app/shared/models/moderateUpdate';
+import { ModerationTreeViewItem } from '@app/shared/models/moderationTreeViewItem';
 import { Conference } from '@app/shared/models/conference';
 import { ConferenceService } from '@app/shared/services/conference.service';
-import { ModerationService } from './../../../shared/services/moderation.service';
-import { SelectItem, MessageService, MenuItem, TreeNode } from 'primeng/api';
+import { ModerationService } from '@app/shared/services/moderation.service';
+import { MenuItem, MessageService, SelectItem, TreeNode } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
-import { BreadcrumbService } from '../../../core/breadcrumb/breadcrumb.service';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HelperUtils } from '../../../shared/util/HelpersUtil';
-import { ModerationComments } from '../../../shared/models/moderationComments';
-import { TranslateChangeService } from '../../../shared/services/translateChange.service';
+import { HelperUtils } from '@app/shared/util/HelpersUtil';
+import { ModerationComments } from '@app/shared/models/moderationComments';
+import { TranslateChangeService } from '@app/shared/services/translateChange.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
 @Component({
   selector: 'app-moderate',
   templateUrl: './moderate.component.html',
-  styleUrls: ['./moderate.component.scss']
+  styleUrls: [ './moderate.component.scss' ],
 })
 export class ModerateComponent implements OnInit {
 
   microregion: SelectItem[] = [];
+  regionalization: boolean;
   labelMicroregion: string;
   optionsSave: MenuItem[] = [];
   loading: boolean;
   strategyArea: TreeNode[] = [];
-  selectedStratgyArea: TreeNode;
+  selectedStrategyArea: TreeNode;
   moving: boolean;
   commentId: number;
   conferenceId: number;
@@ -40,13 +41,14 @@ export class ModerateComponent implements OnInit {
     private translate: TranslateService,
     private translateChange: TranslateChangeService,
     private moderationSrv: ModerationService,
-    private confereceSrv: ConferenceService,
+    private conferenceSrv: ConferenceService,
     private activeRoute: ActivatedRoute,
-    private route: Router
-  ) { }
+    private route: Router,
+  ) {
+  }
 
-  ngOnInit() {
-    this.prepareScreen();
+  async ngOnInit() {
+    await this.prepareScreen();
     this.translateChange.getCurrentLang().subscribe(({ lang }) => {
       this.language = lang;
     });
@@ -58,15 +60,31 @@ export class ModerateComponent implements OnInit {
       this.commentId = +id;
       await this.loadComment();
       await this.loadConference();
+      await this.loadRegionalizationConference();
       await this.loadLocalitiesOptions();
       this.buildBreadcrumb();
     });
   }
 
+  async loadRegionalizationConference() {
+    try {
+      if (this.conferenceId) {
+        const data = await this.conferenceSrv.getRegionalization(this.conferenceId);
+        this.regionalization = data.regionalization;
+      }
+    } catch (error) {
+      console.error(error);
+      this.messageService.add({
+        severity: 'error', summary: 'Erro',
+        detail: this.translate.instant('moderation.error.fetch.regionalization'),
+      });
+    }
+  }
+
   async loadComment() {
     try {
-      this.comment = await this.moderationSrv.getModeration(this.commentId, this.conferenceId);
-      if (!this.comment.classification) {
+      this.comment = await this.moderationSrv.getModeration(this.commentId, this.conferenceId) as ModerationComments;
+      if ( !this.comment.classification) {
         this.comment.classification = 'proposal';
       }
     } catch (error) {
@@ -76,7 +94,7 @@ export class ModerateComponent implements OnInit {
 
   async loadConference() {
     try {
-      this.conference = await this.confereceSrv.getById(this.conferenceId);
+      this.conference = await this.conferenceSrv.getById(this.conferenceId);
     } catch (error) {
       console.error(error);
     }
@@ -92,7 +110,7 @@ export class ModerateComponent implements OnInit {
       collapsedIcon: 'pi pi-folder',
       key: tree.id.toString(),
       selectable: true,
-      styleClass: _.get(this.selectedStratgyArea, 'data', 0) === tree.id ? 'selected-tree' : undefined
+      styleClass: _.get(this.selectedStrategyArea, 'data', 0) === tree.id ? 'selected-tree' : undefined,
     });
   }
 
@@ -106,9 +124,9 @@ export class ModerateComponent implements OnInit {
     }
   }
 
-  moveComment() {
+  async moveComment() {
     this.moving = !this.moving;
-    this.loadTreeView();
+    await this.loadTreeView();
   }
 
   async loadLocalitiesOptions() {
@@ -120,16 +138,15 @@ export class ModerateComponent implements OnInit {
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.regionalization')
+        detail: this.translate.instant('moderation.error.fetch.regionalization'),
       });
     }
   }
 
-
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
       { label: 'administration.moderation' },
-      { label: this.conference.name, routerLink: ['/moderation/search'] }
+      { label: this.conference.name, routerLink: [ '/moderation/search' ] },
     ]);
     this.populateMenuSave();
   }
@@ -137,15 +154,15 @@ export class ModerateComponent implements OnInit {
   private populateMenuSave() {
     this.optionsSave.push({
       label: this.translate.instant('moderation.moderate.save.pending'),
-      icon: 'pi pi-trash', command: async () => this.save('Pending')
+      icon: 'pi pi-trash', command: async () => this.save('Pending'),
     });
     this.optionsSave.push({
       label: this.translate.instant('moderation.moderate.save.archived'),
-      icon: 'pi pi-briefcase', command: async () => this.save('Filed')
+      icon: 'pi pi-briefcase', command: async () => this.save('Filed'),
     });
     this.optionsSave.push({
       label: this.translate.instant('moderation.moderate.save.inTrash'),
-      icon: 'pi pi-trash', command: async () => this.save('Removed')
+      icon: 'pi pi-trash', command: async () => this.save('Removed'),
     });
   }
 
@@ -159,7 +176,7 @@ export class ModerateComponent implements OnInit {
       const { commentId, classification, planItemId, localityId, text } = this.comment;
       sender.id = commentId;
       sender.classification = classification;
-      sender.planItem = _.get(this.selectedStratgyArea, 'data', planItemId);
+      sender.planItem = _.get(this.selectedStrategyArea, 'data', planItemId);
       sender.locality = localityId;
       sender.text = text;
       sender.status = status;
@@ -178,44 +195,48 @@ export class ModerateComponent implements OnInit {
         case 'Filed':
           msg = proposal ? 'moderation.label.msg.filed_proposal' : 'moderation.label.msg.filed_comment';
           break;
-       case 'Removed':
+        case 'Removed':
           msg = proposal ? 'moderation.label.msg.removed_proposal' : 'moderation.label.msg.removed_comment';
           break;
-     }
+      }
       this.messageService.add({
-       severity: 'success',
-       summary: this.translate.instant('success'),
-       detail: this.translate.instant(msg)
+        severity: 'success',
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(msg),
       });
-      setTimeout(() => { this.route.navigate(['/moderation/search']); }, 2000);
+      setTimeout(() => {
+        this.route.navigate([ '/moderation/search' ]);
+      }, 2000);
 
     } catch (error) {
       let msg = 'moderation.error.moderator';
-      if (error && error.code == 400 && error.message != 'moderation.error.moderator') {
+      if (error && error.code === 400 && error.message !== 'moderation.error.moderator') {
         msg = 'moderation.error.update_comment';
       }
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('success'),
-        detail: this.translate.instant(msg)
+        detail: this.translate.instant(msg),
       });
-      setTimeout(() => { this.route.navigate(['/moderation/search']); }, 5000);
+      setTimeout(() => {
+        this.route.navigate([ '/moderation/search' ]);
+      }, 5000);
     }
   }
 
   async end() {
     try {
       await this.moderationSrv.end({
-        id: this.comment.commentId
+        id: this.comment.commentId,
       } as any);
-      this.route.navigate(['/moderation/search']);
+      await this.route.navigate([ '/moderation/search' ]);
     } catch (error) {
       console.error(error);
-      this.route.navigate(['/moderation/search']);
+      await this.route.navigate([ '/moderation/search' ]);
     }
   }
 
   timesAgo(time: string): string {
-    if (!time) {
+    if ( !time) {
       return '';
     }
     try {

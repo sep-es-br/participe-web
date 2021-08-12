@@ -305,9 +305,9 @@
             };
 
             document.getElementById('landing-menu-button').addEventListener('click', function(e) {
-                var menu = document.getElementsByClassName('landing-body')[0];
+              const menu = document.getElementsByClassName('landing-body')[0];
 
-                if(PrestigeLanding.hasClass(menu, 'landing-menu-active'))
+              if(PrestigeLanding.hasClass(menu, 'landing-menu-active'))
                     PrestigeLanding.hideMenu();
                 else
                     PrestigeLanding.showMenu();
@@ -315,8 +315,8 @@
                 e.preventDefault();
             });
 
-            var menuLinks = document.querySelectorAll('#landing-menu a');
-            for (i = 0; i < menuLinks.length; i++) {
+            const menuLinks = document.querySelectorAll('#landing-menu a');
+            for (let i = 0; i < menuLinks.length; i++) {
                 menuLinks[i].addEventListener('click', function(e) {
                     PrestigeLanding.hideMenu();
                 });

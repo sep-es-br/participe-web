@@ -262,10 +262,9 @@ body {
         .ui-datagrid-header {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
+          border-bottom: 0 none;
         }
 
         .ui-datagrid-content {
@@ -273,15 +272,13 @@ body {
             border: $panelContentBorder;
             background-color: $panelContentBgColor;
             color: $panelContentTextColor;
-            padding: $panelContentPadding;
         }
 
         .ui-datagrid-footer {
             background-color: $panelFooterBgColor;
             color: $panelFooterTextColor;
-            border: $panelFooterBorder;
-            padding: $panelFooterPadding;
-            border-top: 0 none;
+          padding: $panelFooterPadding;
+          border-top: 0 none;
         }
     }
 
@@ -289,10 +286,9 @@ body {
         .ui-datalist-header {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
+          border-bottom: 0 none;
         }
 
         .ui-datalist-content {
@@ -300,15 +296,13 @@ body {
             border: $panelContentBorder;
             background-color: $panelContentBgColor;
             color: $panelContentTextColor;
-            padding: $panelContentPadding;
         }
 
         .ui-datalist-footer {
             background-color: $panelFooterBgColor;
             color: $panelFooterTextColor;
-            border: $panelFooterBorder;
-            padding: $panelFooterPadding;
-            border-top: 0 none;
+          padding: $panelFooterPadding;
+          border-top: 0 none;
         }
     }
 
@@ -316,10 +310,9 @@ body {
         .ui-datascroller-header {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
+          border-bottom: 0 none;
         }
 
         .ui-datascroller-content {
@@ -327,15 +320,13 @@ body {
             border: $panelContentBorder;
             background-color: $panelContentBgColor;
             color: $panelContentTextColor;
-            padding: $panelContentPadding;
         }
 
         .ui-datascroller-footer {
             background-color: $panelFooterBgColor;
             color: $panelFooterTextColor;
-            border: $panelFooterBorder;
-            padding: $panelFooterPadding;
-            border-top: 0 none;
+          padding: $panelFooterPadding;
+          border-top: 0 none;
         }
     }
 
@@ -343,10 +334,9 @@ body {
         .ui-virtualscroller-header {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
+          border-bottom: 0 none;
         }
 
         .ui-virtualscroller-content {
@@ -363,9 +353,8 @@ body {
         .ui-virtualscroller-footer {
             background-color: $panelFooterBgColor;
             color: $panelFooterTextColor;
-            border: $panelFooterBorder;
-            padding: $panelFooterPadding;
-            border-top: 0 none;
+          padding: $panelFooterPadding;
+          border-top: 0 none;
         }
     }
 
@@ -373,10 +362,9 @@ body {
         .ui-dataview-header {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
+          border-bottom: 0 none;
         }
 
         .ui-dataview-content {
@@ -389,9 +377,8 @@ body {
         .ui-dataview-footer {
             background-color: $panelFooterBgColor;
             color: $panelFooterTextColor;
-            border: $panelFooterBorder;
-            padding: $panelFooterPadding;
-            border-top: 0 none;
+          padding: $panelFooterPadding;
+          border-top: 0 none;
         }
     }
 
@@ -460,8 +447,8 @@ body {
         }
 
         div.ui-widget-content {
-            padding-left: 0px;
-            padding-right: 0px;
+            padding-left: 0;
+            padding-right: 0;
         }
 
         .fc-event {
@@ -491,11 +478,10 @@ body {
         .ui-picklist-caption {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
-            @include border-radius-top($borderRadius);
+          border-bottom: 0 none;
+          @include border-radius-top($borderRadius);
         }
 
         .ui-picklist-filter-container {
@@ -574,11 +560,10 @@ body {
         .ui-orderlist-caption {
             background-color: $panelHeaderBgColor;
             color: $panelHeaderTextColor;
-            border: $panelHeaderBorder;
-            padding: $panelHeaderPadding;
+          padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
-            border-bottom: 0 none;
-            @include border-radius-top($borderRadius);
+          border-bottom: 0 none;
+          @include border-radius-top($borderRadius);
         }
 
         .ui-orderlist-filter-container {

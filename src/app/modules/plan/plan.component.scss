@@ -63,10 +63,14 @@ form {
     flex-direction: column;
 
     * + * {
-      margin-left: 0px;
+      margin-left: 0;
       margin-top: 14px;
     }
   }
+}
+
+.background-orange {
+  background-color: #ffa5004d !important;
 }
 
 :host ::ng-deep .priority-2,
@@ -99,10 +103,10 @@ form {
 }
 
 .newtr {
- 
+
   animation-name: contrast;
-  animation-duration: 3s; 
-} 
+  animation-duration: 3s;
+}
 .oldtr{
   background-color: white;
 }

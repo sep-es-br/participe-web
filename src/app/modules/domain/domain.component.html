@@ -35,7 +35,7 @@
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-              <tr>
+              <tr [ngClass]="rowData.created ? 'background-orange' : ''">
                 <td>
                   <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                   <span style="vertical-align: middle">{{rowData.name}}</span>
@@ -46,7 +46,7 @@
                 <td class="column-actions">
                   <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
                     (click)="showCreateLocality(rowNode)">
-                    <img src="assets/layout/images/icons/triangule_plus.png" />
+                    <img src="assets/layout/images/icons/triangule_plus.png"  alt=""/>
                   </button>
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
                     (click)="showEdit(rowNode)"></button>
@@ -65,7 +65,7 @@
             </div>
             <div class="p-col-12 p-md-6">
               <label for="name">{{'domain.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="domainForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-4">
@@ -97,6 +97,11 @@
                 (completeMethod)="searchLocalities($event, localityForm.value.type)">
               </p-autoComplete>
               <tt-input-message [form]="localityForm" field="name"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-6">
+              <label for="latitudeLongitude">{{'domain.locality.latitudeLongitude'|translate}}</label>
+              <input formControlName="latitudeLongitude" pInputText>
+              <tt-input-message [form]="localityForm" field="latitudeLongitude"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-6">
               <div class="form-actions">

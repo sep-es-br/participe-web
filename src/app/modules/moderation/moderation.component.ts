@@ -1,28 +1,30 @@
-import { ActionBarService } from './../../core/actionbar/app.actionbar.actions.service';
-import { Conference } from './../../shared/models/conference';
-import { ModerationComments } from './../../shared/models/moderationComments';
-import { ModerationFilter } from './../../shared/models/moderationFilter';
-import { ModerationService } from './../../shared/services/moderation.service';
-import { HelperUtils } from './../../shared/util/HelpersUtil';
+import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
+import { Conference } from '@app/shared/models/conference';
+import { ModerationComments } from '@app/shared/models/moderationComments';
+import { ModerationFilter } from '@app/shared/models/moderationFilter';
+import { ModerationService } from '@app/shared/services/moderation.service';
+import { HelperUtils } from '@app/shared/util/HelpersUtil';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BreadcrumbService } from '../../core/breadcrumb/breadcrumb.service';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
-import { calendar } from '../../shared/constants';
-import { TranslateChangeService } from '../../shared/services/translateChange.service';
+import { calendar } from '@app/shared/constants';
+import { TranslateChangeService } from '@app/shared/services/translateChange.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/shared/services/auth.service';
+import { ConferenceService } from '@app/shared/services/conference.service';
 
 @Component({
   selector: 'app-moderation',
   templateUrl: './moderation.component.html',
-  styleUrls: ['./moderation.component.scss']
+  styleUrls: [ './moderation.component.scss' ],
 })
 export class ModerationComponent implements OnInit, OnDestroy {
 
   search: boolean;
+  regionalization: boolean;
   loading: boolean;
   status: SelectItem[] = [];
   typeOfParticipation: SelectItem[] = [];
@@ -45,10 +47,12 @@ export class ModerationComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private translateChange: TranslateChangeService,
     private moderationSrv: ModerationService,
+    private conferenceSvr: ConferenceService,
     private actionBarSrv: ActionBarService,
     private route: Router,
-    private userAuth: AuthService
-  ) { }
+    private userAuth: AuthService,
+  ) {
+  }
 
   ngOnDestroy(): void {
     this.actionBarSrv.setItems([]);
@@ -56,12 +60,28 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.loadConferencesActives();
+    await this.loadRegionalizationConference();
     await this.prepareScreen();
     this.translateChange.getCurrentLang().subscribe(({ lang }) => {
       this.language = lang;
       this.calendarTranslate = calendar[lang];
       this.populateOptions();
     });
+  }
+
+  async loadRegionalizationConference() {
+    try {
+      if (this.conferenceSelect.id) {
+        const data = await this.conferenceSvr.getRegionalization(this.conferenceSelect.id);
+        this.regionalization = data.regionalization;
+      }
+    } catch (error) {
+      console.error(error);
+      this.messageService.add({
+        severity: 'error', summary: 'Erro',
+        detail: this.translate.instant('moderation.error.fetch.regionalization'),
+      });
+    }
   }
 
   populateOptions() {
@@ -102,8 +122,8 @@ export class ModerationComponent implements OnInit, OnDestroy {
       {
         position: 'LEFT', handle: () => {
           this.showSelectConference = !this.showSelectConference;
-        }, icon: 'change.svg'
-      }
+        }, icon: 'change.svg',
+      },
     ]);
   }
 
@@ -112,7 +132,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
       const data = await this.moderationSrv.getConferencesActive(false);
       this.conferencesActives = data;
       if (data.length > 0) {
-        if(data.filter(conf => conf.isActive).length === 0) {
+        if (data.filter(conf => conf.isActive).length === 0) {
           this.conferenceSelect = data[0];
         } else {
           this.conferenceSelect = data.filter(conf => conf.isActive)[0];
@@ -122,36 +142,35 @@ export class ModerationComponent implements OnInit, OnDestroy {
       console.error(error);
       this.messageService.add({
         severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.conferences')
+        detail: this.translate.instant('moderation.error.fetch.conferences'),
       });
     }
   }
 
   async loadComments() {
-    if(this.conferenceSelect.id == null) {
+    if (this.conferenceSelect.id == null) {
       return null;
     }
 
     try {
-      const data = await this.moderationSrv.getCommentsForModeration(this.conferenceSelect.id, this.filter);
-      this.conferenceComments = data;
+      this.conferenceComments = await this.moderationSrv.getCommentsForModeration(this.conferenceSelect.id, this.filter);
     } catch (error) {
-      if(this.conferenceSelect.id != null) {
+      if (this.conferenceSelect.id != null) {
         this.messageService.add({
           severity: 'error', summary: 'Erro',
-          detail: this.translate.instant('moderation.error.fetch.comments')
+          detail: this.translate.instant('moderation.error.fetch.comments'),
         });
       } else {
         this.messageService.add({
           severity: 'error', summary: 'Erro',
-          detail: this.translate.instant('moderation.error.fetch.conferences')
+          detail: this.translate.instant('moderation.error.fetch.conferences'),
         });
       }
     }
   }
 
   timesAgo(time: string): string {
-    if (!time) {
+    if ( !time) {
       return '';
     }
     try {
@@ -164,7 +183,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async loadLocalitiesOptions() {
     try {
-      if(this.conferenceSelect.id != null) {
+      if (this.conferenceSelect.id != null) {
         const data = await this.moderationSrv.getLocalities(this.conferenceSelect.id);
         this.microregion = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
         this.microregion.unshift({ value: '', label: 'Todos' });
@@ -173,24 +192,24 @@ export class ModerationComponent implements OnInit, OnDestroy {
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.regionalization')
+        detail: this.translate.instant('moderation.error.fetch.regionalization'),
       });
     }
   }
 
   async loadPlanItems() {
     try {
-      if(this.conferenceSelect.id != null) {
+      if (this.conferenceSelect.id != null) {
         const data = await this.moderationSrv.getPlanItem(this.conferenceSelect.id);
-        this.planItem = _.map(_.get(data, 'planItems', []), 
-        ({ planItemId, planItemName }) => ({ value: planItemId, label: planItemName }));
+        this.planItem = _.map(_.get(data, 'planItems', []),
+          ({ planItemId, planItemName }) => ({ value: planItemId, label: planItemName }));
         this.planItem.unshift({ value: '', label: 'Todos' });
         this.labelPlanItem = _.get(data, 'structureItemName');
       }
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.planItems')
+        detail: this.translate.instant('moderation.error.fetch.planItems'),
       });
     }
   }
@@ -198,7 +217,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
       { label: 'administration.moderation' },
-      { label: this.conferenceSelect.name, routerLink: ['/moderation/search'] }
+      { label: this.conferenceSelect.name, routerLink: [ '/moderation/search' ] },
     ]);
   }
 
@@ -211,16 +230,16 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   selectLocality(locality: SelectItem) {
-    this.filter.localityIds = [locality.value];
+    this.filter.localityIds = [ locality.value ];
   }
 
   selectPlanItem(planItem: SelectItem) {
-    this.filter.planItemIds = [planItem.value];
+    this.filter.planItemIds = [ planItem.value ];
   }
 
-  changeSmallFilter(status: string) {
+  async changeSmallFilter(status: string) {
     this.filter.status = status;
-    this.loadComments();
+    await this.loadComments();
     setTimeout(() => {
       this.configureActionBar();
     }, 1000);
@@ -233,7 +252,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
-    this.prepareScreen();
+    await this.prepareScreen();
     this.showSelectConference = false;
   }
 
@@ -246,28 +265,28 @@ export class ModerationComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant(msg)
-       });
+        detail: this.translate.instant(msg),
+      });
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.publish_comment')
+        detail: this.translate.instant('moderation.error.publish_comment'),
       });
     }
   }
 
-  publish(comment: ModerationComments) {
-    this.confirmationService.confirm({
+  async publish(comment: ModerationComments) {
+    await this.confirmationService.confirm({
       message: this.translate.instant('moderation.label.confirm_publish', { text: comment.text, citizenName: comment.citizenName }),
       key: 'confirm_publish',
       acceptLabel: this.translate.instant('yes'),
       rejectLabel: this.translate.instant('no'),
-      accept: () => {
-        this._publish(comment);
+      accept: async () => {
+        await this._publish(comment);
       },
       reject: () => {
-        console.log('reject');
-      }
+        console.error('reject');
+      },
     });
   }
 
@@ -275,17 +294,17 @@ export class ModerationComponent implements OnInit, OnDestroy {
     try {
       await this.moderationSrv.update({
         classification: item.classification,
-        id: item.commentId
+        id: item.commentId,
       } as any);
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('moderation.label.saved_success')
+        detail: this.translate.instant('moderation.label.saved_success'),
       });
     } catch (error) {
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('error'),
-        detail: this.translate.instant('moderation.error.update_comment')
+        detail: this.translate.instant('moderation.error.update_comment'),
       });
     }
   }
@@ -293,50 +312,49 @@ export class ModerationComponent implements OnInit, OnDestroy {
   async moderate(comment: ModerationComments) {
     if (comment.moderatorId && !comment.moderated) {
       const person = this.userAuth.getUserInfo;
-      if (person.id == comment.moderatorId) {
-        this.begin(comment);
+      if (person.id === comment.moderatorId) {
+        await this.begin(comment);
       } else {
-        this.alterModerator(comment);
+        await this.alterModerator(comment);
       }
     } else {
-      this.begin(comment);
+      await this.begin(comment);
     }
   }
 
   async begin(comment: ModerationComments) {
-    console.log(comment);
     try {
       await this.moderationSrv.begin({
-        id: comment.commentId
+        id: comment.commentId,
       } as any);
-      this.route.navigate(['/moderation/moderate', comment.commentId, this.conferenceSelect.id]);
+      await this.route.navigate([ '/moderation/moderate', comment.commentId, this.conferenceSelect.id ]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       let msg = 'moderation.error.begin';
-      if (error && error.code == 400) {
+      if (error && error.code === 400) {
         msg = error.message;
       }
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('error'),
-        detail: this.translate.instant(msg)
+        detail: this.translate.instant(msg),
       });
     }
   }
 
-  alterModerator(comment: ModerationComments) {
+  async alterModerator(comment: ModerationComments) {
     const proposal = comment.classification && comment.classification === 'proposal';
     const msg = proposal ? 'moderation.label.confirm_alter_moderator_proposal' : 'moderation.label.confirm_alter_moderator_comment';
-    this.confirmationService.confirm({
+    await this.confirmationService.confirm({
       message: this.translate.instant(msg),
       key: 'confirm_alter_moderator',
       acceptLabel: this.translate.instant('yes'),
       rejectLabel: this.translate.instant('no'),
-      accept: () => {
-        this.begin(comment);
+      accept: async () => {
+        await this.begin(comment);
       },
       reject: () => {
-        console.log('reject');
-      }
+        console.error('reject');
+      },
     });
   }
 

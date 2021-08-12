@@ -91,20 +91,20 @@
           <form class="p-grid ui-fluid p-col-8" [formGroup]="citizenForm" (submit)="save(citizenForm)">
             <div class="p-col-12 p-md-12">
               <label class="required" for="name">{{'citizen.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText formControlName="name" (input)="onInput($event)" (blur)="onBlur($event)">
               <tt-input-message [form]="citizenForm" field="name"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-12">
               <label class="required" for="locality">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
-              <p-dropdown [options]="localitys" formControlName="locality" class="ng-dirty ng-invalid"
-                [placeholder]="'placeholder.select'|translate"></p-dropdown>
+              <p-dropdown [options]="localities" formControlName="locality" class="ng-dirty ng-invalid"
+                          [placeholder]="'placeholder.select'|translate"></p-dropdown>
               <tt-input-message [form]="citizenForm" field="locality"></tt-input-message>
             </div>
             <div class="p-col-12 p-sm-12 p-md-12 authentication-container">
               <label>Autenticação</label>
               <div class="container">
                 <div class="icons-container">
-                  <img *ngIf="(idCitizen === 0 || (!citizenHasNativeAuth && getFormValue('ckResetPassword')))" src="../../assets/layout/images/icons/participe.svg" />
+                  <img *ngIf="(idCitizen === 0 || (!citizenHasNativeAuth && getFormValue('ckResetPassword')))" src="../../../assets/layout/images/icons/participe.svg"  alt=""/>
                   <div [innerHTML]="getAuthenticationsFromCitizen"></div>
                 </div>
                 <div class="options-container">
@@ -125,7 +125,7 @@
             </div>
             <div class="p-col-12  p-sm-12 p-md-6" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'mail'}">
               <label [class.required]="getFormValue('typeAuthentication') === 'cpf'" for="password">{{'citizen.password'|translate}}</label>
-              <input pInputText formControlName="password">
+              <input pInputText formControlName="password" [maxLength]="6">
               <tt-input-message [form]="citizenForm" field="password"></tt-input-message>
             </div>
             <div class="p-col-12 p-md-12" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'cpf'}">
@@ -142,6 +142,11 @@
               <label for="phone">{{'citizen.phone'|translate}}</label>
               <p-inputMask formControlName="telephone" mask="(99) 99999-9999" unmask="true"></p-inputMask>
               <tt-input-message [form]="citizenForm" field="telephone"></tt-input-message>
+            </div>
+            <div class="p-col-12 p-md-12 input-switch">
+              <label for="input-switch-informational">{{'citizen.receive_informational'|translate}}</label>
+              <p-inputSwitch id="input-switch-informational" formControlName="receiveInformational">
+              </p-inputSwitch>
             </div>
             <div class="p-col-12 p-md-12 radiobutton-status" *ngIf="idCitizen > 0">
               <label for="status">Status</label>
@@ -164,7 +169,7 @@
   </div>
 </app-template>
 <p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
-  [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
+  [visible]="showSelectConference">
   <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
     (click)="selectOtherConference(conference)">
     <h4>{{ conference.name }}</h4>

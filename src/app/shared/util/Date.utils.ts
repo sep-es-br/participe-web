@@ -21,5 +21,5 @@ function convertStringDate(date: string) {
 export const howLongAgo = (date: Date, language?: string) => {
   const currentLanguage = (language && language !== 'pt') ? language : 'pt-BR';
   moment.locale(currentLanguage);
-  return moment(date).fromNow();
+  return moment(date).local().fromNow();
 };

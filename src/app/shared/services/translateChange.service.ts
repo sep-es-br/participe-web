@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class TranslateChangeService {
 
     constructor(
-        private translate: TranslateService
+        private translate: TranslateService,
     ) { }
 
     private subject = new Subject<any>();
@@ -15,6 +15,7 @@ export class TranslateChangeService {
     changeLangDefault(lang: string) {
         localStorage.setItem(StoreKeys.defaultLanguage, lang);
         this.translate.setDefaultLang(lang);
+        this.translate.use(lang);
         this.subject.next({ lang });
     }
 
@@ -22,7 +23,7 @@ export class TranslateChangeService {
         setTimeout(() => {
             const lang = localStorage.getItem(StoreKeys.defaultLanguage) || 'pt';
             this.subject.next({ lang });
-        }, 500);
+        }, 200);
         return this.subject.asObservable();
     }
 }

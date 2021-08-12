@@ -11,6 +11,7 @@ import { ConferenceComponent } from './conference.component';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { FilesService } from '@app/shared/services/files.service';
+import { ConferenceListComponent } from './conference-list/conference-list.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { FilesService } from '@app/shared/services/files.service';
     MeetingModule
   ],
   declarations: [
-    ConferenceComponent
+    ConferenceComponent,
+    ConferenceListComponent
   ],
   exports: [
     ConferenceComponent
