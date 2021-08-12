@@ -39,7 +39,7 @@
     "@types/heatmap.js": "^2.0.36",
     "@types/leaflet": "^1.7.0",
     "@types/leaflet.heat": "^0.2.0",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "chartjs-plugin-datalabels": "^1.0.0",
     "chartjs-plugin-labels": "^1.1.0",
     "color": "^3.1.3",
