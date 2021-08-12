@@ -161,7 +161,7 @@ export class StructureComponent implements OnInit {
     this.structure = new Structure();
     this.structureForm = this.formBuilder.group({
       id: [ null ],
-      name: [ '', [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator ] ],
+      name: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
       regionalization: [ false ],
     });
   }
@@ -170,7 +170,7 @@ export class StructureComponent implements OnInit {
     this.showStructureForm = false;
     this.structureForm = this.formBuilder.group({
       id: [ structure && structure.id ],
-      name: [ structure && structure.name, Validators.required ],
+      name: [ structure && structure.name, Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
       regionalization: [ structure && structure.regionalization ],
     });
   }
@@ -353,7 +353,7 @@ export class StructureComponent implements OnInit {
       id: [ structureItem && structureItem.id ],
       name: [ structureItem && structureItem.name, Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
       logo: [ logo, Validators.compose([ Validators.required ]) ],
-      locality: [ locality, Validators.compose([ Validators.required ]) ],
+      locality: [ locality ],
       votes: [ votes, Validators.compose([ Validators.required ]) ],
       comments: [ comments, Validators.compose([ Validators.required ]) ],
       title: [ title ],
@@ -378,6 +378,7 @@ export class StructureComponent implements OnInit {
         return;
       }
       this.markFormGroupTouched(this.structureItemForm);
+
       if ( !this.isValidForm(this.structureItemForm)) {
         return;
       }
@@ -385,6 +386,7 @@ export class StructureComponent implements OnInit {
       formData = this.checkFormData(formData);
 
       const structureItem = await this.structureItemService.save(formData, this.edit);
+
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
@@ -520,14 +522,14 @@ export class StructureComponent implements OnInit {
 
   onInput($event) {
     this.structureForm.patchValue(
-      {'name': $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
-      {emitEvent: false}
+      { 'name': $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ') },
+      { emitEvent: false },
     );
   }
 
   onBlur($event) {
     this.structureForm.patchValue(
-      {'name': $event.target.value.replace(/\s+$/gm, '')},
-      {emitEvent: false});
+      { 'name': $event.target.value.replace(/\s+$/gm, '') },
+      { emitEvent: false });
   }
 }
