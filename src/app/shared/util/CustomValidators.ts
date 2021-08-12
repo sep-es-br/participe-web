@@ -126,7 +126,7 @@ export class CustomValidators {
   }
 
   static onlyLettersAndSpaceValidator(control: FormControl) {
-    const acceptable = control.value ? control.value.match(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]*$/) !== null : false;
+    const acceptable = control.value ? control.value.match(/^[A-Za-z0-9À-ÖØ-öø-ÿ\s]*$/) !== null : false;
     return acceptable ? null : {custom: {invalid: true, message: 'erro.field-must-contain-only-letters'}};
   }
 

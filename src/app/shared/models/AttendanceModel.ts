@@ -91,7 +91,7 @@ export class AttendanceModel {
     this.citizenSrv = injector.get(CitizenService);
     this.localitySrv = injector.get(LocalityService);
     this.form = this.formBuilder.group({
-      name: [ '', [ Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator ] ],
+      name: [ '', [ Validators.required, CustomValidators.noWhitespaceValidator ] ],
       locality: [ '', Validators.required ],
       authType: [ AuthTypeEnum.CPF, Validators.required ],
       cpf: [ '', this.cpfValidators ],

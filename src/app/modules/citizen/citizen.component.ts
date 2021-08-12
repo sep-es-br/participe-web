@@ -172,7 +172,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   setForm(value) {
     this.citizenForm = this.formBuilder.group({
-      name: [_.get(value, 'name', ''), [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator]],
+      name: [_.get(value, 'name', ''), [Validators.required, CustomValidators.noWhitespaceValidator]],
       locality: [_.get(value, 'locality', '') || _.get(value, 'localityId', ''), Validators.required],
       cpf: [_.get(value, 'cpf', ''), this.cpfValidators],
       password: [_.get(value, 'password', ''), this.passwordValidators],

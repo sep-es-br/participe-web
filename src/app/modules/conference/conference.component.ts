@@ -205,7 +205,7 @@ export class ConferenceComponent implements OnInit {
     this.conference = new Conference();
     this.conferenceForm = this.formBuilder.group({
       id: null,
-      name: [ '', [Validators.required, CustomValidators.noWhitespaceValidator, CustomValidators.onlyLettersAndSpaceValidator] ],
+      name: [ '', [Validators.required, CustomValidators.noWhitespaceValidator] ],
       description: [ '', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator]) ],
       serverName: [ '', [ Validators.compose([Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator]) ] ],
       defaultServerConference: false,
