@@ -48,7 +48,7 @@
     "leaflet": "^1.7.1",
     "leaflet-heatmap": "^1.0.0",
     "leaflet.heat": "https://github.com/Leaflet/Leaflet.heat/tarball/gh-pages",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "primeflex": "^1.0.0",
