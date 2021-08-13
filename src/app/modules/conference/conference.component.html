@@ -14,7 +14,8 @@
               </div>
               <div class="p-col-12 p-md-6">
                 <label for="name">{{'conference.name'|translate}}</label>
-                <input pInputText (change)="validateName($event)" (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
+                <input pInputText (change)="validateName($event)" (input)="onInput($event)" (blur)="onBlur($event)"
+                       formControlName="name">
                 <tt-input-message [form]="conferenceForm" field="name"></tt-input-message>
               </div>
               <div class="p-col-12 p-md-6">
@@ -26,8 +27,9 @@
               <div class="p-col-12 p-md-6">
                 <label for="plan">{{'plan.label'|translate}}</label>
                 <p-dropdown [options]="plans" formControlName="plan" [placeholder]="'placeholder.select'|translate"
-                  class="ng-dirty ng-invalid" (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
-                  [readonly]="selfdeclarations > 0">
+                            class="ng-dirty ng-invalid"
+                            (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
+                            [readonly]="selfdeclarations > 0">
                 </p-dropdown>
                 <tt-input-message [form]="conferenceForm" field="plan"></tt-input-message>
               </div>
@@ -38,11 +40,11 @@
               </div>
               <div class="p-col-12 p-md-6 switch-default-conference">
                 <p-inputSwitch id="input-switch-default-conference" formControlName="defaultServerConference"
-                  [readonly]="conferenceForm.controls.serverName.invalid"
-                  (onChange)="validateDefaultConferenceServer()">
+                               [readonly]="conferenceForm.controls.serverName.invalid"
+                               (onChange)="validateDefaultConferenceServer()">
                 </p-inputSwitch>
                 <label class="targeted-label"
-                  for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>
+                       for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>
               </div>
             </div>
             <p-accordion [multiple]="true">
@@ -87,13 +89,13 @@
                         </td>
                         <td class="column-actions">
                           <button pButton icon="pi pi-plus" type="button" style="margin-right: 2px;"
-                            (click)="addModeratorsEnabled(moderator)"></button>
+                                  (click)="addModeratorsEnabled(moderator)"></button>
                         </td>
                       </tr>
                     </ng-template>
                   </p-table>
                 </div>
-                <br *ngIf="moderators.length > 0 && moderatorsEnabled.length > 0" />
+                <br *ngIf="moderators.length > 0 && moderatorsEnabled.length > 0"/>
                 <div *ngIf="moderatorsEnabled && moderatorsEnabled.length > 0">
                   <p-table [value]="moderatorsEnabled" selectionMode="single" dataKey="vin" [responsive]="true">
                     <ng-template pTemplate="caption">
@@ -116,7 +118,7 @@
                         </td>
                         <td class="column-actions">
                           <button pButton icon="pi pi-trash" type="button" style="margin-right: 2px;"
-                            (click)="removeModeratorsEnabled(moderator)"></button>
+                                  (click)="removeModeratorsEnabled(moderator)"></button>
                         </td>
                       </tr>
                     </ng-template>
@@ -126,21 +128,21 @@
               <p-accordionTab header="{{'conference.segmentation' | translate}}" class="segmentation-accordion">
                 <div class="p-col-12 p-md-6 switch-segmentation">
                   <p-inputSwitch id="input-switch-segmentation" formControlName="segmentation"
-                    (onChange)="showTargetedByItems=!showTargetedByItems"
-                    [readonly]="conferenceForm.controls.plan.invalid">
+                                 (onChange)="showTargetedByItems=!showTargetedByItems"
+                                 [readonly]="conferenceForm.controls.plan.invalid">
                   </p-inputSwitch>
                   <label class="targeted-label"
-                    for="input-switch-segmentation">{{'conference.targetedBy'|translate}}</label>
+                         for="input-switch-segmentation">{{'conference.targetedBy'|translate}}</label>
                 </div>
                 <div class="segmentation-items" *ngIf="showTargetedByItems">
                   <div class="segmentation-item" *ngFor="let item of structureItems">
                     <p-radioButton name="targetedByItemsGroup" [value]="item.value" [label]="item.label"
-                      formControlName="targetedByItems">
+                                   formControlName="targetedByItems">
                     </p-radioButton>
                   </div>
                   <div class="segmentation-item">
                     <p-radioButton name="targetedByItemsGroup" value="TODOS" label="Todos"
-                      formControlName="targetedByItems">
+                                   formControlName="targetedByItems">
                     </p-radioButton>
                   </div>
                 </div>
@@ -157,61 +159,63 @@
                       <div class="ui-g-12 ui-md-3 ui-lg-3 begin-date">
                         <label for="beginDate">{{'conference.opening'|translate}}</label>
                         <p-calendar dateFormat="dd/mm/yy"
-                          (onSelect)="changeBeginDate($event); setStatusDisplayConference()" hourFormat="24"
-                          [showTime]="true" formControlName="beginDate" [locale]="calendarTranslate">
+                                    (onSelect)="changeBeginDate($event); setStatusDisplayConference()"
+                                    [showTime]="true" formControlName="beginDate" [locale]="calendarTranslate">
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
                       </div>
                       <div class="ui-g-12 ui-md-3 ui-lg-3 end-date">
                         <label for="endDate">{{'conference.closure'|translate}}</label>
                         <p-calendar dateFormat="dd/mm/yy" [minDate]="minDate && minDate"
-                          [locale]="calendarTranslate"
-                          (onSelect)="setStatusDisplayConference()" formControlName="endDate" hourFormat="24"
-                          [showTime]="true">
+                                    [locale]="calendarTranslate"
+                                    (onSelect)="setStatusDisplayConference()" formControlName="endDate"
+                                    [showTime]="true">
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="endDate"></tt-input-message>
                       </div>
                       <div class="ui-g-12 ui-md-12 ui-lg-12 container-label-display-mode">
                         <label class="label-display-mode">{{'conference.mode'| translate}}</label>
                       </div>
-                      <div class="ui-g-12 ui-md-3 ui-lg-3 diplay-mode">
+                      <div class="ui-g-12 ui-md-3 ui-lg-3 display-mode">
                         <div class="options-container">
                           <div class="display-item">
                             <p-radioButton name="optionsDisplayConfig" value="AUTOMATIC"
-                              (onClick)="setStatusDisplayConference()" [label]="'automatic'|translate"
-                              formControlName="displayMode">
+                                           (onClick)="setStatusDisplayConference()" [label]="'automatic'|translate"
+                                           formControlName="displayMode">
                             </p-radioButton>
                           </div>
                           <div class="display-item">
                             <p-radioButton name="optionsDisplayConfig" value="MANUAL" [label]="'manual'|translate"
-                              formControlName="displayMode">
+                                           formControlName="displayMode">
                             </p-radioButton>
                           </div>
                         </div>
                       </div>
                       <div class="ui-g-12 ui-md-3 ui-lg-3">
                         <p-dropdown [options]="optionsStatusConference" formControlName="displayStatusConference"
-                          [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
-                          [readonly]="conferenceForm.controls.displayMode.value === 'AUTOMATIC'">
+                                    [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
+                                    [readonly]="conferenceForm.controls.displayMode.value === 'AUTOMATIC'">
                         </p-dropdown>
                         <tt-input-message [form]="conferenceForm" field="displayStatusConference"></tt-input-message>
                       </div>
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
-                    styleClass="tabStyleClass">
+                                  styleClass="tabStyleClass">
                     <div class="p-col-12 p-md-6" *ngIf="!conference.fileAuthentication">
                       <h3>{{'file.label'|translate}}</h3>
                       <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
-                        (uploadHandler)="uploadFile($event, 'authentication')" [chooseLabel]="'file.browse'|translate"
-                        [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate"></p-fileUpload>
+                                    (uploadHandler)="uploadFile($event, 'authentication')"
+                                    [chooseLabel]="'file.browse'|translate"
+                                    [uploadLabel]="'file.send'|translate"
+                                    [cancelLabel]="'cancel'|translate"></p-fileUpload>
                     </div>
                     <div class="p-col-12 p-md-2" *ngIf="conference.fileAuthentication">
                       <h3>{{'conference.image'|translate}}</h3>
                       <img [src]="getUrlFile(conference.fileAuthentication.id)" alt="Imagem Autenticação" width="120px"
-                        style="padding: 20px;">
+                           style="padding: 20px;">
                       <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                        (click)="removeFileAuthentication($event)"></button>
+                              (click)="removeFileAuthentication($event)"></button>
                     </div>
                     <div class="p-col-12 p-md-6">
                       <label for="titleAuthentication">{{'conference.title'|translate}}</label>
@@ -227,8 +231,8 @@
                     <div class="p-col-12 p-md-6">
                       <label for="localityType">{{'conference.locality-citizen'|translate}}</label>
                       <p-dropdown [options]="localitiesOfDomain" formControlName="localityType"
-                        [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
-                        [readonly]="!localitycitizenSelected || selfdeclarations > 0">
+                                  [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
+                                  [readonly]="!localitycitizenSelected || selfdeclarations > 0">
                       </p-dropdown>
                       <tt-input-message [form]="conferenceForm" field="localityType"></tt-input-message>
                     </div>
@@ -237,15 +241,17 @@
                     <div class="p-col-12 p-md-6" *ngIf="!conference.fileParticipation">
                       <h3>{{'file.label'|translate}}</h3>
                       <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
-                        (uploadHandler)="uploadFile($event, 'participation')" [chooseLabel]="'file.browse'|translate"
-                        [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate"></p-fileUpload>
+                                    (uploadHandler)="uploadFile($event, 'participation')"
+                                    [chooseLabel]="'file.browse'|translate"
+                                    [uploadLabel]="'file.send'|translate"
+                                    [cancelLabel]="'cancel'|translate"></p-fileUpload>
                     </div>
                     <div class="p-col-12 p-md-2" *ngIf="conference.fileParticipation">
                       <h3>{{'conference.image'|translate}}</h3>
                       <img [src]="getUrlFile(conference.fileParticipation.id)" alt="Imagem Participação" width="120px"
-                        style="padding: 20px;">
+                           style="padding: 20px;">
                       <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                        (click)="removeFileParticipation($event)"></button>
+                              (click)="removeFileParticipation($event)"></button>
                     </div>
                     <div class="p-col-12 p-md-6">
                       <label for="titleParticipation">{{'conference.title'|translate}}</label>
@@ -262,7 +268,7 @@
                   </p-accordionTab>
 
                   <p-accordionTab header="{{'conference.regionalization-Pages' | translate}}"
-                    *ngIf="structureRegionalization">
+                                  *ngIf="structureRegionalization">
                     <div class="p-col-12 p-md-6">
                       <label for="titleRegionalization">{{'conference.title'|translate}}</label>
                       <input pInputText formControlName="titleRegionalization">
@@ -279,7 +285,7 @@
                     <div class="p-col-12 p-md-12">
                       <label for="preOpeningText">{{'conference.text'|translate}} (HTML) </label>
                       <textarea [rows]="4" [cols]="30" pInputTextarea formControlName="preOpeningText"
-                        autoResize="autoResize">
+                                autoResize="autoResize">
                       </textarea>
                       <tt-input-message [form]="conferenceForm" field="preOpeningText"></tt-input-message>
                     </div>
@@ -288,7 +294,7 @@
                     <div class="p-col-12 p-md-12">
                       <label for="postClosureText">{{'conference.text'|translate}} (HTML) </label>
                       <textarea [rows]="4" [cols]="30" pInputTextarea formControlName="postClosureText"
-                        autoResize="autoResize">
+                                autoResize="autoResize">
                       </textarea>
                       <tt-input-message [form]="conferenceForm" field="postClosureText"></tt-input-message>
                     </div>
@@ -313,7 +319,8 @@
                     </div>
                     <div class="text">
                       <label for="text">{{'conference.text'|translate}}</label>
-                      <textarea [rows]="1" [cols]="30" pInputTextarea formControlName="text" autoResize="autoResize"></textarea>
+                      <textarea [rows]="1" [cols]="30" pInputTextarea formControlName="text"
+                                autoResize="autoResize"></textarea>
                     </div>
                     <div class="button-plus-how-work">
                       <button pButton icon="pi pi-plus" (click)="addHowItWorkStep()"></button>
@@ -345,7 +352,7 @@
                         <td>
                           <p-cellEditor>
                             <ng-template pTemplate="input">
-                              <input pInputText type="text" [(ngModel)]="rowData.title" />
+                              <input pInputText type="text" [(ngModel)]="rowData.title"/>
                             </ng-template>
                             <ng-template pTemplate="output">
                               {{rowData.title}}
@@ -364,14 +371,14 @@
                         </td>
                         <td class="col-action">
                           <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
-                            class="ui-button-info" (click)="onRowStepEditInit(rowData)"></button>
+                                  class="ui-button-info" (click)="onRowStepEditInit(rowData)"></button>
                           <button *ngIf="!editing" pButton type="button" icon="pi pi-trash"
-                            class="ui-button-info button-delete" (click)="onDeleteStep(rowData, ri)"></button>
+                                  class="ui-button-info button-delete" (click)="onDeleteStep(rowData, ri)"></button>
                           <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
-                            class="ui-button-success" style="margin-right: .5em"
-                            (click)="onRowStepEditSave(rowData)"></button>
+                                  class="ui-button-success" style="margin-right: .5em"
+                                  (click)="onRowStepEditSave(rowData)"></button>
                           <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
-                            class="ui-button-danger" (click)="onRowStepEditCancel(rowData, ri)"></button>
+                                  class="ui-button-danger" (click)="onRowStepEditCancel(rowData, ri)"></button>
                         </td>
                       </tr>
                     </ng-template>
@@ -442,14 +449,15 @@
                         </td>
                         <td class="col-action">
                           <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
-                            class="ui-button-info" (click)="onRowLinkEditInit(rowData)"></button>
+                                  class="ui-button-info" (click)="onRowLinkEditInit(rowData)"></button>
                           <button *ngIf="!editing" pButton type="button" icon="pi pi-trash"
-                            class="ui-button-info button-delete" (click)="onDeleteExternalLink(rowData, ri)"></button>
+                                  class="ui-button-info button-delete"
+                                  (click)="onDeleteExternalLink(rowData, ri)"></button>
                           <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
-                            class="ui-button-success" style="margin-right: .5em"
-                            (click)="onRowLinkEditSave(rowData, ri)"></button>
+                                  class="ui-button-success" style="margin-right: .5em"
+                                  (click)="onRowLinkEditSave(rowData, ri)"></button>
                           <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
-                            class="ui-button-danger" (click)="onRowLinkEditCancel(rowData, ri)"></button>
+                                  class="ui-button-danger" (click)="onRowLinkEditCancel(rowData, ri)"></button>
                         </td>
                       </tr>
                     </ng-template>
@@ -462,16 +470,16 @@
                     <div class="ui-g-12 ui-md-2 ui-lg-2 begin-date">
                       <label for="beginDate">{{'begin'|translate}}</label>
                       <p-calendar dateFormat="dd/mm/yy" showTime="true" hourFormat="24" formControlName="beginDate"
-                        [locale]="calendarTranslate"
-                        (onSelect)="validadeResearchDates($event); setResearchDisplayStatus()">
+                                  [locale]="calendarTranslate"
+                                  (onSelect)="validadeResearchDates($event); setResearchDisplayStatus()">
                       </p-calendar>
                       <tt-input-message [form]="conferenceResearchForm" field="beginDate"></tt-input-message>
                     </div>
                     <div class="ui-g-12 ui-md-2 ui-lg-2 end-date">
                       <label for="endDate">{{'conference.closure'|translate}}</label>
                       <p-calendar dateFormat="dd/mm/yy" [minDate]="researchMinDate && researchMinDate"
-                        (onSelect)="setResearchDisplayStatus()" formControlName="endDate" showTime="true"
-                        hourFormat="24" [locale]="calendarTranslate">
+                                  (onSelect)="setResearchDisplayStatus()" formControlName="endDate" showTime="true"
+                                  hourFormat="24" [locale]="calendarTranslate">
                       </p-calendar>
                       <tt-input-message [form]="conferenceResearchForm" field="endDate"></tt-input-message>
                     </div>
@@ -482,20 +490,20 @@
                       <div class="options-container">
                         <div class="display-item">
                           <p-radioButton name="displayOptionsResearch" value="AUTOMATIC" [label]="'automatic'|translate"
-                            (onClick)="setResearchDisplayStatus()" formControlName="displayModeResearch">
+                                         (onClick)="setResearchDisplayStatus()" formControlName="displayModeResearch">
                           </p-radioButton>
                         </div>
                         <div class="display-item">
                           <p-radioButton name="displayOptionsResearch" value="MANUAL" [label]="'manual'|translate"
-                            (onClick)="setResearchDisplayStatus()" formControlName="displayModeResearch">
+                                         (onClick)="setResearchDisplayStatus()" formControlName="displayModeResearch">
                           </p-radioButton>
                         </div>
                       </div>
                     </div>
                     <div class="ui-g-6 ui-md-1 ui-lg-1">
                       <p-dropdown [options]="optionsStatusResearchConference" formControlName="researchDisplayStatus"
-                        [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
-                        [readonly]="conferenceResearchForm.controls.displayModeResearch.value === 'AUTOMATIC'">
+                                  [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
+                                  [readonly]="conferenceResearchForm.controls.displayModeResearch.value === 'AUTOMATIC'">
                       </p-dropdown>
                       <tt-input-message [form]="conferenceResearchForm" field="researchDisplayStatus">
                       </tt-input-message>
@@ -517,10 +525,11 @@
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
                   <div class="p-col-12 p-md-3 fileupload-container">
-                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="1000000" auto="auto"
-                      customUpload="true" (uploadHandler)="uploadBackGroundImages($event, uploader)"
-                      [chooseLabel]="'add'|translate" [uploadLabel]="'file.send'|translate"
-                      [cancelLabel]="'cancel'|translate">
+                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="1000000"
+                                  auto="auto"
+                                  customUpload="true" (uploadHandler)="uploadBackGroundImages($event, uploader)"
+                                  [chooseLabel]="'add'|translate" [uploadLabel]="'file.send'|translate"
+                                  [cancelLabel]="'cancel'|translate">
                     </p-fileUpload>
                   </div>
                   <div class="p-col-12 p-md-12 background-images-container" *ngIf="backgroundImages">
@@ -536,7 +545,7 @@
           <div class="p-col-12 p-md-6">
             <div class="form-actions">
               <button pButton icon="pi pi-check" type="button" [label]="'save'|translate"
-                (click)="saveConference(conferenceForm.value)"></button>
+                      (click)="saveConference(conferenceForm.value)"></button>
               <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate" (click)="cancel()"></button>
             </div>
           </div>

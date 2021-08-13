@@ -75,8 +75,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       const timeZone = moment.tz.guess(true);
       const result = await this.meetingSrv.postCheckIn(this.idMeeting, attendee.personId, timeZone);
       if (result) {
-        console.log(result.time);
-
         attendee.checkedIn = true;
         attendee.checkedInDate = result.time;
         this.messageSrv.add({

@@ -1,26 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {DatePipe, Location} from '@angular/common';
-import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
-import {Conference} from '@app/shared/models/conference';
-import {ConferenceService} from '@app/shared/services/conference.service';
-import {IPerson} from '@app/shared/interface/IPerson';
-import {LocalityService} from '@app/shared/services/locality.service';
-import {Plan} from '@app/shared/models/plan';
-import {PlanService} from '@app/shared/services/plan.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateChangeService} from '@app/shared/services/translateChange.service';
-import {TranslateService} from '@ngx-translate/core';
-import {calendar} from '@app/shared/constants';
-import {environment} from '@environments/environment';
-import {FilesService} from '@app/shared/services/files.service';
-import {File} from '@app/shared/models/file';
-import {StructureItemService} from '@app/shared/services/structure-item.service';
+import { Component, OnInit } from '@angular/core';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DatePipe, Location } from '@angular/common';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
+import { Conference } from '@app/shared/models/conference';
+import { ConferenceService } from '@app/shared/services/conference.service';
+import { IPerson } from '@app/shared/interface/IPerson';
+import { LocalityService } from '@app/shared/services/locality.service';
+import { Plan } from '@app/shared/models/plan';
+import { PlanService } from '@app/shared/services/plan.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateChangeService } from '@app/shared/services/translateChange.service';
+import { TranslateService } from '@ngx-translate/core';
+import { calendar } from '@app/shared/constants';
+import { environment } from '@environments/environment';
+import { FilesService } from '@app/shared/services/files.service';
+import { File } from '@app/shared/models/file';
+import { StructureItemService } from '@app/shared/services/structure-item.service';
 import * as moment from 'moment';
-import {IHowItWorkStep} from '@app/shared/interface/IHowItWorkStep';
-import {IExternalLinks} from '@app/shared/interface/IExternalLinks';
-import {CustomValidators} from '@app/shared/util/CustomValidators';
+import { IHowItWorkStep } from '@app/shared/interface/IHowItWorkStep';
+import { IExternalLinks } from '@app/shared/interface/IExternalLinks';
+import { CustomValidators } from '@app/shared/util/CustomValidators';
 
 @Component({
   selector: 'tt-conference',
@@ -96,7 +96,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   private static setDate(date: Date) {
-    return moment(date).format('DD/MM/YYYY hh:mm:ss');
+    return moment(date).format('DD/MM/yyyy HH:mm:ss');
   }
 
   async ngOnInit() {
@@ -177,7 +177,6 @@ export class ConferenceComponent implements OnInit {
 
   async loadConference() {
     this.conference = await this.conferenceService.show(this.idConference);
-
     this.minDate = this.conference.beginDate && ConferenceComponent.getDate(this.conference.beginDate);
     this.researchMinDate = this.conference.researchConfiguration && this.conference.researchConfiguration.beginDate
       && ConferenceComponent.getDate(this.conference.researchConfiguration.beginDate);
@@ -205,26 +204,26 @@ export class ConferenceComponent implements OnInit {
     this.conference = new Conference();
     this.conferenceForm = this.formBuilder.group({
       id: null,
-      name: [ '', [Validators.required, CustomValidators.noWhitespaceValidator] ],
-      description: [ '', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator]) ],
-      serverName: [ '', [ Validators.compose([Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator]) ] ],
+      name: [ '', [ Validators.required, CustomValidators.noWhitespaceValidator ] ],
+      description: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
+      serverName: [ '', [ Validators.compose([ Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator ]) ] ],
       defaultServerConference: false,
-      beginDate: [null, [Validators.required]],
-      endDate: [null, [Validators.required]],
+      beginDate: [ null, [ Validators.required ] ],
+      endDate: [ null, [ Validators.required ] ],
       plan: [ null, Validators.required ],
-      titleAuthentication: [ '', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator]) ],
-      subtitleAuthentication: [ '', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator]) ],
+      titleAuthentication: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
+      subtitleAuthentication: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
       localityType: null,
-      titleParticipation: [ '', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator]) ],
-      subtitleParticipation: [ '', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator]) ],
+      titleParticipation: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
+      subtitleParticipation: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
       titleRegionalization: [ '', this.structureRegionalization && Validators.compose([
         Validators.required,
-        CustomValidators.noWhitespaceValidator
-      ])],
+        CustomValidators.noWhitespaceValidator,
+      ]) ],
       subtitleRegionalization: [ '', this.structureRegionalization && Validators.compose([
         Validators.required,
-        CustomValidators.noWhitespaceValidator
-      ])],
+        CustomValidators.noWhitespaceValidator,
+      ]) ],
       segmentation: [ false, Validators.required ],
       targetedByItems: null,
       displayMode: [ 'AUTOMATIC', Validators.required ],
@@ -254,20 +253,20 @@ export class ConferenceComponent implements OnInit {
   instanceHowItWorksForm() {
     this.howItWorksForm = this.formBuilder.group({
       order: 0,
-      title: [ '', [CustomValidators.noWhitespaceValidator] ],
-      text: ['']
+      title: [ '', [ CustomValidators.noWhitespaceValidator ] ],
+      text: [ '' ],
     });
   }
 
   instanceMenuLabelForm() {
     this.menuLabelForm = this.formBuilder.group({
-      menuLabel: [ '', [CustomValidators.noWhitespaceValidator] ]
+      menuLabel: [ '', [ CustomValidators.noWhitespaceValidator ] ],
     });
   }
 
   instanceExternalLinksForm() {
     this.externalLinksForm = this.formBuilder.group({
-      label: [ '', [CustomValidators.noWhitespaceValidator] ],
+      label: [ '', [ CustomValidators.noWhitespaceValidator ] ],
       url: [ '', [ Validators.required, CustomValidators.ExternalURL ] ],
     });
   }
@@ -278,8 +277,8 @@ export class ConferenceComponent implements OnInit {
       endDate: null,
       displayModeResearch: 'AUTOMATIC',
       researchDisplayStatus: 'INACTIVE',
-      researchLink: ['', [CustomValidators.noWhitespaceValidator]],
-      estimatedTimeResearch: ['', [CustomValidators.noWhitespaceValidator]],
+      researchLink: [ '', [ CustomValidators.noWhitespaceValidator ] ],
+      estimatedTimeResearch: [ '', [ CustomValidators.noWhitespaceValidator ] ],
     });
   }
 
@@ -298,7 +297,6 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.endDate.setValue(ConferenceComponent.getDate(this.conference.endDate));
     this.conferenceForm.controls.titleAuthentication.setValue(this.conference.titleAuthentication);
     this.conferenceForm.controls.subtitleAuthentication.setValue(this.conference.subtitleAuthentication);
-    this.conferenceForm.controls.localityType.setValue(this.conference.localityType);
     this.conferenceForm.controls.titleParticipation.setValue(this.conference.titleParticipation);
     this.conferenceForm.controls.subtitleParticipation.setValue(this.conference.subtitleParticipation);
     this.conferenceForm.controls.titleRegionalization.setValue(this.conference.titleRegionalization);
@@ -336,7 +334,7 @@ export class ConferenceComponent implements OnInit {
   addHowItWorkStep() {
     this.markFormGroupTouched(this.howItWorksForm);
 
-    if (!this.isValidForm(this.howItWorksForm)) {
+    if ( !this.isValidForm(this.howItWorksForm)) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -376,13 +374,13 @@ export class ConferenceComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('conference.stepUpdated')
+        detail: this.translate.instant('conference.stepUpdated'),
       });
     } else {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('conference.requiredInputs')
+        detail: this.translate.instant('conference.requiredInputs'),
       });
     }
   }
@@ -505,7 +503,7 @@ export class ConferenceComponent implements OnInit {
       if ((dataAtual < beginDate) || (dataAtual > endDate)) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('INACTIVE');
       }
-      if (!beginDate || !endDate || !researchLink || !estimatedTimeResearch) {
+      if ( !beginDate || !endDate || !researchLink || !estimatedTimeResearch) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('INACTIVE');
       }
     }
@@ -520,10 +518,10 @@ export class ConferenceComponent implements OnInit {
       const researchDisplayStatus = this.conferenceResearchForm.controls.researchDisplayStatus.value;
 
       if (researchDisplayStatus === 'ACTIVE') {
-        this.conferenceResearchForm.controls.beginDate.setValidators([Validators.required]);
-        this.conferenceResearchForm.controls.endDate.setValidators([Validators.required]);
-        this.conferenceResearchForm.controls.researchLink.setValidators([Validators.required, CustomValidators.ResearchLink]);
-        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([Validators.required]);
+        this.conferenceResearchForm.controls.beginDate.setValidators([ Validators.required ]);
+        this.conferenceResearchForm.controls.endDate.setValidators([ Validators.required ]);
+        this.conferenceResearchForm.controls.researchLink.setValidators([ Validators.required, CustomValidators.ResearchLink ]);
+        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([ Validators.required ]);
       } else {
         this.conferenceResearchForm.controls.beginDate.clearValidators();
         this.conferenceResearchForm.controls.endDate.clearValidators();
@@ -540,10 +538,10 @@ export class ConferenceComponent implements OnInit {
       const endDateResearchForm = this.conferenceResearchForm.controls.endDate.value;
 
       if (beginDateResearchForm || endDateResearchForm) {
-        this.conferenceResearchForm.controls.researchLink.setValidators([Validators.required, CustomValidators.ResearchLink]);
+        this.conferenceResearchForm.controls.researchLink.setValidators([ Validators.required, CustomValidators.ResearchLink ]);
         this.conferenceResearchForm.controls.researchLink.updateValueAndValidity();
 
-        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([Validators.required]);
+        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([ Validators.required ]);
         this.conferenceResearchForm.controls.estimatedTimeResearch.updateValueAndValidity();
       }
 
@@ -555,13 +553,22 @@ export class ConferenceComponent implements OnInit {
       const targetedByItemsSelectedOption = this.conferenceForm.controls.segmentation && this.conferenceForm.controls.targetedByItems.value;
       const targetedByItems = targetedByItemsSelectedOption === 'TODOS' ? this.structureItems.map(item => item.value)
         : [ Number(this.conferenceForm.controls.targetedByItems.value) ];
-      const beginDateStr = this.conferenceForm.controls.beginDate.value && ConferenceComponent.setDate(this.conferenceForm.controls.beginDate.value);
-      const endDateStr = this.conferenceForm.controls.endDate.value && ConferenceComponent.setDate(this.conferenceForm.controls.endDate.value);
+
+      const conferenceBeginDate = this.conferenceForm
+        .controls.beginDate.value && ConferenceComponent.setDate(this.conferenceForm.controls.beginDate.value);
+      const conferenceEndDate = this.conferenceForm
+        .controls.endDate.value && ConferenceComponent.setDate(this.conferenceForm.controls.endDate.value);
+
+      const researchBeginDate = this.conferenceResearchForm
+        .controls.beginDate.value && ConferenceComponent.setDate(this.conferenceResearchForm.controls.beginDate.value);
+      const researchEndDate = this.conferenceResearchForm
+        .controls.endDate.value && ConferenceComponent.setDate(this.conferenceResearchForm.controls.endDate.value);
+
       formData = {
         ...formData,
         serverName: this.conferenceForm.controls.serverName.value,
-        beginDate: beginDateStr,
-        endDate: endDateStr,
+        beginDate: this.datePipe.transform(ConferenceComponent.getDate(conferenceBeginDate), 'dd/MM/yyyy HH:mm:ss'),
+        endDate: this.datePipe.transform(ConferenceComponent.getDate(conferenceEndDate), 'dd/MM/yyyy HH:mm:ss'),
         plan: formData.plan,
         localityType: formData.localityType,
         fileAuthentication: this.conference.fileAuthentication,
@@ -572,9 +579,8 @@ export class ConferenceComponent implements OnInit {
         externalLinksMenuLabel: this.menuLabelForm.controls.menuLabel.value,
         externalLinks: this.externalLinks,
         researchConfiguration: {
-          beginDate: this.conferenceResearchForm.controls.beginDate.value
-            && ConferenceComponent.setDate(this.conferenceResearchForm.controls.beginDate.value),
-          endDate: this.conferenceResearchForm.controls.endDate.value && ConferenceComponent.setDate(this.conferenceResearchForm.controls.endDate.value),
+          beginDate: this.datePipe.transform(ConferenceComponent.getDate(researchBeginDate), 'dd/MM/yyyy HH:mm:ss'),
+          endDate: this.datePipe.transform(ConferenceComponent.getDate(researchEndDate), 'dd/MM/yyyy HH:mm:ss'),
           displayModeResearch: this.conferenceResearchForm.controls.displayModeResearch.value,
           researchDisplayStatus: this.conferenceResearchForm.controls.researchDisplayStatus.value,
           researchLink: this.conferenceResearchForm.controls.researchLink.value,
@@ -890,14 +896,14 @@ export class ConferenceComponent implements OnInit {
 
   onInput($event) {
     this.conferenceForm.patchValue(
-      {name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
-      {emitEvent: false}
+      { name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ') },
+      { emitEvent: false },
     );
   }
 
   onBlur($event) {
     this.conferenceForm.patchValue(
-      {name: $event.target.value.replace(/\s+$/gm, '')},
-      {emitEvent: false});
+      { name: $event.target.value.replace(/\s+$/gm, '') },
+      { emitEvent: false });
   }
 }
