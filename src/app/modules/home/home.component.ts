@@ -32,7 +32,6 @@ export class HomeComponent implements OnInit {
       const returnSocial = location.hash.split('=');
       const isLoginProcess = Array.isArray(returnSocial) && returnSocial.length === 2;
       if (isLoginProcess) {
-        console.log(decodeURIComponent(escape(atob(returnSocial[1]))));
         const userInfo = JSON.parse(decodeURIComponent(escape(atob(returnSocial[1])))) as ISocialLoginResult;
         this.authSrv.saveToken(userInfo);
         this.authSrv.saveUserInfo(userInfo.person);
