@@ -27,4 +27,5 @@ export class Meeting {
     segmentations: IResultPlanItemByConference[] | number[];
     channels?: IChannel[];
     typeMeetingEnum?: string;
+    showChannels?: string;
 }
