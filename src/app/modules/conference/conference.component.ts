@@ -317,6 +317,7 @@ export class ConferenceComponent implements OnInit {
     this.moderatorsEnabled = this.conference && this.conference.moderators ? this.conference.moderators : [];
     this.moderators = [];
     this.setStatusDisplayConference();
+    this.menuLabelForm.controls.menuLabel.setValue(this.conference.externalLinksMenuLabel);
     this.externalLinksMenuLabel = this.conference.externalLinksMenuLabel;
   }
 

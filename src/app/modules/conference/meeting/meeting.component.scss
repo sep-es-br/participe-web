@@ -100,14 +100,25 @@ section.meetings-container {
     }
     .info-container {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
       min-width: 350px;
       flex: 0.5;
       .date-container {
         span {
           margin-right: 10px;
         }
+      }
+      .icon-container {
+        display: flex;
+        flex: 0.3;
+        justify-content: center;
+        align-items: center;
+      }
+      .icon-type-meeting {
+        color: #f48730;
+        font-size: 2em;
       }
     }
     .locality-container {

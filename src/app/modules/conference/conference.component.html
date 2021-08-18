@@ -525,7 +525,7 @@
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
                   <div class="p-col-12 p-md-3 fileupload-container">
-                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="1000000"
+                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="2000000"
                                   auto="auto"
                                   customUpload="true" (uploadHandler)="uploadBackGroundImages($event, uploader)"
                                   [chooseLabel]="'add'|translate" [uploadLabel]="'file.send'|translate"

@@ -55,15 +55,30 @@
                 <section class="meetings-container">
                     <div class="meeting-item" *ngFor="let meeting of meetings">
                         <div class="info-container">
-                            <h2>{{meeting.name}}</h2>
-                            <div class="date-container">
-                                <span>Início: {{meeting.beginDate}}</span>
-                                <span>Fim: {{meeting.endDate}}</span>
+                            <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL'">
+                                <i class="pi pi-map-marker icon-type-meeting"></i>
+                            </div>
+                            <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'VIRTUAL'">
+                                <i class="pi pi-desktop icon-type-meeting"></i>
+                            </div>
+                            <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL_VIRTUAL'">
+                                <i class="pi pi-map-marker icon-type-meeting"></i>
+                                <i class="pi pi-desktop icon-type-meeting"></i>
+                            </div>
+                            <div>
+                                <h2>{{meeting.name}}</h2>
+                                <div class="date-container">
+                                    <span>Início: {{meeting.beginDate}}</span>
+                                    <span>Fim: {{meeting.endDate}}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="locality-container">
                             <h2>{{meeting?.localityPlace?.name}}</h2>
                             <span>{{meeting.address}}</span>
+                        </div>
+                        <div class="locality-container">
+                          <span>{{meeting?.showChannels}}</span>
                         </div>
                         <div class="action-container">
                             <button pButton (click)="handleCreateOrEdit(meeting.id)" icon="pi pi-pencil"></button>
