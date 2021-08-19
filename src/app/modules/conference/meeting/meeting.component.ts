@@ -439,6 +439,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       this.typeMeetingAlreadySet = true;
       const meeting = await this.meetingSrv.getMeetingById(meetingId);
       meeting.localityCovers = _.map(meeting.localityCovers as Locality[], l => ({ id: l.id }) as any);
+      meeting.segmentations = _.map(meeting.segmentations as IResultPlanItemByConference[], s => ({id: s.id}) as any);
       meeting.localityPlace = { id: _.get(meeting, 'localityPlace.id') } as any;
       this.receptionistsActived = meeting.receptionists as IPerson[];
       this.meetingId = meetingId;
