@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faUserPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from '@app/shared/services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
+import {faEdit, faUserPlus} from '@fortawesome/free-solid-svg-icons';
+import {AuthService} from '@app/shared/services/auth.service';
 
 @Component({
   selector: 'app-attendance',
@@ -11,18 +11,23 @@ import { AuthService } from '@app/shared/services/auth.service';
 })
 export class AttendanceComponent implements OnInit {
 
-  actions: { name: string, url: string, icon: IconDefinition }[];
+  actions: Array<{ name: string, url: string, icon: IconDefinition }>;
 
-  constructor( private breadcrumbSrv: BreadcrumbService, private userAuth: AuthService) { }
+  constructor(private breadcrumbSrv: BreadcrumbService, private userAuth: AuthService) {
+    this.breadcrumbSrv.setItems([
+      {label: 'attendance.label'}
+    ]);
+  }
 
   ngOnInit() {
-    const { roles } = this.userAuth.getUserInfo;
-    this.breadcrumbSrv.setItems([
-      { label: 'attendance.label' }
-    ]);
-    this.actions = [{ name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus }];
+    const {roles} = this.userAuth.getUserInfo;
+
+    this.actions = [
+      {name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus}
+    ];
+
     if (roles.includes('Administrator')) {
-      this.actions.push({ name: 'attendance.edit', url: 'edit', icon: faEdit });
+      this.actions.push({name: 'attendance.edit', url: 'edit', icon: faEdit});
     }
   }
 }

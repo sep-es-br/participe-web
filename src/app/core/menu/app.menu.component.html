@@ -1,4 +1,4 @@
-<div class="layout-menu-container" (click)="template.onMenuClick($event)">
+<div class="layout-menu-container" (click)="template.onMenuClick()">
   <div class="overlay-menu-button" (click)="template.onMenuButtonClick($event)">
     <div class="overlay-menu-button-bars">
       <span></span>
@@ -11,6 +11,7 @@
     </div>
   </div>
   <div class="layout-menu-wrapper fadeInDown">
-    <ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"></ul>
+    <ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset"
+        parentActive="true"></ul>
   </div>
 </div>

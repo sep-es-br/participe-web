@@ -4,15 +4,15 @@
       <div class="search-small-container">
         <div class="search-itens" *ngIf="!search">
           <a class="search" (click)="changeSmallFilter('Pending')"
-            [ngClass]="{'filter-active': filter.status === 'Pending'}">{{ 'moderation.filters.pending'| translate }}</a>
+             [ngClass]="{'filter-active': filter.status === 'Pending'}">{{ 'moderation.filters.pending'| translate }}</a>
           |
           <a class="search" (click)="changeSmallFilter('All')"
-            [ngClass]="{'filter-active': filter.status === 'All'}">{{ 'moderation.filters.all'| translate }}</a> |
+             [ngClass]="{'filter-active': filter.status === 'All'}">{{ 'moderation.filters.all'| translate }}</a> |
           <a class="search" (click)="changeSmallFilter('Removed')"
-            [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
+             [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
         </div>
         <a class="search" [ngClass]="{'search-full': search}"
-          (click)="search = !search">{{ (search ? 'hide' : 'search') | translate }}</a>
+           (click)="search = !search">{{ (search ? 'hide' : 'search') | translate }}</a>
       </div>
       <div class="p-col-12 p-md-12" *ngIf="search">
         <div class="p-grid ui-fluid search-complete">
@@ -24,26 +24,26 @@
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ 'moderation.filters.type_of_participation' | translate }}</label>
             <p-dropdown [options]="typeOfParticipation" [(ngModel)]="filter.type"
-              [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                        [placeholder]="'placeholder.select'|translate"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group" *ngIf="regionalization">
             <label>{{ labelMicroregion }}</label>
             <p-dropdown [options]="microregion" (onChange)="selectLocality($event)"
-              [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                        [placeholder]="'placeholder.select'|translate"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ labelPlanItem }}</label>
             <p-dropdown [options]="planItem" (onChange)="selectPlanItem($event)"
-              [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                        [placeholder]="'placeholder.select'|translate"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ 'moderation.filters.text' | translate }}</label>
-            <input pInputText [(ngModel)]="filter.text" />
+            <input pInputText [(ngModel)]="filter.text"/>
           </div>
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ 'moderation.filters.startAt' | translate }}</label>
             <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeDate('initialDate',$event)"
-              [locale]="calendarTranslate">
+                        [locale]="calendarTranslate">
             </p-calendar>
           </div>
           <div class="p-col-12 p-md-3 form-group">
@@ -53,7 +53,7 @@
           </div>
           <div class="p-col-12 p-md-3 p-col-align-end">
             <button pButton [icon]="getIcon('pi pi-search')" [disabled]="loading" (click)="searchHandle();"
-              [label]="'search' | translate"></button>
+                    [label]="'search' | translate"></button>
           </div>
         </div>
       </div>
@@ -64,7 +64,8 @@
         <div class="p-grid ui-fluid">
           <div class="p-col-12 p-md-6">
             <div class="row">
-              <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span> <span
+              <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span>
+              <span
                 class="moderation-for"
                 *ngIf="comment?.moderatorName && !(comment?.moderated)">{{ 'moderation.label.in_moderation_by' | translate}}
                 {{ comment.moderatorName }} | {{ timesAgo(comment?.moderateTime) }}
@@ -84,18 +85,24 @@
             <div>{{ comment.planItemName }}</div>
           </div>
           <div class="p-col-12 p-md-2 p-col-align-center options">
-            <p-radioButton [name]="'optionModeration_' + comment.commentId"  (onClick)="selectClassificationComment(comment)" [(ngModel)]="comment.classification" value="proposal" [label]="'moderation.label.proposal' | translate">
+            <p-radioButton [name]="'optionModeration_' + comment.commentId"
+                           (onClick)="selectClassificationComment(comment)" [(ngModel)]="comment.classification"
+                           value="proposal" [label]="'moderation.label.proposal' | translate">
             </p-radioButton>
-            <p-radioButton [name]="'optionModeration_' + comment.commentId" (onClick)="selectClassificationComment(comment)"  [(ngModel)]="comment.classification" value="comment" [label]="'moderation.label.comment'| translate ">
+            <p-radioButton [name]="'optionModeration_' + comment.commentId"
+                           (onClick)="selectClassificationComment(comment)" [(ngModel)]="comment.classification"
+                           value="comment" [label]="'moderation.label.comment'| translate ">
             </p-radioButton>
           </div>
           <div class="p-col-12 p-md-1 p-col-align-center actions">
-            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
-              <img src="assets/layout/images/icons/internet.svg"  alt=""/>
+            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate"
+                    [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
+              <img src="assets/layout/images/icons/internet.svg" alt=""/>
             </button>
-            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" icon="" [pTooltip]="'moderation.label.btnModerate' | translate"
-              (click)="moderate(comment)">
-              <img src="assets/layout/images/icons/king.svg"  alt=""/>
+            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" icon=""
+                    [pTooltip]="'moderation.label.btnModerate' | translate"
+                    (click)="moderate(comment)">
+              <img src="assets/layout/images/icons/king.svg" alt=""/>
             </button>
           </div>
         </div>
@@ -103,9 +110,9 @@
     </div>
   </div>
   <p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
-    [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
+            [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
     <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
-      (click)="selectOtherConference(conference)">
+         (click)="selectOtherConference(conference)">
       <h4>{{ conference.name }}</h4>
       <small>{{ conference.description }}</small>
       <div class="date-container">
@@ -126,9 +133,10 @@
     </p-footer>
   </p-dialog>
   <p-confirmDialog [header]="'moderation.label.confirm_publish_title'|translate" icon="pi pi-exclamation-triangle"
-    key="confirm_publish">
+                   key="confirm_publish">
   </p-confirmDialog>
-  <p-confirmDialog [header]="'moderation.label.confirm_alter_moderator_title'|translate" icon="pi pi-exclamation-triangle"
-    key="confirm_alter_moderator">
+  <p-confirmDialog [header]="'moderation.label.confirm_alter_moderator_title'|translate"
+                   icon="pi pi-exclamation-triangle"
+                   key="confirm_alter_moderator">
   </p-confirmDialog>
 </app-template>

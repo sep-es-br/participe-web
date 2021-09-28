@@ -4,21 +4,22 @@
                 'layout-menu-horizontal': isHorizontal(),
                 'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
 
-    <p-toast position="top-right"></p-toast>
+  <p-toast position="top-right"></p-toast>
 
-    <app-topbar></app-topbar>
+  <app-topbar></app-topbar>
 
-    <app-menu [reset]="resetMenu"></app-menu>
+  <app-menu [reset]="resetMenu"></app-menu>
 
-    <app-actionbar></app-actionbar>
+  <app-actionbar></app-actionbar>
 
-    <div class="layout-content">
-      <ng-content></ng-content>
-    </div>
+  <div class="layout-content">
+    <ng-content></ng-content>
+  </div>
 
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 
-    <div class="layout-mask"></div>
+  <div class="layout-mask"></div>
 
-    <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
+  <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
+
 </div>

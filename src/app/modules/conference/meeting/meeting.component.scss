@@ -115,6 +115,18 @@ section.meetings-container {
         flex: 0.3;
         justify-content: center;
         align-items: center;
+        margin-right: 1em;
+      }
+      .marker-img {
+        width: 1em;
+        margin: 0 1em 0 0.5em;
+      }
+      .marker-img-solo {
+        width: 1em;
+        margin: 0 1.8em;
+      }
+      .desktop-icon {
+        margin: 0 0.65em;
       }
       .icon-type-meeting {
         color: #f48730;

@@ -7,5 +7,3 @@ export interface IPerson {
   defaultRole?: string;
   roles: string[];
 }
-
-

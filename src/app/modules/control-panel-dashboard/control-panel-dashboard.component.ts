@@ -1,23 +1,21 @@
-import { typeMeetingEnum } from '@app/shared/models/Meeting';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { IControlPanelDashboardData, IHorizontalBarChartItem } from '@app/shared/interface/IControlPanelDashboardData';
-import { Conference } from '@app/shared/models/conference';
-import { LocalityType } from '@app/shared/models/locality-type';
-import { ConferenceService } from '@app/shared/services/conference.service';
-import { ControlPanelDashboardService } from '@app/shared/services/control-panel-dashboard.service';
-import { DomainService } from '@app/shared/services/domain.service';
-import { MeetingService } from '@app/shared/services/meeting.service';
-import { ResponsiveService } from '@app/shared/services/responsive.service';
-import { TranslateChangeService } from '@app/shared/services/translateChange.service';
-import { TranslateService } from '@ngx-translate/core';
-import { MessageService, SelectItem, SelectItemGroup } from 'primeng/api';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import {
-  faArrowLeft
-} from '@fortawesome/free-solid-svg-icons';
-import { StructureItemService } from '@app/shared/services/structure-item.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
+import {IControlPanelDashboardData, IHorizontalBarChartItem} from '@app/shared/interface/IControlPanelDashboardData';
+import {Conference} from '@app/shared/models/conference';
+import {LocalityType} from '@app/shared/models/locality-type';
+import {ConferenceService} from '@app/shared/services/conference.service';
+import {ControlPanelDashboardService} from '@app/shared/services/control-panel-dashboard.service';
+import {DomainService} from '@app/shared/services/domain.service';
+import {MeetingService} from '@app/shared/services/meeting.service';
+import {ResponsiveService} from '@app/shared/services/responsive.service';
+import {TranslateChangeService} from '@app/shared/services/translateChange.service';
+import {TranslateService} from '@ngx-translate/core';
+import {MessageService, SelectItem, SelectItemGroup} from 'primeng/api';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {StructureItemService} from '@app/shared/services/structure-item.service';
+
 @Component({
   selector: 'app-control-panel-dashboard',
   templateUrl: './control-panel-dashboard.component.html',
@@ -51,7 +49,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   microregionAgroupLocalityTypeSelected: LocalityType;
   strategicAreaChartStructureLevels: { id: number; name: string }[] = [];
   itemStructureSelected: { id: number; name: string };
-  heatMapCenter = { lat: -19.510200002162634, lng: -41.05759854916905 };
+  heatMapCenter = {lat: -19.510200002162634, lng: -41.05759854916905};
   responsive: boolean;
   $destroy = new Subject();
   heatmapZoom = 8;
@@ -94,38 +92,31 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
     this.$destroy.complete();
   }
 
-  private buildBreadcrumb() {
-    this.breadcrumbService.setItems([
-      { label: this.translateSrv.instant('control-panel') },
-      { label: 'Dashboards', routerLink: ['/control-panel-dashboard'] }
-    ]);
-  }
-
   async loadListOptions() {
     this.resultOptions = [
-      { label: this.translateSrv.instant('dashboard.participants'), value: 'PARTICIPANTS' },
-      { label: this.translateSrv.instant('dashboard.highlights'), value: 'HIGHLIGHTS' },
-      { label: this.translateSrv.instant('dashboard.proposals'), value: 'PROPOSALS' }
+      {label: this.translateSrv.instant('dashboard.participants'), value: 'PARTICIPANTS'},
+      {label: this.translateSrv.instant('dashboard.highlights'), value: 'HIGHLIGHTS'},
+      {label: this.translateSrv.instant('dashboard.proposals'), value: 'PROPOSALS'}
     ];
     this.originOptions = [
-      { label: this.translateSrv.instant('dashboard.remote'), value: 'REMOTE' },
-      { label: this.translateSrv.instant('dashboard.presential'), value: 'PRESENTIAL' }
+      {label: this.translateSrv.instant('dashboard.remote'), value: 'REMOTE'},
+      {label: this.translateSrv.instant('dashboard.presential'), value: 'PRESENTIAL'}
     ];
     this.chartDisplayOptions = [
       {
         label: this.translateSrv.instant('dashboard.value'),
         items: [
-          { label: 'Top 5', value: 'TOP_FIVE' },
-          { label: 'Top 10', value: 'TOP_TEN' },
-          { label: this.translateSrv.instant('dashboard.descendent'), value: 'VALUE_DESC' },
-          { label: this.translateSrv.instant('dashboard.ascendent'), value: 'VALUE_ASC' }
+          {label: 'Top 5', value: 'TOP_FIVE'},
+          {label: 'Top 10', value: 'TOP_TEN'},
+          {label: this.translateSrv.instant('dashboard.descendent'), value: 'VALUE_DESC'},
+          {label: this.translateSrv.instant('dashboard.ascendent'), value: 'VALUE_ASC'}
         ]
       },
       {
         label: this.translateSrv.instant('dashboard.alphabetic'),
         items: [
-          { label: this.translateSrv.instant('dashboard.descendent'), value: 'ALPHABETIC_DESC' },
-          { label: this.translateSrv.instant('dashboard.ascendent'), value: 'ALPHABETIC_ASC' }
+          {label: this.translateSrv.instant('dashboard.descendent'), value: 'ALPHABETIC_DESC'},
+          {label: this.translateSrv.instant('dashboard.ascendent'), value: 'ALPHABETIC_ASC'}
         ]
       },
     ];
@@ -161,9 +152,9 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
     const localityTypeRegionalizationConference = this.checkRegionalization();
     if (localityTypeRegionalizationConference && localityTypeRegionalizationConference.id) {
       const localityTypeRegionalizationLevels = await this.dashboardSrv.getAllTypeLocalityFromParents({
-        idDomain: this.conference.plan.domain.id,
-        idTypeLocality: localityTypeRegionalizationConference.id
-      }
+          idDomain: this.conference.plan.domain.id,
+          idTypeLocality: localityTypeRegionalizationConference.id
+        }
       );
       if (localityTypeRegionalizationLevels && localityTypeRegionalizationLevels.length > 0) {
         this.microregionChartAgroupOptions = localityTypeRegionalizationLevels.map(item => ({
@@ -224,7 +215,9 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
         id: this.microregionChartAgroupOptions[0].value, name: this.microregionChartAgroupOptions[0].label
       };
     }
-    if (this.itemStructureSelected && this.microregionChartAgroupSelected) { await this.loadCharts(); }
+    if (this.itemStructureSelected && this.microregionChartAgroupSelected) {
+      await this.loadCharts();
+    }
   }
 
   async loadStructurePlanItemsConference() {
@@ -247,7 +240,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   async loadMeetingsByConferenceSelected() {
     const result = await this.meetingSrv.getAllMeetingByConferenceCombo(this.filters.selectedConference);
     if (result && result.content && result.content.length > 0) {
-      this.meetingListOptions = result.content.filter( m => m.typeMeetingEnum !== 'VIRTUAL').map(meeting => ({
+      this.meetingListOptions = result.content.filter(m => m.typeMeetingEnum !== 'VIRTUAL').map(meeting => ({
         label: meeting.name,
         value: meeting.id
       }));
@@ -284,15 +277,12 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   }
 
   async handleOriginSelected() {
-    this.filters.selectedMeeting = null;
+    // this.filters.selectedMeeting = null;
     await this.loadCharts();
   }
 
   validateOriginSelectedPresential() {
-    if (this.filters.selectedOrigin && this.filters.selectedOrigin === 'PRESENTIAL') {
-      return false;
-    }
-    return true;
+    return !(this.filters.selectedOrigin && this.filters.selectedOrigin === 'PRESENTIAL');
   }
 
   setChartsTitle() {
@@ -303,7 +293,10 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   async handleMicroregionChartAgroupClicked() {
     const optionSelected = this.microregionChartAgroupOptions &&
       this.microregionChartAgroupOptions.find(item => item.value === this.microregionChartAgroupSelected);
-    this.microregionAgroupLocalityTypeSelected = optionSelected && { id: optionSelected.value, name: optionSelected.label };
+    this.microregionAgroupLocalityTypeSelected = optionSelected && {
+      id: optionSelected.value,
+      name: optionSelected.label
+    };
     await this.loadCharts();
   }
 
@@ -405,11 +398,12 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
         this.filters.selectedMeeting,
         this.microregionChartAgroupSelected,
         barRegionSelected,
-        this.showMicroregionChart ? false : true,
+        !this.showMicroregionChart,
         this.itemStructureSelected.id,
         barStrategicAreaSelected,
-        this.showStrategicAreaChart ? false : true
+        !this.showStrategicAreaChart
       );
+      console.log(result);
       if (result) {
         this.dashboardDataResponse = Object.assign({}, result);
         this.dashboardData = Object.assign({}, result);
@@ -546,6 +540,13 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
     if (!this.showStrategicAreaChart) {
       this.dashboardData.strategicAreaChart = undefined;
     }
+  }
+
+  private buildBreadcrumb() {
+    this.breadcrumbService.setItems([
+      {label: this.translateSrv.instant('control-panel')},
+      {label: 'control-panel', routerLink: ['/control-panel-dashboard']}
+    ]);
   }
 
 }

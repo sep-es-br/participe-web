@@ -1,10 +1,10 @@
-import { IPerson } from './../interface/IPerson';
-import { Plan } from './plan';
-import { File } from './file';
-import { LocalityType } from './locality-type';
-import { IHowItWorkStep } from '../interface/IHowItWorkStep';
-import { IExternalLinks } from '../interface/IExternalLinks';
-import { Meeting } from './Meeting';
+import {IPerson} from './../interface/IPerson';
+import {Plan} from './plan';
+import {File} from './file';
+import {LocalityType} from './locality-type';
+import {IHowItWorkStep} from '../interface/IHowItWorkStep';
+import {IExternalLinks} from '../interface/IExternalLinks';
+import {Meeting} from './Meeting';
 
 export class Conference {
   id: number;
@@ -48,4 +48,3 @@ export class Conference {
   };
   localityType?: LocalityType;
 }
-

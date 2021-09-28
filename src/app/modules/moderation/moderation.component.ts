@@ -1,25 +1,25 @@
-import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
-import { Conference } from '@app/shared/models/conference';
-import { ModerationComments } from '@app/shared/models/moderationComments';
-import { ModerationFilter } from '@app/shared/models/moderationFilter';
-import { ModerationService } from '@app/shared/services/moderation.service';
-import { HelperUtils } from '@app/shared/util/HelpersUtil';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { TranslateService } from '@ngx-translate/core';
-import { calendar } from '@app/shared/constants';
-import { TranslateChangeService } from '@app/shared/services/translateChange.service';
+import {ActionBarService} from '@app/core/actionbar/app.actionbar.actions.service';
+import {Conference} from '@app/shared/models/conference';
+import {ModerationComments} from '@app/shared/models/moderationComments';
+import {ModerationFilter} from '@app/shared/models/moderationFilter';
+import {ModerationService} from '@app/shared/services/moderation.service';
+import {HelperUtils} from '@app/shared/util/HelpersUtil';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
+import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
+import {TranslateService} from '@ngx-translate/core';
+import {calendar} from '@app/shared/constants';
+import {TranslateChangeService} from '@app/shared/services/translateChange.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Router } from '@angular/router';
-import { AuthService } from '@app/shared/services/auth.service';
-import { ConferenceService } from '@app/shared/services/conference.service';
+import {Router} from '@angular/router';
+import {AuthService} from '@app/shared/services/auth.service';
+import {ConferenceService} from '@app/shared/services/conference.service';
 
 @Component({
   selector: 'app-moderation',
   templateUrl: './moderation.component.html',
-  styleUrls: [ './moderation.component.scss' ],
+  styleUrls: ['./moderation.component.scss'],
 })
 export class ModerationComponent implements OnInit, OnDestroy {
 
@@ -62,7 +62,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
     await this.loadConferencesActives();
     await this.loadRegionalizationConference();
     await this.prepareScreen();
-    this.translateChange.getCurrentLang().subscribe(({ lang }) => {
+    this.translateChange.getCurrentLang().subscribe(({lang}) => {
       this.language = lang;
       this.calendarTranslate = calendar[lang];
       this.populateOptions();
@@ -88,12 +88,15 @@ export class ModerationComponent implements OnInit, OnDestroy {
     const allLabel = this.translate.instant('all');
 
     this.typeOfParticipation = this.moderationSrv.TypeParticipation.map(type => (
-      { value: type, label: this.translate.instant(`moderation.label.${type.toLowerCase()}`) }
+      {value: type, label: this.translate.instant(`moderation.label.${type.toLowerCase()}`)}
     ));
-    this.typeOfParticipation.unshift({ value: '', label: allLabel });
+    this.typeOfParticipation.unshift({value: '', label: allLabel});
 
-    this.status = this.moderationSrv.StatusTypes.map(status => ({ value: status, label: this.translate.instant(status.toLowerCase()) }));
-    this.status.unshift({ value: allLabel, label: allLabel });
+    this.status = this.moderationSrv.StatusTypes.map(status => ({
+      value: status,
+      label: this.translate.instant(status.toLowerCase())
+    }));
+    this.status.unshift({value: allLabel, label: allLabel});
 
 
     this.filter.type = '';
@@ -118,7 +121,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   configureActionBar() {
     this.actionBarSrv.setItems([
-      { position: 'RIGHT', label: `${this.conferenceComments.length} Textos`, icon: 'comment.svg' },
+      {position: 'RIGHT', label: `${this.conferenceComments.length} Textos`, icon: 'comment.svg'},
       {
         position: 'LEFT', handle: () => {
           this.showSelectConference = !this.showSelectConference;
@@ -170,7 +173,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   timesAgo(time: string): string {
-    if ( !time) {
+    if (!time) {
       return '';
     }
     try {
@@ -185,8 +188,8 @@ export class ModerationComponent implements OnInit, OnDestroy {
     try {
       if (this.conferenceSelect.id != null) {
         const data = await this.moderationSrv.getLocalities(this.conferenceSelect.id);
-        this.microregion = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
-        this.microregion.unshift({ value: '', label: 'Todos' });
+        this.microregion = _.map(data.localities, ({id, name}) => ({value: id, label: name}));
+        this.microregion.unshift({value: '', label: 'Todos'});
         this.labelMicroregion = data.regionalizable;
       }
     } catch (error) {
@@ -202,8 +205,8 @@ export class ModerationComponent implements OnInit, OnDestroy {
       if (this.conferenceSelect.id != null) {
         const data = await this.moderationSrv.getPlanItem(this.conferenceSelect.id);
         this.planItem = _.map(_.get(data, 'planItems', []),
-          ({ planItemId, planItemName }) => ({ value: planItemId, label: planItemName }));
-        this.planItem.unshift({ value: '', label: 'Todos' });
+          ({planItemId, planItemName}) => ({value: planItemId, label: planItemName}));
+        this.planItem.unshift({value: '', label: 'Todos'});
         this.labelPlanItem = _.get(data, 'structureItemName');
       }
     } catch (error) {
@@ -212,13 +215,6 @@ export class ModerationComponent implements OnInit, OnDestroy {
         detail: this.translate.instant('moderation.error.fetch.planItems'),
       });
     }
-  }
-
-  private buildBreadcrumb() {
-    this.breadcrumbService.setItems([
-      { label: 'administration.moderation' },
-      { label: this.conferenceSelect.name, routerLink: [ '/moderation/search' ] },
-    ]);
   }
 
   getIcon(icon?: string) {
@@ -230,11 +226,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   selectLocality(locality: SelectItem) {
-    this.filter.localityIds = [ locality.value ];
+    this.filter.localityIds = [locality.value];
   }
 
   selectPlanItem(planItem: SelectItem) {
-    this.filter.planItemIds = [ planItem.value ];
+    this.filter.planItemIds = [planItem.value];
   }
 
   async changeSmallFilter(status: string) {
@@ -256,28 +252,12 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.showSelectConference = false;
   }
 
-  private async _publish(comment: ModerationComments) {
-    const proposal = comment.classification && comment.classification === 'proposal';
-    const msg = proposal ? 'moderation.label.msg.publish_proposal' : 'moderation.label.msg.publish_comment';
-    try {
-      await this.moderationSrv.update({ status: 'Published', id: comment.commentId });
-      await this.prepareScreen();
-      this.messageService.add({
-        severity: 'success',
-        summary: this.translate.instant('success'),
-        detail: this.translate.instant(msg),
-      });
-    } catch (error) {
-      this.messageService.add({
-        severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.publish_comment'),
-      });
-    }
-  }
-
   async publish(comment: ModerationComments) {
     await this.confirmationService.confirm({
-      message: this.translate.instant('moderation.label.confirm_publish', { text: comment.text, citizenName: comment.citizenName }),
+      message: this.translate.instant('moderation.label.confirm_publish', {
+        text: comment.text,
+        citizenName: comment.citizenName
+      }),
       key: 'confirm_publish',
       acceptLabel: this.translate.instant('yes'),
       rejectLabel: this.translate.instant('no'),
@@ -327,7 +307,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
       await this.moderationSrv.begin({
         id: comment.commentId,
       } as any);
-      await this.route.navigate([ '/moderation/moderate', comment.commentId, this.conferenceSelect.id ]);
+      await this.route.navigate(['/moderation/moderate', comment.commentId, this.conferenceSelect.id]);
     } catch (error) {
       console.error(error);
       let msg = 'moderation.error.begin';
@@ -356,6 +336,32 @@ export class ModerationComponent implements OnInit, OnDestroy {
         console.error('reject');
       },
     });
+  }
+
+  private buildBreadcrumb() {
+    this.breadcrumbService.setItems([
+      {label: 'administration.moderation'},
+      {label: this.conferenceSelect.name, routerLink: ['/moderation/search']},
+    ]);
+  }
+
+  private async _publish(comment: ModerationComments) {
+    const proposal = comment.classification && comment.classification === 'proposal';
+    const msg = proposal ? 'moderation.label.msg.publish_proposal' : 'moderation.label.msg.publish_comment';
+    try {
+      await this.moderationSrv.update({status: 'Published', id: comment.commentId});
+      await this.prepareScreen();
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant(msg),
+      });
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error', summary: 'Erro',
+        detail: this.translate.instant('moderation.error.publish_comment'),
+      });
+    }
   }
 
 

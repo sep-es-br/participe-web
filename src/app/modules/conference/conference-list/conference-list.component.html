@@ -6,7 +6,7 @@
           <div class="p-grid ui-fluid actions">
             <div class="ui-g-5 ui-md-2 ui-lg-2">
               <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
-                (click)="handleCreateConference()">
+                      (click)="handleCreateConference()">
               </button>
             </div>
             <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
@@ -24,17 +24,17 @@
                 <div class="ui-g-12 ui-md-6 ui-lg-3">
                   <label for="planSearch">{{'plan.label'|translate}}</label>
                   <p-dropdown [options]="plans" formControlName="planSearch" class="ng-dirty ng-invalid"
-                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                              [placeholder]="'placeholder.select'|translate"></p-dropdown>
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-3">
                   <label for="monthSearch">{{'month.label'|translate}}</label>
                   <p-dropdown [options]="months" formControlName="monthSearch" class="ng-dirty ng-invalid"
-                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                              [placeholder]="'placeholder.select'|translate"></p-dropdown>
                 </div>
                 <div class="ui-g-12 ui-md-6 ui-lg-3">
                   <label for="yearSearch">{{'years'|translate}}</label>
                   <p-dropdown [options]="years" formControlName="yearSearch" class="ng-dirty ng-invalid"
-                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+                              [placeholder]="'placeholder.select'|translate"></p-dropdown>
                 </div>
 
                 <div class="ui-g-12 ui-md-3 ui-lg-3">
@@ -42,13 +42,13 @@
                 </div>
                 <div class="ui-g-12 ui-md-4 ui-lg-3">
                   <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
-                    (click)="clearSearch()"></button>
+                          (click)="clearSearch()"></button>
                 </div>
               </div>
             </form>
           </div>
           <p-table [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
-            [responsive]="true" paginatorPosition="both">
+                   [responsive]="true" paginatorPosition="both">
             <ng-template pTemplate="header">
               <tr>
                 <th>{{'name'|translate}}</th>
@@ -67,18 +67,18 @@
                   <span style="vertical-align: middle">{{conference.plan?.name}}</span>
                 </td>
                 <td>
-                  <span style="vertical-align: middle">{{conference.beginDate}}</span>
+                  <span style="vertical-align: middle">{{conference.beginDate?.toLocaleString('pt-BR')}}</span>
                 </td>
                 <td>
-                  <span style="vertical-align: middle">{{conference.endDate}}</span>
+                  <span style="vertical-align: middle">{{conference.endDate?.toLocaleString('pt-BR')}}</span>
                 </td>
                 <td class="column-actions">
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
-                    (click)="handleEditConference(conference)"></button>
+                          (click)="handleEditConference(conference)"></button>
                   <button pButton icon="pi pi-users" type="button" style="margin-right: 2px;"
-                    [routerLink]="goToMetting(conference)"></button>
+                          [routerLink]="goToMetting(conference)"></button>
                   <button pButton icon="pi pi-trash" type="button" (click)="delete(conference)"
-                    [disabled]="disableBtnDelete(conference)"></button>
+                          [disabled]="disableBtnDelete(conference)"></button>
                 </td>
               </tr>
             </ng-template>

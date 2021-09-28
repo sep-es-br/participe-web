@@ -166,8 +166,9 @@
                       </div>
                       <div class="ui-g-12 ui-md-3 ui-lg-3 end-date">
                         <label for="endDate">{{'conference.closure'|translate}}</label>
-                        <p-calendar dateFormat="dd/mm/yy" [minDate]="minDate && minDate"
+                        <p-calendar (onClose)="changeEndDate()" [minDate]="minDate"
                                     [locale]="calendarTranslate"
+                                    dateFormat="dd/mm/yy"
                                     (onSelect)="setStatusDisplayConference()" formControlName="endDate"
                                     [showTime]="true">
                         </p-calendar>
@@ -215,7 +216,7 @@
                       <img [src]="getUrlFile(conference.fileAuthentication.id)" alt="Imagem Autenticação" width="120px"
                            style="padding: 20px;">
                       <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                              (click)="removeFileAuthentication($event)"></button>
+                              (click)="removeFileAuthentication()"></button>
                     </div>
                     <div class="p-col-12 p-md-6">
                       <label for="titleAuthentication">{{'conference.title'|translate}}</label>
@@ -251,7 +252,7 @@
                       <img [src]="getUrlFile(conference.fileParticipation.id)" alt="Imagem Participação" width="120px"
                            style="padding: 20px;">
                       <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                              (click)="removeFileParticipation($event)"></button>
+                              (click)="removeFileParticipation()"></button>
                     </div>
                     <div class="p-col-12 p-md-6">
                       <label for="titleParticipation">{{'conference.title'|translate}}</label>

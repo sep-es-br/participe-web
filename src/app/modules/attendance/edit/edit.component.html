@@ -6,7 +6,7 @@
           <div class="p-col-12 title">
             <span>{{ 'attendance.editAttendance' | translate }}</span>
             <span class="remove-action" (click)="uncheckIn()" [pTooltip]="getTooltipRemoveText()"
-              tooltipStyleClass="tooltip-uncheck">
+                  tooltipStyleClass="tooltip-uncheck">
               <fa-icon [icon]="iconRemove"></fa-icon>
               {{ 'attendance.removeAttendee' | translate }}
             </span>
@@ -19,22 +19,24 @@
           <div class="p-col-12">
             <label class="required">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
             <p-dropdown [options]="optionsLocalities" formControlName="locality"
-              [placeholder]="'placeholder.select' | translate"></p-dropdown>
+                        [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
           <div class="p-col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
-              <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth" src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
-              <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)" [title]="auth.loginName" [alt]="auth.loginName"/>
+              <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
+                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
+              <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)"
+                   [title]="auth.loginName" [alt]="auth.loginName"/>
               <p-radioButton *ngFor="let type of authTypeEnum" name="authType" [value]="type" [label]="type"
-                formControlName="authType"></p-radioButton>
+                             formControlName="authType"></p-radioButton>
             </div>
           </div>
           <div class="p-col-12 p-md-6">
             <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
             <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-              slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
+                         slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
             <tt-input-message [form]="form" field="cpf"></tt-input-message>
           </div>
           <div class="p-col-12 p-md-6">
@@ -47,19 +49,19 @@
             <input pInputText formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
             <p-checkbox class="checkbox-reset" *ngIf="form.get('authType').value === 'E-Mail'" [binary]="true"
-              [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
+                        [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
           </div>
           <div class="p-col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
             <p-inputMask mask="(99) 99999-9999" placeholder="(00) 00000-0000" unmask="true"
-              formControlName="phone"></p-inputMask>
+                         formControlName="phone"></p-inputMask>
             <tt-input-message [form]="form" field="phone"></tt-input-message>
           </div>
           <div class="p-col-12">
             <div class="form-actions">
               <button pButton icon="pi pi-check" type="submit" [label]="'save' | translate"></button>
               <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
-                (click)="toggleSelectedAttendee()"></button>
+                      (click)="toggleSelectedAttendee()"></button>
             </div>
           </div>
         </form>
@@ -69,16 +71,18 @@
       <div class="top-bar">
         <p-dropdown [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" (onChange)="searchByName()">
           <ng-template let-option pTemplate="selectedItem">
-            {{ ( 'attendance.orderBy' | translate ) + ': ' + ( option.label | translate ) }}
+            {{ ('attendance.orderBy' | translate) + ': ' + (option.label | translate) }}
           </ng-template>
           <ng-template let-option pTemplate="item">
             {{ option.label | translate }}
           </ng-template>
         </p-dropdown>
         <div class="county ui-float-label">
-          <p-autoComplete id="search-county" field="name" [(ngModel)]="selectedCounty" [suggestions]="resultSearchCounty"
-            (completeMethod)="handleSearchCounty($event)" [forceSelection]="true" (onSelect)="searchByName()"></p-autoComplete>
-            <label for="search-county">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
+          <p-autoComplete id="search-county" field="name" [(ngModel)]="selectedCounty"
+                          [suggestions]="resultSearchCounty"
+                          (completeMethod)="handleSearchCounty($event)" [forceSelection]="true"
+                          (onSelect)="searchByName()"></p-autoComplete>
+          <label for="search-county">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
         </div>
         <div class="search">
           <div class="ui-float-label">
@@ -118,11 +122,13 @@
           </div>
           <div class="action">
             <fa-icon size="2x" (click)="selectAttendee(attendee)" [icon]="iconChecked"
-              tooltipPosition="left" [pTooltip]="getToolTipText(attendee)" tooltipStyleClass="tooltip-uncheck"></fa-icon>
+                     tooltipPosition="left" [pTooltip]="getToolTipText(attendee)"
+                     tooltipStyleClass="tooltip-uncheck"></fa-icon>
           </div>
         </div>
         <ng-container *ngIf="isSearching">
-          <ng-container *ngTemplateOutlet="loadingList; context: { $implicit: getListOfLettersForLoading() }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="loadingList; context: { $implicit: getListOfLettersForLoading() }"></ng-container>
         </ng-container>
         <div *ngIf="!lastPage" class="load-more">
           <button pButton [label]="'attendance.loadMore' | translate" (click)="loadNextPage()"></button>
@@ -138,16 +144,26 @@
       <div class="letter-icon">{{ letter }}</div>
     </div>
     <div class="primary-info">
-      <div class="name"><div class="loading">&nbsp;</div></div>
-      <div class="contact"><div class="loading">&nbsp;</div></div>
+      <div class="name">
+        <div class="loading">&nbsp;</div>
+      </div>
+      <div class="contact">
+        <div class="loading">&nbsp;</div>
+      </div>
     </div>
     <div class="secondary-info">
       <div class="info-place">
-        <div class="locality"><div class="loading">&nbsp;</div></div>
-        <div class="region"><div class="loading">&nbsp;</div></div>
+        <div class="locality">
+          <div class="loading">&nbsp;</div>
+        </div>
+        <div class="region">
+          <div class="loading">&nbsp;</div>
+        </div>
       </div>
       <div class="info-checkin">
-        <div class="how-long-ago"><div class="loading">&nbsp;</div></div>
+        <div class="how-long-ago">
+          <div class="loading">&nbsp;</div>
+        </div>
       </div>
     </div>
     <div class="action">
@@ -156,10 +172,13 @@
   </div>
 </ng-template>
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting">
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
+          [(visible)]="showSelectMeeting">
   <div class="label">Consulta</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference"
+              optionLabel="name"></p-dropdown>
   <div class="label">Reunião</div>
   <p-dropdown [options]="optionsMeeting" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-  <button pButton class="change-button" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+  <button pButton class="change-button" [label]="'change' | translate" icon="pi pi-sort-alt"
+          (click)="setCurrentMeeting()"></button>
 </p-dialog>

@@ -1,60 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DatePipe, Location } from '@angular/common';
-import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { Conference } from '@app/shared/models/conference';
-import { ConferenceService } from '@app/shared/services/conference.service';
-import { IPerson } from '@app/shared/interface/IPerson';
-import { LocalityService } from '@app/shared/services/locality.service';
-import { Plan } from '@app/shared/models/plan';
-import { PlanService } from '@app/shared/services/plan.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateChangeService } from '@app/shared/services/translateChange.service';
-import { TranslateService } from '@ngx-translate/core';
-import { calendar } from '@app/shared/constants';
-import { environment } from '@environments/environment';
-import { FilesService } from '@app/shared/services/files.service';
-import { File } from '@app/shared/models/file';
-import { StructureItemService } from '@app/shared/services/structure-item.service';
+import {Component, OnInit} from '@angular/core';
+import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {DatePipe, Location} from '@angular/common';
+import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
+import {Conference} from '@app/shared/models/conference';
+import {ConferenceService} from '@app/shared/services/conference.service';
+import {IPerson} from '@app/shared/interface/IPerson';
+import {LocalityService} from '@app/shared/services/locality.service';
+import {Plan} from '@app/shared/models/plan';
+import {PlanService} from '@app/shared/services/plan.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TranslateChangeService} from '@app/shared/services/translateChange.service';
+import {TranslateService} from '@ngx-translate/core';
+import {calendar} from '@app/shared/constants';
+import {environment} from '@environments/environment';
+import {FilesService} from '@app/shared/services/files.service';
+import {File} from '@app/shared/models/file';
+import {StructureItemService} from '@app/shared/services/structure-item.service';
 import * as moment from 'moment';
-import { IHowItWorkStep } from '@app/shared/interface/IHowItWorkStep';
-import { IExternalLinks } from '@app/shared/interface/IExternalLinks';
-import { CustomValidators } from '@app/shared/util/CustomValidators';
+import {IHowItWorkStep} from '@app/shared/interface/IHowItWorkStep';
+import {IExternalLinks} from '@app/shared/interface/IExternalLinks';
+import {CustomValidators} from '@app/shared/util/CustomValidators';
 
 @Component({
-  selector: 'tt-conference',
+  selector: 'app-conference',
   templateUrl: './conference.component.html',
-  styleUrls: [ './conference.component.scss' ],
+  styleUrls: ['./conference.component.scss'],
 })
 export class ConferenceComponent implements OnInit {
-
-  constructor(
-    private breadcrumbService: BreadcrumbService,
-    private confirmationService: ConfirmationService,
-    private conferenceService: ConferenceService,
-    private planService: PlanService,
-    private localityService: LocalityService,
-    private formBuilder: FormBuilder,
-    private datePipe: DatePipe,
-    private messageService: MessageService,
-    private translate: TranslateService,
-    private translateChange: TranslateChangeService,
-    private router: Router,
-    private actRouter: ActivatedRoute,
-    private filesSrv: FilesService,
-    private structureItemSrv: StructureItemService,
-    private location: Location,
-  ) {
-    this.actRouter.queryParams.subscribe(async queryParams => {
-      this.idConference = queryParams.id;
-    });
-  }
 
   idConference: number;
   conferenceForm: FormGroup;
   conference: Conference;
-
   plans: SelectItem[] = [];
   localitiesOfDomain: SelectItem[] = [];
   structureRegionalization = false;
@@ -83,14 +60,38 @@ export class ConferenceComponent implements OnInit {
   menuLabelForm: FormGroup;
   howItWorksForm: FormGroup;
 
+  constructor(
+    private breadcrumbService: BreadcrumbService,
+    private confirmationService: ConfirmationService,
+    private conferenceService: ConferenceService,
+    private planService: PlanService,
+    private localityService: LocalityService,
+    private formBuilder: FormBuilder,
+    private datePipe: DatePipe,
+    private messageService: MessageService,
+    private translate: TranslateService,
+    private translateChange: TranslateChangeService,
+    private router: Router,
+    private actRouter: ActivatedRoute,
+    private filesSrv: FilesService,
+    private structureItemSrv: StructureItemService,
+    private location: Location,
+  ) {
+    this.actRouter.queryParams.subscribe(async queryParams => {
+      this.idConference = queryParams.id;
+    });
+  }
+
   private static getDate(str) {
     if (str) {
       if (str instanceof Date) {
         return new Date(str);
       }
+
       const dateTime = str.split(' ');
       const dataArgs = dateTime[0].split('/');
       const timeArgs = dateTime[1].split(':');
+
       return new Date(dataArgs[2], (dataArgs[1] - 1), dataArgs[0], timeArgs[0], timeArgs[1]);
     }
   }
@@ -109,7 +110,7 @@ export class ConferenceComponent implements OnInit {
       this.instanceConferenceForm();
     }
     this.loadListOptions();
-    this.translateChange.getCurrentLang().subscribe(({ lang }) => {
+    this.translateChange.getCurrentLang().subscribe(({lang}) => {
       this.calendarTranslate = calendar[lang];
       this.loadListOptions();
     });
@@ -139,13 +140,6 @@ export class ConferenceComponent implements OnInit {
         detail: this.translate.instant('conference.error.fetch.plans'),
       });
     }
-  }
-
-  private buildBreadcrumb() {
-    this.breadcrumbService.setItems([
-      { label: 'administration.label' },
-      { label: 'administration.conference', routerLink: [ '/administration/conferences' ] },
-    ]);
   }
 
   loadListOptions() {
@@ -204,36 +198,36 @@ export class ConferenceComponent implements OnInit {
     this.conference = new Conference();
     this.conferenceForm = this.formBuilder.group({
       id: null,
-      name: [ '', [ Validators.required, CustomValidators.noWhitespaceValidator ] ],
-      description: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
-      serverName: [ '', [ Validators.compose([ Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator ]) ] ],
+      name: ['', [Validators.required, CustomValidators.noWhitespaceValidator]],
+      description: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
+      serverName: ['', [Validators.compose([Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator])]],
       defaultServerConference: false,
-      beginDate: [ null, [ Validators.required ] ],
-      endDate: [ null, [ Validators.required ] ],
-      plan: [ null, Validators.required ],
-      titleAuthentication: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
-      subtitleAuthentication: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
+      beginDate: [null, [Validators.required]],
+      endDate: [null, [Validators.required]],
+      plan: [null, Validators.required],
+      titleAuthentication: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
+      subtitleAuthentication: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
       localityType: null,
-      titleParticipation: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
-      subtitleParticipation: [ '', Validators.compose([ Validators.required, CustomValidators.noWhitespaceValidator ]) ],
-      titleRegionalization: [ '', this.structureRegionalization && Validators.compose([
+      titleParticipation: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
+      subtitleParticipation: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
+      titleRegionalization: ['', this.structureRegionalization && Validators.compose([
         Validators.required,
         CustomValidators.noWhitespaceValidator,
-      ]) ],
-      subtitleRegionalization: [ '', this.structureRegionalization && Validators.compose([
+      ])],
+      subtitleRegionalization: ['', this.structureRegionalization && Validators.compose([
         Validators.required,
         CustomValidators.noWhitespaceValidator,
-      ]) ],
-      segmentation: [ false, Validators.required ],
+      ])],
+      segmentation: [false, Validators.required],
       targetedByItems: null,
-      displayMode: [ 'AUTOMATIC', Validators.required ],
+      displayMode: ['AUTOMATIC', Validators.required],
       displayStatusConference: 'OPEN',
       preOpeningText: '',
       postClosureText: '',
     });
     this.searchModeratorsForm = this.formBuilder.group({
-      nameModerator: [ '' ],
-      emailModerator: [ '', Validators.email ],
+      nameModerator: [''],
+      emailModerator: ['', Validators.email],
     });
     this.instanceNewStep();
     this.instanceHowItWorksForm();
@@ -253,21 +247,21 @@ export class ConferenceComponent implements OnInit {
   instanceHowItWorksForm() {
     this.howItWorksForm = this.formBuilder.group({
       order: 0,
-      title: [ '', [ CustomValidators.noWhitespaceValidator ] ],
-      text: [ '' ],
+      title: ['', [CustomValidators.noWhitespaceValidator]],
+      text: [''],
     });
   }
 
   instanceMenuLabelForm() {
     this.menuLabelForm = this.formBuilder.group({
-      menuLabel: [ '', [ CustomValidators.noWhitespaceValidator ] ],
+      menuLabel: ['', [CustomValidators.noWhitespaceValidator]],
     });
   }
 
   instanceExternalLinksForm() {
     this.externalLinksForm = this.formBuilder.group({
-      label: [ '', [ CustomValidators.noWhitespaceValidator ] ],
-      url: [ '', [ Validators.required, CustomValidators.ExternalURL ] ],
+      label: ['', [CustomValidators.noWhitespaceValidator]],
+      url: ['', [Validators.required, CustomValidators.ExternalURL]],
     });
   }
 
@@ -277,8 +271,8 @@ export class ConferenceComponent implements OnInit {
       endDate: null,
       displayModeResearch: 'AUTOMATIC',
       researchDisplayStatus: 'INACTIVE',
-      researchLink: [ '', [ CustomValidators.noWhitespaceValidator ] ],
-      estimatedTimeResearch: [ '', [ CustomValidators.noWhitespaceValidator ] ],
+      researchLink: ['', [CustomValidators.noWhitespaceValidator]],
+      estimatedTimeResearch: ['', [CustomValidators.noWhitespaceValidator]],
     });
   }
 
@@ -287,6 +281,7 @@ export class ConferenceComponent implements OnInit {
       this.showTargetedByItems = this.conference && this.conference.segmentation;
       this.targetedByItemsSelected = this.conference.targetedByItems.length > 1 ? 'TODOS' : this.conference.targetedByItems[0].toString();
     }
+
     this.conferenceForm.controls.id.setValue(this.conference.id);
     this.conferenceForm.controls.name.setValue(this.conference.name);
     this.conferenceForm.controls.description.setValue(this.conference.description);
@@ -335,7 +330,7 @@ export class ConferenceComponent implements OnInit {
   addHowItWorkStep() {
     this.markFormGroupTouched(this.howItWorksForm);
 
-    if ( !this.isValidForm(this.howItWorksForm)) {
+    if (!this.isValidForm(this.howItWorksForm)) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -348,7 +343,7 @@ export class ConferenceComponent implements OnInit {
     const title = this.howItWorksForm.controls.title.value;
     const text = this.howItWorksForm.controls.text.value;
 
-    this.newStep = { order, title, text };
+    this.newStep = {order, title, text};
 
     if (this.howItWorkSteps) {
       this.howItWorkSteps.push({
@@ -356,17 +351,17 @@ export class ConferenceComponent implements OnInit {
         tableId: this.howItWorkSteps.length + 1,
       });
     } else {
-      this.howItWorkSteps = [ {
+      this.howItWorkSteps = [{
         ...this.newStep,
         tableId: 1,
-      } ];
+      }];
     }
     // this.instanceNewStep();
     this.instanceHowItWorksForm();
   }
 
   onRowStepEditInit(step: IHowItWorkStep) {
-    this.clonedSteps[step.tableId] = { ...step };
+    this.clonedSteps[step.tableId] = {...step};
   }
 
   onRowStepEditSave(step: IHowItWorkStep) {
@@ -410,10 +405,10 @@ export class ConferenceComponent implements OnInit {
         tableId: this.externalLinks.length + 1,
       });
     } else {
-      this.externalLinks = [ {
+      this.externalLinks = [{
         ...this.externalLinksForm.value,
         tableId: 1,
-      } ];
+      }];
     }
     this.instanceExternalLinksForm();
   }
@@ -423,7 +418,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   onRowLinkEditInit(link: IExternalLinks) {
-    this.clonedExternalLinks[link.tableId] = { ...link };
+    this.clonedExternalLinks[link.tableId] = {...link};
   }
 
   isUrlValid(url: string): boolean {
@@ -441,7 +436,7 @@ export class ConferenceComponent implements OnInit {
       this.externalLinks[index] = this.clonedExternalLinks[link.tableId];
     }
 
-    if ( !isGreaterThanZero) {
+    if (!isGreaterThanZero) {
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('error'),
         detail: this.translate.instant('conference.requiredInputs'),
@@ -449,7 +444,7 @@ export class ConferenceComponent implements OnInit {
       return;
     }
 
-    if ( !isUrlValid) {
+    if (!isUrlValid) {
       this.messageService.add({
         severity: 'error', summary: this.translate.instant('error'),
         detail: this.translate.instant('conference.error.externalLinkInvalid'),
@@ -489,22 +484,22 @@ export class ConferenceComponent implements OnInit {
     const estimatedTimeResearch = this.conferenceResearchForm.controls.estimatedTimeResearch.value;
 
     if (displayModeResearch === 'AUTOMATIC') {
-      if (( !beginDate) && ( !endDate)) {
+      if ((!beginDate) && (!endDate)) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('ACTIVE');
       }
       if (dataAtual >= beginDate && dataAtual < endDate) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('ACTIVE');
       }
-      if (( !beginDate) && dataAtual < endDate) {
+      if ((!beginDate) && dataAtual < endDate) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('ACTIVE');
       }
-      if (( !endDate) && dataAtual >= beginDate) {
+      if ((!endDate) && dataAtual >= beginDate) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('ACTIVE');
       }
       if ((dataAtual < beginDate) || (dataAtual > endDate)) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('INACTIVE');
       }
-      if ( !beginDate || !endDate || !researchLink || !estimatedTimeResearch) {
+      if (!beginDate || !endDate || !researchLink || !estimatedTimeResearch) {
         this.conferenceResearchForm.controls.researchDisplayStatus.setValue('INACTIVE');
       }
     }
@@ -519,10 +514,10 @@ export class ConferenceComponent implements OnInit {
       const researchDisplayStatus = this.conferenceResearchForm.controls.researchDisplayStatus.value;
 
       if (researchDisplayStatus === 'ACTIVE') {
-        this.conferenceResearchForm.controls.beginDate.setValidators([ Validators.required ]);
-        this.conferenceResearchForm.controls.endDate.setValidators([ Validators.required ]);
-        this.conferenceResearchForm.controls.researchLink.setValidators([ Validators.required, CustomValidators.ResearchLink ]);
-        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([ Validators.required ]);
+        this.conferenceResearchForm.controls.beginDate.setValidators([Validators.required]);
+        this.conferenceResearchForm.controls.endDate.setValidators([Validators.required]);
+        this.conferenceResearchForm.controls.researchLink.setValidators([Validators.required, CustomValidators.ResearchLink]);
+        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([Validators.required]);
       } else {
         this.conferenceResearchForm.controls.beginDate.clearValidators();
         this.conferenceResearchForm.controls.endDate.clearValidators();
@@ -539,37 +534,42 @@ export class ConferenceComponent implements OnInit {
       const endDateResearchForm = this.conferenceResearchForm.controls.endDate.value;
 
       if (beginDateResearchForm || endDateResearchForm) {
-        this.conferenceResearchForm.controls.researchLink.setValidators([ Validators.required, CustomValidators.ResearchLink ]);
+        this.conferenceResearchForm.controls.researchLink.setValidators([Validators.required, CustomValidators.ResearchLink]);
         this.conferenceResearchForm.controls.researchLink.updateValueAndValidity();
 
-        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([ Validators.required ]);
+        this.conferenceResearchForm.controls.estimatedTimeResearch.setValidators([Validators.required]);
         this.conferenceResearchForm.controls.estimatedTimeResearch.updateValueAndValidity();
       }
 
       this.markFormGroupTouched(this.conferenceForm);
       this.markFormGroupTouched(this.conferenceResearchForm);
-      if ( !this.isValidForm(this.conferenceForm) || !this.isValidForm(this.conferenceResearchForm)) {
+      if (!this.isValidForm(this.conferenceForm) || !this.isValidForm(this.conferenceResearchForm)) {
         return;
       }
       const targetedByItemsSelectedOption = this.conferenceForm.controls.segmentation && this.conferenceForm.controls.targetedByItems.value;
       const targetedByItems = targetedByItemsSelectedOption === 'TODOS' ? this.structureItems.map(item => item.value)
-        : [ Number(this.conferenceForm.controls.targetedByItems.value) ];
+        : [Number(this.conferenceForm.controls.targetedByItems.value)];
 
-      const conferenceBeginDate = this.conferenceForm
-        .controls.beginDate.value && ConferenceComponent.setDate(this.conferenceForm.controls.beginDate.value);
-      const conferenceEndDate = this.conferenceForm
-        .controls.endDate.value && ConferenceComponent.setDate(this.conferenceForm.controls.endDate.value);
+      const conferenceBeginDate = this.conferenceForm.controls.beginDate.value &&
+        ConferenceComponent.setDate(this.conferenceForm.controls.beginDate.value);
+      const conferenceEndDate = this.conferenceForm.controls.endDate.value &&
+        ConferenceComponent.setDate(this.conferenceForm.controls.endDate.value);
 
-      const researchBeginDate = this.conferenceResearchForm
-        .controls.beginDate.value && ConferenceComponent.setDate(this.conferenceResearchForm.controls.beginDate.value);
-      const researchEndDate = this.conferenceResearchForm
-        .controls.endDate.value && ConferenceComponent.setDate(this.conferenceResearchForm.controls.endDate.value);
+      const researchBeginDate = this.conferenceResearchForm.controls.beginDate.value &&
+        ConferenceComponent.setDate(this.conferenceResearchForm.controls.beginDate.value);
+      const researchEndDate = this.conferenceResearchForm.controls.endDate.value &&
+        ConferenceComponent.setDate(this.conferenceResearchForm.controls.endDate.value);
+
+      const beginDate = this.datePipe.transform(ConferenceComponent.getDate(conferenceBeginDate), 'dd/MM/yyyy HH:mm:ss');
+      const endDate = this.datePipe.transform(ConferenceComponent.getDate(conferenceEndDate), 'dd/MM/yyyy HH:mm:ss');
+      const offset = moment.tz(beginDate, 'dd/MM/yyyy HH:mm:ss', moment.tz.guess(true)).format('Z');
 
       formData = {
         ...formData,
         serverName: this.conferenceForm.controls.serverName.value,
-        beginDate: this.datePipe.transform(ConferenceComponent.getDate(conferenceBeginDate), 'dd/MM/yyyy HH:mm:ss'),
-        endDate: this.datePipe.transform(ConferenceComponent.getDate(conferenceEndDate), 'dd/MM/yyyy HH:mm:ss'),
+        beginDate,
+        endDate,
+        offset,
         plan: formData.plan,
         localityType: formData.localityType,
         fileAuthentication: this.conference.fileAuthentication,
@@ -590,15 +590,12 @@ export class ConferenceComponent implements OnInit {
         backgroundImages: this.backgroundImages,
       };
 
-      if (this.idConference) {
-        await this.conferenceService.save(formData, true);
-      } else {
-        await this.conferenceService.save(formData, false);
-      }
+      await this.conferenceService.save(formData, !!this.idConference);
+
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant(this.idConference ? 'conference.updated' : 'conference.inserted', { name: formData.name }),
+        detail: this.translate.instant(this.idConference ? 'conference.updated' : 'conference.inserted', {name: formData.name}),
       });
 
       this.location.back();
@@ -612,28 +609,6 @@ export class ConferenceComponent implements OnInit {
     }
   }
 
-  private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
-    if ( !form.valid) {
-      this.messageService.add({
-        severity: 'error',
-        summary: this.translate.instant('error'),
-        detail: errorMessage,
-      });
-      return false;
-    }
-    return true;
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup) {
-    (Object as any).values(formGroup.controls).forEach(control => {
-      control.markAsTouched();
-
-      if (control.controls) {
-        this.markFormGroupTouched(control);
-      }
-    });
-  }
-
   changeBeginDate(event) {
     this.minDate = ConferenceComponent.getDate(event);
     if (this.conferenceForm && this.conferenceForm.value.endDate) {
@@ -644,10 +619,25 @@ export class ConferenceComponent implements OnInit {
     }
   }
 
+  changeEndDate() {
+    const beginDate = this.conferenceForm.controls.beginDate.value;
+    const endDate = this.conferenceForm.controls.endDate.value;
+
+    if (endDate < beginDate) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translate.instant('warn'),
+        detail: this.translate.instant('conference.error.endDateOutOfRange'),
+      });
+
+      this.conferenceForm.controls.endDate.setValue(beginDate);
+    }
+  }
+
   async validateName(event) {
     const id = this.conferenceForm.value.id;
     const nameValid = await this.conferenceService.validate(event.target.value, id);
-    if ( !nameValid) {
+    if (!nameValid) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -657,20 +647,16 @@ export class ConferenceComponent implements OnInit {
   }
 
   setStatusDisplayConference() {
+    const beginDate = this.conferenceForm.controls.beginDate.value;
+    const endDate = this.conferenceForm.controls.endDate.value;
     const displayMode = this.conferenceForm.controls.displayMode.value;
 
+    const dataAtual = new Date();
+
     if (displayMode === 'AUTOMATIC') {
-
-      const dataAtual = new Date();
-
-      const beginDate = this.conferenceForm.controls.beginDate.value;
-
       if (beginDate !== null && (dataAtual < beginDate)) {
         this.conferenceForm.get('displayStatusConference').setValue('PRE_OPENING');
       }
-
-      const endDate = this.conferenceForm.controls.endDate.value;
-
       if ((beginDate !== null && (dataAtual >= beginDate)) &&
         (endDate !== null && (dataAtual < endDate))) {
         this.conferenceForm.get('displayStatusConference').setValue('OPEN');
@@ -697,7 +683,7 @@ export class ConferenceComponent implements OnInit {
     const defaultConferenceName = await this.conferenceService.validateDefaultConferenceServer(serverName, this.conference.id);
     if (defaultConferenceName && defaultConferenceName.conferenceName && defaultConferenceName.conferenceName.length > 0) {
       this.confirmationService.confirm({
-        message: this.translate.instant('conference.confirm.defaultConferenceServer', { name: defaultConferenceName.conferenceName }),
+        message: this.translate.instant('conference.confirm.defaultConferenceServer', {name: defaultConferenceName.conferenceName}),
         key: 'defaultConference',
         acceptLabel: this.translate.instant('yes'),
         rejectLabel: this.translate.instant('no'),
@@ -734,7 +720,7 @@ export class ConferenceComponent implements OnInit {
 
   async uploadBackGroundImages(data: { files: any[] }, uploader) {
     const files = data.files.filter(file => {
-      if ( !this.backgroundImages || !this.backgroundImages.find(image => image.name === file.name)) {
+      if (!this.backgroundImages || !this.backgroundImages.find(image => image.name === file.name)) {
         return file;
       }
     });
@@ -752,7 +738,7 @@ export class ConferenceComponent implements OnInit {
     }));
     if (this.backgroundImages && this.backgroundImages.length > 0) {
       uploadedImages.forEach(item => {
-        if ( !this.backgroundImages.find(file => file.id === item.id)) {
+        if (!this.backgroundImages.find(file => file.id === item.id)) {
           this.backgroundImages.push(item);
         }
       });
@@ -770,7 +756,7 @@ export class ConferenceComponent implements OnInit {
     return `${environment.apiEndpoint}/files/${url}`;
   }
 
-  async removeFileParticipation(event) {
+  async removeFileParticipation() {
     try {
       await this.planService.deleteLogo(this.conference.fileParticipation.id).toPromise();
     } catch (err) {
@@ -779,7 +765,7 @@ export class ConferenceComponent implements OnInit {
     this.conference.fileParticipation = null;
   }
 
-  async removeFileAuthentication(event) {
+  async removeFileAuthentication() {
     try {
       await this.planService.deleteLogo(this.conference.fileAuthentication.id).toPromise();
     } catch (err) {
@@ -818,24 +804,6 @@ export class ConferenceComponent implements OnInit {
     }
   }
 
-  private loadLocalities(localities, localitiesOfDomain, plan, visit) {
-    localities.forEach(locality => {
-      if (locality.children) {
-        this.loadLocalities(locality.children, localitiesOfDomain, plan, visit);
-      }
-
-      if ( !visit[locality.type.name]) {
-        visit[locality.type.name] = true;
-        this.localitiesOfDomain.push({
-          value: {
-            id: locality.type.id,
-          },
-          label: locality.type.name,
-        });
-      }
-    });
-  }
-
   checkRegionalization(plan: Plan) {
     if (plan && plan.structure) {
       this.structureRegionalization = plan.structure.regionalization;
@@ -850,7 +818,7 @@ export class ConferenceComponent implements OnInit {
     name = name.replace(/[^a-z0-9]/gi, ' ');
     this.moderators = await this.conferenceService.searchModerators(name, email);
 
-    if ( !this.moderators || this.moderators.length === 0) {
+    if (!this.moderators || this.moderators.length === 0) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -865,7 +833,7 @@ export class ConferenceComponent implements OnInit {
         this.messageService.add({
           severity: 'warn',
           summary: this.translate.instant('warn'),
-          detail: this.translate.instant('conference.moderator.already-enabled', { name: moderator.name }),
+          detail: this.translate.instant('conference.moderator.already-enabled', {name: moderator.name}),
         });
         return;
       }
@@ -897,14 +865,61 @@ export class ConferenceComponent implements OnInit {
 
   onInput($event) {
     this.conferenceForm.patchValue(
-      { name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ') },
-      { emitEvent: false },
+      {name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
+      {emitEvent: false},
     );
   }
 
   onBlur($event) {
     this.conferenceForm.patchValue(
-      { name: $event.target.value.replace(/\s+$/gm, '') },
-      { emitEvent: false });
+      {name: $event.target.value.replace(/\s+$/gm, '')},
+      {emitEvent: false});
+  }
+
+  private buildBreadcrumb() {
+    this.breadcrumbService.setItems([
+      {label: 'administration.label'},
+      {label: 'administration.conference', routerLink: ['/administration/conferences']},
+    ]);
+  }
+
+  private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
+    if (!form.valid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: this.translate.instant('error'),
+        detail: errorMessage,
+      });
+      return false;
+    }
+    return true;
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    (Object as any).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control.controls) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+
+  private loadLocalities(localities, localitiesOfDomain, plan, visit) {
+    localities.forEach(locality => {
+      if (locality.children) {
+        this.loadLocalities(locality.children, localitiesOfDomain, plan, visit);
+      }
+
+      if (!visit[locality.type.name]) {
+        visit[locality.type.name] = true;
+        this.localitiesOfDomain.push({
+          value: {
+            id: locality.type.id,
+          },
+          label: locality.type.name,
+        });
+      }
+    });
   }
 }
