@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
-import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { Conference } from '@app/shared/models/conference';
-import { ConferenceService } from '@app/shared/services/conference.service';
-import { DatePipe } from '@angular/common';
-import { LocalityService } from '@app/shared/services/locality.service';
-import { PlanService } from '@app/shared/services/plan.service';
-import { Router } from '@angular/router';
-import { TranslateChangeService } from '@app/shared/services/translateChange.service';
-import { TranslateService } from '@ngx-translate/core';
+import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
+import {Conference} from '@app/shared/models/conference';
+import {ConferenceService} from '@app/shared/services/conference.service';
+import {DatePipe} from '@angular/common';
+import {LocalityService} from '@app/shared/services/locality.service';
+import {PlanService} from '@app/shared/services/plan.service';
+import {Router} from '@angular/router';
+import {TranslateChangeService} from '@app/shared/services/translateChange.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-conference-list',
   templateUrl: './conference-list.component.html',
-  styleUrls: [ './conference-list.component.scss' ],
+  styleUrls: ['./conference-list.component.scss'],
 })
 export class ConferenceListComponent implements OnInit {
 
@@ -76,23 +76,23 @@ export class ConferenceListComponent implements OnInit {
         });
       });
       this.months = [];
-      this.months.push({ label: this.translate.instant('month.january'), value: 1 });
-      this.months.push({ label: this.translate.instant('month.february'), value: 2 });
-      this.months.push({ label: this.translate.instant('month.march'), value: 3 });
-      this.months.push({ label: this.translate.instant('month.april'), value: 4 });
-      this.months.push({ label: this.translate.instant('month.may'), value: 5 });
-      this.months.push({ label: this.translate.instant('month.june'), value: 6 });
-      this.months.push({ label: this.translate.instant('month.july'), value: 7 });
-      this.months.push({ label: this.translate.instant('month.august'), value: 8 });
-      this.months.push({ label: this.translate.instant('month.september'), value: 9 });
-      this.months.push({ label: this.translate.instant('month.october'), value: 10 });
-      this.months.push({ label: this.translate.instant('month.november'), value: 11 });
-      this.months.push({ label: this.translate.instant('month.december'), value: 12 });
+      this.months.push({label: this.translate.instant('month.january'), value: 1});
+      this.months.push({label: this.translate.instant('month.february'), value: 2});
+      this.months.push({label: this.translate.instant('month.march'), value: 3});
+      this.months.push({label: this.translate.instant('month.april'), value: 4});
+      this.months.push({label: this.translate.instant('month.may'), value: 5});
+      this.months.push({label: this.translate.instant('month.june'), value: 6});
+      this.months.push({label: this.translate.instant('month.july'), value: 7});
+      this.months.push({label: this.translate.instant('month.august'), value: 8});
+      this.months.push({label: this.translate.instant('month.september'), value: 9});
+      this.months.push({label: this.translate.instant('month.october'), value: 10});
+      this.months.push({label: this.translate.instant('month.november'), value: 11});
+      this.months.push({label: this.translate.instant('month.december'), value: 12});
 
       this.years = [];
       const year = new Date().getFullYear();
       for (let i = year - 5; i < year + 5; i++) {
-        this.years.push({ label: i.toString(), value: i });
+        this.years.push({label: i.toString(), value: i});
       }
 
     } catch (err) {
@@ -105,17 +105,6 @@ export class ConferenceListComponent implements OnInit {
     }
   }
 
-  private buildBreadcrumb() {
-    this.breadcrumbService.setItems([
-      { label: 'administration.label' },
-      { label: 'administration.conference', routerLink: [ '/administration/conferences' ] },
-    ]);
-  }
-
-  private async loadConferences() {
-    this.conferences = await this.conferenceService.listAll();
-  }
-
   toggleSearch() {
     this.search = !this.search;
     if (this.search) {
@@ -125,10 +114,10 @@ export class ConferenceListComponent implements OnInit {
 
   clearSearchForm() {
     this.searchForm = this.formBuilder.group({
-      nameSearch: [ '' ],
-      planSearch: [ '' ],
-      monthSearch: [ '' ],
-      yearSearch: [ '' ],
+      nameSearch: [''],
+      planSearch: [''],
+      monthSearch: [''],
+      yearSearch: [''],
     });
   }
 
@@ -155,7 +144,7 @@ export class ConferenceListComponent implements OnInit {
 
     if (comments === 0 && highlights === 0) {
       this.confirmationService.confirm({
-        message: this.translate.instant('conference.confirm.delete', { name: conference.name }),
+        message: this.translate.instant('conference.confirm.delete', {name: conference.name}),
         key: 'deleteConference',
         acceptLabel: this.translate.instant('yes'),
         rejectLabel: this.translate.instant('no'),
@@ -175,6 +164,42 @@ export class ConferenceListComponent implements OnInit {
     }
   }
 
+  goToMetting(c: Conference) {
+    return `/administration/conferences/${c.id}/meeting`;
+  }
+
+  async handleEditConference(c: Conference) {
+    await this.router.navigate(
+      ['/administration/conferences/conference'],
+      {
+        queryParams: {
+          id: c.id,
+        },
+      },
+    );
+  }
+
+  disableBtnDelete(conference) {
+    return !conference.hasAttend;
+  }
+
+  async handleCreateConference() {
+    await this.router.navigate(
+      ['/administration/conferences/conference'],
+    );
+  }
+
+  private buildBreadcrumb() {
+    this.breadcrumbService.setItems([
+      {label: 'administration.label'},
+      {label: 'administration.conference', routerLink: ['/administration/conferences']},
+    ]);
+  }
+
+  private async loadConferences() {
+    this.conferences = await this.conferenceService.listAll();
+  }
+
   private async confirmDelete(id) {
     try {
       await this.conferenceService.delete(id);
@@ -191,31 +216,6 @@ export class ConferenceListComponent implements OnInit {
         detail: this.translate.instant('erro.removing.register'),
       });
     }
-  }
-
-  goToMetting(c: Conference) {
-    return `/administration/conferences/${c.id}/meeting`;
-  }
-
-  async handleEditConference(c: Conference) {
-    await this.router.navigate(
-      [ '/administration/conferences/conference' ],
-      {
-        queryParams: {
-          id: c.id,
-        },
-      },
-    );
-  }
-
-  disableBtnDelete(conference) {
-    return !conference.hasAttend;
-  }
-
-  async handleCreateConference() {
-    await this.router.navigate(
-      [ '/administration/conferences/conference' ],
-    );
   }
 
 }

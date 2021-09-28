@@ -108,47 +108,48 @@
 		"conferenceName": "Conference name",
 		"defaultServerConference": "Default server conference",
 		"stepUpdated": "Step is updated",
-		"externalLinkUpdated": "External link updated",
-		"requiredInputs": "Fill in all the information",
-		"confirm": {
-			"delete": "Are you sure that you want to delete {{name}}?",
-			"defaultConferenceServer": "Another active conference already exists for that server name ({{name}}). If you continue, the other conferece will be disabled."
-		},
-		"menuLabel": "Menu label",
-		"delete": "Delete Conference",
-		"email": "E-mail",
-		"enable": "Enable",
-		"error": {
-			"fetch": {
-				"plans": "Error fetching plans"
-			},
-			"saving": "Error saving conference",
-			"savingStep": "Error saving step",
-			"savingExternalLink": "Error saving external link",
-			"serverNameInvalid": "Invalid server name",
+    "externalLinkUpdated": "External link updated",
+    "requiredInputs": "Fill in all the information",
+    "confirm": {
+      "delete": "Are you sure that you want to delete {{name}}?",
+      "defaultConferenceServer": "Another active conference already exists for that server name ({{name}}). If you continue, the other conferece will be disabled."
+    },
+    "menuLabel": "Menu label",
+    "delete": "Delete Conference",
+    "email": "E-mail",
+    "enable": "Enable",
+    "error": {
+      "fetch": {
+        "plans": "Error fetching plans"
+      },
+      "saving": "Error saving conference",
+      "savingStep": "Error saving step",
+      "savingExternalLink": "Error saving external link",
+      "serverNameInvalid": "Invalid server name",
       "externalLinkInvalid": "Invalid external link",
       "researchLinkInvalid": "Research link invalid",
-      "plan-regionalizable": "The plan must be regionalizable"
-		},
-		"image": "Image",
-		"in-progress": "Conference in progress, cannot be deleted!",
-		"inserted": "Inserted conference {{name}} ",
-		"locality-citizen": "Type of citizen locality",
-		"meeting": {
-			"address": "Address",
-			"beginDate": "Begin",
-			"delete": "Remove?",
-			"endDate": "End",
-			"error": {
-				"delete": "Error deleting meeting {{name}}",
-				"fetch": {
-					"conferenceActive": "Could not load active conferences",
-					"localities": "Error fetching localities",
-					"plans": "Error fetching plans",
-					"plan-items": "Error fetching plan items"
-				},
+      "plan-regionalizable": "The plan must be regionalizable",
+      "endDateOutOfRange": "Conference closure date must be before opening date"
+    },
+    "image": "Image",
+    "in-progress": "Conference in progress, cannot be deleted!",
+    "inserted": "Inserted conference {{name}} ",
+    "locality-citizen": "Type of citizen locality",
+    "meeting": {
+      "address": "Address",
+      "beginDate": "Begin",
+      "delete": "Remove?",
+      "endDate": "End",
+      "error": {
+        "delete": "Error deleting meeting {{name}}",
+        "fetch": {
+          "conferenceActive": "Could not load active conferences",
+          "localities": "Error fetching localities",
+          "plans": "Error fetching plans",
+          "plan-items": "Error fetching plan items"
+        },
         "edit-channel": "Name and URL is required",
-				"saving": "Error saving meeting",
+        "saving": "Error saving meeting",
         "beginDateOutOfRange": "Meeting begin date must be in Conference date range",
         "endDateOutOfRange": "Meeting end date must be in Conference date range",
         "beginDateAfterEndDate": "Meeting begin date must be before end date",

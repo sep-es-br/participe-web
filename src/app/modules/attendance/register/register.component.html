@@ -14,22 +14,24 @@
           <div class="p-col-12">
             <label class="required">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
             <p-dropdown [options]="optionsLocalities" formControlName="locality"
-              [placeholder]="'placeholder.select' | translate"></p-dropdown>
+                        [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
           <div class="p-col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
-              <img *ngIf="newAccount || (form.get('resetPassword').value && !citizenHasNativeAuth)" src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
-              <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)" [title]="auth.loginName" [alt]="auth.loginName"/>
+              <img *ngIf="newAccount || (form.get('resetPassword').value && !citizenHasNativeAuth)"
+                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
+              <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)"
+                   [title]="auth.loginName" [alt]="auth.loginName"/>
               <p-radioButton *ngFor="let type of authTypeEnum" name="authType" [value]="type" [label]="type"
-                formControlName="authType"></p-radioButton>
+                             formControlName="authType"></p-radioButton>
             </div>
           </div>
           <div class="p-col-12 p-md-6">
             <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
             <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-              slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
+                         slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
             <tt-input-message [form]="form" field="cpf"></tt-input-message>
           </div>
           <div class="p-col-12 p-md-6">
@@ -41,26 +43,29 @@
             <label [class.required]="form.get('authType').value === 'E-Mail'">{{ 'citizen.mail' | translate }}</label>
             <input pInputText formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
-            <p-checkbox class="checkbox-reset" *ngIf="isAttendeeSelected && form.get('authType').value === 'E-Mail'" [binary]="true"
-              [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
+            <p-checkbox class="checkbox-reset" *ngIf="isAttendeeSelected && form.get('authType').value === 'E-Mail'"
+                        [binary]="true"
+                        [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
           </div>
           <div class="p-col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
             <p-inputMask mask="(99) 99999-9999" placeholder="(00) 00000-0000" unmask="true"
-              formControlName="phone"></p-inputMask>
+                         formControlName="phone"></p-inputMask>
             <tt-input-message [form]="form" field="phone"></tt-input-message>
           </div>
           <div class="p-col-12">
             <div class="form-actions">
               <ng-container *ngIf="newAccount; else attendeeSelected">
-                <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit" [label]="'attendance.saveAndRegister' | translate"></button>
+                <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
+                        [label]="'attendance.saveAndRegister' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
-                  (click)="toggleNewAccount()"></button>
+                        (click)="toggleNewAccount()"></button>
               </ng-container>
               <ng-template #attendeeSelected>
-                <button pButton icon="pi pi-check" type="button" (click)="checkIn(selectedAttende)" [label]="'attendance.registerAttendance' | translate"></button>
+                <button pButton icon="pi pi-check" type="button" (click)="checkIn(selectedAttende)"
+                        [label]="'attendance.registerAttendance' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
-                  (click)="toggleSelectedAttendee()"></button>
+                        (click)="toggleSelectedAttendee()"></button>
               </ng-template>
             </div>
           </div>
@@ -71,7 +76,8 @@
       <div class="top-bar">
         <div class="search">
           <input type="text" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
-          <button id="btnSearchRegister" pButton [disabled]="!this.idMeeting" icon="pi pi-search" [label]="'search' | translate" (click)="searchByName()"></button>
+          <button id="btnSearchRegister" pButton [disabled]="!this.idMeeting" icon="pi pi-search"
+                  [label]="'search' | translate" (click)="searchByName()"></button>
         </div>
         <div class="new">
           <button pButton icon="pi pi-plus" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
@@ -107,16 +113,19 @@
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
-              <fa-icon size="2x" class="disabled" [icon]="iconChecked"></fa-icon>
+              <fa-icon size="2x" [icon]="iconChecked"></fa-icon>
             </ng-container>
             <ng-template #canCheckIn>
-              <fa-icon size="2x" (click)="selectAttendee(attendee)" [icon]="iconUnchecked" [class.disabled]="attendee.checkingIn"
-                tooltipPosition="left" [pTooltip]="getToolTipText(attendee)" tooltipStyleClass="tooltip-uncheck"></fa-icon>
+              <fa-icon size="2x" (click)="selectAttendee(attendee)" [icon]="iconUnchecked"
+                       [class.disabled]="attendee.checkingIn"
+                       tooltipPosition="left" [pTooltip]="getToolTipText(attendee)"
+                       tooltipStyleClass="tooltip-uncheck"></fa-icon>
             </ng-template>
           </div>
         </div>
         <ng-container *ngIf="isSearching">
-          <ng-container *ngTemplateOutlet="loadingList; context: { $implicit: getListOfLettersForLoading() }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="loadingList; context: { $implicit: getListOfLettersForLoading() }"></ng-container>
         </ng-container>
         <div *ngIf="!lastPage" class="load-more">
           <button pButton [label]="'attendance.loadMore' | translate" (click)="loadNextPage()"></button>
@@ -133,16 +142,26 @@
       <div class="letter-icon">{{ letter }}</div>
     </div>
     <div class="primary-info">
-      <div class="name"><div class="loading">&nbsp;</div></div>
-      <div class="contact"><div class="loading">&nbsp;</div></div>
+      <div class="name">
+        <div class="loading">&nbsp;</div>
+      </div>
+      <div class="contact">
+        <div class="loading">&nbsp;</div>
+      </div>
     </div>
     <div class="secondary-info">
       <div class="info-place">
-        <div class="locality"><div class="loading">&nbsp;</div></div>
-        <div class="region"><div class="loading">&nbsp;</div></div>
+        <div class="locality">
+          <div class="loading">&nbsp;</div>
+        </div>
+        <div class="region">
+          <div class="loading">&nbsp;</div>
+        </div>
       </div>
       <div class="info-checkin">
-        <div class="how-long-ago"><div class="loading">&nbsp;</div></div>
+        <div class="how-long-ago">
+          <div class="loading">&nbsp;</div>
+        </div>
       </div>
     </div>
     <div class="action">
@@ -152,10 +171,13 @@
 </ng-template>
 
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
+          [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
   <div class="label">{{ 'administration.conference' | translate }}</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference"
+              optionLabel="name"></p-dropdown>
   <div class="label">{{ 'meeting' | translate }}</div>
   <p-dropdown [options]="optionsMeeting" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-  <button pButton class="change-button" [autofocus]="false"  [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+  <button pButton class="change-button" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt"
+          (click)="setCurrentMeeting()"></button>
 </p-dialog>

@@ -1,25 +1,25 @@
-import { Inject, Injector } from '@angular/core';
-import { MessageService, SelectItem } from 'primeng/api';
-import { TranslateService } from '@ngx-translate/core';
+import {Inject, Injector} from '@angular/core';
+import {MessageService, SelectItem} from 'primeng/api';
+import {TranslateService} from '@ngx-translate/core';
 
-import { IAttendee } from '../interface/IAttendee';
-import { IConferenceWithMeetings } from '../interface/IConferenceWithMeetings';
-import { IQueryOptions } from '../interface/IQueryOptions';
-import { Meeting } from './Meeting';
-import { Locality } from './locality';
-import { howLongAgo } from '../util/Date.utils';
-import { getColorBasedOnText } from '../util/Colors.utils';
-import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
-import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
-import { ConferenceService } from '../services/conference.service';
-import { MeetingService } from '../services/meeting.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from '../util/CustomValidators';
-import { Subscription } from 'rxjs';
-import { CitizenSenderModel } from './CitizenSenderModel';
-import { CitizenService } from '../services/citizen.service';
-import { CitizenAuthenticationModel } from './CitizenAuthenticationModel';
-import { LocalityService } from '../services/locality.service';
+import {IAttendee} from '../interface/IAttendee';
+import {IConferenceWithMeetings} from '../interface/IConferenceWithMeetings';
+import {IQueryOptions} from '../interface/IQueryOptions';
+import {Meeting} from './Meeting';
+import {Locality} from './locality';
+import {howLongAgo} from '../util/Date.utils';
+import {getColorBasedOnText} from '../util/Colors.utils';
+import {ActionBarService} from '@app/core/actionbar/app.actionbar.actions.service';
+import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
+import {ConferenceService} from '../services/conference.service';
+import {MeetingService} from '../services/meeting.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CustomValidators} from '../util/CustomValidators';
+import {Subscription} from 'rxjs';
+import {CitizenSenderModel} from './CitizenSenderModel';
+import {CitizenService} from '../services/citizen.service';
+import {CitizenAuthenticationModel} from './CitizenAuthenticationModel';
+import {LocalityService} from '../services/locality.service';
 import * as moment from 'moment';
 
 export enum AuthTypeEnum {
@@ -62,9 +62,9 @@ export class AttendanceModel {
   localityLabel: string;
   optionsLocalities: SelectItem[];
   authTypeEnum: string[] = Object.values(AuthTypeEnum);
-  cpfValidators = [ Validators.required, Validators.maxLength(14), CustomValidators.ValidateCPF ];
-  passwordValidators = [ Validators.required, CustomValidators.AttendeeCitizenPassword ];
-  emailValidators = [ Validators.required, Validators.email ];
+  cpfValidators = [Validators.required, Validators.maxLength(14), CustomValidators.ValidateCPF];
+  passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
+  emailValidators = [Validators.required, Validators.email];
   valueChangeCPFSub: Subscription;
 
   protected actionbarSrv: ActionBarService;
@@ -90,17 +90,37 @@ export class AttendanceModel {
     this.formBuilder = injector.get(FormBuilder);
     this.citizenSrv = injector.get(CitizenService);
     this.localitySrv = injector.get(LocalityService);
+
     this.form = this.formBuilder.group({
-      name: [ '', [ Validators.required, CustomValidators.noWhitespaceValidator ] ],
-      locality: [ '', Validators.required ],
-      authType: [ AuthTypeEnum.CPF, Validators.required ],
-      cpf: [ '', this.cpfValidators ],
-      password: [ '', this.passwordValidators ],
-      email: [ '' ],
-      phone: [ '', Validators.maxLength(20) ],
+      name: ['', [Validators.required, CustomValidators.noWhitespaceValidator]],
+      locality: ['', Validators.required],
+      authType: [AuthTypeEnum.CPF, Validators.required],
+      cpf: ['', this.cpfValidators],
+      password: ['', this.passwordValidators],
+      email: [''],
+      phone: ['', Validators.maxLength(20)],
       resetPassword: false,
     });
+
     this.getConferencesAndMeetings().then();
+  }
+
+  get requestSearch() {
+    return this.editing
+      ? this.meetingSrv.getListAttendees(this.idMeeting, this.getQueryListAttendees())
+      : this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees());
+  }
+
+  get labelBreadCrumb() {
+    return this.editing ? 'attendance.edit' : 'attendance.registerAttendanceIn';
+  }
+
+  get routerLinkItem() {
+    return this.editing ? 'edit' : 'register';
+  }
+
+  get citizenHasNativeAuth() {
+    return this.citizenAutentications.length > 0 ? this.citizenAutentications.findIndex(c => c.loginName === 'Participe') !== -1 : false;
   }
 
   async updateTotalAttendees() {
@@ -108,11 +128,14 @@ export class AttendanceModel {
   }
 
   async selectAttendee(attendee: IAttendee) {
-    const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
+    const {name, locality, authType, cpf, email, phone, password} = this.form.controls;
     try {
       this.isAttendeeSelected = true;
       this.selectedAttende = attendee;
-      const { success, data } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
+      const {
+        success,
+        data
+      } = await this.citizenSrv.GetById(attendee.personId, {search: {conferenceId: this.currentConference.id}});
       if (success) {
         const auhtTypeAttendee = data.typeAuthentication === 'cpf' ? AuthTypeEnum.CPF : AuthTypeEnum.EMAIL;
         name.setValue(data.name);
@@ -139,50 +162,52 @@ export class AttendanceModel {
   }
 
   async save(): Promise<{ success: boolean; result?: any }> {
-    if (this.form.valid) {
-      const { name, locality, phone, authType, cpf, password, email, resetPassword } = this.form.value;
-      const formAPI: CitizenSenderModel = {
-        name,
-        telephone: phone,
-        contactEmail: email,
-        confirmEmail: email,
-        password,
-        confirmPassword: password,
-        cpf,
-        typeAuthentication: authType === AuthTypeEnum.CPF ? 'cpf' : 'mail',
-        selfDeclaration: {
-          conference: this.selectedConference.id,
-          locality,
-        },
-        resetPassword: !!resetPassword,
-      };
-      try {
-        const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);
-        if (result) {
-          this.form.reset();
-          return { success: true, result: { ...result, name: formAPI.name, email: formAPI.confirmEmail } };
-        }
-        throw new Error('errorSaving');
-      } catch (error) {
-        this.messageSrv.add({
-          severity: 'warn',
-          summary: this.translate.instant('error'),
-          detail: this.translate.instant('attendance.error.' + (error === 'errorSaving' ? 'whenSaving' : 'couldNotConnectToServer')),
-        });
-        return { success: false };
-      }
-    } else {
+    if (!this.form.valid) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
         detail: this.translate.instant('attendance.error.invalidForm'),
       });
-      return { success: false };
+
+      return {success: false};
     }
+
+    const {name, locality, phone, authType, cpf, password, email, resetPassword} = this.form.value;
+
+    const formAPI: CitizenSenderModel = {
+      name,
+      telephone: phone,
+      contactEmail: email,
+      confirmEmail: email,
+      password,
+      confirmPassword: password,
+      cpf,
+      typeAuthentication: authType === AuthTypeEnum.CPF ? 'cpf' : 'mail',
+      selfDeclaration: {
+        conference: this.selectedConference.id,
+        locality,
+      },
+      resetPassword: !!resetPassword,
+    };
+
+    const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);
+
+    if (result) {
+      this.form.reset();
+      return {success: true, result: {...result, name: formAPI.name, email: formAPI.confirmEmail}};
+    }
+
+    this.messageSrv.add({
+      severity: 'warn',
+      summary: this.translate.instant('error'),
+      detail: this.translate.instant('attendance.error.errorSaving'),
+    });
+
+    return {success: false};
   }
 
   async searchByName() {
-    if ( !this.idMeeting) {
+    if (!this.idMeeting) {
       return;
     }
     this.listAttendees = [];
@@ -222,7 +247,7 @@ export class AttendanceModel {
   }
 
   handleChangeAuthType(value: AuthTypeEnum) {
-    const { password: passwordControl, email: emailControl, cpf: cpfControl } = this.form.controls;
+    const {password: passwordControl, email: emailControl, cpf: cpfControl} = this.form.controls;
     if (this.valueChangeCPFSub) {
       this.valueChangeCPFSub.unsubscribe();
     }
@@ -287,8 +312,11 @@ export class AttendanceModel {
       this.nameSearch = '';
       this.noResult = false;
       this.breadcrumbSrv.setItems([
-        { label: 'attendance.label', routerLink: [ '/attendance' ] },
-        { label: `${this.labelBreadCrumb} ${this.currentMeeting.localityPlace.name}` },
+        {label: 'attendance.label'},
+        {
+          label: `${this.labelBreadCrumb} ${this.currentMeeting.localityPlace.name}`,
+          routerLink: [`/attendance/${this.routerLinkItem}`]
+        },
       ]);
     }
     await this.setActionBar();
@@ -306,16 +334,14 @@ export class AttendanceModel {
       {
         position: 'RIGHT',
         handle: () => this.updateTotalAttendees(),
-        icon: 'users-solid.svg',
+        icon: 'user-solid.svg',
         label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
       },
     ]);
   }
 
   async getConferencesAndMeetings() {
-
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
-
     const result = await this.conferenceSrv.getConferencesWithPresentialMeetings(date);
 
     this.optionsConference = result;
@@ -331,7 +357,7 @@ export class AttendanceModel {
       const result = await this.localitySrv.getLocalitiesBasedOnConferenceCitizenAuth(this.selectedConference.id);
       this.localityLabel = result.nameType;
       this.localities = result.localities;
-      this.optionsLocalities = result.localities.map(({ id, name }) => ({ label: name, value: id }));
+      this.optionsLocalities = result.localities.map(({id, name}) => ({label: name, value: id}));
     } catch (error) {
       this.messageSrv.add({
         severity: 'warn',
@@ -348,22 +374,22 @@ export class AttendanceModel {
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
-        ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
+        ...this.selectedCounty ? {localities: this.selectedCounty.id} : {},
       },
     };
   }
 
   getHowLongAgo(when: string): string {
     // API date format dd/mm/yyyy hh:mm:ss
-    const [ strDate, strTime ] = when.split(' ');
-    const [ day, month, year ] = strDate.split('/');
+    const [strDate, strTime] = when.split(' ');
+    const [day, month, year] = strDate.split('/');
 
     const date = new Date(`${month}-${day}-${year} ${strTime}`);
     return howLongAgo(date, this.translate.defaultLang);
   }
 
   getToolTipText(person: IAttendee): string {
-    if ( !person.name) {
+    if (!person.name) {
       return this.translate.instant('attendance.tooltipLabelView');
     }
     const names = person.name.trim().split(' ');
@@ -379,20 +405,6 @@ export class AttendanceModel {
 
   getNameIconColor(name: string) {
     return getColorBasedOnText(name);
-  }
-
-  get requestSearch() {
-    return this.editing
-      ? this.meetingSrv.getListAttendees(this.idMeeting, this.getQueryListAttendees())
-      : this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees());
-  }
-
-  get labelBreadCrumb() {
-    return this.editing ? 'attendance.edit' : 'attendance.registerAttendanceIn';
-  }
-
-  get citizenHasNativeAuth() {
-    return this.citizenAutentications.length > 0 ? this.citizenAutentications.findIndex(c => c.loginName === 'Participe') !== -1 : false;
   }
 
   getCPFFromEmailField(emailStr: string): string {

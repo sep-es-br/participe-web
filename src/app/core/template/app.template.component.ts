@@ -1,10 +1,10 @@
 import {Component, Renderer2} from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-template',
   templateUrl: './app.template.component.html',
-  styleUrls: [ './app.template.component.scss' ],
+  styleUrls: ['./app.template.component.scss'],
   animations: [
     trigger('mask-anim', [
       state('void', style({
@@ -44,7 +44,8 @@ export class AppTemplateComponent {
 
   overlayMenuMobileActive: boolean;
 
-  constructor(public renderer: Renderer2) {}
+  constructor(public renderer: Renderer2) {
+  }
 
   onLayoutClick() {
     if (!this.topbarItemClick) {
@@ -72,8 +73,10 @@ export class AppTemplateComponent {
     this.topbarItemClick = true;
 
     if (this.activeTopbarItem === item) {
-      this.activeTopbarItem = null; } else {
-      this.activeTopbarItem = item; }
+      this.activeTopbarItem = null;
+    } else {
+      this.activeTopbarItem = item;
+    }
 
     event.preventDefault();
   }
@@ -96,7 +99,7 @@ export class AppTemplateComponent {
     const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
     layoutLink.href = 'assets/layout/css/' + color + '.css';
 
-    this.changeComponentTheme(event, theme, scheme );
+    this.changeComponentTheme(event, theme, scheme);
 
     event.preventDefault();
   }
@@ -121,7 +124,7 @@ export class AppTemplateComponent {
     event.preventDefault();
   }
 
-  onMenuClick($event) {
+  onMenuClick() {
     this.menuClick = true;
     this.resetMenu = false;
   }

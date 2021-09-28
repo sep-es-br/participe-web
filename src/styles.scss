@@ -9,25 +9,25 @@ button:focus {
 
 input.ng-invalid.ng-touched,
 p-dropdown.ng-invalid.ng-touched > div,
-p-autocomplete.ng-invalid.ng-touched > span > input {
+p-autoComplete.ng-invalid.ng-touched > span > input {
   border: 1.3px solid #f44336 !important;
 }
 
 input.ng-invalid.ng-touched:focus,
 p-dropdown.ng-invalid.ng-touched:focus > div,
-p-autocomplete.ng-invalid.ng-touched:focus > span > input {
+p-autoComplete.ng-invalid.ng-touched:focus > span > input {
   box-shadow: 0 1px 0 0 #f47f6a !important;
 }
 
 input.ng-valid.ng-touched.ng-dirty,
 p-dropdown.ng-valid.ng-touched.ng-dirty > div,
-p-autocomplete.ng-valid.ng-touched.ng-dirty > span > input {
+p-autoComplete.ng-valid.ng-touched.ng-dirty > span > input {
   border: 1.3px solid #549c3d !important;
 }
 
 input.ng-valid.ng-touched.ng-dirty:focus,
 p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
-p-autocomplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
+p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
   box-shadow: 0 1px 0 0 #6d9c5f !important;
 }
 
@@ -86,7 +86,7 @@ form {
 .form-actions {
   display: inline-flex;
   button,
-  p-splitbutton {
+  p-splitButton {
     margin-right: 10px;
   }
 
@@ -119,12 +119,19 @@ div.search {
     display: flex;
     align-items: center;
     > * {
-      margin: 2px;
+      margin: 3px;
     }
   }
 
+  .actions-right {
+    color: silver;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
   img {
-    width: 20px;
+    width: 15px;
+    filter: invert(96%) sepia(0%) saturate(20%) hue-rotate(204deg) brightness(82%) contrast(88%);
   }
 
 }
@@ -183,7 +190,7 @@ section.pagesize-section {
 .loading-overlay {
   width: 100%;
   height: 5px;
-  background-color: grayscale(rgba(0,0,0,.3));
+  background-color: rgba(0,0,0,.3);
   z-index: 99999;
   position: fixed;
   top: 0;
