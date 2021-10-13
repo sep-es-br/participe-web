@@ -8,8 +8,6 @@ import {Injectable} from '@angular/core';
 import {PrepareHttpQuery} from '../util/Query.utils';
 import {environment} from '@environments/environment';
 import {IResultRegionalizationConference} from '../interface/IResultRegionalizationConference';
-import * as moment from 'moment';
-import 'moment-timezone';
 
 @Injectable()
 export class ConferenceService {
@@ -19,30 +17,9 @@ export class ConferenceService {
   constructor(private http: HttpClient) {
   }
 
-  private static updateConferenceDate(conference: Conference) {
-    const confBeginDate = conference.beginDate;
-    const confEndDate = conference.endDate;
-
-    if (confBeginDate != null) {
-      const beginDate = this.extractLocalDate(confBeginDate);
-      conference.beginDate = new Date(beginDate);
-    }
-
-    if (confEndDate != null) {
-      const endDate = this.extractLocalDate(confEndDate);
-      conference.endDate = new Date(endDate);
-    }
-
-    return conference;
-  }
-
-  private static extractLocalDate(date: Date) {
-    return moment.tz(date.toString(), 'DD/MM/yyyy HH:mm:ss', 'Atlantic/Azores').toString();
-  }
-
   async getById(id: number) {
     const conference = await this.http.get<Conference>(`${this.url}/${id}`, {headers: this.headers}).toPromise();
-    return ConferenceService.updateConferenceDate(conference);
+    return conference;
   }
 
   getRegionalization(idConference: number) {
@@ -52,14 +29,13 @@ export class ConferenceService {
 
   async listAll() {
     const conferences = await this.http.get<Conference[]>(this.url, {headers: this.headers}).toPromise();
-    conferences.forEach(conference => ConferenceService.updateConferenceDate(conference));
     return conferences;
   }
 
   async show(id) {
     const url = this.url.concat(`/${id}`);
     const conference = await this.http.get<Conference>(url, {headers: this.headers}).toPromise();
-    return ConferenceService.updateConferenceDate(conference);
+    return conference;
   }
 
   async search(name, plan, year, month) {
@@ -67,7 +43,6 @@ export class ConferenceService {
       .concat(year ? `&year=${year}` : '').concat(month ? `&month=${month}` : '');
 
     const conferences = await this.http.get<Conference[]>(url, {headers: this.headers}).toPromise();
-    conferences.forEach(conference => ConferenceService.updateConferenceDate(conference));
     return conferences;
   }
 

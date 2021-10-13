@@ -129,7 +129,7 @@
       "externalLinkInvalid": "Link externo inválido",
       "researchLinkInvalid": "Link da pesquisa inválido",
       "plan-regionalizable": "É necessário que o plano seja regionalizável",
-      "endDateOutOfRange": "A data de término da conferência deve ser anterior à data de abertura"
+      "endDateOutOfRange": "A data de término da conferência deve ser posterior à data de abertura"
     },
     "image": "Imagem",
     "in-progress": "Consulta em andamento, não pode ser excluída!",
@@ -226,6 +226,7 @@
 		"proposals": "Propostas",
 		"origin": "Origem",
 		"remote": "Remota",
+		"all": "Todos",
 		"counties": "Municípios",
 		"strategicArea": "Área Estratégica",
 		"error": {
@@ -377,6 +378,7 @@
 			"presential": "Presencial",
 			"proposal": "Proposta",
 			"remote": "Remoto",
+			"all": "Todos",
 			"saved_success": "Comentário atualizado com sucesso!",
 			"select_conference": "Selecione a consulta que deseja moderar",
 			"strategic_area": "Área Estratégica"

@@ -129,7 +129,7 @@
       "externalLinkInvalid": "Invalid external link",
       "researchLinkInvalid": "Research link invalid",
       "plan-regionalizable": "The plan must be regionalizable",
-      "endDateOutOfRange": "Conference closure date must be before opening date"
+      "endDateOutOfRange": "Conference closure date must be after opening date"
     },
     "image": "Image",
     "in-progress": "Conference in progress, cannot be deleted!",
@@ -222,6 +222,7 @@
 		"presential": "Presential",
 		"origin": "Origin",
 		"remote": "Remote",
+		"all": "All",
 		"counties": "Counties",
 		"participants": "Participants",
 		"highlights": "Highlights",
@@ -376,6 +377,7 @@
 			"presential": "Presential",
 			"proposal": "Proposal",
 			"remote": "Remote",
+			"all": "All",
 			"saved_success": "Comment saved!",
 			"select_conference": "Select the conference you want to moderate",
 			"strategic_area": "Strategic Area"

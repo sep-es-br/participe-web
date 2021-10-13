@@ -82,21 +82,19 @@ export class ConferenceComponent implements OnInit {
     });
   }
 
-  private static getDate(str) {
+  getDate(str) {
     if (str) {
       if (str instanceof Date) {
         return new Date(str);
       }
-
       const dateTime = str.split(' ');
       const dataArgs = dateTime[0].split('/');
       const timeArgs = dateTime[1].split(':');
-
       return new Date(dataArgs[2], (dataArgs[1] - 1), dataArgs[0], timeArgs[0], timeArgs[1]);
     }
   }
 
-  private static setDate(date: Date) {
+  setDate(date: Date) {
     return moment(date).format('DD/MM/yyyy HH:mm:ss');
   }
 
@@ -171,9 +169,9 @@ export class ConferenceComponent implements OnInit {
 
   async loadConference() {
     this.conference = await this.conferenceService.show(this.idConference);
-    this.minDate = this.conference.beginDate && ConferenceComponent.getDate(this.conference.beginDate);
+    this.minDate = this.conference.beginDate && this.getDate(this.conference.beginDate);
     this.researchMinDate = this.conference.researchConfiguration && this.conference.researchConfiguration.beginDate
-      && ConferenceComponent.getDate(this.conference.researchConfiguration.beginDate);
+      && this.getDate(this.conference.researchConfiguration.beginDate);
     this.selfdeclarations = await this.conferenceService.selfdeclarations(this.conference.id);
     const plan = this.plans.find(p => p.value.id === this.conference.plan.id);
     await this.onChangePlans(plan.value, this.conference);
@@ -269,7 +267,7 @@ export class ConferenceComponent implements OnInit {
     this.conferenceResearchForm = this.formBuilder.group({
       beginDate: null,
       endDate: null,
-      displayModeResearch: 'AUTOMATIC',
+      displayModeResearch: 'MANUAL',
       researchDisplayStatus: 'INACTIVE',
       researchLink: ['', [CustomValidators.noWhitespaceValidator]],
       estimatedTimeResearch: ['', [CustomValidators.noWhitespaceValidator]],
@@ -288,8 +286,8 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.plan.setValue(this.findPlanInList(this.conference.plan));
     this.conferenceForm.controls.serverName.setValue(this.conference.serverName);
     this.conferenceForm.controls.defaultServerConference.setValue(this.conference.defaultServerConference);
-    this.conferenceForm.controls.beginDate.setValue(ConferenceComponent.getDate(this.conference.beginDate));
-    this.conferenceForm.controls.endDate.setValue(ConferenceComponent.getDate(this.conference.endDate));
+    this.conferenceForm.controls.beginDate.setValue(this.getDate(this.conference.beginDate));
+    this.conferenceForm.controls.endDate.setValue(this.getDate(this.conference.endDate));
     this.conferenceForm.controls.titleAuthentication.setValue(this.conference.titleAuthentication);
     this.conferenceForm.controls.subtitleAuthentication.setValue(this.conference.subtitleAuthentication);
     this.conferenceForm.controls.titleParticipation.setValue(this.conference.titleParticipation);
@@ -317,8 +315,8 @@ export class ConferenceComponent implements OnInit {
   }
 
   setConferenceResearchForm() {
-    this.conferenceResearchForm.controls.beginDate.setValue(ConferenceComponent.getDate(this.conference.researchConfiguration.beginDate));
-    this.conferenceResearchForm.controls.endDate.setValue(ConferenceComponent.getDate(this.conference.researchConfiguration.endDate));
+    this.conferenceResearchForm.controls.beginDate.setValue(this.getDate(this.conference.researchConfiguration.beginDate));
+    this.conferenceResearchForm.controls.endDate.setValue(this.getDate(this.conference.researchConfiguration.endDate));
     this.conferenceResearchForm.controls.displayModeResearch.setValue(this.conference.researchConfiguration.displayModeResearch);
     this.conferenceResearchForm.controls.researchDisplayStatus.setValue(this.conference.researchConfiguration.researchDisplayStatus);
     this.conferenceResearchForm.controls.researchLink.setValue(this.conference.researchConfiguration.researchLink);
@@ -466,9 +464,9 @@ export class ConferenceComponent implements OnInit {
   }
 
   validadeResearchDates(event) {
-    this.researchMinDate = ConferenceComponent.getDate(event);
+    this.researchMinDate = this.getDate(event);
     if (this.conferenceResearchForm && this.conferenceResearchForm.controls.endDate.value) {
-      const endDate = ConferenceComponent.getDate(this.conferenceResearchForm.controls.endDate.value);
+      const endDate = this.getDate(this.conferenceResearchForm.controls.endDate.value);
       if (endDate < this.researchMinDate) {
         this.conferenceResearchForm.get('endDate').setValue(this.researchMinDate);
       }
@@ -530,8 +528,10 @@ export class ConferenceComponent implements OnInit {
       this.conferenceResearchForm.controls.researchLink.updateValueAndValidity();
       this.conferenceResearchForm.controls.estimatedTimeResearch.updateValueAndValidity();
 
-      const beginDateResearchForm = this.conferenceResearchForm.controls.beginDate.value;
-      const endDateResearchForm = this.conferenceResearchForm.controls.endDate.value;
+      const beginDateResearchForm = this.conferenceResearchForm.controls.beginDate.value &&
+        this.setDate(this.conferenceResearchForm.controls.beginDate.value);
+      const endDateResearchForm = this.conferenceResearchForm.controls.endDate.value &&
+        this.setDate(this.conferenceResearchForm.controls.endDate.value);
 
       if (beginDateResearchForm || endDateResearchForm) {
         this.conferenceResearchForm.controls.researchLink.setValidators([Validators.required, CustomValidators.ResearchLink]);
@@ -551,25 +551,24 @@ export class ConferenceComponent implements OnInit {
         : [Number(this.conferenceForm.controls.targetedByItems.value)];
 
       const conferenceBeginDate = this.conferenceForm.controls.beginDate.value &&
-        ConferenceComponent.setDate(this.conferenceForm.controls.beginDate.value);
+        this.setDate(this.conferenceForm.controls.beginDate.value);
       const conferenceEndDate = this.conferenceForm.controls.endDate.value &&
-        ConferenceComponent.setDate(this.conferenceForm.controls.endDate.value);
+        this.setDate(this.conferenceForm.controls.endDate.value);
 
       const researchBeginDate = this.conferenceResearchForm.controls.beginDate.value &&
-        ConferenceComponent.setDate(this.conferenceResearchForm.controls.beginDate.value);
+        this.setDate(this.conferenceResearchForm.controls.beginDate.value);
       const researchEndDate = this.conferenceResearchForm.controls.endDate.value &&
-        ConferenceComponent.setDate(this.conferenceResearchForm.controls.endDate.value);
+        this.setDate(this.conferenceResearchForm.controls.endDate.value);
 
-      const beginDate = this.datePipe.transform(ConferenceComponent.getDate(conferenceBeginDate), 'dd/MM/yyyy HH:mm:ss');
-      const endDate = this.datePipe.transform(ConferenceComponent.getDate(conferenceEndDate), 'dd/MM/yyyy HH:mm:ss');
-      const offset = moment.tz(beginDate, 'dd/MM/yyyy HH:mm:ss', moment.tz.guess(true)).format('Z');
+      // const beginDate = this.datePipe.transform(this.getDate(conferenceBeginDate), 'dd/MM/yyyy HH:mm:ss');
+      // const endDate = this.datePipe.transform(this.getDate(conferenceEndDate), 'dd/MM/yyyy HH:mm:ss');
+      // const offset = moment.tz(beginDate, 'dd/MM/yyyy HH:mm:ss', moment.tz.guess(true)).format('Z');
 
       formData = {
         ...formData,
         serverName: this.conferenceForm.controls.serverName.value,
-        beginDate,
-        endDate,
-        offset,
+        beginDate: conferenceBeginDate,
+        endDate: conferenceEndDate,
         plan: formData.plan,
         localityType: formData.localityType,
         fileAuthentication: this.conference.fileAuthentication,
@@ -580,8 +579,8 @@ export class ConferenceComponent implements OnInit {
         externalLinksMenuLabel: this.menuLabelForm.controls.menuLabel.value,
         externalLinks: this.externalLinks,
         researchConfiguration: {
-          beginDate: this.datePipe.transform(ConferenceComponent.getDate(researchBeginDate), 'dd/MM/yyyy HH:mm:ss'),
-          endDate: this.datePipe.transform(ConferenceComponent.getDate(researchEndDate), 'dd/MM/yyyy HH:mm:ss'),
+          beginDate: beginDateResearchForm,
+          endDate: endDateResearchForm,
           displayModeResearch: this.conferenceResearchForm.controls.displayModeResearch.value,
           researchDisplayStatus: this.conferenceResearchForm.controls.researchDisplayStatus.value,
           researchLink: this.conferenceResearchForm.controls.researchLink.value,
@@ -610,9 +609,9 @@ export class ConferenceComponent implements OnInit {
   }
 
   changeBeginDate(event) {
-    this.minDate = ConferenceComponent.getDate(event);
+    this.minDate = this.getDate(event);
     if (this.conferenceForm && this.conferenceForm.value.endDate) {
-      const endDate = ConferenceComponent.getDate(this.conferenceForm.value.endDate);
+      const endDate = this.getDate(this.conferenceForm.value.endDate);
       if (endDate < this.minDate) {
         this.conferenceForm.get('endDate').setValue(this.minDate);
       }

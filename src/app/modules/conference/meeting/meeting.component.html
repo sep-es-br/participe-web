@@ -20,18 +20,18 @@
             <div class="p-grid ui-fluid">
               <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <label for="nameSearch">{{'conference.meeting.name'|translate}}</label>
-                <input id="search-input" pInputText formControlName="name">
+                <input id="nameSearch" pInputText formControlName="name">
               </div>
               <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <label for="beginDate">{{'date.start'|translate}}</label>
-                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="true" [showTime]="true"
+                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="false" [showTime]="true"
                             formControlName="beginDate"
                             [locale]="calendarTranslate">
                 </p-calendar>
               </div>
               <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <label for="endDate">{{'date.end'|translate}}</label>
-                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="true" [showTime]="true" formControlName="endDate"
+                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="false" [showTime]="true" formControlName="endDate"
                             [locale]="calendarTranslate">
                 </p-calendar>
               </div>
@@ -109,7 +109,7 @@
               <div class="p-col-12 p-md-6">
                 <label for="beginDate">{{'conference.meeting.beginDate'|translate}}</label>
                 <p-calendar *ngIf="calendarTranslate" dateFormat="dd/mm/yy" (onSelect)="changeBeginDate($event)"
-                            formControlName="beginDate" [showSeconds]="true" [showTime]="true"
+                            formControlName="beginDate" [showSeconds]="false" [showTime]="true"
                             [locale]="calendarTranslate">
                 </p-calendar>
                 <tt-input-message [form]="form" field="beginDate"></tt-input-message>
@@ -117,7 +117,7 @@
               <div class="p-col-12 p-md-6">
                 <label for="endDate">{{'conference.meeting.endDate'|translate}}</label>
                 <p-calendar *ngIf="calendarTranslate" dateFormat="dd/mm/yy" [showTime]="true" [minDate]="minDate"
-                            formControlName="endDate" [showSeconds]="true" [locale]="calendarTranslate">
+                            formControlName="endDate" [showSeconds]="false" [locale]="calendarTranslate">
                 </p-calendar>
                 <tt-input-message [form]="form" field="endDate"></tt-input-message>
               </div>
@@ -231,7 +231,7 @@
                   <div class="p-grid ui-fluid">
                     <div class="ui-g-12 ui-md-10">
                       <label for="mail"> {{ 'conference.meeting.mail' | translate }}</label>
-                      <input id="search-input" pInputText formControlName="mail">
+                      <input id="mail" pInputText formControlName="mail">
                     </div>
                     <div class="ui-g-12 ui-md-2 p-col-align-end">
                       <button pButton type="submit" icon="pi pi-search"
