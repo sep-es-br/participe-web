@@ -99,6 +99,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
       {label: this.translateSrv.instant('dashboard.proposals'), value: 'PROPOSALS'}
     ];
     this.originOptions = [
+      {label: this.translateSrv.instant('dashboard.all'), value: ''},
       {label: this.translateSrv.instant('dashboard.remote'), value: 'REMOTE'},
       {label: this.translateSrv.instant('dashboard.presential'), value: 'PRESENTIAL'}
     ];
@@ -122,10 +123,13 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
     ];
   }
 
-  async handleConferenceSelected() {
-    this.clearFilters(false);
-    await this.loadConference();
-    await this.loadMeetingsByConferenceSelected();
+  async handleConferenceSelected(event?) {
+    console.log(event);
+    if (this.filters.selectedConference !== null) {
+      this.clearFilters(false);
+      await this.loadConference();
+      await this.loadMeetingsByConferenceSelected();
+    }
   }
 
   async loadConference() {
@@ -251,7 +255,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   clearFilters(clearConference: boolean, clearResult = true) {
     this.filters = {
       ...this.filters,
-      selectedOrigin: null,
+      selectedOrigin: '',
       selectedMeeting: []
     };
     if (clearConference) {

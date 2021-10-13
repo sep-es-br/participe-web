@@ -11,8 +11,10 @@ export class Conference {
   name: string;
   plan: Plan;
   description: string;
-  beginDate: Date;
-  endDate: Date;
+  beginDate: string;
+  endDate: string;
+  beginDateComplet?: Date;
+  endDateComplet: Date;
   titleAuthentication: string;
   subtitleAuthentication: string;
   titleParticipation: string;
@@ -39,8 +41,8 @@ export class Conference {
   backgroundImages: File[];
   meeting?: Meeting[];
   researchConfiguration: {
-    beginDate: Date;
-    endDate: Date;
+    beginDate: string;
+    endDate: string;
     displayModeResearch: string; // AUTOMATIC || MANUAL
     researchDisplayStatus: string; // INACTIVE || ACTIVE
     researchLink: string;
