@@ -20,7 +20,7 @@ export class ControlPanelDashboardService extends BaseService<any> {
                    microregionChartAgroup?: number,
                    microregionLocalitySelected?: number,
                    stLastLevelLocality?: boolean,
-                   structureItemSelected?: number,
+  //                 structureItemSelected?: number,
                    structureItemPlanSelected?: number,
                    stLastLevelPlanItem?: boolean) {
     const url = this.urlBase.concat('?idConference=').concat(idConference ? idConference.toString() : '')
@@ -30,7 +30,7 @@ export class ControlPanelDashboardService extends BaseService<any> {
       .concat(microregionChartAgroup ? `&microregionChartAgroup=${microregionChartAgroup.toString()}` : '')
       .concat(microregionLocalitySelected ? `&microregionLocalitySelected=${microregionLocalitySelected.toString()}` : '')
       .concat(stLastLevelLocality ? `&stLastLevelLocality=${stLastLevelLocality.toString()}` : '')
-      .concat(structureItemSelected ? `&structureItemSelected=${structureItemSelected.toString()}` : '')
+//      .concat(structureItemSelected ? `&structureItemSelected=${structureItemSelected.toString()}` : '')
       .concat(structureItemPlanSelected ? `&structureItemPlanSelected=${structureItemPlanSelected.toString()}` : '')
       .concat(stLastLevelPlanItem ? `&stLastLevelPlanItem=${stLastLevelPlanItem.toString()}` : '');
     return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildHeaders() }).toPromise();
