@@ -35,17 +35,17 @@ export class ModerationService {
   }
 
   getCommentsForModeration(conferenceId: number, filter: ModerationFilter) {
-    const localityIds = filter.localityIds;
-    const planItensIds = filter.planItemIds;
-    filter.localityIds = undefined;
-    filter.planItemIds = undefined;
+    const localityId = filter.localityId;
+    const planItensId = filter.planItemId;
+    //filter.localityIds = undefined;
+    //filter.planItemIds = undefined;
     const query = {
       conferenceId,
       ...filter
     };
     const url = `${environment.apiEndpoint}/moderation${qs.stringify(query, {addQueryPrefix: true})}`
-      .concat(localityIds ? `&localityIds=${localityIds.toString()}` : '')
-      .concat(planItensIds ? `&planItemIds=${planItensIds.toString()}` : '');
+      .concat(localityId ? `&localityIds=${localityId.toString()}` : '')
+      .concat(planItensId ? `&planItemIds=${planItensId.toString()}` : '');
     return this.http.get<ModerationComments[]>(url, {headers: this.headers}).toPromise();
   }
 
