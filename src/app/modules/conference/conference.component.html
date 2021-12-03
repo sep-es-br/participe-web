@@ -205,7 +205,7 @@
                                   styleClass="tabStyleClass">
                     <div class="p-col-12 p-md-6" *ngIf="!conference.fileAuthentication">
                       <h3>{{'file.label'|translate}}</h3>
-                      <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
+                      <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                                     (uploadHandler)="uploadFile($event, 'authentication')"
                                     [chooseLabel]="'file.browse'|translate"
                                     [uploadLabel]="'file.send'|translate"
@@ -241,7 +241,7 @@
                   <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
                     <div class="p-col-12 p-md-6" *ngIf="!conference.fileParticipation">
                       <h3>{{'file.label'|translate}}</h3>
-                      <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
+                      <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                                     (uploadHandler)="uploadFile($event, 'participation')"
                                     [chooseLabel]="'file.browse'|translate"
                                     [uploadLabel]="'file.send'|translate"
@@ -526,7 +526,7 @@
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
                   <div class="p-col-12 p-md-3 fileupload-container">
-                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="2000000"
+                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="5000000"
                                   auto="auto"
                                   customUpload="true" (uploadHandler)="uploadBackGroundImages($event, uploader)"
                                   [chooseLabel]="'add'|translate" [uploadLabel]="'file.send'|translate"
