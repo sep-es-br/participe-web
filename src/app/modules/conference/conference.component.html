@@ -160,7 +160,7 @@
                         <label for="beginDate">{{'conference.opening'|translate}}</label>
                         <p-calendar dateFormat="dd/mm/yy"
                                     (onSelect)="changeBeginDate($event); setStatusDisplayConference()"
-                                    [showTime]="true" formControlName="beginDate" [locale]="calendarTranslate">
+                                    [showTime]="true" [showSeconds]="true" formControlName="beginDate" [locale]="calendarTranslate">
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
                       </div>
@@ -170,7 +170,7 @@
                                     [locale]="calendarTranslate"
                                     dateFormat="dd/mm/yy"
                                     (onSelect)="setStatusDisplayConference()" formControlName="endDate"
-                                    [showTime]="true">
+                                    [showTime]="true" [showSeconds]="true" >
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="endDate"></tt-input-message>
                       </div>

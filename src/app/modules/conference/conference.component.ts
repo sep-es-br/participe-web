@@ -90,7 +90,7 @@ export class ConferenceComponent implements OnInit {
       const dateTime = str.split(' ');
       const dataArgs = dateTime[0].split('/');
       const timeArgs = dateTime[1].split(':');
-      return new Date(dataArgs[2], (dataArgs[1] - 1), dataArgs[0], timeArgs[0], timeArgs[1]);
+      return new Date(dataArgs[2], (dataArgs[1] - 1), dataArgs[0], timeArgs[0], timeArgs[1], timeArgs[2]);
     }
   }
 
