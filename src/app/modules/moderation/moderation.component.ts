@@ -90,20 +90,40 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.typeOfParticipation = this.moderationSrv.TypeParticipation.map(type => (
       {value: type, label: this.translate.instant(`moderation.label.${type.toLowerCase()}`)}
     ));
-    this.typeOfParticipation.unshift({value: '', label: allLabel});
+    this.typeOfParticipation.unshift({value: null, label: allLabel});
 
     this.status = this.moderationSrv.StatusTypes.map(status => ({
       value: status,
       label: this.translate.instant(status.toLowerCase())
     }));
-    this.status.unshift({value: allLabel, label: allLabel});
+    this.status.unshift({value: "All", label: allLabel});
 
 
-    this.filter.type = '';
+    //this.filter.type = '';
+
   }
 
   async prepareScreen() {
-    this.filter.status = 'Pending';
+
+    var strSavedFilter: string;
+    var strSearchState: string;
+
+    if((strSavedFilter = sessionStorage.getItem("moderationFilter")) !== null){
+      this.filter = JSON.parse(strSavedFilter);
+    }
+    else{
+      this.filter = {
+        planItemId: null,
+        localityId: null,
+        status: "Pending",
+        type: null,
+        text: "",
+        initialDate: null,
+        endDate: null
+      }
+    }
+
+    this.search = (sessionStorage.getItem("searchState") === "show");
 
     await this.loadComments();
     await this.loadLocalitiesOptions();
@@ -155,6 +175,8 @@ export class ModerationComponent implements OnInit, OnDestroy {
       return null;
     }
 
+    sessionStorage.setItem("moderationFilter", JSON.stringify(this.filter));
+
     try {
       this.conferenceComments = await this.moderationSrv.getCommentsForModeration(this.conferenceSelect.id, this.filter);
     } catch (error) {
@@ -189,7 +211,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
       if (this.conferenceSelect.id != null) {
         const data = await this.moderationSrv.getLocalities(this.conferenceSelect.id);
         this.microregion = _.map(data.localities, ({id, name}) => ({value: id, label: name}));
-        this.microregion.unshift({value: '', label: 'Todos'});
+        this.microregion.unshift({value: null, label: 'Todos'});
         this.labelMicroregion = data.regionalizable;
       }
     } catch (error) {
@@ -206,7 +228,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
         const data = await this.moderationSrv.getPlanItem(this.conferenceSelect.id);
         this.planItem = _.map(_.get(data, 'planItems', []),
           ({planItemId, planItemName}) => ({value: planItemId, label: planItemName}));
-        this.planItem.unshift({value: '', label: 'Todos'});
+        this.planItem.unshift({value: null, label: 'Todos'});
         this.labelPlanItem = _.get(data, 'structureItemName');
       }
     } catch (error) {
@@ -225,13 +247,13 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.filter[field] = moment(event).format('DD/MM/yyyy');
   }
 
-  selectLocality(locality: SelectItem) {
-    this.filter.localityIds = [locality.value];
-  }
+//  selectLocality(locality: SelectItem) {
+//    this.filter.localityIds = [locality.value];
+//  }
 
-  selectPlanItem(planItem: SelectItem) {
-    this.filter.planItemIds = [planItem.value];
-  }
+//  selectPlanItem(planItem: SelectItem) {
+//    this.filter.planItemId = [planItem.value];
+//  }
 
   async changeSmallFilter(status: string) {
     this.filter.status = status;
@@ -243,6 +265,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async searchHandle() {
     await this.loadComments();
+
     this.configureActionBar();
   }
 
@@ -336,6 +359,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
         console.error('reject');
       },
     });
+  }
+
+  async toggleSearch() {
+    this.search = !this.search;
+    sessionStorage.setItem("searchState", this.search ? "show" : "hide" );
   }
 
   private buildBreadcrumb() {

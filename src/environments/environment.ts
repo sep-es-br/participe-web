@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   redirectAdmin: false,
-  apiEndpoint: 'https://localhost:8443/participe',
+  apiEndpoint: 'http://localhost:8080/participe',
 };
 
 /*

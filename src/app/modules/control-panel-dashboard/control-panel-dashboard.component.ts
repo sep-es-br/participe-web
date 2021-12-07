@@ -124,7 +124,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   }
 
   async handleConferenceSelected(event?) {
-    console.log(event);
+    //console.log(event);
     if (this.filters.selectedConference !== null) {
       this.clearFilters(false);
       await this.loadConference();
@@ -144,9 +144,9 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
     await this.loadCharts();
   }
 
-  async loadRegionStructureConference() {
+  async loadRegionStructureConference(loadChart?: boolean) {
     if (this.filters.selectedResult === 'PARTICIPANTS') {
-      await this.loadLocalityCitizenItems();
+      await this.loadLocalityCitizenItems(loadChart);
     } else {
       await this.loadRegionalizationItems();
     }
@@ -188,23 +188,23 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
     // this.clearBarChartSelecteds();
     // this.showMicroregionChart = true;
     // this.showStrategicAreaChart = true;
-    await this.loadRegionStructureConference();
+    await this.loadRegionStructureConference(true);
     // await this.loadCharts();
   }
 
   checkRegionalization() {
     const plan = this.conference.plan;
-    if (plan && plan.structure) {
-      if (plan.structure.regionalization) {
+    if (plan) {// && plan.structure) {
+      //if (plan.structure.regionalization) {
         return plan.localitytype;
-      } else {
-        return undefined;
-      }
+      //} else {
+      //  return undefined;
+      //}
     }
     return undefined;
   }
 
-  async loadLocalityCitizenItems() {
+  async loadLocalityCitizenItems(loadChart = false) {
     const typeLocalityCitizenParents = await this.dashboardSrv.getAllTypeLocalityFromParents({
       idDomain: this.conference.plan.domain.id,
       idTypeLocality: this.conference.localityType.id
@@ -219,7 +219,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
         id: this.microregionChartAgroupOptions[0].value, name: this.microregionChartAgroupOptions[0].label
       };
     }
-    if (this.itemStructureSelected && this.microregionChartAgroupSelected) {
+    if (loadChart && this.itemStructureSelected && this.microregionChartAgroupSelected) {
       await this.loadCharts();
     }
   }
@@ -305,7 +305,7 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   }
 
   async handleDisplayModeMicroregionChartChange() {
-    if (this.dashboardDataResponse.microregionChart && this.dashboardDataResponse.microregionChart.length > 0) {
+    if (this.dashboardDataResponse && this.dashboardDataResponse.microregionChart && this.dashboardDataResponse.microregionChart.length > 0) {
       switch (this.microregionChartDisplaySelected) {
         case 'VALUE_DESC':
           const microregionChartDataOrderedDesc = Array.from(this.dashboardDataResponse.microregionChart);
@@ -403,11 +403,11 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
         this.microregionChartAgroupSelected,
         barRegionSelected,
         !this.showMicroregionChart,
-        this.itemStructureSelected.id,
+//        this.itemStructureSelected.id,
         barStrategicAreaSelected,
         !this.showStrategicAreaChart
       );
-      console.log(result);
+     //console.log(result);
       if (result) {
         this.dashboardDataResponse = Object.assign({}, result);
         this.dashboardData = Object.assign({}, result);

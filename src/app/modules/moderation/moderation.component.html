@@ -12,29 +12,26 @@
              [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
         </div>
         <a class="search" [ngClass]="{'search-full': search}"
-           (click)="search = !search">{{ (search ? 'hide' : 'search') | translate }}</a>
+           (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
       </div>
       <div class="p-col-12 p-md-12" *ngIf="search">
         <div class="p-grid ui-fluid search-complete">
           <div class="p-col-12 p-md-3 form-group">
             <label class="form-label">{{ 'moderation.filters.status' | translate }}</label>
-            <p-dropdown [options]="status" [(ngModel)]="filter.status" [placeholder]="'placeholder.select'|translate">
+            <p-dropdown [options]="status" [(ngModel)]="filter.status">
             </p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ 'moderation.filters.type_of_participation' | translate }}</label>
-            <p-dropdown [options]="typeOfParticipation" [(ngModel)]="filter.type"
-                        [placeholder]="'placeholder.select'|translate"></p-dropdown>
+            <p-dropdown [options]="typeOfParticipation" [(ngModel)]="filter.type"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group" *ngIf="regionalization">
             <label>{{ labelMicroregion }}</label>
-            <p-dropdown [options]="microregion" (onChange)="selectLocality($event)"
-                        [placeholder]="'placeholder.select'|translate"></p-dropdown>
+            <p-dropdown [options]="microregion" [(ngModel)]="filter.localityId"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ labelPlanItem }}</label>
-            <p-dropdown [options]="planItem" (onChange)="selectPlanItem($event)"
-                        [placeholder]="'placeholder.select'|translate"></p-dropdown>
+            <p-dropdown [options]="planItem" [(ngModel)]="filter.planItemId"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group">
             <label>{{ 'moderation.filters.text' | translate }}</label>

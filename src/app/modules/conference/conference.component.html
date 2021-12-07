@@ -160,7 +160,7 @@
                         <label for="beginDate">{{'conference.opening'|translate}}</label>
                         <p-calendar dateFormat="dd/mm/yy"
                                     (onSelect)="changeBeginDate($event); setStatusDisplayConference()"
-                                    [showTime]="true" formControlName="beginDate" [locale]="calendarTranslate">
+                                    [showTime]="true" [showSeconds]="true" formControlName="beginDate" [locale]="calendarTranslate">
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
                       </div>
@@ -170,7 +170,7 @@
                                     [locale]="calendarTranslate"
                                     dateFormat="dd/mm/yy"
                                     (onSelect)="setStatusDisplayConference()" formControlName="endDate"
-                                    [showTime]="true">
+                                    [showTime]="true" [showSeconds]="true" >
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="endDate"></tt-input-message>
                       </div>
@@ -205,7 +205,7 @@
                                   styleClass="tabStyleClass">
                     <div class="p-col-12 p-md-6" *ngIf="!conference.fileAuthentication">
                       <h3>{{'file.label'|translate}}</h3>
-                      <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
+                      <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                                     (uploadHandler)="uploadFile($event, 'authentication')"
                                     [chooseLabel]="'file.browse'|translate"
                                     [uploadLabel]="'file.send'|translate"
@@ -241,7 +241,7 @@
                   <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
                     <div class="p-col-12 p-md-6" *ngIf="!conference.fileParticipation">
                       <h3>{{'file.label'|translate}}</h3>
-                      <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" customUpload="true"
+                      <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                                     (uploadHandler)="uploadFile($event, 'participation')"
                                     [chooseLabel]="'file.browse'|translate"
                                     [uploadLabel]="'file.send'|translate"
@@ -526,7 +526,7 @@
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
                   <div class="p-col-12 p-md-3 fileupload-container">
-                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="2000000"
+                    <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="5000000"
                                   auto="auto"
                                   customUpload="true" (uploadHandler)="uploadBackGroundImages($event, uploader)"
                                   [chooseLabel]="'add'|translate" [uploadLabel]="'file.send'|translate"
