@@ -314,7 +314,7 @@ export class AttendanceModel {
       this.breadcrumbSrv.setItems([
         {label: 'attendance.label'},
         {
-          label: `${this.labelBreadCrumb} ${this.currentMeeting.localityPlace.name}`,
+          label: `${this.labelBreadCrumb} ${this.currentMeeting.name}`,
           routerLink: [`/attendance/${this.routerLinkItem}`]
         },
       ]);

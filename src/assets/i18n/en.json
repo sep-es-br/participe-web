@@ -21,7 +21,8 @@
 		"authentication": "Authentication",
 		"county": "County",
 		"edit": "Edit Attendees",
-		"editAttendance": "Edit attendance",
+		"editAttendance": "Edit Attendance",
+		"editAttendanceIn": "Edit attendance in meeting: ",
 		"error": {
 			"couldNotConnectToServer": "Error trying to connect to server, try again",
 			"couldNotGetCitizenInfo": "Error retrieving information about user, try again",
