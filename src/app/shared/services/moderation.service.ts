@@ -19,11 +19,11 @@ export class ModerationService {
   constructor(private http: HttpClient) {
   }
 
-  get StatusTypes(): string[] {
+  get StatusOptions(): string[] {
     return ['Pending', 'Filed', 'Removed', 'Published'];
   }
 
-  get TypeParticipation(): string[] {
+  get FromOptions(): string[] {
     return ['Presential', 'Remote'];
   }
 

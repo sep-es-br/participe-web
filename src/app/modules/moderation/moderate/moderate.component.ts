@@ -84,8 +84,8 @@ export class ModerateComponent implements OnInit {
   async loadComment() {
     try {
       this.comment = await this.moderationSrv.getModeration(this.commentId, this.conferenceId) as ModerationComments;
-      if ( !this.comment.classification) {
-        this.comment.classification = 'proposal';
+      if ( !this.comment.type) {
+        this.comment.type = 'Proposal';
       }
     } catch (error) {
       console.error(error);
@@ -173,9 +173,9 @@ export class ModerateComponent implements OnInit {
   async save(status: string) {
     try {
       const sender: ModerateUpdate = new ModerateUpdate();
-      const { commentId, classification, planItemId, localityId, text } = this.comment;
+      const { commentId, type, planItemId, localityId, text } = this.comment;
       sender.id = commentId;
-      sender.classification = classification;
+      sender.type = type;
       sender.planItem = _.get(this.selectedStrategyArea, 'data', planItemId);
       sender.locality = localityId;
       sender.text = text;
@@ -183,7 +183,7 @@ export class ModerateComponent implements OnInit {
 
       await this.moderationSrv.update(sender);
 
-      const proposal = this.comment.classification && this.comment.classification === 'proposal';
+      const proposal = this.comment.type && this.comment.type === 'proposal';
       let msg = null;
       switch (status) {
         case 'Pending':

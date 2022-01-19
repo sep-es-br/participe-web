@@ -349,7 +349,7 @@
 			"status": "Status",
 			"text": "text",
 			"trash": "Trash",
-			"type_of_participation": "Type of participation"
+			"from": "Origin"
 		},
 		"label": {
 			"btnModerate": "Moderate",

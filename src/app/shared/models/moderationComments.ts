@@ -14,7 +14,7 @@ export interface ModerationComments {
   moderated: boolean;
   moderatorName: string;
   commentStructure: CommentStructure[];
-  classification: string;
+  from: string;
   moderateTime: string;
   moderatorId: number;
   disableModerate: boolean;

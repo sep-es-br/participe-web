@@ -15,6 +15,7 @@ import * as moment from 'moment';
 import {Router} from '@angular/router';
 import {AuthService} from '@app/shared/services/auth.service';
 import {ConferenceService} from '@app/shared/services/conference.service';
+import { TypeofExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-moderation',
@@ -26,9 +27,10 @@ export class ModerationComponent implements OnInit, OnDestroy {
   search: boolean;
   regionalization: boolean;
   loading: boolean;
-  status: SelectItem[] = [];
-  typeOfParticipation: SelectItem[] = [];
-  calendarTranslate: any;
+  statusOptions: SelectItem[] = [];
+  fromOptions: SelectItem[] = [];
+  typeOptions: SelectItem[] = [];
+  calendarTranslate: any = calendar;
   microregion: SelectItem[] = [];
   planItem: SelectItem[] = [];
   labelMicroregion: string;
@@ -59,14 +61,15 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    await this.loadConferencesActives();
-    await this.loadRegionalizationConference();
-    await this.prepareScreen();
-    this.translateChange.getCurrentLang().subscribe(({lang}) => {
+    await this.translateChange.getCurrentLang().subscribe(({lang}) => {
       this.language = lang;
       this.calendarTranslate = calendar[lang];
       this.populateOptions();
     });
+    await this.loadConferencesActives();
+    await this.loadRegionalizationConference();
+    await this.prepareScreen();
+
   }
 
   async loadRegionalizationConference() {
@@ -87,19 +90,16 @@ export class ModerationComponent implements OnInit, OnDestroy {
   populateOptions() {
     const allLabel = this.translate.instant('all');
 
-    this.typeOfParticipation = this.moderationSrv.TypeParticipation.map(type => (
-      {value: type, label: this.translate.instant(`moderation.label.${type.toLowerCase()}`)}
+    this.fromOptions = this.moderationSrv.FromOptions.map(from => (
+      {value: from, label: this.translate.instant(`moderation.label.${from.toLowerCase()}`)}
     ));
-    this.typeOfParticipation.unshift({value: null, label: allLabel});
+    this.fromOptions.unshift({value: null, label: allLabel});
 
-    this.status = this.moderationSrv.StatusTypes.map(status => ({
+    this.statusOptions = this.moderationSrv.StatusOptions.map(status => ({
       value: status,
       label: this.translate.instant(status.toLowerCase())
     }));
-    this.status.unshift({value: "All", label: allLabel});
-
-
-    //this.filter.type = '';
+    this.statusOptions.unshift({value: "All", label: allLabel});
 
   }
 
@@ -116,7 +116,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
         planItemId: null,
         localityId: null,
         status: "Pending",
-        type: null,
+        from: null,
         text: "",
         initialDate: null,
         endDate: null
@@ -293,10 +293,10 @@ export class ModerationComponent implements OnInit, OnDestroy {
     });
   }
 
-  async selectClassificationComment(item: ModerationComments) {
+  async selectCommentType(item: ModerationComments) {
     try {
       await this.moderationSrv.update({
-        classification: item.classification,
+        type: item.type,
         id: item.commentId,
       } as any);
       this.messageService.add({
@@ -345,7 +345,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   async alterModerator(comment: ModerationComments) {
-    const proposal = comment.classification && comment.classification === 'proposal';
+    const proposal = comment.type && comment.type === 'proposal';
     const msg = proposal ? 'moderation.label.confirm_alter_moderator_proposal' : 'moderation.label.confirm_alter_moderator_comment';
     await this.confirmationService.confirm({
       message: this.translate.instant(msg),
@@ -374,7 +374,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   private async _publish(comment: ModerationComments) {
-    const proposal = comment.classification && comment.classification === 'proposal';
+    const proposal = comment.type && comment.type === 'proposal';
     const msg = proposal ? 'moderation.label.msg.publish_proposal' : 'moderation.label.msg.publish_comment';
     try {
       await this.moderationSrv.update({status: 'Published', id: comment.commentId});

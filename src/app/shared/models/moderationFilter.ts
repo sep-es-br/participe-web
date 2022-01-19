@@ -1,7 +1,6 @@
-
 export class ModerationFilter {
   status: string;
-  type: string;
+  from: string;
   text: string;
   localityId: number;
   planItemId: number;

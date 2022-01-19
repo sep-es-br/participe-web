@@ -350,7 +350,7 @@
 			"status": "Situação",
 			"text": "Texto",
 			"trash": "Lixo",
-			"type_of_participation": "Tipo de Participação"
+			"from": "Origem"
 		},
 		"label": {
 			"btnModerate": "Moderar",

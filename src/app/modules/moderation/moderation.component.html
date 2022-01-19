@@ -18,12 +18,12 @@
         <div class="p-grid ui-fluid search-complete">
           <div class="p-col-12 p-md-3 form-group">
             <label class="form-label">{{ 'moderation.filters.status' | translate }}</label>
-            <p-dropdown [options]="status" [(ngModel)]="filter.status">
+            <p-dropdown [options]="statusOptions" [(ngModel)]="filter.status">
             </p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group">
-            <label>{{ 'moderation.filters.type_of_participation' | translate }}</label>
-            <p-dropdown [options]="typeOfParticipation" [(ngModel)]="filter.type"></p-dropdown>
+            <label>{{ 'moderation.filters.from' | translate }}</label>
+            <p-dropdown [options]="fromOptions" [(ngModel)]="filter.from"></p-dropdown>
           </div>
           <div class="p-col-12 p-md-3 form-group" *ngIf="regionalization">
             <label>{{ labelMicroregion }}</label>
@@ -83,12 +83,12 @@
           </div>
           <div class="p-col-12 p-md-2 p-col-align-center options">
             <p-radioButton [name]="'optionModeration_' + comment.commentId"
-                           (onClick)="selectClassificationComment(comment)" [(ngModel)]="comment.classification"
-                           value="proposal" [label]="'moderation.label.proposal' | translate">
+                           (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
+                           value="Proposal" [label]="'moderation.label.proposal' | translate">
             </p-radioButton>
             <p-radioButton [name]="'optionModeration_' + comment.commentId"
-                           (onClick)="selectClassificationComment(comment)" [(ngModel)]="comment.classification"
-                           value="comment" [label]="'moderation.label.comment'| translate ">
+                           (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
+                           value="Comment" [label]="'moderation.label.comment'| translate ">
             </p-radioButton>
           </div>
           <div class="p-col-12 p-md-1 p-col-align-center actions">

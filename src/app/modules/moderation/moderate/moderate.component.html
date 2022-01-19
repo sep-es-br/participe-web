@@ -11,10 +11,10 @@
         <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/200</span>
       </div>
       <div class="p-col-12 p-md-12 margin-item">
-        <p-radioButton [(ngModel)]="comment.classification" name="optionModeration" value="proposal"
+        <p-radioButton [(ngModel)]="comment.type" name="optionModeration" value="Proposal"
           [label]="'moderation.label.proposal' | translate">
         </p-radioButton>
-        <p-radioButton [(ngModel)]="comment.classification" name="optionModeration" value="comment"
+        <p-radioButton [(ngModel)]="comment.type" name="optionModeration" value="Comment"
           [label]="'moderation.label.comment'| translate ">
         </p-radioButton>
       </div>
