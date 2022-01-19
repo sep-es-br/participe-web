@@ -72,8 +72,9 @@
               {{ comment.text }}
             </div>
             <div class="row info">
-              {{ comment.citizenName }} | {{ timesAgo(comment?.time) }} |
-              {{ 'moderation.label.' + comment?.type.toLowerCase() | translate}} |
+              {{ comment.citizenName }} |
+              {{ 'moderation.label.' + comment?.from.toLowerCase() | translate }} |
+              {{ timesAgo(comment?.time) }} |
               {{ comment.localityName }}
             </div>
           </div>
