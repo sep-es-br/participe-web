@@ -156,49 +156,51 @@
                 <p-accordion [multiple]="true" class="accordion-citizen-portal">
                   <p-accordionTab header="{{'conference.display' | translate}}">
                     <div class="p-grid ui-fluid">
-                      <div class="ui-g-12 ui-md-3 ui-lg-3 begin-date">
-                        <label for="beginDate">{{'conference.opening'|translate}}</label>
-                        <p-calendar dateFormat="dd/mm/yy"
-                                    (onSelect)="changeBeginDate($event); setStatusDisplayConference()"
-                                    [showTime]="true" [showSeconds]="true" formControlName="beginDate" [locale]="calendarTranslate">
-                        </p-calendar>
-                        <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
-                      </div>
-                      <div class="ui-g-12 ui-md-3 ui-lg-3 end-date">
-                        <label for="endDate">{{'conference.closure'|translate}}</label>
-                        <p-calendar (onClose)="changeEndDate()" [minDate]="minDate"
-                                    [locale]="calendarTranslate"
-                                    dateFormat="dd/mm/yy"
-                                    (onSelect)="setStatusDisplayConference()" formControlName="endDate"
-                                    [showTime]="true" [showSeconds]="true" >
-                        </p-calendar>
-                        <tt-input-message [form]="conferenceForm" field="endDate"></tt-input-message>
-                      </div>
-                      <div class="ui-g-12 ui-md-12 ui-lg-12 container-label-display-mode">
-                        <label class="label-display-mode">{{'conference.mode'| translate}}</label>
-                      </div>
-                      <div class="ui-g-12 ui-md-3 ui-lg-3 display-mode">
-                        <div class="options-container">
-                          <div class="display-item">
-                            <p-radioButton name="optionsDisplayConfig" value="AUTOMATIC"
-                                           (onClick)="setStatusDisplayConference()" [label]="'automatic'|translate"
-                                           formControlName="displayMode">
-                            </p-radioButton>
-                          </div>
-                          <div class="display-item">
-                            <p-radioButton name="optionsDisplayConfig" value="MANUAL" [label]="'manual'|translate"
-                                           formControlName="displayMode">
-                            </p-radioButton>
+                        <div class="ui-g-12 ui-md-12 ui-lg-12 container-label-display-mode">
+                          <label class="label-display-mode">{{'conference.mode'| translate}}</label>
+                        </div>
+                        <div class="ui-g-12 ui-md-3 ui-lg-2 display-mode">
+                          <div class="options-container">
+                            <div class="display-item">
+                              <p-radioButton name="optionsDisplayConfig" value="AUTOMATIC"
+                                            (onClick)="setStatusDisplayConference()" [label]="'automatic'|translate"
+                                            formControlName="displayMode">
+                              </p-radioButton>
+                            </div>
+                            <div class="display-item">
+                              <p-radioButton name="optionsDisplayConfig" value="MANUAL" [label]="'manual'|translate"
+                                            formControlName="displayMode">
+                              </p-radioButton>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="ui-g-12 ui-md-3 ui-lg-3">
-                        <p-dropdown [options]="optionsStatusConference" formControlName="displayStatusConference"
-                                    [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
-                                    [readonly]="conferenceForm.controls.displayMode.value === 'AUTOMATIC'">
-                        </p-dropdown>
-                        <tt-input-message [form]="conferenceForm" field="displayStatusConference"></tt-input-message>
-                      </div>
+                        <div class="ui-g-12 ui-md-4 ui-lg-3 ui-xl-2">
+                          <p-dropdown [options]="optionsStatusConference" formControlName="displayStatusConference"
+                                      [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
+                                      [readonly]="conferenceForm.controls.displayMode.value === 'AUTOMATIC'">
+                          </p-dropdown>
+                          <tt-input-message [form]="conferenceForm" field="displayStatusConference"></tt-input-message>
+                        </div>
+                    </div>
+                    <div class="p-grid ui-fluid">
+                        <div class="ui-g-12 ui-md-4 ui-lg-2 begin-date">
+                          <label for="beginDate">{{'conference.opening'|translate}}</label>
+                          <p-calendar dateFormat="dd/mm/yy"
+                                      (onSelect)="changeBeginDate($event); setStatusDisplayConference()"
+                                      [showTime]="true" [showSeconds]="true" formControlName="beginDate" [locale]="calendarTranslate">
+                          </p-calendar>
+                          <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
+                        </div>
+                        <div class="ui-g-12 ui-md-4 ui-lg-2 end-date">
+                          <label for="endDate">{{'conference.closure'|translate}}</label>
+                          <p-calendar (onClose)="changeEndDate()" [minDate]="minDate"
+                                      [locale]="calendarTranslate"
+                                      dateFormat="dd/mm/yy"
+                                      (onSelect)="setStatusDisplayConference()" formControlName="endDate"
+                                      [showTime]="true" [showSeconds]="true" >
+                          </p-calendar>
+                          <tt-input-message [form]="conferenceForm" field="endDate"></tt-input-message>
+                        </div>
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
@@ -468,26 +470,10 @@
               <p-accordionTab header="{{'conference.research' | translate}}">
                 <form [formGroup]="conferenceResearchForm" *ngIf="conferenceResearchForm">
                   <div class="p-grid ui-fluid">
-                    <div class="ui-g-12 ui-md-2 ui-lg-2 begin-date">
-                      <label for="beginDate">{{'begin'|translate}}</label>
-                      <p-calendar dateFormat="dd/mm/yy" showTime="true" hourFormat="24" formControlName="beginDate"
-                                  [locale]="calendarTranslate"
-                                  (onSelect)="validadeResearchDates($event); setResearchDisplayStatus()">
-                      </p-calendar>
-                      <tt-input-message [form]="conferenceResearchForm" field="beginDate"></tt-input-message>
-                    </div>
-                    <div class="ui-g-12 ui-md-2 ui-lg-2 end-date">
-                      <label for="endDate">{{'conference.closure'|translate}}</label>
-                      <p-calendar dateFormat="dd/mm/yy" [minDate]="researchMinDate && researchMinDate"
-                                  (onSelect)="setResearchDisplayStatus()" formControlName="endDate" showTime="true"
-                                  hourFormat="24" [locale]="calendarTranslate">
-                      </p-calendar>
-                      <tt-input-message [form]="conferenceResearchForm" field="endDate"></tt-input-message>
-                    </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12 container-label-display-mode">
                       <label class="label-display-mode">{{'conference.displayOfTheCitizenPortal'| translate}}</label>
                     </div>
-                    <div class="ui-g-6 ui-md-1 ui-lg-1 diplay-mode">
+                    <div class="ui-g-6 ui-md-3 ui-lg-2 diplay-mode">
                       <div class="options-container">
                         <div class="display-item">
                           <p-radioButton name="displayOptionsResearch" value="AUTOMATIC" [label]="'automatic'|translate"
@@ -501,13 +487,31 @@
                         </div>
                       </div>
                     </div>
-                    <div class="ui-g-6 ui-md-1 ui-lg-1">
+                    <div class="ui-g-12 ui-md-4 ui-lg-3 ui-xl-2">
                       <p-dropdown [options]="optionsStatusResearchConference" formControlName="researchDisplayStatus"
                                   [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
                                   [readonly]="conferenceResearchForm.controls.displayModeResearch.value === 'AUTOMATIC'">
                       </p-dropdown>
                       <tt-input-message [form]="conferenceResearchForm" field="researchDisplayStatus">
                       </tt-input-message>
+                    </div>
+                  </div>
+                  <div class="p-grid ui-fluid">
+                    <div class="ui-g-12 ui-md-4 ui-lg-2 begin-date">
+                      <label for="beginDate">{{'begin'|translate}}</label>
+                      <p-calendar dateFormat="dd/mm/yy" showTime="true" hourFormat="24" formControlName="beginDate"
+                                  [locale]="calendarTranslate"
+                                  (onSelect)="validadeResearchDates($event); setResearchDisplayStatus()">
+                      </p-calendar>
+                      <tt-input-message [form]="conferenceResearchForm" field="beginDate"></tt-input-message>
+                    </div>
+                    <div class="ui-g-12 ui-md-4 ui-lg-2 end-date">
+                      <label for="endDate">{{'conference.closure'|translate}}</label>
+                      <p-calendar dateFormat="dd/mm/yy" [minDate]="researchMinDate && researchMinDate"
+                                  (onSelect)="setResearchDisplayStatus()" formControlName="endDate" showTime="true"
+                                  hourFormat="24" [locale]="calendarTranslate">
+                      </p-calendar>
+                      <tt-input-message [form]="conferenceResearchForm" field="endDate"></tt-input-message>
                     </div>
                     <div class="p-col-12 p-md-12">
                       <label for="researchLink">Link</label>
