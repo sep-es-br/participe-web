@@ -35,7 +35,7 @@
               </div>
               <div class="p-col-12 p-md-6 server-name">
                 <label for="serverName">{{'conference.serverName'|translate}}</label>
-                <input pInputText formControlName="serverName" (blur)="validateDefaultConferenceServer()">
+                <input pInputText formControlName="serverName" (blur)="validateDefaultConferenceServer()" placeholder="https://my.domain.com/">
                 <tt-input-message [form]="conferenceForm" field="serverName"></tt-input-message>
               </div>
               <div class="p-col-12 p-md-6 switch-default-conference">
