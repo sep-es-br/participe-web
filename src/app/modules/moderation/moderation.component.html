@@ -1,18 +1,21 @@
 <app-template>
   <div class="p-grid ui-fluid">
     <div class="p-col-12 p-lg-12">
-      <div class="search-small-container">
-        <div class="search-itens" *ngIf="!search">
-          <a class="search" (click)="changeSmallFilter('Pending')"
-             [ngClass]="{'filter-active': filter.status === 'Pending'}">{{ 'moderation.filters.pending'| translate }}</a>
-          |
-          <a class="search" (click)="changeSmallFilter('All')"
-             [ngClass]="{'filter-active': filter.status === 'All'}">{{ 'moderation.filters.all'| translate }}</a> |
-          <a class="search" (click)="changeSmallFilter('Removed')"
-             [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
+      <div class="p-col-12 p-lg-12 search-small-container">
+        <div class="p-col-6 p-lg-6 search-itens">
+          <div *ngIf="!search">
+            <a class="search" (click)="changeSmallFilter('Pending')"
+              [ngClass]="{'filter-active': filter.status === 'Pending'}">{{ 'moderation.filters.pending'| translate }}</a> |
+            <a class="search" (click)="changeSmallFilter('All')"
+              [ngClass]="{'filter-active': filter.status === 'All'}">{{ 'moderation.filters.all'| translate }}</a> |
+            <a class="search" (click)="changeSmallFilter('Removed')"
+              [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
+          </div>
         </div>
-        <a class="search" [ngClass]="{'search-full': search}"
+        <div class="p-col-6 p-lg-6 search-right">
+          <a class="search"
            (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
+        </div>
       </div>
       <div class="p-col-12 p-md-12" *ngIf="search">
         <div class="p-grid ui-fluid search-complete">
