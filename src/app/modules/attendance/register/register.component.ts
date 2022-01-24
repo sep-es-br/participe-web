@@ -1,7 +1,8 @@
+import { delay } from 'rxjs/operators';
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {MessageService} from 'primeng/api';
+import {Message, MessageService} from 'primeng/api';
 import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
 
 import {IAttendee} from '@app/shared/interface/IAttendee';
@@ -13,6 +14,7 @@ import {AuthService} from '@app/shared/services/auth.service';
 import {LocalityService} from '@app/shared/services/locality.service';
 import * as moment from 'moment';
 import 'moment-timezone';
+import { formatNumber } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -70,7 +72,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
 
-    const timeZone = moment.tz.guess(true);
+    var now = new Date();
+    var timeZone = now.toString().split(' ')[5];
+
     const result = await this.meetingSrv.postCheckIn(this.idMeeting, attendee.personId, timeZone);
 
     if (result) {
@@ -79,10 +83,13 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('attendance.successDetail.checkin')
+        detail: this.translate.instant('attendance.successDetail.checkin', {name: attendee.name.toUpperCase()}),
+        life: 10000
       });
+
       this.isAttendeeSelected = false;
       this.selectedAttende = null;
+      this.cleanListAtendees();
       await this.setActionBar();
     } else {
       this.messageSrv.add({
