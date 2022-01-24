@@ -46,7 +46,7 @@
 		"saveAndRegister": "Salvar e Registrar Presença",
 		"selectMeeting": "Selecionar Reunião",
 		"successDetail": {
-			"checkin": "Presença registrada!",
+			"checkin": "Presença registrada para {{name}}",
 			"saveAccount": "Usuário salvo!",
 			"uncheckin": "Prenseça removida!"
 		},

@@ -340,6 +340,11 @@ export class AttendanceModel {
     ]);
   }
 
+  async cleanListAtendees() {
+    this.listAttendees = [];
+    this.nameSearch = '';
+  }
+
   async getConferencesAndMeetings() {
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
     const result = await this.conferenceSrv.getConferencesWithPresentialMeetings(date);
