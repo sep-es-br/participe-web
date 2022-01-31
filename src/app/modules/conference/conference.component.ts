@@ -1,5 +1,4 @@
-import { FileCtrl } from './../../shared/models/file';
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe, Location} from '@angular/common';
@@ -22,14 +21,12 @@ import * as moment from 'moment';
 import {IHowItWorkStep} from '@app/shared/interface/IHowItWorkStep';
 import {IExternalLinks} from '@app/shared/interface/IExternalLinks';
 import {CustomValidators} from '@app/shared/util/CustomValidators';
-import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-conference',
   templateUrl: './conference.component.html',
   styleUrls: ['./conference.component.scss'],
 })
-
 export class ConferenceComponent implements OnInit {
 
   idConference: number;
@@ -59,12 +56,9 @@ export class ConferenceComponent implements OnInit {
   clonedExternalLinks: { [s: string]: IExternalLinks; } = {};
   showTargetedByItems = false;
   conferenceResearchForm: FormGroup;
+  backgroundImages: File[];
   menuLabelForm: FormGroup;
   howItWorksForm: FormGroup;
-
-  participationImages: FileCtrl[] = [];
-  authenticationImages: FileCtrl[] = [];
-  backgroundImages: FileCtrl[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -81,7 +75,8 @@ export class ConferenceComponent implements OnInit {
     private actRouter: ActivatedRoute,
     private filesSrv: FilesService,
     private structureItemSrv: StructureItemService,
-    private location: Location)  {
+    private location: Location,
+  ) {
     this.actRouter.queryParams.subscribe(async queryParams => {
       this.idConference = queryParams.id;
     });
@@ -192,30 +187,7 @@ export class ConferenceComponent implements OnInit {
       ...link,
       tableId: i + 1,
     }));
-
-    if (this.conference.fileAuthentication !== undefined && this.conference.fileAuthentication !== null) {
-      this.authenticationImages.push({
-        file: this.conference.fileAuthentication,
-        toAdd: false,
-        toDelete: false
-      });
-    }
-    if (this.conference.fileParticipation !== undefined && this.conference.fileParticipation !== null) {
-      this.participationImages.push({
-        file: this.conference.fileParticipation,
-        toAdd: false,
-        toDelete: false
-      });
-    }
-    if (this.conference.backgroundImages !== undefined && this.conference.backgroundImages !== null) {
-      this.conference.backgroundImages.forEach(image => {
-        this.backgroundImages.push({
-          file: image,
-          toAdd: false,
-          toDelete: false
-        });
-      });
-    }
+    this.backgroundImages = this.conference.backgroundImages;
     this.moderatorsEnabled = this.conference.moderators && this.conference.moderators.length > 0 ? this.conference.moderators : [];
     this.moderators = [];
   }
@@ -588,54 +560,9 @@ export class ConferenceComponent implements OnInit {
       const researchEndDate = this.conferenceResearchForm.controls.endDate.value &&
         this.setDate(this.conferenceResearchForm.controls.endDate.value);
 
-      let i = 0;
-      for (i = this.authenticationImages.length-1; i >= 0 ; i--) {
-       if ((this.authenticationImages[i].file.id === null
-            || this.authenticationImages[i].file.id === undefined)
-            && this.authenticationImages[i].toAdd) {
-          this.conference.fileAuthentication = await this.uploadFile(i, 'authentication');
-        }
-        else if (this.authenticationImages[i].file.id !== null
-          && this.authenticationImages[i].file.id !== undefined
-          && this.authenticationImages[i].toDelete) {
-          await this.removeFile(this.authenticationImages[i].file.id, 'authentication');
-        }
-
-      }
-
-      for (i = this.participationImages.length-1; i >= 0 ; i--) {
-        if ((this.participationImages[i].file.id === null
-            || this.participationImages[i].file.id === undefined)
-            && this.participationImages[i].toAdd) {
-          this.conference.fileParticipation = await this.uploadFile(i, 'participation');
-        }
-        else if (this.participationImages[i].file.id !== null
-          && this.participationImages[i].file.id !== undefined
-          && this.participationImages[i].toDelete) {
-          await this.removeFile(this.participationImages[i].file.id, 'participation');
-        }
-      }
-
-      for (i = this.backgroundImages.length-1; i >= 0; i--) {
-        if ((this.backgroundImages[i].file.id === null
-            || this.backgroundImages[i].file.id === undefined)
-            && this.backgroundImages[i].toAdd) {
-          const uploadedFile: File = await this.uploadFile(i, 'background');
-          if (uploadedFile !== null) {
-            this.backgroundImages[i].file = uploadedFile;
-          }
-        }
-        else if (this.backgroundImages[i].file.id !== null
-          && this.backgroundImages[i].file.id !== undefined
-          && this.backgroundImages[i].toDelete) {
-          await this.removeFile(this.backgroundImages[i].file.id, 'background');
-        }
-      }
-      this.conference.backgroundImages = this.backgroundImages.map(image => {
-        if (image.file.id !== null && image.file.id !== undefined && !image.toDelete) {
-          return image.file;
-        }
-      });
+      // const beginDate = this.datePipe.transform(this.getDate(conferenceBeginDate), 'dd/MM/yyyy HH:mm:ss');
+      // const endDate = this.datePipe.transform(this.getDate(conferenceEndDate), 'dd/MM/yyyy HH:mm:ss');
+      // const offset = moment.tz(beginDate, 'dd/MM/yyyy HH:mm:ss', moment.tz.guess(true)).format('Z');
 
       formData = {
         ...formData,
@@ -659,10 +586,10 @@ export class ConferenceComponent implements OnInit {
           researchLink: this.conferenceResearchForm.controls.researchLink.value,
           estimatedTimeResearch: this.conferenceResearchForm.controls.estimatedTimeResearch.value,
         },
-        backgroundImages: this.conference.backgroundImages
+        backgroundImages: this.backgroundImages,
       };
 
-      this.conferenceService.save(formData, !!this.idConference);
+      await this.conferenceService.save(formData, !!this.idConference);
 
       this.messageService.add({
         severity: 'success',
@@ -768,163 +695,82 @@ export class ConferenceComponent implements OnInit {
       });
     }
   }
-  async uploadFile(index: number, setFile: string): Promise<File> {
+
+  async uploadFile(data: { files: File }, setFile: string) {
     const formData: FormData = new FormData();
-    let file: any;
+    const file = data.files[0];
+    formData.append('file', file, file.name);
     try {
       switch (setFile) {
-        case 'authentication':
-          if (this.authenticationImages[index].file.id === null || this.authenticationImages[index].file.id === undefined) {
-            file = this.authenticationImages[index].file;
-            formData.append('file', file, file.name);
-            return await this.filesSrv.uploadFile(formData);
-          }
-          break;
         case 'participation':
-          if (this.participationImages[index].file.id === null || this.participationImages[index].file.id === undefined) {
-            file = this.participationImages[index].file;
-            formData.append('file', file, file.name);
-            return await this.filesSrv.uploadFile(formData);
-          }
+          this.conference.fileParticipation = await this.filesSrv.uploadFile(formData);
           break;
-        case 'background':
-          if (this.backgroundImages[index].file.id === null || this.backgroundImages[index].file.id === undefined) {
-            file = this.backgroundImages[index].file;
-            formData.append('file', file, file.name);
-            return await this.filesSrv.uploadFile(formData);
-          }
+        case 'authentication':
+          this.conference.fileAuthentication = await this.filesSrv.uploadFile(formData);
           break;
       }
-
     } catch (error) {
       this.messageService.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
       });
-      return null;
     }
   }
 
-  syncFiles2Upload(data: {files: File[]}, setFile: string) {
-    let i = 0;
-    switch (setFile) {
-      case 'participation':
-        this.participationImages = this.participationImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
-        for (i = 0; i < data.files.length; i++) {
-          this.participationImages.push({file: data.files[i], toDelete: false, toAdd: true});
+  async uploadBackGroundImages(data: { files: any[] }, uploader) {
+    const files = data.files.filter(file => {
+      if (!this.backgroundImages || !this.backgroundImages.find(image => image.name === file.name)) {
+        return file;
+      }
+    });
+    const uploadedImages = await Promise.all(files.map(async (file) => {
+      const formData: FormData = new FormData();
+      formData.append('file', file, file.name);
+      try {
+        return await this.filesSrv.uploadFile(formData);
+      } catch (error) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: this.translate.instant('error'),
+        });
+      }
+    }));
+    if (this.backgroundImages && this.backgroundImages.length > 0) {
+      uploadedImages.forEach(item => {
+        if (!this.backgroundImages.find(file => file.id === item.id)) {
+          this.backgroundImages.push(item);
         }
-        break;
-      case 'authentication':
-        this.authenticationImages = this.authenticationImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
-        for (i = 0; i < data.files.length; i++) {
-          this.authenticationImages.push({file: data.files[i], toDelete: false, toAdd: true});
-        }
-        break;
-      case 'background':
-        this.backgroundImages = this.backgroundImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
-        for (i = 0; i < data.files.length; i++) {
-          this.backgroundImages.push({file: data.files[i], toDelete: false, toAdd: true});
-        }
-        break;
+      });
+    } else {
+      this.backgroundImages = uploadedImages;
     }
+    uploader.clear();
   }
 
-  addFiles2Upload(data: {files: File[]}, setFile: string) {
-    let i = 0;
-    switch (setFile) {
-      case 'participation':
-        for (i = 0; i < data.files.length; i++) {
-          this.participationImages.push({file: data.files[i], toDelete: false, toAdd: true});
-        }
-        break;
-      case 'authentication':
-        for (i = 0; i < data.files.length; i++) {
-          this.authenticationImages.push({file: data.files[i], toDelete: false, toAdd: true});
-        }
-        break;
-      case 'background':
-        for (i = 0; i < data.files.length; i++) {
-          this.backgroundImages.push({file: data.files[i], toDelete: false, toAdd: true});
-        }
-        break;
-    }
+  async deleteBackgroundImage(id: number) {
+    this.backgroundImages = this.backgroundImages.filter(image => image.id !== id);
   }
 
   getUrlFile(url) {
     return `${environment.apiEndpoint}/files/${url}`;
   }
 
-  async removeFile(id: number, from: string) {
+  async removeFileParticipation() {
     try {
-      await this.planService.deleteLogo(id).toPromise();
+      await this.planService.deleteLogo(this.conference.fileParticipation.id).toPromise();
     } catch (err) {
       console.error(err);
     }
-    switch (from) {
-      case 'authentication':
-        this.authenticationImages = this.authenticationImages.filter(image => image.file.id !== id);
-        break;
-      case 'participation':
-        this.participationImages = this.participationImages.filter(image => image.file.id !== id);
-        break;
-      case 'background':
-        this.backgroundImages = this.backgroundImages.filter(image => image.file.id !== id);
-        break;
-    }
+    this.conference.fileParticipation = null;
   }
 
-  noSavedImages2Show(images: FileCtrl[]): boolean {
-    const toShow = images.filter(img => (img.file.id !== null && img.file.id !== undefined && !img.toDelete));
-    return (toShow.length === 0);
-  }
-
-  prepare2RemoveSavedImage(image2Delete: FileCtrl, from: string) {
-    switch (from) {
-      case 'participation':
-        this.participationImages.forEach(image => {
-          if ((image.file.id !== null && image.file.id !== null) && image.file.id === image2Delete.file.id) {
-            image.toDelete = true;
-          }
-        });
-        break;
-
-      case 'authentication':
-        this.authenticationImages.forEach(image => {
-          if ((image.file.id !== null && image.file.id !== undefined) && image.file.id === image2Delete.file.id) {
-            image.toDelete = true;
-          }
-        });
-        break;
-
-
-      case 'background':
-        this.backgroundImages.forEach(image => {
-          if ((image.file.id !== null && image.file.id !== undefined) && image.file.id === image2Delete.file.id) {
-            image.toDelete = true;
-          }
-        });
-        break;
-
+  async removeFileAuthentication() {
+    try {
+      await this.planService.deleteLogo(this.conference.fileAuthentication.id).toPromise();
+    } catch (err) {
+      console.error(err);
     }
-  }
-
-  async removeUnsavedFile(data: {file: File}, from: string) {
-    switch (from) {
-      case 'participation':
-        this.participationImages = this.participationImages
-          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
-        break;
-
-      case 'authentication':
-        this.authenticationImages = this.authenticationImages
-          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
-        break;
-
-      case 'background':
-        this.backgroundImages = this.backgroundImages
-          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
-        break;
-    }
+    this.conference.fileAuthentication = null;
   }
 
   async onChangePlans(plan, conference?) {
