@@ -6,3 +6,9 @@ export class File {
   mimeType: string;
   subtype: string;
 }
+
+export class FileCtrl {
+  file: File;
+  toDelete: boolean = false;
+  toAdd: boolean = false;
+}
