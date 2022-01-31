@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { async } from '@angular/core/testing';
 
 @Injectable()
 export class FilesService {
@@ -8,7 +9,8 @@ export class FilesService {
 
   constructor(private http: HttpClient) {}
 
-  uploadFile(file: FormData) {
-    return this.http.post<any>(`${this.url}/upload`, file).toPromise();
+  async uploadFile(file: FormData){
+    var ret = await this.http.post<any>(`${this.url}/upload`, file).toPromise();
+    return ret;
   }
 }

@@ -205,21 +205,26 @@
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
                                   styleClass="tabStyleClass">
-                    <div class="p-col-12 p-md-6" *ngIf="!conference.fileAuthentication">
-                      <h3>{{'file.label'|translate}}</h3>
-                      <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
-                                    (uploadHandler)="uploadFile($event, 'authentication')"
-                                    [chooseLabel]="'file.browse'|translate"
-                                    [uploadLabel]="'file.send'|translate"
-                                    [cancelLabel]="'cancel'|translate"></p-fileUpload>
+                      <div class="p-col-12 p-md-6" *ngIf="noSavedImages2Show(authenticationImages)">
+                        <h3>{{'file.label'|translate}}</h3>
+                        <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
+                                      (onSelect)="syncFiles2Upload($event, 'authentication')"
+                                      (onRemove)="removeUnsavedFile($event, 'authentication')"
+                                      [chooseLabel]="'file.browse'|translate"
+                                      [uploadLabel]="'file.send'|translate"
+                                      [cancelLabel]="'cancel'|translate">
+                        </p-fileUpload>
+                      </div>
+                    <div *ngFor="let image of authenticationImages">
+                      <div class="p-col-12 p-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                        <h3>{{'conference.image'|translate}}</h3>
+                        <img [src]="getUrlFile(image.file.id)" alt="Imagem Autenticação" width="120px"
+                            style="padding: 20px;">
+                        <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
+                                (click)="prepare2RemoveSavedImage(image, 'authentication')"></button>
+                      </div>
                     </div>
-                    <div class="p-col-12 p-md-2" *ngIf="conference.fileAuthentication">
-                      <h3>{{'conference.image'|translate}}</h3>
-                      <img [src]="getUrlFile(conference.fileAuthentication.id)" alt="Imagem Autenticação" width="120px"
-                           style="padding: 20px;">
-                      <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                              (click)="removeFileAuthentication()"></button>
-                    </div>
+
                     <div class="p-col-12 p-md-6">
                       <label for="titleAuthentication">{{'conference.title'|translate}}</label>
                       <input pInputText formControlName="titleAuthentication">
@@ -241,20 +246,23 @@
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
-                    <div class="p-col-12 p-md-6" *ngIf="!conference.fileParticipation">
+                    <div class="p-col-12 p-md-6" *ngIf="noSavedImages2Show(participationImages)">
                       <h3>{{'file.label'|translate}}</h3>
                       <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
-                                    (uploadHandler)="uploadFile($event, 'participation')"
+                                    (onSelect)="syncFiles2Upload($event, 'participation')"
+                                    (onRemove)="removeUnsavedFile($event, 'participation')"
                                     [chooseLabel]="'file.browse'|translate"
                                     [uploadLabel]="'file.send'|translate"
                                     [cancelLabel]="'cancel'|translate"></p-fileUpload>
                     </div>
-                    <div class="p-col-12 p-md-2" *ngIf="conference.fileParticipation">
-                      <h3>{{'conference.image'|translate}}</h3>
-                      <img [src]="getUrlFile(conference.fileParticipation.id)" alt="Imagem Participação" width="120px"
-                           style="padding: 20px;">
-                      <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                              (click)="removeFileParticipation()"></button>
+                    <div *ngFor="let image of participationImages">
+                      <div class="p-col-12 p-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                        <h3>{{'conference.image'|translate}}</h3>
+                        <img [src]="getUrlFile(image.file.id)" alt="Imagem Participação" width="120px"
+                            style="padding: 20px;">
+                        <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
+                                (click)="prepare2RemoveSavedImage(image, 'participation')"></button>
+                      </div>
                     </div>
                     <div class="p-col-12 p-md-6">
                       <label for="titleParticipation">{{'conference.title'|translate}}</label>
@@ -529,18 +537,21 @@
               </p-accordionTab>
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
-                  <div class="p-col-12 p-md-3 fileupload-container">
+                  <div class="p-col-12 fileupload-container">
                     <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="5000000"
                                   auto="auto"
-                                  customUpload="true" (uploadHandler)="uploadBackGroundImages($event, uploader)"
+                                  customUpload="true"
+                                  (onSelect)="addFiles2Upload($event, 'background')"
+                                  (onRemove)="removeUnsavedFile($event, 'background')"
                                   [chooseLabel]="'add'|translate" [uploadLabel]="'file.send'|translate"
                                   [cancelLabel]="'cancel'|translate">
                     </p-fileUpload>
                   </div>
-                  <div class="p-col-12 p-md-12 background-images-container" *ngIf="backgroundImages">
-                    <div class="p-col-12 p-md-1 background-image-item" *ngFor="let image of backgroundImages">
-                      <img class="background-image" width="120px" [src]="getUrlFile(image.id)" alt="Imagem Background">
-                      <i class="pi pi-times" (click)="deleteBackgroundImage(image.id)"></i>
+                  <div *ngFor="let image of backgroundImages"
+                      class="p-col-12 p-md-4 p-lg-3 p-xl-2 background-images-container" >
+                    <div class="background-image-item" *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
+                      <img class="background-image" width="100%" [src]="getUrlFile(image.file.id)" alt="Imagem Background">
+                      <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
                     </div>
                   </div>
                 </div>
