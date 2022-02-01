@@ -599,8 +599,8 @@ export class ConferenceComponent implements OnInit {
           && this.authenticationImages[i].file.id !== undefined
           && this.authenticationImages[i].toDelete) {
           await this.removeFile(this.authenticationImages[i].file.id, 'authentication');
+          this.conference.fileAuthentication = null;
         }
-
       }
 
       for (i = this.participationImages.length-1; i >= 0 ; i--) {
@@ -613,6 +613,7 @@ export class ConferenceComponent implements OnInit {
           && this.participationImages[i].file.id !== undefined
           && this.participationImages[i].toDelete) {
           await this.removeFile(this.participationImages[i].file.id, 'participation');
+          this.conference.fileParticipation = null;
         }
       }
 
