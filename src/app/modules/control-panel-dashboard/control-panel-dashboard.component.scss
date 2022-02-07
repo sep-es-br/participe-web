@@ -81,6 +81,7 @@
     //flex-direction: column;
     padding: 2em;
     margin: 15px;
+    height: 780px;
   }
 
   .selected-bar-values {
@@ -232,7 +233,7 @@
 
   .chart {
     height: 600px;
-    overflow-y: scroll;
+    //overflow-y: scroll;
   }
 
   .chart-heatmap {
@@ -263,6 +264,7 @@
     flex-direction: column;
     padding: 1em;
     margin: 0;
+    height: 780px;
   }
   .chart-heatmap-container {
     padding: 1em 1em 0.5em;
