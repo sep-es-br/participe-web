@@ -480,8 +480,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
       sender.receptionists = [];
       sender.receptionists = this.receptionistsActived ? this.receptionistsActived.map(r => r.id) : [];
       sender.channels = this.channels;
-      sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate), 'dd/MM/yyyy HH:mm:ss');
-      sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate), 'dd/MM/yyyy HH:mm:ss');
+      sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
       sender.localityPlace = _.get(sender, 'localityPlace.id');
       sender.localityCovers = _.map((sender.localityCovers as Locality[]), l => l.id);
       sender.segmentations = _.map((sender.segmentations as IResultPlanItemByConference[]), p => p.id);
