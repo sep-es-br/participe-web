@@ -56,13 +56,13 @@
           <div class="meeting-item" *ngFor="let meeting of meetings">
             <div class="info-container">
               <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL'">
-                <img src="../../../../assets/images/marker-alt.png" class="marker-img-solo" alt="">
+                <img src="assets/layout/images/icons/marker-alt.png" class="marker-img-solo" alt="">
               </div>
               <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'VIRTUAL'">
                 <i class="pi pi-desktop icon-type-meeting desktop-icon"></i>
               </div>
               <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL_VIRTUAL'">
-                <img src="../../../../assets/images/marker-alt.png" class="marker-img" alt="">
+                <img src="assets/layout/images/icons/marker-alt.png" class="marker-img" alt="">
                 <i class="pi pi-desktop icon-type-meeting"></i>
               </div>
               <div>
