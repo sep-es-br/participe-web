@@ -63,6 +63,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
   channels: IChannel[] = [];
   clonedChannels: IChannel[] = [];
 
+  resultBeginDate:any;
+  resultEndDate:any;
+  beginDateLengh1:string;
+  beginDateLengh2:number;
+  endDateLengh1:string;
+  endDateLengh2:number;
+
   localityPlaceValidators = Validators.required;
   addressValidators = Validators.required;
   placeValidators = Validators.required;
@@ -480,8 +487,28 @@ export class MeetingComponent implements OnInit, OnDestroy {
       sender.receptionists = [];
       sender.receptionists = this.receptionistsActived ? this.receptionistsActived.map(r => r.id) : [];
       sender.channels = this.channels;
-      sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
-      sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      this.resultBeginDate=   sender.beginDate;
+      this.beginDateLengh1 = this.resultBeginDate;
+      this.beginDateLengh2=   this.beginDateLengh1.length;
+      this.resultEndDate=   sender.endDate;
+      this.endDateLengh1 = this.resultEndDate;
+      this.endDateLengh2=   this.endDateLengh1.length;
+      if(this.beginDateLengh2 == 16){
+        sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      }else{
+        sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate), 'dd/MM/yyyy HH:mm:ss');
+        sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      }
+      if(this.endDateLengh2 == 16){
+        sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      }else{
+        sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate), 'dd/MM/yyyy HH:mm:ss');
+        sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      }
+      //sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate), 'dd/MM/yyyy HH:mm:ss');
+      //sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
+      //sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate), 'dd/MM/yyyy HH:mm:ss');
+      //sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
       sender.localityPlace = _.get(sender, 'localityPlace.id');
       sender.localityCovers = _.map((sender.localityCovers as Locality[]), l => l.id);
       sender.segmentations = _.map((sender.segmentations as IResultPlanItemByConference[]), p => p.id);
