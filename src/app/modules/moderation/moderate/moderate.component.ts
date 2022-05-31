@@ -61,7 +61,9 @@ export class ModerateComponent implements OnInit {
       await this.loadComment();
       await this.loadConference();
       await this.loadRegionalizationConference();
-      await this.loadLocalitiesOptions();
+      if(this.regionalization){
+        await this.loadLocalitiesOptions();
+      }
       this.buildBreadcrumb();
     });
   }
@@ -133,7 +135,7 @@ export class ModerateComponent implements OnInit {
     try {
       const data = await this.moderationSrv.getLocalities(this.conferenceId);
       this.microregion = _.map(data.localities, ({ id, name }) => ({ value: id, label: name }));
-      this.microregion.unshift({ value: '', label: 'Todos' });
+      //this.microregion.unshift({ value: '', label: 'Todos' });
       this.labelMicroregion = data.regionalizable;
     } catch (error) {
       this.messageService.add({
