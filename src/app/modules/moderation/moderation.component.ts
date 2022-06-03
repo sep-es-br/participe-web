@@ -66,10 +66,10 @@ export class ModerationComponent implements OnInit, OnDestroy {
       this.calendarTranslate = calendar[lang];
       this.populateOptions();
     });
+
     await this.loadConferencesActives();
     await this.loadRegionalizationConference();
     await this.prepareScreen();
-
   }
 
   async loadRegionalizationConference() {
@@ -151,22 +151,27 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   async loadConferencesActives() {
-    try {
-      const data = await this.moderationSrv.getConferencesActive(false);
-      this.conferencesActives = data;
-      if (data.length > 0) {
-        if (data.filter(conf => conf.isActive).length === 0) {
-          this.conferenceSelect = data[0];
-        } else {
-          this.conferenceSelect = data.filter(conf => conf.isActive)[0];
+    if (sessionStorage.getItem("selectedConference") === null) {
+      try {
+        const data = await this.moderationSrv.getConferencesActive(false);
+        this.conferencesActives = data;
+        if (data.length > 0) {
+          if (data.filter(conf => conf.isActive).length === 0) {
+            this.conferenceSelect = data[0];
+          } else {
+            this.conferenceSelect = data.filter(conf => conf.isActive)[0];
+          }
         }
+      } catch (error) {
+        console.error(error);
+        this.messageService.add({
+          severity: 'error', summary: 'Erro',
+          detail: this.translate.instant('moderation.error.fetch.conferences'),
+        });
       }
-    } catch (error) {
-      console.error(error);
-      this.messageService.add({
-        severity: 'error', summary: 'Erro',
-        detail: this.translate.instant('moderation.error.fetch.conferences'),
-      });
+    }
+    else {
+      this.conferenceSelect = JSON.parse(sessionStorage.getItem('selectedConference'));
     }
   }
 
@@ -271,6 +276,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
+    sessionStorage.setItem('selectedConference', JSON.stringify(conference));
     await this.prepareScreen();
     this.showSelectConference = false;
   }
