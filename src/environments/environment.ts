@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   redirectAdmin: false,
   apiEndpoint: 'http://localhost:8080/participe',
+  logoutURIAcessoCidadao: 'https://acessocidadao.es.gov.br/is/logout',
 };
 
 /*

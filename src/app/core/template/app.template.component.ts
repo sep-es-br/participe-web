@@ -1,3 +1,4 @@
+import { AuthService } from '@app/shared/services/auth.service';
 import {Component, Renderer2} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
@@ -44,7 +45,8 @@ export class AppTemplateComponent {
 
   overlayMenuMobileActive: boolean;
 
-  constructor(public renderer: Renderer2) {
+  constructor(public renderer: Renderer2,
+              public authService: AuthService) {
   }
 
   onLayoutClick() {
@@ -83,6 +85,7 @@ export class AppTemplateComponent {
 
   onTopbarSubItemClick(event) {
     event.preventDefault();
+    this.authService.signOut();
   }
 
   changeComponentTheme(event, theme, scheme) {
