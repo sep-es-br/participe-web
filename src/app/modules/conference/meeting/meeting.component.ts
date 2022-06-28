@@ -251,8 +251,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
   async addReceptionist(receptionist: IPerson) {
     const person = await this.meetingSrv.getReceptionistByEmail(receptionist.contactEmail);
     if (person) {
-      this.receptionistsActived.push(person);
-      this.receptionistsSearch = [];
+      person.name = receptionist.name;
+      if (!this.receptionistsActived) {
+        this.receptionistsActived = [];
+      }
+      if (!(this.receptionistsActived.find((p) => (p.contactEmail === person.contactEmail)))) {
+        this.receptionistsActived.push(person);
+      }
       this.setFormSearchReceptionists();
     }
   }
@@ -446,7 +451,19 @@ export class MeetingComponent implements OnInit, OnDestroy {
       meeting.localityCovers = _.map(meeting.localityCovers as Locality[], l => ({id: l.id}) as any);
       meeting.segmentations = _.map(meeting.segmentations as IResultPlanItemByConference[], s => ({id: s.id}) as any);
       meeting.localityPlace = {id: _.get(meeting, 'localityPlace.id')} as any;
+
       this.receptionistsActived = meeting.receptionists as IPerson[];
+      if (this.receptionistsActived) {
+        this.receptionistsActived.forEach(async (rec) => {
+          const acPeople = await this.conferenceSrv.searchReceptionists('', rec.contactEmail);
+          const acPerson = acPeople.find((p) => (p.contactEmail === rec.contactEmail));
+          if (acPerson) {
+            rec.name = acPerson.name;
+          }
+        });
+      }
+
+
       this.meetingId = meetingId;
       this.channels = meeting.channels ? meeting.channels : [];
       this.setForm(meeting);
@@ -505,10 +522,6 @@ export class MeetingComponent implements OnInit, OnDestroy {
         sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate), 'dd/MM/yyyy HH:mm:ss');
         sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
       }
-      //sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate), 'dd/MM/yyyy HH:mm:ss');
-      //sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
-      //sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate), 'dd/MM/yyyy HH:mm:ss');
-      //sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
       sender.localityPlace = _.get(sender, 'localityPlace.id');
       sender.localityCovers = _.map((sender.localityCovers as Locality[]), l => l.id);
       sender.segmentations = _.map((sender.segmentations as IResultPlanItemByConference[]), p => p.id);
