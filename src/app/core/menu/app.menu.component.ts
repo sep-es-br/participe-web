@@ -39,13 +39,10 @@ export class AppMenuComponent implements OnInit {
       this.model.push(
         {label: this.translateSrv.instant('control-panel'), icon: faTachometerAlt, routerLink: ['/home']}
       );
-    }
-
-    if (person.roles.includes('Moderator') || person.roles.includes('Administrator')) {
       this.model.push({label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search']});
     }
 
-    if (person.roles.includes('Recepcionist') || person.roles.includes('Administrator')) {
+    if (person.roles.includes('Recepcionist') && person.roles.includes('Administrator')) {
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
           {
@@ -60,6 +57,24 @@ export class AppMenuComponent implements OnInit {
             label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
               {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+            ]
+          });
+      }
+    }
+
+    if (person.roles.includes('Recepcionist') && !person.roles.includes('Administrator')) {
+      if (window.location.href.endsWith('#/attendance')) {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, items: [
+              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']}
+            ]
+          });
+      } else {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
+              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']}
             ]
           });
       }

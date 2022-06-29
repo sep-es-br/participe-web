@@ -28,6 +28,7 @@ export class ConferenceService {
   }
 
   async listAll() {
+    this.headers = Common.buildHeaders();
     const conferences = await this.http.get<Conference[]>(this.url, {headers: this.headers}).toPromise();
     return conferences;
   }
@@ -112,6 +113,7 @@ export class ConferenceService {
   }
 
   getConferencesWithPresentialMeetings(date?: string) {
+    this.headers = Common.buildHeaders();
     return this.http.get<IConferenceWithMeetings[]>(
       `${this.url}/with-presential-meetings${PrepareHttpQuery({search: {date}})}`,
       {headers: this.headers},
