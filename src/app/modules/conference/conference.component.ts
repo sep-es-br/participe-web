@@ -1,3 +1,4 @@
+import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
@@ -81,6 +82,7 @@ export class ConferenceComponent implements OnInit {
     private actRouter: ActivatedRoute,
     private filesSrv: FilesService,
     private structureItemSrv: StructureItemService,
+    private personService: PersonService,
     private location: Location)  {
     this.actRouter.queryParams.subscribe(async queryParams => {
       this.idConference = queryParams.id;
@@ -638,6 +640,11 @@ export class ConferenceComponent implements OnInit {
         }
       });
 
+      /*
+      this.moderatorsEnabled.forEach(async moderator => {
+        await this.personService.postOperator('Moderator', moderator);
+      });
+*/
       formData = {
         ...formData,
         serverName: this.conferenceForm.controls.serverName.value,

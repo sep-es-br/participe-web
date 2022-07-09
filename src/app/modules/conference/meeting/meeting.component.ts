@@ -1,3 +1,4 @@
+import { PersonService } from '@app/shared/services/person.service';
 import * as _ from 'lodash';
 
 import {ActivatedRoute, Router} from '@angular/router';
@@ -80,6 +81,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     private conferenceSrv: ConferenceService,
     public localitySrv: LocalityService,
     private planSrv: PlanService,
+    private personSrv: PersonService,
     private formBuilder: FormBuilder,
     private messageSrv: MessageService,
     private translate: TranslateService,
@@ -249,7 +251,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   async addReceptionist(receptionist: IPerson) {
-    const person = await this.meetingSrv.getReceptionistByEmail(receptionist.contactEmail);
+    let person = await this.meetingSrv.getReceptionistByEmail(receptionist.contactEmail);
+    if (!person) {
+      person = await this.personSrv.postOperator('Recepcionist', receptionist);
+    }
     if (person) {
       person.name = receptionist.name;
       if (!this.receptionistsActived) {
@@ -260,6 +265,16 @@ export class MeetingComponent implements OnInit, OnDestroy {
       }
       this.setFormSearchReceptionists();
     }
+  }
+
+  async activateReceptionist(receptionist: IPerson) {
+    if (!this.receptionistsActived) {
+      this.receptionistsActived = [];
+    }
+    if (!(this.receptionistsActived.find((p) => (p.contactEmail === receptionist.contactEmail)))) {
+      this.receptionistsActived.push(receptionist);
+    }
+    this.setFormSearchReceptionists();
   }
 
   removeReceptionist(index: number) {
@@ -500,8 +515,15 @@ export class MeetingComponent implements OnInit, OnDestroy {
         return;
       }
 
+      for (let i = 0 ; this.receptionistsActived.length > i ; i++) {
+        if (!this.receptionistsActived[i].id) {
+          const a = await this.personSrv.postOperator('Recepcionist', this.receptionistsActived[i]);
+          const p = await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail);
+          this.receptionistsActived[i] = p;
+        }
+      }
+
       const sender = {...form} as Meeting;
-      sender.receptionists = [];
       sender.receptionists = this.receptionistsActived ? this.receptionistsActived.map(r => r.id) : [];
       sender.channels = this.channels;
       this.resultBeginDate=   sender.beginDate;
