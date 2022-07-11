@@ -219,6 +219,7 @@ export class ConferenceComponent implements OnInit {
       });
     }
     this.moderatorsEnabled = this.conference.moderators && this.conference.moderators.length > 0 ? this.conference.moderators : [];
+    this.moderatorsEnabled.sort((a, b) => (this.comparePersonName(a, b)));
     this.moderators = [];
   }
 
@@ -985,6 +986,8 @@ export class ConferenceComponent implements OnInit {
         summary: this.translate.instant('error'),
         detail: this.translate.instant('conference.moderator.empty'),
       });
+    } else {
+      this.moderators.sort((a, b) => (this.comparePersonName(a, b)));
     }
   }
 
@@ -1002,6 +1005,7 @@ export class ConferenceComponent implements OnInit {
 
     this.moderators = this.moderators.filter(m => m.name !== moderator.name && m.contactEmail !== moderator.contactEmail);
     this.moderatorsEnabled.push(moderator);
+    this.moderatorsEnabled.sort((a, b) => (this.comparePersonName(a, b)));
   }
 
   removeModeratorsEnabled(moderator: IPerson) {
@@ -1083,4 +1087,19 @@ export class ConferenceComponent implements OnInit {
       }
     });
   }
+
+  comparePersonName( a, b ) {
+    let aName: string = a.name;
+    let bName: string = b.name;
+    aName = aName.normalize().toUpperCase();
+    bName = bName.normalize().toUpperCase();
+    if ( aName < bName ) {
+      return -1;
+    }
+    if ( aName > bName ) {
+      return 1;
+    }
+    return 0;
+  }
+
 }

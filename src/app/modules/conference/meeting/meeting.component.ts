@@ -289,8 +289,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   comparePersonName( a, b ) {
-    let aName : String = a.name;
-    let bName : String = b.name;
+    let aName: string = a.name;
+    let bName: string = b.name;
     aName = aName.normalize().toUpperCase();
     bName = bName.normalize().toUpperCase();
     if ( aName < bName ) {
