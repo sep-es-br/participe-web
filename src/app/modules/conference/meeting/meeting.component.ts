@@ -249,7 +249,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
     const mail = _.get(form, 'mail');
     const name = _.get(form, 'name');
     this.receptionistsSearch = await this.conferenceSrv.searchReceptionists(name, mail);
-    this.receptionistsSearch.sort((a, b) => (this.comparePersonName(a, b)));
+    if (this.receptionistsSearch) {
+      this.receptionistsSearch.sort((a, b) => (this.comparePersonName(a, b)));
+    }
   }
 
 /*
@@ -279,7 +281,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (!(this.receptionistsActived.find(await ((p) => (p.contactEmail === receptionist.contactEmail))))) {
       this.receptionistsActived.push(receptionist);
     }
-    this.receptionistsActived.sort((a, b) => this.comparePersonName(a, b));
+    if (this.receptionistsActived) {
+      this.receptionistsActived.sort((a, b) => this.comparePersonName(a, b));
+    }
 
     this.setFormSearchReceptionists();
   }
@@ -498,7 +502,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.receptionistsActived.sort((a, b) => (this.comparePersonName(a, b)));
+      if (this.receptionistsActived) {
+        this.receptionistsActived.sort((a, b) => (this.comparePersonName(a, b)));
+      }
 
 
       this.meetingId = meetingId;
