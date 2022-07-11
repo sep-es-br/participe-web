@@ -26,6 +26,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {IResultPlanItemByConference} from '@app/shared/interface/IResultPlanItemByConference';
 import {IChannel} from '@app/shared/interface/IChannel';
 import {CustomValidators} from '@app/shared/util/CustomValidators';
+import { analyzeNgModules } from '@angular/compiler';
 
 @Component({
   selector: 'app-meeting',
@@ -248,7 +249,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
     const mail = _.get(form, 'mail');
     const name = _.get(form, 'name');
     this.receptionistsSearch = await this.conferenceSrv.searchReceptionists(name, mail);
+    this.receptionistsSearch.sort((a, b) => (this.comparePersonName(a, b)));
   }
+
+/*
 
   async addReceptionist(receptionist: IPerson) {
     let person = await this.meetingSrv.getReceptionistByEmail(receptionist.contactEmail);
@@ -266,6 +270,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       this.setFormSearchReceptionists();
     }
   }
+*/
 
   async activateReceptionist(receptionist: IPerson) {
     if (!this.receptionistsActived) {
@@ -274,7 +279,23 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (!(this.receptionistsActived.find(await ((p) => (p.contactEmail === receptionist.contactEmail))))) {
       this.receptionistsActived.push(receptionist);
     }
+    this.receptionistsActived.sort((a, b) => this.comparePersonName(a, b));
+
     this.setFormSearchReceptionists();
+  }
+
+  comparePersonName( a, b ) {
+    let aName : String = a.name;
+    let bName : String = b.name;
+    aName = aName.normalize().toUpperCase();
+    bName = bName.normalize().toUpperCase();
+    if ( aName < bName ) {
+      return -1;
+    }
+    if ( aName > bName ) {
+      return 1;
+    }
+    return 0;
   }
 
   removeReceptionist(index: number) {
@@ -477,6 +498,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
           }
         });
       }
+      this.receptionistsActived.sort((a, b) => (this.comparePersonName(a, b)));
 
 
       this.meetingId = meetingId;
@@ -515,11 +537,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
         return;
       }
 
-      for (let i = 0 ; this.receptionistsActived.length > i ; i++) {
-        if (!this.receptionistsActived[i].id) {
-          const a = await this.personSrv.postOperator('Recepcionist', this.receptionistsActived[i]);
-          const p = await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail);
-          this.receptionistsActived[i] = p;
+      if (this.receptionistsActived) {
+        for (let i = 0 ; this.receptionistsActived.length > i ; i++) {
+          if (!this.receptionistsActived[i].id) {
+            const a = await this.personSrv.postOperator('Recepcionist', this.receptionistsActived[i]);
+            const p = await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail);
+            this.receptionistsActived[i] = p;
+          }
         }
       }
 
