@@ -58,7 +58,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   async checkIn(attendee: IAttendee) {
     this.form.markAllAsTouched();
 
-    if (!this.form.valid || attendee.checkingIn) {
+    if (attendee.checkedIn || attendee.checkingIn) {
       return;
     }
 
@@ -111,7 +111,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           personId: result.id,
           name: result.name,
           email: result.email,
-          checkedIn: false
+          checkedIn: false,
+          checkingIn: false
         };
         await this.checkIn(newAttendee);
         this.toggleNewAccount();
