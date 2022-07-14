@@ -53,7 +53,7 @@ export class AttendanceComponent implements OnInit {
   IsAMeetingRunning(confs: IConferenceWithMeetings[]): boolean {
     const meetingFound =
       confs.find((conf) => (
-        conf.meeting.find((meet) => (this.IsRunningNow(meet)))
+        conf.meeting.find((meet) => (this.IsRunningToday(meet)))
       ));
     return (meetingFound !== undefined) ? true : false;
   }
@@ -67,6 +67,26 @@ export class AttendanceComponent implements OnInit {
     const now = new Date();
     return ((new Date(this.ToIntlDateFormat(meeting.beginDate.toString())) < now)
          && (new Date(this.ToIntlDateFormat(meeting.endDate.toString())) > now))
+  }
+
+  IsRunningToday(meeting: Meeting): boolean {
+    const now = new Date();
+    let day = new Date(this.ToIntlDateFormat(meeting.beginDate.toString()));
+    let startTime = new Date(
+      day.getFullYear(),
+      day.getMonth(),
+      day.getDate(),
+      0, 0, 0, 0);
+
+    day = new Date(this.ToIntlDateFormat(meeting.endDate.toString()));
+    let endTime = new Date(
+      day.getFullYear(),
+      day.getMonth(),
+      day.getDate(),
+      23, 59, 59, 999);
+
+    return (startTime < now)
+         && (endTime > now)
   }
 
 

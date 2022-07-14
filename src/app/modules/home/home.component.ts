@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
       ]);
       this.router.navigate(['/control-panel-dashboard']);
     } else if (user.roles.find(r => (r === 'Recepcionist'))) {
-      if (await this.HaveMeetingsForReceptionist(user)) {
+      if (await this.HaveMeetingsForReceptionist()) {
         this.breadcrumbService.setItems([
           { label: 'attendance', routerLink: ['/attendance'] }
         ]);
@@ -77,20 +77,53 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private async HaveMeetingsForReceptionist(user: IPerson) {
-    const { protocol, host } = window.location;
-    const now = new Date();
-    const dateString = now.toLocaleDateString('pt-BR', {timeZone: 'UTC'})
-    + ' '
-    + ('0' + now.getHours().toString()).slice(-2)
-    + ':'
-    + ('0' + now.getMinutes().toString()).slice(-2)
-    + ':'
-    + ('0' + now.getSeconds().toString()).slice(-2) ;
+  private async HaveMeetingsForReceptionist() {
 
-    const allConfs = await this.conferenceService.getConferencesWithPresentialMeetings(dateString);
+    const allConfs = await this.conferenceService.getConferencesWithPresentialMeetings();
 
-    return (allConfs.length > 0);
+    return ((allConfs.length > 0) && (this.IsAMeetingRunning(allConfs)));
   }
+
+
+  IsAMeetingRunning(confs: IConferenceWithMeetings[]): boolean {
+    const meetingFound =
+      confs.find((conf) => (
+        conf.meeting.find((meet) => (this.IsRunningToday(meet)))
+      ));
+    return (meetingFound !== undefined) ? true : false;
+  }
+
+  ToIntlDateFormat(date: string): string {
+    const parts = date.split('/');
+    return (parts.length === 3) ? parts[1] + '/' + parts[0] + '/' + parts[2] : date;
+  }
+
+  IsRunningNow(meeting: Meeting): boolean {
+    const now = new Date();
+    return ((new Date(this.ToIntlDateFormat(meeting.beginDate.toString())) < now)
+         && (new Date(this.ToIntlDateFormat(meeting.endDate.toString())) > now))
+  }
+
+  IsRunningToday(meeting: Meeting): boolean {
+    const now = new Date();
+    let day = new Date(this.ToIntlDateFormat(meeting.beginDate.toString()));
+    let startTime = new Date(
+      day.getFullYear(),
+      day.getMonth(),
+      day.getDate(),
+      0, 0, 0, 0);
+
+    day = new Date(this.ToIntlDateFormat(meeting.endDate.toString()));
+    let endTime = new Date(
+      day.getFullYear(),
+      day.getMonth(),
+      day.getDate(),
+      23, 59, 59, 999);
+
+    return (startTime < now)
+         && (endTime > now)
+  }
+
+
 
 }
