@@ -332,6 +332,9 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   async begin(comment: ModerationComments) {
+
+    comment.disableModerate = true;
+
     try {
       await this.moderationSrv.begin({
         id: comment.commentId,
