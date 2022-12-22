@@ -352,9 +352,33 @@ export class AttendanceModel {
     this.optionsConference = result;
     this.selectedConference = result[0];
     this.optionsMeeting = result[0].meeting;
-    this.selectedMeeting = result[0].meeting[0];
+
+    //this.selectedMeeting = result[0].meeting[0];
+    if (this.optionsMeeting.length > 0) {
+      this.selectedMeeting = this.getRunningMeetingIndex(this.optionsMeeting);
+    }
 
     await this.setCurrentMeeting();
+  }
+
+  getRunningMeetingIndex(meetings: Meeting[]): Meeting {
+
+    let now = Date.now();
+    let runningMeeting = meetings.find((m) => {
+      let start = new Date(
+        +m.beginDate.toString().substring(6,10), // Year
+        +m.beginDate.toString().substring(3,5) - 1, // Month
+        +m.beginDate.toString().substring(0,2), // Day
+        0,0,0,0);
+      let end = new Date(
+        +m.endDate.toString().substring(6,10), // Year
+        +m.endDate.toString().substring(3,5) - 1, // Month
+        +m.endDate.toString().substring(0,2), // Day
+        23,59,59,999);
+      return ((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()));
+    })
+
+    return (runningMeeting !== undefined) ? runningMeeting : meetings[0];
   }
 
   async getLocalitiesBasedOnConference() {
