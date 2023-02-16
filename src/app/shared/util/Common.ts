@@ -11,4 +11,16 @@ export default class Common {
       headers
     });
   }
+
+  public static buildFileUploadHeaders(...headers) {
+    const accessToken = localStorage.getItem(StoreKeys.ACCESS_TOKEN);
+    return new HttpHeaders({
+      'Form-Data': 'true',
+      'encType': 'multipart/form-data',
+      'Access-Control-Allow-Origin': '*',
+      Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      headers
+    });
+  }
+
 }
