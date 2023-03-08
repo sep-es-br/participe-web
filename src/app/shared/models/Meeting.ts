@@ -10,6 +10,11 @@ export enum typeMeetingEnum {
   PRESENCIAL_VIRTUAL = 'PRESENCIAL_VIRTUAL'
 }
 
+export enum attendanceListModeEnum {
+  AUTO = 'AUTO',
+  MANUAL = 'MANUAL'
+}
+
 export class Meeting {
     id: number;
     name: string;
@@ -28,4 +33,5 @@ export class Meeting {
     channels?: IChannel[];
     typeMeetingEnum?: string;
     showChannels?: string;
+    attendanceListMode?: string;
 }

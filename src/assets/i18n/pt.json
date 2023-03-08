@@ -163,6 +163,11 @@
 				"virtual": "Virtual",
 				"presential-virtual": "Presencial e Virtual"
 			},
+      "attendanceList": "Lista de Presença",
+      "attendanceListMode": {
+        "auto": "Automática",
+        "manual": "Manual"
+      },
 			"segmentation": "Segmentação",
 			"locality": "Localidade",
 			"localityCovers": "Abrangência",
@@ -181,7 +186,7 @@
         "updated": "Reunião {{name}} atualizada",
 				"created": "Reunião {{name}} criada"
 			},
-			"title": "Nova Reunião Presencial"
+			"title": "Nova Reunião"
 		},
 		"moderator": {
 			"already-enabled": "{{name}} já está habilitado como moderador",

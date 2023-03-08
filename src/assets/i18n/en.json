@@ -162,6 +162,11 @@
         "virtual": "Virtual",
         "presential-virtual": "Presential and Virtual"
       },
+      "attendanceList": "Attendance List",
+      "attendanceListMode": {
+        "auto": "Automatic",
+        "manual": "Manual"
+      },
       "segmentation": "Segmentation",
 			"locality": "Locality",
 			"localityCovers": "Coverage",
@@ -180,7 +185,7 @@
 				"updated": "Meeting {{name}} updated",
 				"created": "Meeting {{name}} created"
 			},
-			"title": "New face-to-face Meeting"
+			"title": "New Meeting"
 		},
 		"moderator": {
 			"already-enabled": "{{name}} is already enabled as a moderator",

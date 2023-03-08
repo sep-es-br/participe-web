@@ -1,3 +1,4 @@
+import { attendanceListModeEnum } from './../../../shared/models/Meeting';
 import { PersonService } from '@app/shared/services/person.service';
 import * as _ from 'lodash';
 
@@ -39,8 +40,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   localitycitizenSelected = false;
   showSelectConference: boolean = false;
   optionsTypesMeeting: SelectItem[];
+  optionsAttendanceListModes: SelectItem[];
   typesMeetingEnum = typeMeetingEnum;
   typeMeetingAlreadySet = false;
+  attendaceListModesEnum = attendanceListModeEnum;
 
   form: FormGroup;
   searchForm: FormGroup;
@@ -236,6 +239,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
       },
     ];
   }
+
+  loadOptionsAttendanceListModes() {
+    this.optionsAttendanceListModes = [
+      {value: attendanceListModeEnum.AUTO, label: this.translate.instant('conference.meeting.attendanceListMode.auto')},
+      {value: attendanceListModeEnum.MANUAL, label: this.translate.instant('conference.meeting.attendanceListMode.manual')},
+    ];
+  }
+
 
   validTypeDifferentFromVirtual() {
     return this.form.value.type !== typeMeetingEnum.VIRTUAL;
@@ -447,6 +458,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
       place: [_.get(value, 'place', '')],
       localityCovers: [_.get(value, 'localityCovers', ''), [Validators.required]],
       segmentations: [_.get(value, 'segmentations', '')],
+      attendanceListMode: [{
+        value: _.get(value, 'attendanceListMode', attendanceListModeEnum.AUTO),
+        disabled: false
+      }, [Validators.required]],
     });
   }
 
@@ -577,6 +592,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
       sender.localityPlace = _.get(sender, 'localityPlace.id');
       sender.localityCovers = _.map((sender.localityCovers as Locality[]), l => l.id);
       sender.segmentations = _.map((sender.segmentations as IResultPlanItemByConference[]), p => p.id);
+      sender.attendanceListMode = (this.form.value.type === typeMeetingEnum.VIRTUAL) ? 'MANUAL' : this.form.value.attendanceListMode;
       sender.conference = this.conferenceId;
       const result = await this.meetingSrv.save(sender, this.meetingId);
       const messageSuccess = this.meetingId ? 'conference.meeting.success.updated' : 'conference.meeting.success.created';
@@ -636,6 +652,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     await this.loadConferencesActives();
     await this.loadMeetings();
     this.loadOptionsTypesMeeting();
+    this.loadOptionsAttendanceListModes();
     await this.loadPlanItemsTargetedBy();
     this.translateChange.getCurrentLang().subscribe(({lang}) => {
       this.calendarTranslate = calendar[lang];

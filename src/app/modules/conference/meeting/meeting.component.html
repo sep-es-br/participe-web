@@ -93,13 +93,13 @@
           <div class="p-col-12 p-md-12" style="height: 60px;">{{ 'conference.meeting.title' | translate }}</div>
           <form [formGroup]="form" (submit)="save(form.value)" *ngIf="form">
             <div class="p-col-9">
-                        <span class="p-col-3" *ngFor="let type of optionsTypesMeeting">
-                          <p-radioButton [disabled]="typeMeetingAlreadySet" [id]="type.value" name="type"
-                                         [value]="type.value"
-                                         formControlName="type"
-                                         (onClick)="changeTypeMeeting()"></p-radioButton>
-                          <label [for]="type.value" class="label-type-meeting">{{type.label}}</label>
-                        </span>
+              <span class="p-col-3" *ngFor="let type of optionsTypesMeeting">
+                <p-radioButton [disabled]="typeMeetingAlreadySet" [id]="type.value" name="type"
+                                [value]="type.value"
+                                formControlName="type"
+                                (onClick)="changeTypeMeeting()"></p-radioButton>
+                <label [for]="type.value" class="label-type-meeting">{{type.label}}</label>
+              </span>
             </div>
             <div class="p-col-12 p-md-12">
               <label for="name">{{'conference.meeting.name'|translate}}</label>
@@ -224,7 +224,19 @@
                 </div>
               </p-accordionTab>
             </p-accordion>
-            <p-accordion [multiple]="true" *ngIf="validTypeDifferentFromVirtual()">
+
+            <div class="attendance-list-mode" *ngIf="validTypeDifferentFromVirtual()">
+              <div class="p-col-12">{{ 'conference.meeting.attendanceList' | translate }}</div>
+              <span class="p-col-3" *ngFor="let mode of optionsAttendanceListModes">
+                <p-radioButton [disabled]="false" [id]="mode.value" name="attendanceListMode"
+                                [value]="mode.value"
+                                formControlName="attendanceListMode"></p-radioButton>
+                <label [for]="mode.value" class="label-type-meeting">{{mode.label}}</label>
+              </span>
+            </div>
+
+
+            <p-accordion [multiple]="true" *ngIf="validTypeDifferentFromVirtual() && form.value.attendanceListMode === attendaceListModesEnum.AUTO">
               <p-accordionTab header="{{'conference.meeting.receptionists' | translate}}"
                               styleClass="tabStyleClass">
                 <form [formGroup]="searchFormReceptionists"
