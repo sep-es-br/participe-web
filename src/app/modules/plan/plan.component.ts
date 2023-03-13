@@ -2,6 +2,7 @@ import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService, SelectItem, TreeNode } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FileCtrl } from './../../shared/models/file';
 
 import { DomainService } from '@app/shared/services/domain.service';
 import { Plan } from '@app/shared/models/plan';
@@ -19,6 +20,7 @@ import { Router } from '@angular/router';
 import { Domain } from '@app/shared/models/domain';
 import { LocalityType } from '@app/shared/models/locality-type';
 import { CustomValidators } from '@app/shared/util/CustomValidators';
+import { FilesService } from '@app/shared/services/files.service';
 
 export class local {
   id: number;
@@ -59,6 +61,7 @@ export class PlanComponent implements OnInit {
   planItemForm: FormGroup;
   localities: TreeNode[];
   selectedLocalities: TreeNode[];
+  toDelete: File;
 
   search = false;
   edit = false;
@@ -82,7 +85,8 @@ export class PlanComponent implements OnInit {
     private structureService: StructureService,
     private translate: TranslateService,
     private router: Router,
-    private httpClient: HttpClient,
+    //private httpClient: HttpClient,
+    private filesSrv: FilesService
   ) {
   }
 
@@ -549,16 +553,18 @@ export class PlanComponent implements OnInit {
     }
   }
 
-  uploadFile(data: { files: File }) {
+  async uploadFile(data: { files: File }) {
     const formData: FormData = new FormData();
     const file = data.files[0];
 
     formData.append('file', file, file.name);
-    this.httpClient
-      .post<any>(this.getUrlUploadFile(), formData)
-      .subscribe(r => {
-        this.planItem.file = r;
-      });
+    this.planItem.file = await this.filesSrv.uploadFile(formData);
+    this.planItem.file.
+    //this.httpClient
+     // .post<any>(this.getUrlUploadFile(), formData)
+    //  .subscribe(r => {
+    //    this.planItem.file = r;
+    //  });
   }
 
   async removeFile(event) {
