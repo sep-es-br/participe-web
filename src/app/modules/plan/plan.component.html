@@ -134,17 +134,25 @@
 
             <div class="p-col-12 p-md-6" *ngIf="structureItem.logo && !planItem.file">
               <h3>{{'file.label'|translate}}</h3>
-              <p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" [url]="getUrlUploadFile()"
+              <!--p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" [url]="getUrlUploadFile()"
                 [headers]="getHeadersUploadFile()" customUpload="true"
                 (uploadHandler)="uploadFile($event)"
                 [chooseLabel]="'file.browse'|translate" [uploadLabel]="'file.send'|translate"
-                [cancelLabel]="'cancel'|translate"></p-fileUpload>
+                [cancelLabel]="'cancel'|translate"></!--p-fileUpload -->
+              <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
+                (onSelect)="syncFiles2Upload($event, 'cardImage')"
+                (onRemove)="removeUnsavedFile($event, 'cardImage')"
+                [chooseLabel]="'file.browse'|translate"
+                [uploadLabel]="'file.send'|translate"
+                [cancelLabel]="'cancel'|translate">
+              </p-fileUpload>
             </div>
+
             <div class="p-col-12 p-md-2" *ngIf="structureItem.logo && planItem.file">
               <h3>{{'plan.file'|translate}}</h3>
               <img [src]="getUrlFile(planItem.file.id)" alt="Logo do Plano" width="120px" style="padding: 20px;">
               <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
-                (click)="removeFile($event)"></button>
+                (click)="prepare2RemoveSavedImage(planItem.file, 'cardImage')"></button>
             </div>
 
             <div class="p-col-12 p-md-6">

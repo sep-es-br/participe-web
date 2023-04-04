@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService, SelectItem, TreeNode } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileCtrl } from './../../shared/models/file';
+import { File } from '@app/shared/models/file';
 
 import { DomainService } from '@app/shared/services/domain.service';
 import { Plan } from '@app/shared/models/plan';
@@ -38,6 +39,8 @@ export class PlanComponent implements OnInit {
   contrastPlan: number = -1;
   localitiesPlanItem: local[] = [];
   localitiesPlanItemSelected: local[] = [];
+
+  cardImages: FileCtrl[] = [];
 
   plans: Plan[] = [];
   planTree: TreeNode[];
@@ -451,6 +454,12 @@ export class PlanComponent implements OnInit {
 
         if (item.file) {
           this.planItem.file = item.file;
+          this.cardImages = [];
+          this.cardImages.push({
+            file: this.planItem.file,
+            toAdd: false,
+            toDelete: false
+          });
         }
         if (item.localities) {
           this.planItem.localities = item.localities;
@@ -553,6 +562,7 @@ export class PlanComponent implements OnInit {
     }
   }
 
+  /*
   async uploadFile(data: { files: File }) {
     const formData: FormData = new FormData();
     const file = data.files[0];
@@ -566,14 +576,76 @@ export class PlanComponent implements OnInit {
     //    this.planItem.file = r;
     //  });
   }
+  */
 
-  async removeFile(event) {
+  async uploadFile(index: number, setFile: string): Promise<File> {
+    const formData: FormData = new FormData();
+    let file: any;
     try {
-      await this.planService.deleteLogo(this.planItem.file.id).toPromise();
+      switch (setFile) {
+        case 'cardImage':
+          if (this.cardImages[index].file.id === null || this.cardImages[index].file.id === undefined) {
+            file = this.cardImages[index].file;
+            formData.append('file', file, file.name);
+            return await this.filesSrv.uploadFile(formData);
+          }
+          break;
+      }
+
+    } catch (error) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translate.instant('error'),
+      });
+      return null;
+    }
+  }
+
+  syncFiles2Upload(data: {files: File[]}, setFile: string) {
+    let i = 0;
+    switch (setFile) {
+      case 'cardImage':
+        this.cardImages = this.cardImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
+        for (i = 0; i < data.files.length; i++) {
+          this.cardImages.push({file: data.files[i], toDelete: false, toAdd: true});
+        }
+        break;
+    }
+  }
+
+  async removeUnsavedFile(data: {file: File}, from: string) {
+    switch (from) {
+      case 'cardImage':
+        this.cardImages = this.cardImages
+          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
+      break;
+    }
+  }
+
+  async removeFile(id: number, from: string) {
+    try {
+      await this.planService.deleteLogo(id).toPromise();
     } catch (err) {
       console.error(err);
     }
-    this.planItem.file = null;
+    switch (from) {
+      case 'cardImage':
+        this.cardImages = this.cardImages.filter(image => image.file.id !== id);
+        break;
+    }
+  }
+
+  prepare2RemoveSavedImage(image2Delete: File, from: string) {
+    switch (from) {
+      case 'cardImage':
+        this.cardImages.forEach(image => {
+          if ((image.file.id !== null && image.file.id !== undefined) && image.file.id === image2Delete.id) {
+            image.toDelete = true;
+            this.planItem.file = null;
+          }
+        });
+        break;
+    }
   }
 
   getUrlFile(url) {
@@ -663,6 +735,20 @@ export class PlanComponent implements OnInit {
         this.planItem.structureItem = this.structureItem;
       }
 
+      let i = 0;
+      for (i = this.cardImages.length-1; i >= 0 ; i--) {
+        if ((this.cardImages[i].file.id === null
+            || this.cardImages[i].file.id === undefined)
+            && this.cardImages[i].toAdd) {
+          this.planItem.file = await this.uploadFile(i, 'cardImage');
+        }
+        else if (this.cardImages[i].file.id !== null
+          && this.cardImages[i].file.id !== undefined
+          && this.cardImages[i].toDelete) {
+          await this.removeFile(this.cardImages[i].file.id, 'cardImage');
+        }
+      }
+
       const planItem = await this.planItemService.save(this.planItem, this.edit);
       this.loadRegionFineshed = this.loadRegionFineshed && this.saveAndContinue;
       this.localitiesPlanItemSelected = [];
@@ -731,7 +817,7 @@ export class PlanComponent implements OnInit {
       });
       valid = false;
     }
-    if (this.structureItem.logo && !this.planItem.file) {
+    if (this.structureItem.logo && !this.hasFile()) {
       this.messageService.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -740,6 +826,10 @@ export class PlanComponent implements OnInit {
       valid = false;
     }
     return valid;
+  }
+
+  private hasFile(): boolean {
+    return this.cardImages.find(f => (!f.toDelete)) !== undefined;
   }
 
   private isValidForm(form, errorMessage = this.translate.instant('erro.invalid.data')) {
