@@ -185,7 +185,7 @@ export class ModerateComponent implements OnInit {
 
       await this.moderationSrv.update(sender);
 
-      const proposal = this.comment.type && this.comment.type === 'proposal';
+      const proposal = this.comment.type && this.comment.type === 'prop';
       let msg = null;
       switch (status) {
         case 'Pending':
