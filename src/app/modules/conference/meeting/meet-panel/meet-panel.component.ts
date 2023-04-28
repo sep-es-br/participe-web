@@ -9,6 +9,7 @@ import { ControlPanelDashboardService } from '@app/shared/services/control-panel
 import { MeetingService } from '@app/shared/services/meeting.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-meet-panel',
@@ -27,7 +28,7 @@ export class MeetPanelComponent implements OnInit {
 
   subs: Subscription[] = [];
   meeting: Meeting;
-  refreshTime: number = 2000;
+  refreshTime: number = environment.meetingPanelRefreshTimeMs;
   conference: Conference;
   meetingSubtitle: String = "";
   timer: any;
