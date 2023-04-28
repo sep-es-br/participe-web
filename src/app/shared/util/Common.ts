@@ -12,6 +12,17 @@ export default class Common {
     });
   }
 
+  public static buildNoLoaderHeaders(...headers) {
+    const accessToken = localStorage.getItem(StoreKeys.ACCESS_TOKEN);
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'x-hidden-loading': 'yes',
+      Authorization: accessToken ? `Bearer ${accessToken}` : '',
+      headers
+    });
+  }
+
   public static buildFileUploadHeaders(...headers) {
     const accessToken = localStorage.getItem(StoreKeys.ACCESS_TOKEN);
     return new HttpHeaders({

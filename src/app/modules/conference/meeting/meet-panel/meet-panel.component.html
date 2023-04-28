@@ -1,0 +1,82 @@
+<div class="full-page">
+
+  <div class="conf-header p-grid">
+    <div class="p-col-4 header-slot">
+      <div class="p-grid">
+        <div class="general-card p-col-6">
+          <div class="p-grid">
+            <div class="general-card-number p-col-12">{{confParticipants}}</div>
+            <div class="general-card-title p-col-12">PARTICIPANTES</div>
+          </div>
+        </div>
+        <div class="general-card p-col-6">
+          <div class="p-grid">
+            <div class="general-card-number p-col-12">{{confComments}}</div>
+            <div class="general-card-title p-col-12">PROPOSTAS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-4 header-slot">
+      <img class="conf-logo-img" src="../../../../../assets/layout/images/logo_24-27.png">
+    </div>
+    <div class="p-col-4 header-slot">
+      <div class="p-grid">
+        <div class="general-card p-col-6">
+          <div class="p-grid">
+            <div class="general-card-number p-col-12">{{confHighlights}}</div>
+            <div class="general-card-title p-col-12">DESTAQUES</div>
+          </div>
+        </div>
+        <div class="general-card p-col-6">
+          <div class="p-grid">
+            <div class="general-card-number p-col-12">{{confLocalities}}</div>
+            <div class="general-card-title p-col-12">MUNICÍPIOS</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="meet-container">
+    <div class="meet-title">ENCONTRO PRESENCIAL DE {{meeting?.localityPlace?.name | uppercase}}</div>
+    <div class="meet-subtitle">{{meetingSubtitle}}</div>
+    <div class="meet-line p-grid">
+      <div class="meet-card p-col-6">
+        <div class="p-grid">
+          <div class="meet-card-number p-col-12"
+            [style.color]="mpColor"
+            [style.text-shadow]="'#00a198 0px 0px ' + mpShadow + 'vh'">{{meetingParticipants}}</div>
+          <div class="meet-card-title p-col-12">PARTICIPANTES</div>
+        </div>
+      </div>
+      <div class="meet-card p-col-6">
+        <div class="p-grid">
+          <div class="meet-card-number p-col-12"
+            [style.color]="mcColor"
+            [style.text-shadow]="'#00a198 0px 0px ' + mcShadow + 'vh'">{{meetingComments}}</div>
+          <div class="meet-card-title p-col-12">PROPOSTAS</div>
+        </div>
+      </div>
+    </div>
+    <div class="meet-line p-grid">
+      <div class="meet-card p-col-6">
+        <div class="p-grid">
+          <div class="meet-card-number p-col-12"
+            [style.color]="mhColor"
+            [style.text-shadow]="'#00a198 0px 0px ' + mhShadow + 'vh'">{{meetingHighlights}}</div>
+          <div class="meet-card-title p-col-12">DESTAQUES</div>
+        </div>
+      </div>
+      <div class="meet-card p-col-6">
+        <div class="p-grid">
+          <div class="meet-card-number p-col-12"
+            [style.color]="mlColor"
+            [style.text-shadow]="'#00a198 0px 0px ' + mlShadow + 'vh'">{{meetingLocalities}}</div>
+          <div class="meet-card-title p-col-12">MUNICÍPIOS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -185,7 +185,12 @@
 				"updated": "Meeting {{name}} updated",
 				"created": "Meeting {{name}} created"
 			},
-			"title": "New Meeting"
+			"title": "New Meeting",
+      "action": {
+        "edit": "Edit",
+        "panel": "Show Panel",
+        "delete": "Delete"
+      }
 		},
 		"moderator": {
 			"already-enabled": "{{name}} is already enabled as a moderator",

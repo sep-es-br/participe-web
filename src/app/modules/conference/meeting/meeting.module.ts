@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService } from 'primeng/api';
 import { MeetingService } from '@app/shared/services/meeting.service';
 import { MeetingComponent } from './meeting.component';
+import { MeetPanelComponent } from './meet-panel/meet-panel.component';
 
 @NgModule({
   imports: [
@@ -18,9 +19,11 @@ import { MeetingComponent } from './meeting.component';
   ],
   declarations: [
     MeetingComponent,
+    MeetPanelComponent,
   ],
   exports: [
     MeetingComponent,
+    MeetPanelComponent,
   ],
   providers: [
     ConfirmationService,

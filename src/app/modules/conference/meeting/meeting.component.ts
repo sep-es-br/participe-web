@@ -528,6 +528,20 @@ export class MeetingComponent implements OnInit, OnDestroy {
     }
   }
 
+  handleShowPanel(meetingId?: Number) {
+    if (!meetingId) {
+      return;
+    }
+
+    //this.location.replaceState(`/administration/conferences/${this.conference.id}/meeting/${meetingId}/panel`);
+
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/administration/conferences/${this.conference.id}/meeting/${meetingId}/panel`]));
+
+      //this.router.navigate(['../', 'meetingId', 'panel', '_blank'], {relativeTo: this.activeRoute})
+      window.open('#' + url, '_blank');
+  }
+
   changeBeginDate(event) {
     this.minDate = MeetingComponent.getDate(event);
     if (_.get(this.form, 'value.endDate')) {

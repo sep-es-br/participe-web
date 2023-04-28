@@ -186,7 +186,12 @@
         "updated": "Reunião {{name}} atualizada",
 				"created": "Reunião {{name}} criada"
 			},
-			"title": "Nova Reunião"
+			"title": "Nova Reunião",
+      "action": {
+        "edit": "Editar",
+        "panel": "Exibir painel",
+        "delete": "Excluir"
+      }
 		},
 		"moderator": {
 			"already-enabled": "{{name}} já está habilitado como moderador",

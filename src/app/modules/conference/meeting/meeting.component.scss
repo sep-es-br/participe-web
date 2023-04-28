@@ -138,7 +138,7 @@ section.meetings-container {
     }
     .action-container {
       display: flex;
-      width: 70px;
+      //width: 70px;
       justify-content: space-between;
     }
   }
@@ -209,4 +209,8 @@ section.meetings-container {
 
 .attendance-list-mode {
   margin-bottom: 20px;
+}
+
+.action-button {
+  margin-left: 5px;
 }

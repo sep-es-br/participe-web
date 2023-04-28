@@ -82,8 +82,12 @@
               <span>{{meeting?.showChannels}}</span>
             </div>
             <div class="action-container">
-              <button pButton (click)="handleCreateOrEdit(meeting.id)" icon="pi pi-pencil"></button>
-              <button pButton (click)="handleDelete(meeting)" icon="pi pi-trash"></button>
+              <button class="action-button" pButton id="pencil" (click)="handleCreateOrEdit(meeting.id)"
+                pTooltip="{{'conference.meeting.action.edit' | translate}}" icon="pi pi-pencil"></button>
+              <button class="action-button" pButton (click)="handleShowPanel(meeting.id)"
+                pTooltip="{{'conference.meeting.action.panel' | translate}}"icon="pi pi-external-link"></button>
+              <button class="action-button" pButton (click)="handleDelete(meeting)"
+                pTooltip="{{'conference.meeting.action.delete' | translate}}"icon="pi pi-trash"></button>
             </div>
           </div>
         </section>

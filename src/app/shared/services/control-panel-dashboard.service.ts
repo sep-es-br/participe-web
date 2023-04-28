@@ -22,7 +22,8 @@ export class ControlPanelDashboardService extends BaseService<any> {
                    stLastLevelLocality?: boolean,
   //                 structureItemSelected?: number,
                    structureItemPlanSelected?: number,
-                   stLastLevelPlanItem?: boolean) {
+                   stLastLevelPlanItem?: boolean,
+                   hideLoader: boolean = false) {
     const url = this.urlBase.concat('?idConference=').concat(idConference ? idConference.toString() : '')
       .concat(result ? `&result=${result}` : '')
       .concat(origin ? `&origin=${origin}` : '')
@@ -33,7 +34,13 @@ export class ControlPanelDashboardService extends BaseService<any> {
 //      .concat(structureItemSelected ? `&structureItemSelected=${structureItemSelected.toString()}` : '')
       .concat(structureItemPlanSelected ? `&structureItemPlanSelected=${structureItemPlanSelected.toString()}` : '')
       .concat(stLastLevelPlanItem ? `&stLastLevelPlanItem=${stLastLevelPlanItem.toString()}` : '');
-    return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildHeaders() }).toPromise();
+
+    if (hideLoader) {
+      return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildNoLoaderHeaders() }).toPromise();
+    }
+    else {
+      return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildHeaders() }).toPromise();
+    }
   }
 
   getAllTypeLocalityFromParents(options: any) {
