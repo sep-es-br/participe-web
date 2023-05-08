@@ -5,36 +5,36 @@ import { HttpClient } from '@angular/common/http';
 import Common from '@app/shared/util/Common';
 import { Plan } from '../models/plan';
 import { PlanItem } from '../models/plan-item';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class PlanItemService {
   private url = `${environment.apiEndpoint}/plan-items`;
-  private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authSrv: AuthService) {}
 
-  listAll(query) {
+  async listAll(query) {
     const url = this.url.concat(query ? `?query=${query}` : '');
-    return this.http.get<Plan[]>(url, { headers: this.headers }).toPromise();
+    return this.http.get<Plan[]>(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  show(id) {
+  async show(id) {
     const url = `${this.url}/${id}`;
-    return this.http.get<PlanItem>(url, { headers: this.headers }).toPromise();
+    return this.http.get<PlanItem>(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  save(planItem, edit) {
+  async save(planItem, edit) {
     if (edit) {
       const url = `${this.url}/${planItem.id}`;
-      return this.http.put<Plan>(url, JSON.stringify(planItem), { headers: this.headers }).toPromise();
+      return this.http.put<Plan>(url, JSON.stringify(planItem), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     } else {
-      return this.http.post<Plan>(this.url, JSON.stringify(planItem), { headers: this.headers }).toPromise();
+      return this.http.post<Plan>(this.url, JSON.stringify(planItem), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     }
   }
 
-  delete(id) {
+  async delete(id) {
     const url = `${this.url}/${id}`;
-    return this.http.delete(url, { headers: this.headers }).toPromise();
+    return this.http.delete(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
 }

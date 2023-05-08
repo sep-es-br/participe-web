@@ -624,7 +624,7 @@ export class PlanComponent implements OnInit {
 
   async removeFile(id: number, from: string) {
     try {
-      await this.planService.deleteLogo(id).toPromise();
+      await this.planService.deleteLogo(id);
     } catch (err) {
       console.error(err);
     }

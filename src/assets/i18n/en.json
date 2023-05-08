@@ -554,6 +554,9 @@
 	"update": "Update",
 	"warn": "Warn",
 	"years": "Years",
-	"yes": "Yes"
+	"yes": "Yes",
+  "session-expired": {
+    "error": "Your session is expired due to inactivity. Please login again."
+  }
 }
 

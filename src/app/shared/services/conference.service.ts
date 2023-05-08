@@ -8,34 +8,34 @@ import {Injectable} from '@angular/core';
 import {PrepareHttpQuery} from '../util/Query.utils';
 import {environment} from '@environments/environment';
 import {IResultRegionalizationConference} from '../interface/IResultRegionalizationConference';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ConferenceService {
   private url = `${environment.apiEndpoint}/conferences`;
-  private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private authSrv: AuthService) {
   }
 
   async getById(id: number) {
-    const conference = await this.http.get<Conference>(`${this.url}/${id}`, {headers: this.headers}).toPromise();
+    const conference = await this.http.get<Conference>(`${this.url}/${id}`, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
     return conference;
   }
 
-  getRegionalization(idConference: number) {
+  async getRegionalization(idConference: number) {
     return this.http.get<IResultRegionalizationConference>
-    (`${this.url}/${idConference}/regionalization`, {headers: this.headers}).toPromise();
+    (`${this.url}/${idConference}/regionalization`, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
   async listAll() {
-    this.headers = Common.buildHeaders();
-    const conferences = await this.http.get<Conference[]>(this.url, {headers: this.headers}).toPromise();
+    const conferences = await this.http.get<Conference[]>(this.url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
     return conferences;
   }
 
   async show(id) {
     const url = this.url.concat(`/${id}`);
-    const conference = await this.http.get<Conference>(url, {headers: this.headers}).toPromise();
+    const conference = await this.http.get<Conference>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
     return conference;
   }
 
@@ -43,80 +43,79 @@ export class ConferenceService {
     const url = this.url.concat('?name=').concat(name ? name : '').concat(plan ? `&plan=${plan.id}` : '')
       .concat(year ? `&year=${year}` : '').concat(month ? `&month=${month}` : '');
 
-    const conferences = await this.http.get<Conference[]>(url, {headers: this.headers}).toPromise();
+    const conferences = await this.http.get<Conference[]>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
     return conferences;
   }
 
-  save(conference, edit) {
+  async save(conference, edit) {
     if (edit) {
       const url = `${this.url}/${conference.id}`;
-      return this.http.put<Conference>(url, JSON.stringify(conference), {headers: this.headers}).toPromise();
+      return this.http.put<Conference>(url, JSON.stringify(conference), {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
     } else {
-      return this.http.post<Conference>(this.url, JSON.stringify(conference), {headers: this.headers}).toPromise();
+      return this.http.post<Conference>(this.url, JSON.stringify(conference), {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
     }
   }
 
-  delete(id) {
+  async delete(id) {
     const url = `${this.url}/${id}`;
-    return this.http.delete(url, {headers: this.headers}).toPromise();
+    return this.http.delete(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
-  validate(name, id) {
+  async validate(name, id) {
     const url = this.url.concat('/validate?name=').concat(name ? name : '').concat(id ? `&id=${id}` : '');
-    return this.http.get<boolean>(url, {headers: this.headers}).toPromise();
+    return this.http.get<boolean>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
-  validateDefaultConferenceServer(serverName: string, id?: number) {
+  async validateDefaultConferenceServer(serverName: string, id?: number) {
     const url = this.url.concat('/validateDefaultConference?serverName=').concat(serverName).concat(id ? `&id=${id}` : '');
-    return this.http.get<{ conferenceName: string }>(url, {headers: this.headers}).toPromise();
+    return this.http.get<{ conferenceName: string }>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
-  searchModerators(name, email) {
+  async searchModerators(name, email) {
     const url = this.url.concat('/moderators').concat('?name=').concat(name ? name : '').concat(email ? `&email=${email}` : '');
-    return this.http.get<IPerson[]>(url, {headers: this.headers}).toPromise();
+    return this.http.get<IPerson[]>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
-  searchReceptionists(name: string, email: string) {
+  async searchReceptionists(name: string, email: string) {
     return this.http.get<IPerson[]>(`${this.url}/receptionists${PrepareHttpQuery({search: {name, email}})}`,
-      {headers: this.headers}).toPromise();
+      {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
-  comments(id) {
+  async comments(id) {
     const url = this.url.concat(`/${id}/comments`);
-    return this.http.get<number>(url, {headers: this.headers}).toPromise();
+    return this.http.get<number>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
 
   }
 
-  highlights(id) {
+  async highlights(id) {
     const url = this.url.concat(`/${id}/highlights`);
-    return this.http.get<number>(url, {headers: this.headers}).toPromise();
+    return this.http.get<number>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
 
   }
 
-  selfdeclarations(id) {
+  async selfdeclarations(id) {
     const url = this.url.concat(`/${id}/selfdeclarations`);
-    return this.http.get<number>(url, {headers: this.headers}).toPromise();
+    return this.http.get<number>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
 
   }
 
-  getLocalitiesByConferenceId(conferenceId: number, localityName?: string) {
+  async getLocalitiesByConferenceId(conferenceId: number, localityName?: string) {
     return this.http.get<ILocalityConferente>(
       `${environment.apiEndpoint}/citizen/localities/${conferenceId}?name=${localityName || ''}`
-      , {headers: this.headers}).toPromise();
+      , {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
   }
 
-  getConferencesWithMeetings(date?: string) {
+  async getConferencesWithMeetings(date?: string) {
     return this.http.get<IConferenceWithMeetings[]>(
       `${this.url}/with-meetings${PrepareHttpQuery({search: {date}})}`,
-      {headers: this.headers},
+      {headers: await Common.buildHeaders(this.authSrv)},
     ).toPromise();
   }
 
-  getConferencesWithPresentialMeetings(date?: string) {
-    this.headers = Common.buildHeaders();
+  async getConferencesWithPresentialMeetings(date?: string) {
     return this.http.get<IConferenceWithMeetings[]>(
       `${this.url}/with-presential-meetings${PrepareHttpQuery({search: {date}})}`,
-      {headers: this.headers},
+      {headers: await Common.buildHeaders(this.authSrv)},
     ).toPromise();
   }
 }

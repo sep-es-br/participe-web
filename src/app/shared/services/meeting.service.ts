@@ -9,58 +9,60 @@ import { IQueryOptions } from '../interface/IQueryOptions';
 import Common from '../util/Common';
 import { IPerson } from '../interface/IPerson';
 import { IResultPlanItemByConference } from '../interface/IResultPlanItemByConference';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
-
+  authSrv: AuthService;
   constructor(
     @Inject(Injector) injector: Injector
   ) {
     super('meetings', injector);
+    this.authSrv = injector.get(AuthService);
   }
 
-  getMeetingById(meetingId: number) {
-    return this.http.get<Meeting>(`${this.urlBase}/?meetingId=${meetingId}`, { headers: Common.buildHeaders() }).toPromise();
+  async getMeetingById(meetingId: number) {
+    return this.http.get<Meeting>(`${this.urlBase}/?meetingId=${meetingId}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  getSearch(conferenceId: number, filter?: MeetingFilterModel, options?: IQueryOptions) {
+  async getSearch(conferenceId: number, filter?: MeetingFilterModel, options?: IQueryOptions) {
     return this.http.get<IResultPaginated<Meeting>>(`${this.urlBase}/${conferenceId}${PrepareHttpQuery({ ...options, search: filter })}`,
-      { headers: Common.buildHeaders() }).toPromise();
+      { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  getAllMeetingByConferenceId(conferenceId: number) {
-    return this.http.get<Meeting[]>(`${this.urlBase}/${conferenceId}`, { headers: Common.buildHeaders() }).toPromise();
+  async getAllMeetingByConferenceId(conferenceId: number) {
+    return this.http.get<Meeting[]>(`${this.urlBase}/${conferenceId}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  getAllMeetingByConferenceCombo(conferenceId: number) {
-    return this.http.get<IResultPaginated<Meeting>>(`${this.urlBase}/${conferenceId}`, { headers: Common.buildHeaders() }).toPromise();
+  async getAllMeetingByConferenceCombo(conferenceId: number) {
+    return this.http.get<IResultPaginated<Meeting>>(`${this.urlBase}/${conferenceId}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  getReceptionistByEmail(email: string) {
-    return this.http.get<IPerson>(`${this.urlBase}/receptionistByEmail?email=${email}`, { headers: Common.buildHeaders() }).toPromise();
+  async getReceptionistByEmail(email: string) {
+    return this.http.get<IPerson>(`${this.urlBase}/receptionistByEmail?email=${email}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  getPlanItemsTargetedByConference(conferenceId: number) {
+  async getPlanItemsTargetedByConference(conferenceId: number) {
     return this.http.get<IResultPlanItemByConference[]>(`${this.urlBase}/${conferenceId}/targeted-by/plan-items`,
-    { headers: Common.buildHeaders() }).toPromise();
+    { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
 
-  getListPerson(idMeeting: number, query: IQueryOptions): Promise<IResultPaginated<IAttendee>> {
+  async getListPerson(idMeeting: number, query: IQueryOptions): Promise<IResultPaginated<IAttendee>> {
     return this.http.get<IResultPaginated<IAttendee>>(
       `${this.urlBase}/${idMeeting}/persons${PrepareHttpQuery(query)}`,
-      { headers: Common.buildHeaders() }
+      { headers: await Common.buildHeaders(this.authSrv) }
     ).toPromise();
   }
 
-  getListAttendees(idMeeting: number, query: IQueryOptions): Promise<IResultPaginated<IAttendee>> {
+  async getListAttendees(idMeeting: number, query: IQueryOptions): Promise<IResultPaginated<IAttendee>> {
     return this.http.get<IResultPaginated<IAttendee>>(
       `${this.urlBase}/${idMeeting}/participants${PrepareHttpQuery(query)}`,
-      { headers: Common.buildHeaders() }
+      { headers: await Common.buildHeaders(this.authSrv) }
     ).toPromise();
   }
 
-  postCheckIn(meetingId: number, personId: number, timeZone: string): Promise<any> {
+  async postCheckIn(meetingId: number, personId: number, timeZone: string): Promise<any> {
     return this.http.post(
       `${this.urlBase}/checkIn`,
       {
@@ -68,14 +70,14 @@ export class MeetingService extends BaseService<Meeting> {
         personId,
         timeZone
       },
-      { headers: Common.buildHeaders() }
+      { headers: await Common.buildHeaders(this.authSrv) }
     ).toPromise();
   }
 
-  deleteCheckIn(meetingId: number, personId: number): Promise<any> {
+  async deleteCheckIn(meetingId: number, personId: number): Promise<any> {
     return this.http.delete(
       `${this.urlBase}/${meetingId}/remove-participation/${personId}`,
-      { headers: Common.buildHeaders() }
+      { headers: await Common.buildHeaders(this.authSrv) }
     ).toPromise();
   }
 

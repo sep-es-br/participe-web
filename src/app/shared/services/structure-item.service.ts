@@ -4,38 +4,39 @@ import { HttpClient } from '@angular/common/http';
 
 import Common from '@app/shared/util/Common';
 import { StructureItem } from '@app/shared/models/structure-item';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class StructureItemService {
   private url = `${environment.apiEndpoint}/structure-items`;
-  private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private authSrv: AuthService) {}
 
-  listAll(query) {
-    return this.http.get<StructureItem[]>(`${this.url}?query=${query}`, { headers: this.headers }).toPromise();
+  async listAll(query) {
+    return this.http.get<StructureItem[]>(`${this.url}?query=${query}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  find(id) {
-    return this.http.get<StructureItem>(`${this.url}/${id}`, { headers: this.headers }).toPromise();
+  async find(id) {
+    return this.http.get<StructureItem>(`${this.url}/${id}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  save(structureItem, edit) {
+  async save(structureItem, edit) {
     if (edit) {
       const editUrl = `${this.url}/${structureItem.id}`;
-      return this.http.put<StructureItem>(editUrl, JSON.stringify(structureItem), { headers: this.headers }).toPromise();
+      return this.http.put<StructureItem>(editUrl, JSON.stringify(structureItem), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     } else {
-      return this.http.post<StructureItem>(this.url, JSON.stringify(structureItem), { headers: this.headers }).toPromise();
+      return this.http.post<StructureItem>(this.url, JSON.stringify(structureItem), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     }
   }
 
-  delete(id) {
+  async delete(id) {
     const url = `${this.url}/${id}`;
-    return this.http.delete(url, { headers: this.headers }).toPromise();
+    return this.http.delete(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  listStructureItems(idStructure: number) {
+  async listStructureItems(idStructure: number) {
     return this.http.get<StructureItem[]>
-      (`${this.url}/list?id=${idStructure && idStructure.toString()}`, { headers: this.headers }).toPromise();
+      (`${this.url}/list?id=${idStructure && idStructure.toString()}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 }

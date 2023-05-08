@@ -8,6 +8,7 @@ import { environment } from '@environments/environment';
 import { ConfirmationService } from 'primeng/api';
 import { Inject, Injector } from '@angular/core';
 import * as _ from 'lodash';
+import { AuthService } from '../services/auth.service';
 
 // tslint:disable: no-string-literal
 // tslint:disable: no-shadowed-variable
@@ -18,14 +19,16 @@ export abstract class BaseService<T> {
   urlBase: string = '';
   http: HttpClient;
   confirmationSrv: ConfirmationService;
+  authSrv: AuthService;
 
   protected constructor(
     public url: string,
-    @Inject(Injector) injector: Injector
+    @Inject(Injector) injector: Injector,
   ) {
     this.urlBaseDefault = this.urlBase = `${environment.apiEndpoint}/${this.url}`;
     this.http = injector.get(HttpClient);
     this.confirmationSrv = injector.get(ConfirmationService);
+    this.authSrv = injector.get(AuthService);
   }
 
   setParamsFromUrl(fields: string[], values: any[]) {
@@ -34,13 +37,13 @@ export abstract class BaseService<T> {
     });
   }
 
-  public GetAllUrl<T>({ url, options }: { url: string; options?: IQueryOptions; }): Promise<IResultPaginated<T>> {
-    return this.http.get<IResultPaginated<T>>(`${url}${PrepareHttpQuery(options)}`, { headers: Common.buildHeaders() }).toPromise();
+  public async GetAllUrl<T>({ url, options }: { url: string; options?: IQueryOptions; }): Promise<IResultPaginated<T>> {
+    return this.http.get<IResultPaginated<T>>(`${url}${PrepareHttpQuery(options)}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
   public async GetAll(options?: IQueryOptions): Promise<T[]> {
     const response = await
-      this.http.get<any>(`${this.urlBase}${PrepareHttpQuery(options)}`, { headers: Common.buildHeaders() }).toPromise();
+      this.http.get<any>(`${this.urlBase}${PrepareHttpQuery(options)}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     if (_.get(response, 'success', true)) {
       return _.get(response, 'data', response) as T[];
     } else {
@@ -51,7 +54,7 @@ export abstract class BaseService<T> {
   public async GetAllPaginated(options?: IQueryOptions): Promise<any> {
     const response = await
       this.http.get<IResultPaginated<T>>(`${this.urlBase}${PrepareHttpQuery(options)}`,
-        { headers: Common.buildHeaders() }
+        { headers: await Common.buildHeaders(this.authSrv) }
       ).toPromise();
     if (_.get(response, 'totalPages', 0) > 0) {
       return response as IResultPaginated<T>;
@@ -64,7 +67,7 @@ export abstract class BaseService<T> {
   public async GetById(id: number, options?: IQueryOptions): Promise<IHttpResult<T>> {
     const response = await this.http.get<T>(
       `${this.urlBase}/${id}${PrepareHttpQuery(options)}`,
-      { headers: Common.buildHeaders() }).toPromise();
+      { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     return {
       success: _.get(response, 'success', true),
       data: _.get(response, 'data', response),
@@ -72,15 +75,15 @@ export abstract class BaseService<T> {
     };
   }
 
-  public post(model: T, url?: string): Promise<T> {
-    return this.http.post(url ? url : this.urlBase, model, { headers: Common.buildHeaders() }).toPromise() as Promise<T>;
+  public async post(model: T, url?: string): Promise<T> {
+    return this.http.post(url ? url : this.urlBase, model, { headers: await Common.buildHeaders(this.authSrv) }).toPromise() as Promise<T>;
   }
 
-  public put(model: T, id: number): Promise<T> {
-    return this.http.put(`${this.urlBase}/${id}`, model, { headers: Common.buildHeaders() }).toPromise() as Promise<T>;
+  public async put(model: T, id: number): Promise<T> {
+    return this.http.put(`${this.urlBase}/${id}`, model, { headers: await Common.buildHeaders(this.authSrv) }).toPromise() as Promise<T>;
   }
 
-  public save(model: T, id?: number): Promise<T> {
+  public async save(model: T, id?: number): Promise<T> {
     if (_.isNumber(id) && id > 0) {
       return this.put(model, id);
     } else {
@@ -88,8 +91,8 @@ export abstract class BaseService<T> {
     }
   }
 
-  public deleteFlush(id: number, url?: string): Promise<T> {
-    return this.http.delete(`${this.urlBase}/${id}`, { headers: Common.buildHeaders() }).toPromise() as Promise<T>;
+  public async deleteFlush(id: number, url?: string): Promise<T> {
+    return this.http.delete(`${this.urlBase}/${id}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise() as Promise<T>;
   }
 
   public async delete(model: T, options?: { message?: string, field?: string }) {
@@ -103,7 +106,7 @@ export abstract class BaseService<T> {
         rejectLabel: 'Não',
         accept: async () => {
           try {
-            const result = await this.http.delete(`${this.urlBase}/${model['id']}`, { headers: Common.buildHeaders() }).toPromise();
+            const result = await this.http.delete(`${this.urlBase}/${model['id']}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
             resolve(result['success'] || !!result);
           } catch (error) {
             reject(error);

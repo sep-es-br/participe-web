@@ -555,5 +555,8 @@
 	"update": "Editar",
 	"warn": "Cuidado",
 	"years": "Anos",
-	"yes": "Sim"
+	"yes": "Sim",
+  "session-expired": {
+    "error": "Sua sessão expirou por inatividade. Por favor, faça login novamente."
+  }
 }

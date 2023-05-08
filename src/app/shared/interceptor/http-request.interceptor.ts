@@ -53,6 +53,11 @@ export class HttpRequestInterceptor implements HttpInterceptor {
             severity: 'warn',
             detail: this.translateSrv.instant('unauthorized.error')
           });
+        } else if (error.status === 401 || (error.status === 500 && error.message.startsWith('JWT expired '))) {
+          this.messageSrv.add({
+            severity: 'warn',
+            detail: this.translateSrv.instant('session-expired.error')
+          });
         }
         this.loadingService.updateProgressLoading(100);
         return throwError({ ...error });

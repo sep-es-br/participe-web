@@ -4,15 +4,16 @@ import { HttpClient } from '@angular/common/http';
 
 import Common from '@app/shared/util/Common';
 import { LocalityType } from '@app/shared/models/locality-type';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class LocalityTypeService {
   private url = `${environment.apiEndpoint}/locality-types`;
-  private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private authSrv: AuthService) {}
 
-  listAll() {
-    return this.http.get<LocalityType[]>(this.url, { headers: this.headers }).toPromise();
+  async listAll() {
+    return this.http.get<LocalityType[]>(this.url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 }

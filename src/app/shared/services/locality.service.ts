@@ -5,47 +5,48 @@ import { Injectable } from '@angular/core';
 import { Locality } from '@app/shared/models/locality';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class LocalityService {
   private url = `${environment.apiEndpoint}/localities`;
-  private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient, private translateSrv: TranslateService) { }
+  constructor(private http: HttpClient, private translateSrv: TranslateService,
+              private authSrv: AuthService) { }
 
-  listAll(query) {
-    return this.http.get<Locality[]>(`${this.url}?query=${query}`, { headers: this.headers }).toPromise();
+  async listAll(query) {
+    return this.http.get<Locality[]>(`${this.url}?query=${query}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  listAllByNameType(query, type) {
+  async listAllByNameType(query, type) {
     const url = `${this.url}?query=${query}`.concat(type ? `&type=${type}` : '');
-    return this.http.get<Locality[]>(url, { headers: this.headers }).toPromise();
+    return this.http.get<Locality[]>(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  save(locality: Locality, edit: boolean) {
+  async save(locality: Locality, edit: boolean) {
     if (edit) {
-      return this.http.put<Locality>(`${this.url}/${locality.id}`, JSON.stringify(locality), { headers: this.headers }).toPromise();
+      return this.http.put<Locality>(`${this.url}/${locality.id}`, JSON.stringify(locality), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     } else {
-      return this.http.post<Locality>(this.url, JSON.stringify(locality), { headers: this.headers }).toPromise();
+      return this.http.post<Locality>(this.url, JSON.stringify(locality), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     }
   }
 
-  delete(idLocality: number, idDomain: number) {
-    return this.http.delete(`${this.url}/${idLocality}/domain/${idDomain}`, { headers: this.headers }).toPromise();
+  async delete(idLocality: number, idDomain: number) {
+    return this.http.delete(`${this.url}/${idLocality}/domain/${idDomain}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  findByDomain(idDomain: number) {
-    return this.http.get<Locality[]>(`${this.url}/domain/${idDomain}`, { headers: this.headers }).toPromise();
+  async findByDomain(idDomain: number) {
+    return this.http.get<Locality[]>(`${this.url}/domain/${idDomain}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  findByConference(idConference: number) {
-    return this.http.get<IResultLocalitysByConference>(`${this.url}/conference/${idConference}`, { headers: this.headers }).toPromise();
+  async findByConference(idConference: number) {
+    return this.http.get<IResultLocalitysByConference>(`${this.url}/conference/${idConference}`, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  getLocalitiesBasedOnConferenceCitizenAuth(idConference: number) {
+  async getLocalitiesBasedOnConferenceCitizenAuth(idConference: number) {
     return this.http.get<IResultLocalitysByConference>(
       `${this.url}/complement/${idConference}`,
-      { headers: this.headers }
+      { headers: await Common.buildHeaders(this.authSrv) }
     ).toPromise();
   }
 

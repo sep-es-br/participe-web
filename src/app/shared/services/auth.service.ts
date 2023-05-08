@@ -46,12 +46,13 @@ export class AuthService {
           `${environment.apiEndpoint}/signin/refresh?refreshToken=${refreshToken}`
         ).toPromise();
         this.saveToken(data);
+        return true;
       }
-      return true;
+      return false;
     } catch (err) {
+      this.clearTokens();
+      return false;
     }
-    this.clearTokens();
-    return false;
   }
 
   async signOut() {
@@ -112,12 +113,12 @@ export class AuthService {
       if (notExpired) {
         return true;
       }
-
-      if (await this.refresh()) {
-        return true;
-      }
+      return await this.refresh();
     }
-    return false;
+    else {
+      return false;
+    }
+
   }
 
   getAuthenticationIcon(authProvider: string): string {

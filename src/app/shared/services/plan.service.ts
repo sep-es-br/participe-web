@@ -4,36 +4,36 @@ import { HttpClient } from '@angular/common/http';
 
 import Common from '@app/shared/util/Common';
 import { Plan } from '../models/plan';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class PlanService {
   private url = `${environment.apiEndpoint}/plans`;
   private urlApiImagem = `${environment.apiEndpoint}/files`;
-  private headers = Common.buildHeaders();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authSrv: AuthService) {}
 
-  listAll(query) {
+  async listAll(query) {
     const url = this.url.concat(query ? `?query=${query}` : '');
-    return this.http.get<Plan[]>(url, { headers: this.headers }).toPromise();
+    return this.http.get<Plan[]>(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  save(domain, edit) {
+  async save(domain, edit) {
     if (edit) {
       const url = `${this.url}/${domain.id}`;
-      return this.http.put<Plan>(url, JSON.stringify(domain), { headers: this.headers }).toPromise();
+      return this.http.put<Plan>(url, JSON.stringify(domain), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     } else {
-      return this.http.post<Plan>(this.url, JSON.stringify(domain), { headers: this.headers }).toPromise();
+      return this.http.post<Plan>(this.url, JSON.stringify(domain), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
     }
   }
 
-  delete(id) {
+  async delete(id) {
     const url = `${this.url}/${id}`;
-    return this.http.delete(url, { headers: this.headers }).toPromise();
+    return this.http.delete(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
   }
 
-  deleteLogo(id) {
+  async deleteLogo(id) {
     const url = this.urlApiImagem + '/' + id;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, { headers: await Common.buildHeaders(this.authSrv) });
   }
 }

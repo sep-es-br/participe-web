@@ -2,6 +2,7 @@ import { IPerson } from '@app/shared/interface/IPerson';
 import { Injectable, Injector, Inject } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import Common from '../util/Common';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class PersonService extends BaseService<any> {
@@ -11,10 +12,10 @@ export class PersonService extends BaseService<any> {
     super('person', injector);
   }
 
-  postOperator(profile: string, person: IPerson): Promise<any> {
+  async postOperator(profile: string, person: IPerson): Promise<any> {
     return this.http.post(
       `${this.urlBase}/operator?profile=${profile}`, JSON.stringify(person),
-      { headers: Common.buildHeaders() }
+      { headers: await Common.buildHeaders(this.authSrv) }
     ).toPromise();
   }
 
