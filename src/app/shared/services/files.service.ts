@@ -6,10 +6,11 @@ import Common from '../util/Common';
 @Injectable()
 export class FilesService {
   private url = `${environment.apiEndpoint}/files`;
+  private headers = Common.buildFileUploadHeaders();
 
   constructor(private http: HttpClient) {}
 
   uploadFile(file: FormData) {
-    return this.http.post<any>(`${this.url}/upload`, file, { headers: Common.buildFileUploadHeaders() }).toPromise();
+    return this.http.post<any>(`${this.url}/upload`, file, { headers: Common.buildHeaders() }).toPromise();
   }
 }

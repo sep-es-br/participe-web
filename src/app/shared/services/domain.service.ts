@@ -4,31 +4,31 @@ import { HttpClient } from '@angular/common/http';
 
 import Common from '@app/shared/util/Common';
 import { Domain } from '../models/domain';
-import { AuthService } from './auth.service';
 
 @Injectable()
 export class DomainService {
   private url = `${environment.apiEndpoint}/domains`;
 
-  constructor(private http: HttpClient, private authSrv: AuthService) { }
 
-  async listAll(query) {
+  constructor(private http: HttpClient) { }
+
+  listAll(query) {
     const url = this.url.concat(query ? `?query=${query}` : '');
-    return this.http.get<Domain[]>(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
+    return this.http.get<Domain[]>(url, { headers: Common.buildHeaders() }).toPromise();
   }
 
-  async save(domain, edit) {
+  save(domain, edit) {
     if (edit) {
       const url = `${this.url}/${domain.id}`;
-      return this.http.put<Domain>(url, JSON.stringify(domain), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
+      return this.http.put<Domain>(url, JSON.stringify(domain), { headers: Common.buildHeaders() }).toPromise();
     } else {
-      return this.http.post<Domain>(this.url, JSON.stringify(domain), { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
+      return this.http.post<Domain>(this.url, JSON.stringify(domain), { headers: Common.buildHeaders() }).toPromise();
     }
   }
 
-  async delete(id) {
+  delete(id) {
     const url = `${this.url}/${id}`;
-    return this.http.delete(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
+    return this.http.delete(url, { headers: Common.buildHeaders() }).toPromise();
   }
 
 }

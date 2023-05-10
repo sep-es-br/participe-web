@@ -3,20 +3,17 @@ import Common from '@app/shared/util/Common';
 import { IControlPanelDashboardData } from '../interface/IControlPanelDashboardData';
 import { LocalityType } from '../models/locality-type';
 import { BaseService } from '../base/base.service';
-import { AuthService } from './auth.service';
 
 @Injectable()
 export class ControlPanelDashboardService extends BaseService<any> {
 
-  authSrv: AuthService;
   constructor(
     @Inject(Injector) injector: Injector
   ) {
     super('control-panel-dashboard', injector);
-    this.authSrv = injector.get(AuthService);
   }
 
-  async getDashboardData(idConference: number,
+  getDashboardData(idConference: number,
                    result?: string,
                    origin?: string,
                    meetings?: number[],
@@ -39,20 +36,20 @@ export class ControlPanelDashboardService extends BaseService<any> {
       .concat(stLastLevelPlanItem ? `&stLastLevelPlanItem=${stLastLevelPlanItem.toString()}` : '');
 
     if (hideLoader) {
-      return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildNoLoaderHeaders(this.authSrv) }).toPromise();
+      return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildNoLoaderHeaders() }).toPromise();
     }
     else {
-      return this.http.get<IControlPanelDashboardData>(url, { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
+      return this.http.get<IControlPanelDashboardData>(url, { headers: Common.buildHeaders() }).toPromise();
     }
   }
 
-  async getAllTypeLocalityFromParents(options: any) {
+  getAllTypeLocalityFromParents(options: any) {
     const url = this.urlBase.concat('/locality-parents')
       .concat('?idDomain=').concat(options.idDomain ? options.idDomain.toString() : '')
       .concat('&idTypeLocality=').concat(options.idTypeLocality ? options.idTypeLocality.toString() : '');
     return this.http.get<LocalityType[]>
       (url,
-      { headers: await Common.buildHeaders(this.authSrv) }).toPromise();
+      { headers: Common.buildHeaders() }).toPromise();
   }
 
 }

@@ -551,12 +551,10 @@
 	},
 	"type": "Type",
 	"unauthorized.error": "You do not have permission to access this functionality",
+  "expired.error": "Your session has expired. Please login again.",
 	"update": "Update",
 	"warn": "Warn",
 	"years": "Years",
-	"yes": "Yes",
-  "session-expired": {
-    "error": "Your session is expired due to inactivity. Please login again."
-  }
+	"yes": "Yes"
 }
 

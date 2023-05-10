@@ -865,7 +865,7 @@ export class ConferenceComponent implements OnInit {
 
   async removeFile(id: number, from: string) {
     try {
-      await this.planService.deleteLogo(id);
+      await this.planService.deleteLogo(id).toPromise();
     } catch (err) {
       console.error(err);
     }

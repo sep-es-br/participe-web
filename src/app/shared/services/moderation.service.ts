@@ -10,12 +10,13 @@ import {environment} from '@environments/environment';
 import {HttpClient} from '@angular/common/http';
 import Common from '../util/Common';
 import * as qs from 'qs';
-import { AuthService } from './auth.service';
 
 @Injectable({providedIn: 'root'})
 export class ModerationService {
 
-  constructor(private http: HttpClient, private authSrv: AuthService) {
+
+
+  constructor(private http: HttpClient) {
   }
 
   get StatusOptions(): string[] {
@@ -26,14 +27,14 @@ export class ModerationService {
     return ['Presential', 'Remote'];
   }
 
-  async getModeration(moderationId: number, conferenceId: number) {
+  getModeration(moderationId: number, conferenceId: number) {
     return this.http.get<ModerationComments>(
       `${environment.apiEndpoint}/moderation/${moderationId}?conferenceId=${conferenceId}`,
-      {headers: await Common.buildHeaders(this.authSrv)}
+      {headers: Common.buildHeaders()}
     ).toPromise();
   }
 
-  async getCommentsForModeration(conferenceId: number, filter: ModerationFilter) {
+  getCommentsForModeration(conferenceId: number, filter: ModerationFilter) {
     const localityId = filter.localityId;
     const planItensId = filter.planItemId;
     //filter.localityIds = undefined;
@@ -45,50 +46,50 @@ export class ModerationService {
     const url = `${environment.apiEndpoint}/moderation${qs.stringify(query, {addQueryPrefix: true})}`
       .concat(localityId ? `&localityIds=${localityId.toString()}` : '')
       .concat(planItensId ? `&planItemIds=${planItensId.toString()}` : '');
-    return this.http.get<ModerationComments[]>(url, {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
+    return this.http.get<ModerationComments[]>(url, {headers: Common.buildHeaders()}).toPromise();
   }
 
-  async getLocalities(conferenceId: number) {
+  getLocalities(conferenceId: number) {
     return this.http.get<ModerationLocatliy>(`${environment.apiEndpoint}/moderation/localities/conference/${conferenceId}`,
-      {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
+      {headers: Common.buildHeaders()}).toPromise();
   }
 
-  async getPlanItem(conferenceId: number) {
+  getPlanItem(conferenceId: number) {
     return this.http.get<ModerationPlanItem>(`${environment.apiEndpoint}/moderation/plan-items/conference/${conferenceId}`,
-      {headers: await Common.buildHeaders(this.authSrv)}).toPromise();
+      {headers: Common.buildHeaders()}).toPromise();
   }
 
-  async getConferencesActive(isActive: boolean) {
+  getConferencesActive(isActive: boolean) {
     return this.http.get<Conference[]>(`${environment.apiEndpoint}/moderation/conferences?activeConferences=${isActive}`,
-      {headers: await Common.buildHeaders(this.authSrv)}
+      {headers: Common.buildHeaders()}
     ).toPromise();
   }
 
-  async update(comment: ModerateUpdate): Promise<ModerationComments> {
+  update(comment: ModerateUpdate): Promise<ModerationComments> {
     return this.http.put<ModerationComments>(`${environment.apiEndpoint}/moderation/${comment.id}`,
       comment,
-      {headers: await Common.buildHeaders(this.authSrv)}
+      {headers: Common.buildHeaders()}
     ).toPromise();
   }
 
-  async begin(comment: ModerateUpdate): Promise<ModerationComments> {
+  begin(comment: ModerateUpdate): Promise<ModerationComments> {
     return this.http.put<ModerationComments>(`${environment.apiEndpoint}/moderation/begin/${comment.id}`,
       comment,
-      {headers: await Common.buildHeaders(this.authSrv)}
+      {headers: Common.buildHeaders()}
     ).toPromise();
   }
 
-  async end(comment: ModerateUpdate): Promise<ModerationComments> {
+  end(comment: ModerateUpdate): Promise<ModerationComments> {
     return this.http.put<ModerationComments>(`${environment.apiEndpoint}/moderation/end/${comment.id}`,
       comment,
-      {headers: await Common.buildHeaders(this.authSrv)}
+      {headers: Common.buildHeaders()}
     ).toPromise();
   }
 
-  async getTreeView(commentId: number) {
+  getTreeView(commentId: number) {
     return this.http.get<ModerationTreeView>(
       `${environment.apiEndpoint}/moderation/treeView/${commentId}`,
-      {headers: await Common.buildHeaders(this.authSrv)}
+      {headers: Common.buildHeaders()}
     ).toPromise();
   }
 
