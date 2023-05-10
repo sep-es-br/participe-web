@@ -551,7 +551,8 @@
 		"yourhave": "Você possui"
 	},
 	"type": "Tipo",
-	"unauthorized.error": "Você não possui permissão de acesso à essa funcionalidade",
+	"unauthorized.error": "Você não possui permissão de acesso a essa funcionalidade",
+  "expired.error": "Sua sessão expirou. Por favor faça login novamente.",
 	"update": "Editar",
 	"warn": "Cuidado",
 	"years": "Anos",

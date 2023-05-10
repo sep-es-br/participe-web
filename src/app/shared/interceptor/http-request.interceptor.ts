@@ -5,27 +5,32 @@ import {
   HttpEvent,
   HttpEventType,
   HttpHandler,
+  HttpHeaders,
   HttpInterceptor,
   HttpRequest,
   HttpResponse,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { Observable, from, of, throwError } from 'rxjs';
+import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 import { Injectable } from '@angular/core';
 import { LoadingService } from '../services/loading.service';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
+
+  isRefreshingToken = false;
 
   constructor(
     private authService: AuthService,
     private loadingService: LoadingService,
     private messageSrv: MessageService,
-    private translateSrv: TranslateService
+    private translateSrv: TranslateService,
+    private route: Router,
   ) { }
 
   intercept(
@@ -54,6 +59,9 @@ export class HttpRequestInterceptor implements HttpInterceptor {
             detail: this.translateSrv.instant('unauthorized.error')
           });
         }
+        else if (error.status === 401) {
+          return this.handleUnauthorized(req, next);
+        }
         this.loadingService.updateProgressLoading(100);
         return throwError({ ...error });
       }),
@@ -62,6 +70,61 @@ export class HttpRequestInterceptor implements HttpInterceptor {
       })
     );
   }
+
+  handleUnauthorized(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
+    if (!this.isRefreshingToken) {
+        this.isRefreshingToken = true;
+
+        // get a new token via userService.refreshToken
+        return from(this.authService.refresh())
+            .pipe(switchMap((newToken: boolean) => {
+                // did we get a new token retry previous request
+                if (newToken) {
+                  const accessToken = this.authService.getAccessToken();
+                  const headers = new HttpHeaders(accessToken ? { Authorization: `Bearer ${accessToken}` } : { }) ;
+                  req = req.clone({ headers });
+                  return next.handle(req);
+                }
+
+                // If we don't get a new token, we are in trouble so logout.
+                this.route.navigate(['/login']);
+                this.messageSrv.add({
+                  summary: this.translateSrv.instant('error'),
+                  severity: 'warn',
+                  detail: this.translateSrv.instant('expired.error')
+                });
+                return of(new HttpResponse({
+                  body: {
+                    success: false,
+                    data: null,
+                    message: this.translateSrv.instant('expired.error'),
+                  }
+                }));
+            }),
+            catchError(error => {
+              this.route.navigate(['/login']);
+              this.messageSrv.add({
+                summary: this.translateSrv.instant('error'),
+                severity: 'warn',
+                detail: this.translateSrv.instant('expired.error')
+              });
+              return of(new HttpResponse({
+                body: {
+                  success: false,
+                  data: null,
+                  message: this.translateSrv.instant('expired.error'),
+                }
+              }));
+            }),
+            finalize(() => {
+              this.isRefreshingToken = false;
+            })
+        );
+    } else {
+      return next.handle(req);
+    }
+  }
+
 
   handleLoading(event: HttpEvent<any>) {
     switch (event.type) {
