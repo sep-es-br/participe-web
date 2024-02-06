@@ -50,11 +50,11 @@ form {
   display: inline-block;
 }
 
-.server-name, .switch-default-conference {
+.server-name, .switch-default-conference, .switch-show-statistics {
   margin-top: 1em;
 }
 
-::ng-deep .switch-default-conference {
+::ng-deep .switch-default-conference , ::ng-deep .switch-show-statistics  {
   display: flex;
   align-items: center;
   margin-bottom: 2em;
@@ -79,6 +79,7 @@ form {
       }
     }
   }
+
   .ui-inputswitch-checked .ui-inputswitch-slider {
     background-color: #FFA000 !important;
     border-color: #FFA000 !important;

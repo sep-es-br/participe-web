@@ -108,6 +108,7 @@
     "serverName": "Nome do servidor",
     "conferenceName": "Nome da consulta",
     "defaultServerConference": "Consulta padrão do servidor",
+	"showStatistics": "Mostrar estatistica",
     "stepUpdated": "Passo alterado",
     "externalLinkUpdated": "Link externo alterado",
     "requiredInputs": "Preencha todas as informações",

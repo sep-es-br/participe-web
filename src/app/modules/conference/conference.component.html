@@ -46,6 +46,13 @@
                 <label class="targeted-label"
                        for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>
               </div>
+              <div class="p-col-12 p-md-6 switch-show-statistics">
+                <p-inputSwitch id="input-switch-show-statistics" formControlName="showStatistics" (onChange)="test()">
+                </p-inputSwitch>
+                <label class="targeted-label"
+                       for="input-switch-show-statistics">{{'conference.showStatistics'|translate}}</label>
+                       
+              </div>
             </div>
             <p-accordion [multiple]="true">
               <p-accordionTab header="{{'conference.moderators' | translate}}">

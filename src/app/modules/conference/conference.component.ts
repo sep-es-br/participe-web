@@ -1,6 +1,6 @@
 import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe, Location} from '@angular/common';
@@ -231,6 +231,7 @@ export class ConferenceComponent implements OnInit {
       description: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
       serverName: ['', [Validators.compose([Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator])]],
       defaultServerConference: false,
+      showStatistics: true,
       beginDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       plan: [null, Validators.required],
@@ -317,6 +318,7 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.plan.setValue(this.findPlanInList(this.conference.plan));
     this.conferenceForm.controls.serverName.setValue(this.conference.serverName);
     this.conferenceForm.controls.defaultServerConference.setValue(this.conference.defaultServerConference);
+    this.conferenceForm.controls.showStatistics.setValue(this.conference.showStatistics);
     this.conferenceForm.controls.beginDate.setValue(this.getDate(this.conference.beginDate));
     this.conferenceForm.controls.endDate.setValue(this.getDate(this.conference.endDate));
     this.conferenceForm.controls.titleAuthentication.setValue(this.conference.titleAuthentication);
@@ -777,6 +779,7 @@ export class ConferenceComponent implements OnInit {
       });
     }
   }
+
   async uploadFile(index: number, setFile: string): Promise<File> {
     const formData: FormData = new FormData();
     let file: any;
@@ -1100,6 +1103,10 @@ export class ConferenceComponent implements OnInit {
       return 1;
     }
     return 0;
+  }
+
+  test(){
+    console.log(this.conference)
   }
 
 }
