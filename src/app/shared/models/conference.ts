@@ -29,7 +29,8 @@ export class Conference {
   isActive: boolean;
   serverName: string;
   defaultServerConference: boolean;
-  showStatistics: boolean;
+  showStatistics: Boolean;
+  showCalendar: Boolean;
   segmentation: boolean;
   targetedByItems: number[];
   displayMode: string;  // AUTOMATIC || MANUAL

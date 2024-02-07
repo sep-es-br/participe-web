@@ -50,11 +50,11 @@ form {
   display: inline-block;
 }
 
-.server-name, .switch-default-conference, .switch-show-statistics {
+.server-name, .switch-default-conference, .switch-show-statistics, .switch-show-calendar{
   margin-top: 1em;
 }
 
-::ng-deep .switch-default-conference , ::ng-deep .switch-show-statistics  {
+::ng-deep .switch-default-conference , ::ng-deep .switch-show-statistics, ::ng-deep .switch-show-calendar  {
   display: flex;
   align-items: center;
   margin-bottom: 2em;
