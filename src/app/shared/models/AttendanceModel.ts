@@ -1,26 +1,27 @@
-import {Inject, Injector} from '@angular/core';
-import {MessageService, SelectItem} from 'primeng/api';
-import {TranslateService} from '@ngx-translate/core';
+import { Inject, Injector } from '@angular/core';
+import { MessageService, SelectItem } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
-import {IAttendee} from '../interface/IAttendee';
-import {IConferenceWithMeetings} from '../interface/IConferenceWithMeetings';
-import {IQueryOptions} from '../interface/IQueryOptions';
-import {Meeting} from './Meeting';
-import {Locality} from './locality';
-import {howLongAgo} from '../util/Date.utils';
-import {getColorBasedOnText} from '../util/Colors.utils';
-import {ActionBarService} from '@app/core/actionbar/app.actionbar.actions.service';
-import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
-import {ConferenceService} from '../services/conference.service';
-import {MeetingService} from '../services/meeting.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators} from '../util/CustomValidators';
-import {Subscription} from 'rxjs';
-import {CitizenSenderModel} from './CitizenSenderModel';
-import {CitizenService} from '../services/citizen.service';
-import {CitizenAuthenticationModel} from './CitizenAuthenticationModel';
-import {LocalityService} from '../services/locality.service';
+import { IAttendee } from '../interface/IAttendee';
+import { IConferenceWithMeetings } from '../interface/IConferenceWithMeetings';
+import { IQueryOptions } from '../interface/IQueryOptions';
+import { Meeting } from './Meeting';
+import { Locality } from './locality';
+import { howLongAgo } from '../util/Date.utils';
+import { getColorBasedOnText } from '../util/Colors.utils';
+import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
+import { ConferenceService } from '../services/conference.service';
+import { MeetingService } from '../services/meeting.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from '../util/CustomValidators';
+import { Subscription } from 'rxjs';
+import { CitizenSenderModel } from './CitizenSenderModel';
+import { CitizenService } from '../services/citizen.service';
+import { CitizenAuthenticationModel } from './CitizenAuthenticationModel';
+import { LocalityService } from '../services/locality.service';
 import * as moment from 'moment';
+import { concat } from 'lodash';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -45,6 +46,8 @@ export class AttendanceModel {
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
   optionsMeeting: Meeting[];
+  auxiliaryList: Meeting[];
+  auxiliaryList2: Meeting[];
   selectedConference: IConferenceWithMeetings;
   selectedMeeting: Meeting;
   currentConference: IConferenceWithMeetings;
@@ -128,14 +131,14 @@ export class AttendanceModel {
   }
 
   async selectAttendee(attendee: IAttendee) {
-    const {name, locality, authType, cpf, email, phone, password} = this.form.controls;
+    const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
     try {
       this.isAttendeeSelected = true;
       this.selectedAttende = attendee;
       const {
         success,
         data
-      } = await this.citizenSrv.GetById(attendee.personId, {search: {conferenceId: this.currentConference.id}});
+      } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
       if (success) {
         const auhtTypeAttendee = data.typeAuthentication === 'cpf' ? AuthTypeEnum.CPF : AuthTypeEnum.EMAIL;
         name.setValue(data.name);
@@ -169,10 +172,10 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.invalidForm'),
       });
 
-      return {success: false};
+      return { success: false };
     }
 
-    const {name, locality, phone, authType, cpf, password, email, resetPassword} = this.form.value;
+    const { name, locality, phone, authType, cpf, password, email, resetPassword } = this.form.value;
 
     const formAPI: CitizenSenderModel = {
       name,
@@ -194,7 +197,7 @@ export class AttendanceModel {
 
     if (result) {
       this.form.reset();
-      return {success: true, result: {...result, name: formAPI.name, email: formAPI.confirmEmail}};
+      return { success: true, result: { ...result, name: formAPI.name, email: formAPI.confirmEmail } };
     }
 
     this.messageSrv.add({
@@ -203,7 +206,7 @@ export class AttendanceModel {
       detail: this.translate.instant('attendance.error.errorSaving'),
     });
 
-    return {success: false};
+    return { success: false };
   }
 
   async searchByName() {
@@ -247,7 +250,7 @@ export class AttendanceModel {
   }
 
   handleChangeAuthType(value: AuthTypeEnum) {
-    const {password: passwordControl, email: emailControl, cpf: cpfControl} = this.form.controls;
+    const { password: passwordControl, email: emailControl, cpf: cpfControl } = this.form.controls;
     if (this.valueChangeCPFSub) {
       this.valueChangeCPFSub.unsubscribe();
     }
@@ -285,8 +288,16 @@ export class AttendanceModel {
   }
 
   handleChangeConference() {
-    this.optionsMeeting = this.selectedConference.meeting;
-    this.selectedMeeting = this.selectedConference.meeting[0];
+    this.auxiliaryList = this.getRunningMeeting(this.selectedConference.meeting, 'open');
+    this.auxiliaryList2 = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
+    if (this.auxiliaryList.length > 0) {
+      this.auxiliaryList.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
+      this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+      this.selectedMeeting = this.optionsMeeting[0]
+    } else {
+      this.optionsMeeting = this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+      this.selectedMeeting = this.optionsMeeting[0]
+    }
   }
 
   callbackHideModal() {
@@ -312,7 +323,7 @@ export class AttendanceModel {
       this.nameSearch = '';
       this.noResult = false;
       this.breadcrumbSrv.setItems([
-        {label: 'attendance.label'},
+        { label: 'attendance.label' },
         {
           label: `${this.labelBreadCrumb} ${this.currentMeeting.name}`,
           routerLink: [`/attendance/${this.routerLinkItem}`]
@@ -348,45 +359,87 @@ export class AttendanceModel {
   async getConferencesAndMeetings() {
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
     const result = await this.conferenceSrv.getConferencesWithPresentialMeetings();
-
     this.optionsConference = result;
-    this.selectedConference = result[0];
-    this.optionsMeeting = result[0].meeting;
 
     //this.selectedMeeting = result[0].meeting[0];
-    if (this.optionsMeeting.length > 0) {
-      this.selectedMeeting = this.getRunningMeetingIndex(this.optionsMeeting);
-    }
+
+    this.optionsConference.forEach(item => {
+      if (item.meeting.length > 0) {
+        this.auxiliaryList = this.getRunningMeeting(item.meeting, 'open');
+        this.auxiliaryList2 = this.getRunningMeeting(item.meeting, 'closed');
+        if (this.auxiliaryList.length > 0) {
+          this.auxiliaryList.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
+          this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+          this.selectedMeeting = this.optionsMeeting[0]
+          this.selectedConference = item
+        } else {
+          this.optionsMeeting = this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+          this.selectedMeeting = this.optionsMeeting[0]
+          this.selectedConference = item
+        }
+
+      }
+    })
 
     await this.setCurrentMeeting();
   }
 
-  getRunningMeetingIndex(meetings: Meeting[]): Meeting {
+  getRunningMeeting(meetings: Meeting[], type: string): Meeting[] {
 
     let now = Date.now();
-    let runningMeeting = meetings.find((m) => {
+    let runningMeeting = meetings.filter((m) => {
       let start = new Date(
-        +m.beginDate.toString().substring(6,10), // Year
-        +m.beginDate.toString().substring(3,5) - 1, // Month
-        +m.beginDate.toString().substring(0,2), // Day
-        0,0,0,0);
+        +m.beginDate.toString().substring(6, 10), // Year
+        +m.beginDate.toString().substring(3, 5) - 1, // Month
+        +m.beginDate.toString().substring(0, 2), // Day
+        0, 0, 0, 0);
       let end = new Date(
-        +m.endDate.toString().substring(6,10), // Year
-        +m.endDate.toString().substring(3,5) - 1, // Month
-        +m.endDate.toString().substring(0,2), // Day
-        23,59,59,999);
-      return ((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()));
-    })
+        +m.endDate.toString().substring(6, 10), // Year
+        +m.endDate.toString().substring(3, 5) - 1, // Month
+        +m.endDate.toString().substring(0, 2), // Day
+        23, 59, 59, 999);
 
-    return (runningMeeting !== undefined) ? runningMeeting : meetings[0];
+      let openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf())
+      // console.log(openMeeting)
+      let closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()))
+      // console.log(closedMeeting)
+
+      if (type == 'open') {
+        return openMeeting
+      } else if (type == 'closed') {
+        return closedMeeting
+      }
+    })
+    return runningMeeting
   }
+
+  // getRunningMeetingClose(meetings: Meeting[]): Meeting[] {
+
+  //   let now = Date.now();
+  //   let runningMeeting = meetings.filter((m) => {
+  //     let start = new Date(
+  //       +m.beginDate.toString().substring(6,10), // Year
+  //       +m.beginDate.toString().substring(3,5) - 1, // Month
+  //       +m.beginDate.toString().substring(0,2), // Day
+  //       0,0,0,0);
+  //     let end = new Date(
+  //       +m.endDate.toString().substring(6,10), // Year
+  //       +m.endDate.toString().substring(3,5) - 1, // Month
+  //       +m.endDate.toString().substring(0,2), // Day
+  //       23,59,59,999);
+  //     return (!(now.valueOf() <= start.valueOf()) && (now.valueOf() >= end.valueOf()));
+  //   })
+  //   return runningMeeting 
+  // }
+
+
 
   async getLocalitiesBasedOnConference() {
     try {
       const result = await this.localitySrv.getLocalitiesBasedOnConferenceCitizenAuth(this.selectedConference.id);
       this.localityLabel = result.nameType;
       this.localities = result.localities;
-      this.optionsLocalities = result.localities.map(({id, name}) => ({label: name, value: id}));
+      this.optionsLocalities = result.localities.map(({ id, name }) => ({ label: name, value: id }));
     } catch (error) {
       this.messageSrv.add({
         severity: 'warn',
@@ -403,7 +456,7 @@ export class AttendanceModel {
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
-        ...this.selectedCounty ? {localities: this.selectedCounty.id} : {},
+        ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
       },
     };
   }
