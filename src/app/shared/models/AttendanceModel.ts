@@ -358,7 +358,7 @@ export class AttendanceModel {
 
   async getConferencesAndMeetings() {
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
-    const result = await this.conferenceSrv.getConferencesWithPresentialMeetings();
+    const result = await this.conferenceSrv.getConferencesWithPresentialMeetings(date);
     this.optionsConference = result;
 
     //this.selectedMeeting = result[0].meeting[0];
