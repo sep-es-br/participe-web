@@ -50,11 +50,11 @@ form {
   display: inline-block;
 }
 
-.server-name, .switch-default-conference, .switch-show-statistics, .switch-show-calendar{
+.server-name, .switch-default-conference, .switch-show-statistics, .switch-show-calendar, .switch-show-statistics-panel{
   margin-top: 1em;
 }
 
-::ng-deep .switch-default-conference , ::ng-deep .switch-show-statistics, ::ng-deep .switch-show-calendar  {
+::ng-deep .switch-default-conference , ::ng-deep .switch-show-statistics, ::ng-deep .switch-show-calendar, ::ng-deep .switch-show-statistics-panel  {
   display: flex;
   align-items: center;
   margin-bottom: 2em;

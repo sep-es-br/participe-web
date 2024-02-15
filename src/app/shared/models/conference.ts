@@ -31,6 +31,7 @@ export class Conference {
   defaultServerConference: boolean;
   showStatistics: Boolean;
   showCalendar: Boolean;
+  showStatisticsPanel: Boolean;
   segmentation: boolean;
   targetedByItems: number[];
   displayMode: string;  // AUTOMATIC || MANUAL
