@@ -413,27 +413,6 @@ export class AttendanceModel {
     return runningMeeting
   }
 
-  // getRunningMeetingClose(meetings: Meeting[]): Meeting[] {
-
-  //   let now = Date.now();
-  //   let runningMeeting = meetings.filter((m) => {
-  //     let start = new Date(
-  //       +m.beginDate.toString().substring(6,10), // Year
-  //       +m.beginDate.toString().substring(3,5) - 1, // Month
-  //       +m.beginDate.toString().substring(0,2), // Day
-  //       0,0,0,0);
-  //     let end = new Date(
-  //       +m.endDate.toString().substring(6,10), // Year
-  //       +m.endDate.toString().substring(3,5) - 1, // Month
-  //       +m.endDate.toString().substring(0,2), // Day
-  //       23,59,59,999);
-  //     return (!(now.valueOf() <= start.valueOf()) && (now.valueOf() >= end.valueOf()));
-  //   })
-  //   return runningMeeting 
-  // }
-
-
-
   async getLocalitiesBasedOnConference() {
     try {
       const result = await this.localitySrv.getLocalitiesBasedOnConferenceCitizenAuth(this.selectedConference.id);

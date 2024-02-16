@@ -9,6 +9,7 @@ import {AuthService} from '@app/shared/services/auth.service';
 import { ActionBarService, ActionButtonItem } from '@app/core/actionbar/app.actionbar.actions.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
 import { DateProfileGenerator } from '@fullcalendar/core';
+import * as moment from 'moment';
 
 
 @Component({
@@ -33,8 +34,9 @@ export class AttendanceComponent implements OnInit {
   ngOnInit() {
     const {roles} = this.userAuth.getUserInfo;
     this.actions = [];
+    const date = moment().format('DD/MM/YYYY HH:mm:ss');
     if (roles.includes('Recepcionist') || roles.includes('Administrator')) {
-      this.conferenceService.getConferencesWithPresentialMeetings().then((confs) => {
+      this.conferenceService.getConferencesWithPresentialMeetings(date).then((confs) => {
         // We have any conference with presential meetings?
         if (confs.length > 0) {
           // Only administrators can edit
