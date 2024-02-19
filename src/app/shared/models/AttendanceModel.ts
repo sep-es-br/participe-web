@@ -234,10 +234,26 @@ export class AttendanceModel {
     this.isSearching = false;
   }
 
-  async loadNextPage() {
+  async loadNextPageRegister() {
     this.isSearching = true;
     try {
       const result = await this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees(true));
+      this.lastPage = result.last;
+      this.listAttendees = this.listAttendees.concat(result.content);
+    } catch {
+      this.messageSrv.add({
+        severity: 'warn',
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('attendance.error.whenSearching'),
+      });
+    }
+    this.isSearching = false;
+  }
+
+  async loadNextPageEdit() {
+    this.isSearching = true;
+    try {
+      const result = await this.meetingSrv.getListAttendees(this.idMeeting, this.getQueryListAttendees(true));
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
     } catch {
