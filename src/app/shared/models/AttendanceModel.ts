@@ -128,6 +128,7 @@ export class AttendanceModel {
 
   async updateTotalAttendees() {
     this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting);
+    this.searchByName();
   }
 
   async selectAttendee(attendee: IAttendee) {
