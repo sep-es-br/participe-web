@@ -46,8 +46,8 @@ export class AttendanceModel {
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
   optionsMeeting: Meeting[];
-  auxiliaryList: Meeting[];
-  auxiliaryList2: Meeting[];
+  openListMeetings: Meeting[];
+  closedListMeetings: Meeting[];
   selectedConference: IConferenceWithMeetings;
   selectedMeeting: Meeting;
   currentConference: IConferenceWithMeetings;
@@ -304,15 +304,23 @@ export class AttendanceModel {
     }
   }
 
-  handleChangeConference() {
-    this.auxiliaryList = this.getRunningMeeting(this.selectedConference.meeting, 'open');
-    this.auxiliaryList2 = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
-    if (this.auxiliaryList.length > 0) {
-      this.auxiliaryList.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
-      this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+  handleChangeConference(item? : IConferenceWithMeetings) {
+    if(!item){
+      this.openListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'open');
+      this.closedListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
+    }else{
+      this.openListMeetings = this.getRunningMeeting(item.meeting, 'open');
+      this.closedListMeetings = this.getRunningMeeting(item.meeting, 'closed');
+      this.selectedConference = item
+    }
+
+    if (this.openListMeetings.length > 0) {
+      this.openListMeetings.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
+      this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings)
       this.selectedMeeting = this.optionsMeeting[0]
+
     } else {
-      this.optionsMeeting = this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+      this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings)
       this.selectedMeeting = this.optionsMeeting[0]
     }
   }
@@ -378,23 +386,9 @@ export class AttendanceModel {
     const result = await this.conferenceSrv.getConferencesWithPresentialMeetings(date);
     this.optionsConference = result;
 
-    //this.selectedMeeting = result[0].meeting[0];
-
     this.optionsConference.forEach(item => {
       if (item.meeting.length > 0) {
-        this.auxiliaryList = this.getRunningMeeting(item.meeting, 'open');
-        this.auxiliaryList2 = this.getRunningMeeting(item.meeting, 'closed');
-        if (this.auxiliaryList.length > 0) {
-          this.auxiliaryList.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
-          this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
-          this.selectedMeeting = this.optionsMeeting[0]
-          this.selectedConference = item
-        } else {
-          this.optionsMeeting = this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
-          this.selectedMeeting = this.optionsMeeting[0]
-          this.selectedConference = item
-        }
-
+        this.handleChangeConference(item)
       }
     })
 
