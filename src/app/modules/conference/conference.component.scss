@@ -50,11 +50,15 @@ form {
   display: inline-block;
 }
 
-.server-name, .switch-default-conference, .switch-show-statistics, .switch-show-calendar, .switch-show-statistics-panel{
+.server-name, .switch-default-conference, .switch-show-statistics, .switch-show-calendar, .switch-show-statistics-panel, .switch-show-external-links{
   margin-top: 1em;
 }
 
-::ng-deep .switch-default-conference , ::ng-deep .switch-show-statistics, ::ng-deep .switch-show-calendar, ::ng-deep .switch-show-statistics-panel  {
+::ng-deep .switch-default-conference , 
+::ng-deep .switch-show-statistics, 
+::ng-deep .switch-show-calendar, 
+::ng-deep .switch-show-statistics-panel, 
+::ng-deep .switch-show-external-links  {
   display: flex;
   align-items: center;
   margin-bottom: 2em;
