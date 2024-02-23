@@ -34,7 +34,9 @@ export class ConferenceService {
 
   async show(id) {
     const url = this.url.concat(`/${id}`);
+    console.log('URL |||', url);
     const conference = await this.http.get<Conference>(url, {headers: Common.buildHeaders()}).toPromise();
+    console.log('Conference |||', conference);
     return conference;
   }
 
@@ -48,6 +50,7 @@ export class ConferenceService {
 
   save(conference, edit) {
     if (edit) {
+      console.log("conference |||", conference);
       const url = `${this.url}/${conference.id}`;
       return this.http.put<Conference>(url, JSON.stringify(conference), {headers: Common.buildHeaders()}).toPromise();
     } else {
