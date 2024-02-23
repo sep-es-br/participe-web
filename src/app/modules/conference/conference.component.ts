@@ -66,6 +66,7 @@ export class ConferenceComponent implements OnInit {
   participationImages: FileCtrl[] = [];
   authenticationImages: FileCtrl[] = [];
   backgroundImages: FileCtrl[] = [];
+  calendarImages: FileCtrl[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -213,6 +214,15 @@ export class ConferenceComponent implements OnInit {
     if (this.conference.backgroundImages !== undefined && this.conference.backgroundImages !== null) {
       this.conference.backgroundImages.forEach(image => {
         this.backgroundImages.push({
+          file: image,
+          toAdd: false,
+          toDelete: false
+        });
+      });
+    }
+    if (this.conference.calendarImages !== undefined && this.conference.calendarImages !== null) {
+      this.conference.calendarImages.forEach(image => {
+        this.calendarImages.push({
           file: image,
           toAdd: false,
           toDelete: false
@@ -652,6 +662,27 @@ export class ConferenceComponent implements OnInit {
         }
       });
 
+      for (i = this.calendarImages.length-1; i >= 0; i--) {
+        if ((this.calendarImages[i].file.id === null
+            || this.calendarImages[i].file.id === undefined)
+            && this.calendarImages[i].toAdd) {
+          const uploadedFile: File = await this.uploadFile(i, 'mobile');
+          if (uploadedFile !== null) {
+            this.calendarImages[i].file = uploadedFile;
+          }
+        }
+        else if (this.calendarImages[i].file.id !== null
+          && this.calendarImages[i].file.id !== undefined
+          && this.calendarImages[i].toDelete) {
+          await this.removeFile(this.calendarImages[i].file.id, 'mobile');
+        }
+      }
+      this.conference.calendarImages = this.calendarImages.map(image => {
+        if (image.file.id !== null && image.file.id !== undefined && !image.toDelete) {
+          return image.file;
+        }
+      });
+
       /*
       this.moderatorsEnabled.forEach(async moderator => {
         await this.personService.postOperator('Moderator', moderator);
@@ -679,7 +710,8 @@ export class ConferenceComponent implements OnInit {
           researchLink: this.conferenceResearchForm.controls.researchLink.value,
           estimatedTimeResearch: this.conferenceResearchForm.controls.estimatedTimeResearch.value,
         },
-        backgroundImages: this.conference.backgroundImages
+        backgroundImages: this.conference.backgroundImages,
+        calendarImages: this.conference.calendarImages
       };
 
       this.conferenceService.save(formData, !!this.idConference);
@@ -815,6 +847,13 @@ export class ConferenceComponent implements OnInit {
             return await this.filesSrv.uploadFile(formData);
           }
           break;
+        case 'mobile':
+          if (this.calendarImages[index].file.id === null || this.calendarImages[index].file.id === undefined) {
+            file = this.calendarImages[index].file;
+            formData.append('file', file, file.name);
+            return await this.filesSrv.uploadFile(formData);
+          }
+          break;
       }
 
     } catch (error) {
@@ -866,6 +905,11 @@ export class ConferenceComponent implements OnInit {
       case 'background':
         for (i = 0; i < data.files.length; i++) {
           this.backgroundImages.push({file: data.files[i], toDelete: false, toAdd: true});
+        }
+        break;
+      case 'mobile':
+        for (i = 0; i < data.files.length; i++) {
+          this.calendarImages.push({file: data.files[i], toDelete: false, toAdd: true});
         }
         break;
     }
@@ -925,6 +969,13 @@ export class ConferenceComponent implements OnInit {
           }
         });
         break;
+      case 'mobile':
+        this.calendarImages.forEach(image => {
+          if ((image.file.id !== null && image.file.id !== undefined) && image.file.id === image2Delete.file.id) {
+            image.toDelete = true;
+          }
+        });
+        break;
 
     }
   }
@@ -943,6 +994,10 @@ export class ConferenceComponent implements OnInit {
 
       case 'background':
         this.backgroundImages = this.backgroundImages
+          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
+        break;
+      case 'mobile':
+        this.calendarImages = this.calendarImages
           .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
         break;
     }
