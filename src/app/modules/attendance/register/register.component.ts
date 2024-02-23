@@ -1,5 +1,5 @@
 import { delay } from 'rxjs/operators';
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Message, MessageService} from 'primeng/api';
@@ -42,9 +42,12 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     super(injector, false);
   }
 
-  ngOnInit() {
+   ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+    setTimeout( () => {
+      this.searchByName();
+    }, 300)
   }
 
   ngOnDestroy(): void {
@@ -89,7 +92,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
       this.isAttendeeSelected = false;
       this.selectedAttende = null;
-      this.cleanListAtendees();
+      //this.cleanListAtendees();
       await this.setActionBar();
     } else {
       this.messageSrv.add({

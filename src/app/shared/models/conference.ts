@@ -32,6 +32,7 @@ export class Conference {
   showStatistics: Boolean;
   showCalendar: Boolean;
   showStatisticsPanel: Boolean;
+  showExternalLinks: Boolean;
   segmentation: boolean;
   targetedByItems: number[];
   displayMode: string;  // AUTOMATIC || MANUAL

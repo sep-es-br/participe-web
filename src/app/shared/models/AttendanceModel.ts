@@ -46,8 +46,8 @@ export class AttendanceModel {
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
   optionsMeeting: Meeting[];
-  auxiliaryList: Meeting[];
-  auxiliaryList2: Meeting[];
+  openListMeetings: Meeting[];
+  closedListMeetings: Meeting[];
   selectedConference: IConferenceWithMeetings;
   selectedMeeting: Meeting;
   currentConference: IConferenceWithMeetings;
@@ -128,6 +128,7 @@ export class AttendanceModel {
 
   async updateTotalAttendees() {
     this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting);
+    this.searchByName();
   }
 
   async selectAttendee(attendee: IAttendee) {
@@ -233,10 +234,26 @@ export class AttendanceModel {
     this.isSearching = false;
   }
 
-  async loadNextPage() {
+  async loadNextPageRegister() {
     this.isSearching = true;
     try {
       const result = await this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees(true));
+      this.lastPage = result.last;
+      this.listAttendees = this.listAttendees.concat(result.content);
+    } catch {
+      this.messageSrv.add({
+        severity: 'warn',
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('attendance.error.whenSearching'),
+      });
+    }
+    this.isSearching = false;
+  }
+
+  async loadNextPageEdit() {
+    this.isSearching = true;
+    try {
+      const result = await this.meetingSrv.getListAttendees(this.idMeeting, this.getQueryListAttendees(true));
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
     } catch {
@@ -287,15 +304,23 @@ export class AttendanceModel {
     }
   }
 
-  handleChangeConference() {
-    this.auxiliaryList = this.getRunningMeeting(this.selectedConference.meeting, 'open');
-    this.auxiliaryList2 = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
-    if (this.auxiliaryList.length > 0) {
-      this.auxiliaryList.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
-      this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+  handleChangeConference(item? : IConferenceWithMeetings) {
+    if(!item){
+      this.openListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'open');
+      this.closedListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
+    }else{
+      this.openListMeetings = this.getRunningMeeting(item.meeting, 'open');
+      this.closedListMeetings = this.getRunningMeeting(item.meeting, 'closed');
+      this.selectedConference = item
+    }
+
+    if (this.openListMeetings.length > 0) {
+      this.openListMeetings.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
+      this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings)
       this.selectedMeeting = this.optionsMeeting[0]
+
     } else {
-      this.optionsMeeting = this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
+      this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings)
       this.selectedMeeting = this.optionsMeeting[0]
     }
   }
@@ -361,23 +386,9 @@ export class AttendanceModel {
     const result = await this.conferenceSrv.getConferencesWithPresentialMeetings(date);
     this.optionsConference = result;
 
-    //this.selectedMeeting = result[0].meeting[0];
-
     this.optionsConference.forEach(item => {
       if (item.meeting.length > 0) {
-        this.auxiliaryList = this.getRunningMeeting(item.meeting, 'open');
-        this.auxiliaryList2 = this.getRunningMeeting(item.meeting, 'closed');
-        if (this.auxiliaryList.length > 0) {
-          this.auxiliaryList.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
-          this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
-          this.selectedMeeting = this.optionsMeeting[0]
-          this.selectedConference = item
-        } else {
-          this.optionsMeeting = this.optionsMeeting = concat(this.auxiliaryList, this.auxiliaryList2)
-          this.selectedMeeting = this.optionsMeeting[0]
-          this.selectedConference = item
-        }
-
+        this.handleChangeConference(item)
       }
     })
 
@@ -412,27 +423,6 @@ export class AttendanceModel {
     })
     return runningMeeting
   }
-
-  // getRunningMeetingClose(meetings: Meeting[]): Meeting[] {
-
-  //   let now = Date.now();
-  //   let runningMeeting = meetings.filter((m) => {
-  //     let start = new Date(
-  //       +m.beginDate.toString().substring(6,10), // Year
-  //       +m.beginDate.toString().substring(3,5) - 1, // Month
-  //       +m.beginDate.toString().substring(0,2), // Day
-  //       0,0,0,0);
-  //     let end = new Date(
-  //       +m.endDate.toString().substring(6,10), // Year
-  //       +m.endDate.toString().substring(3,5) - 1, // Month
-  //       +m.endDate.toString().substring(0,2), // Day
-  //       23,59,59,999);
-  //     return (!(now.valueOf() <= start.valueOf()) && (now.valueOf() >= end.valueOf()));
-  //   })
-  //   return runningMeeting 
-  // }
-
-
 
   async getLocalitiesBasedOnConference() {
     try {

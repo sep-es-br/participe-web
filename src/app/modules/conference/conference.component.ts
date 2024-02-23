@@ -177,6 +177,7 @@ export class ConferenceComponent implements OnInit {
 
   async loadConference() {
     this.conference = await this.conferenceService.show(this.idConference);
+    console.log(this.conference)
     this.minDate = this.conference.beginDate && this.getDate(this.conference.beginDate);
     this.researchMinDate = this.conference.researchConfiguration && this.conference.researchConfiguration.beginDate
       && this.getDate(this.conference.researchConfiguration.beginDate);
@@ -244,6 +245,7 @@ export class ConferenceComponent implements OnInit {
       showStatistics: true,
       showCalendar: true,
       showStatisticsPanel: true,
+      showExternalLinks: true,
       beginDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       plan: [null, Validators.required],
@@ -267,6 +269,7 @@ export class ConferenceComponent implements OnInit {
       preOpeningText: '',
       postClosureText: '',
     });
+    
     this.searchModeratorsForm = this.formBuilder.group({
       nameModerator: [''],
       emailModerator: ['', Validators.email],
@@ -276,6 +279,7 @@ export class ConferenceComponent implements OnInit {
     this.instanceMenuLabelForm();
     this.instanceExternalLinksForm();
     this.instanceConferenceResearchForm();
+    
   }
 
   instanceNewStep() {
@@ -333,6 +337,7 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.showStatistics.setValue(this.conference.showStatistics);
     this.conferenceForm.controls.showStatisticsPanel.setValue(this.conference.showStatisticsPanel);
     this.conferenceForm.controls.showCalendar.setValue(this.conference.showCalendar);
+    this.conferenceForm.controls.showExternalLinks.setValue(this.conference.showExternalLinks);
     this.conferenceForm.controls.beginDate.setValue(this.getDate(this.conference.beginDate));
     this.conferenceForm.controls.endDate.setValue(this.getDate(this.conference.endDate));
     this.conferenceForm.controls.titleAuthentication.setValue(this.conference.titleAuthentication);
