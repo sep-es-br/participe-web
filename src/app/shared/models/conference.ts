@@ -42,6 +42,7 @@ export class Conference {
   externalLinksMenuLabel: string;
   externalLinks: IExternalLinks[];
   backgroundImages: File[];
+  calendarImages: File[];
   meeting?: Meeting[];
   researchConfiguration: {
     beginDate: string;

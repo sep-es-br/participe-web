@@ -338,14 +338,14 @@ form {
       }
     }
   }
-  .background-images-container {
+  .list-images-container {
     display: flex;
     flex-direction: row;
-    .background-image-item {
+    .list-image-item {
       display: flex;
       flex-direction: column;
     }
-    .background-image {
+    .list-image {
       border: 3px solid #E0E0E0;
       width: 100%;
       padding: 10px !important;

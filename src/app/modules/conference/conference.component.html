@@ -553,6 +553,7 @@
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
                   <div class="p-col-12 fileupload-container">
+                    <h3>{{'conference.desktop'|translate}}</h3>
                     <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="5000000"
                       auto="auto" customUpload="true" (onSelect)="addFiles2Upload($event, 'background')"
                       (onRemove)="removeUnsavedFile($event, 'background')" [chooseLabel]="'add'|translate"
@@ -560,10 +561,27 @@
                     </p-fileUpload>
                   </div>
                   <div *ngFor="let image of backgroundImages"
-                    class="p-col-12 p-md-4 p-lg-3 p-xl-2 background-images-container">
-                    <div class="background-image-item"
+                    class="p-col-12 p-md-4 p-lg-3 p-xl-2 list-images-container">
+                    <div class="list-image-item"
                       *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
-                      <img class="background-image" width="100%" [src]="getUrlFile(image.file.id)"
+                      <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
+                        alt="Imagem Background">
+                      <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
+                    </div>
+                  </div>
+                  <div class="p-col-12 fileupload-container">
+                    <h3>{{'conference.mobile'|translate}}</h3>
+                    <p-fileUpload name="files"  accept="image/*" maxFileSize="5000000"
+                      auto="auto" customUpload="true" (onSelect)="addFiles2Upload($event, 'mobile')"
+                      (onRemove)="removeUnsavedFile($event, 'mobile')" [chooseLabel]="'add'|translate"
+                      [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate">
+                    </p-fileUpload>
+                  </div>
+                  <div *ngFor="let image of calendarImages"
+                    class="p-col-12 p-md-4 p-lg-3 p-xl-2 list-images-container">
+                    <div class="list-image-item"
+                      *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
+                      <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
                         alt="Imagem Background">
                       <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
                     </div>
