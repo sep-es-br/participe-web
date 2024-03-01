@@ -41,6 +41,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   ngOnInit(): void {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+    setTimeout( () => {
+      this.searchByName();
+    }, 300)
   }
 
   ngOnDestroy(): void {

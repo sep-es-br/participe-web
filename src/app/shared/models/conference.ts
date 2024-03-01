@@ -29,6 +29,10 @@ export class Conference {
   isActive: boolean;
   serverName: string;
   defaultServerConference: boolean;
+  showStatistics: Boolean;
+  showCalendar: Boolean;
+  showStatisticsPanel: Boolean;
+  showExternalLinks: Boolean;
   segmentation: boolean;
   targetedByItems: number[];
   displayMode: string;  // AUTOMATIC || MANUAL
@@ -39,6 +43,7 @@ export class Conference {
   externalLinksMenuLabel: string;
   externalLinks: IExternalLinks[];
   backgroundImages: File[];
+  calendarImages: File[];
   meeting?: Meeting[];
   researchConfiguration: {
     beginDate: string;

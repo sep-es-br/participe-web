@@ -128,7 +128,7 @@
             *ngTemplateOutlet="loadingList; context: { $implicit: getListOfLettersForLoading() }"></ng-container>
         </ng-container>
         <div *ngIf="!lastPage" class="load-more">
-          <button pButton [label]="'attendance.loadMore' | translate" (click)="loadNextPage()"></button>
+          <button pButton [label]="'attendance.loadMore' | translate" (click)="loadNextPageRegister()"></button>
         </div>
       </div>
     </ng-template>

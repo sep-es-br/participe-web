@@ -1,6 +1,6 @@
 import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe, Location} from '@angular/common';
@@ -66,6 +66,7 @@ export class ConferenceComponent implements OnInit {
   participationImages: FileCtrl[] = [];
   authenticationImages: FileCtrl[] = [];
   backgroundImages: FileCtrl[] = [];
+  calendarImages: FileCtrl[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -176,6 +177,7 @@ export class ConferenceComponent implements OnInit {
 
   async loadConference() {
     this.conference = await this.conferenceService.show(this.idConference);
+    console.log(this.conference)
     this.minDate = this.conference.beginDate && this.getDate(this.conference.beginDate);
     this.researchMinDate = this.conference.researchConfiguration && this.conference.researchConfiguration.beginDate
       && this.getDate(this.conference.researchConfiguration.beginDate);
@@ -218,6 +220,15 @@ export class ConferenceComponent implements OnInit {
         });
       });
     }
+    if (this.conference.calendarImages !== undefined && this.conference.calendarImages !== null) {
+      this.conference.calendarImages.forEach(image => {
+        this.calendarImages.push({
+          file: image,
+          toAdd: false,
+          toDelete: false
+        });
+      });
+    }
     this.moderatorsEnabled = this.conference.moderators && this.conference.moderators.length > 0 ? this.conference.moderators : [];
     this.moderatorsEnabled.sort((a, b) => (this.comparePersonName(a, b)));
     this.moderators = [];
@@ -231,6 +242,10 @@ export class ConferenceComponent implements OnInit {
       description: ['', Validators.compose([Validators.required, CustomValidators.noWhitespaceValidator])],
       serverName: ['', [Validators.compose([Validators.required, CustomValidators.URIServerName, CustomValidators.noWhitespaceValidator])]],
       defaultServerConference: false,
+      showStatistics: true,
+      showCalendar: true,
+      showStatisticsPanel: true,
+      showExternalLinks: true,
       beginDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
       plan: [null, Validators.required],
@@ -254,6 +269,7 @@ export class ConferenceComponent implements OnInit {
       preOpeningText: '',
       postClosureText: '',
     });
+    
     this.searchModeratorsForm = this.formBuilder.group({
       nameModerator: [''],
       emailModerator: ['', Validators.email],
@@ -263,6 +279,7 @@ export class ConferenceComponent implements OnInit {
     this.instanceMenuLabelForm();
     this.instanceExternalLinksForm();
     this.instanceConferenceResearchForm();
+    
   }
 
   instanceNewStep() {
@@ -317,6 +334,10 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.plan.setValue(this.findPlanInList(this.conference.plan));
     this.conferenceForm.controls.serverName.setValue(this.conference.serverName);
     this.conferenceForm.controls.defaultServerConference.setValue(this.conference.defaultServerConference);
+    this.conferenceForm.controls.showStatistics.setValue(this.conference.showStatistics);
+    this.conferenceForm.controls.showStatisticsPanel.setValue(this.conference.showStatisticsPanel);
+    this.conferenceForm.controls.showCalendar.setValue(this.conference.showCalendar);
+    this.conferenceForm.controls.showExternalLinks.setValue(this.conference.showExternalLinks);
     this.conferenceForm.controls.beginDate.setValue(this.getDate(this.conference.beginDate));
     this.conferenceForm.controls.endDate.setValue(this.getDate(this.conference.endDate));
     this.conferenceForm.controls.titleAuthentication.setValue(this.conference.titleAuthentication);
@@ -641,6 +662,27 @@ export class ConferenceComponent implements OnInit {
         }
       });
 
+      for (i = this.calendarImages.length-1; i >= 0; i--) {
+        if ((this.calendarImages[i].file.id === null
+            || this.calendarImages[i].file.id === undefined)
+            && this.calendarImages[i].toAdd) {
+          const uploadedFile: File = await this.uploadFile(i, 'mobile');
+          if (uploadedFile !== null) {
+            this.calendarImages[i].file = uploadedFile;
+          }
+        }
+        else if (this.calendarImages[i].file.id !== null
+          && this.calendarImages[i].file.id !== undefined
+          && this.calendarImages[i].toDelete) {
+          await this.removeFile(this.calendarImages[i].file.id, 'mobile');
+        }
+      }
+      this.conference.calendarImages = this.calendarImages.map(image => {
+        if (image.file.id !== null && image.file.id !== undefined && !image.toDelete) {
+          return image.file;
+        }
+      });
+
       /*
       this.moderatorsEnabled.forEach(async moderator => {
         await this.personService.postOperator('Moderator', moderator);
@@ -668,7 +710,8 @@ export class ConferenceComponent implements OnInit {
           researchLink: this.conferenceResearchForm.controls.researchLink.value,
           estimatedTimeResearch: this.conferenceResearchForm.controls.estimatedTimeResearch.value,
         },
-        backgroundImages: this.conference.backgroundImages
+        backgroundImages: this.conference.backgroundImages,
+        calendarImages: this.conference.calendarImages
       };
 
       this.conferenceService.save(formData, !!this.idConference);
@@ -777,6 +820,7 @@ export class ConferenceComponent implements OnInit {
       });
     }
   }
+
   async uploadFile(index: number, setFile: string): Promise<File> {
     const formData: FormData = new FormData();
     let file: any;
@@ -799,6 +843,13 @@ export class ConferenceComponent implements OnInit {
         case 'background':
           if (this.backgroundImages[index].file.id === null || this.backgroundImages[index].file.id === undefined) {
             file = this.backgroundImages[index].file;
+            formData.append('file', file, file.name);
+            return await this.filesSrv.uploadFile(formData);
+          }
+          break;
+        case 'mobile':
+          if (this.calendarImages[index].file.id === null || this.calendarImages[index].file.id === undefined) {
+            file = this.calendarImages[index].file;
             formData.append('file', file, file.name);
             return await this.filesSrv.uploadFile(formData);
           }
@@ -854,6 +905,11 @@ export class ConferenceComponent implements OnInit {
       case 'background':
         for (i = 0; i < data.files.length; i++) {
           this.backgroundImages.push({file: data.files[i], toDelete: false, toAdd: true});
+        }
+        break;
+      case 'mobile':
+        for (i = 0; i < data.files.length; i++) {
+          this.calendarImages.push({file: data.files[i], toDelete: false, toAdd: true});
         }
         break;
     }
@@ -913,6 +969,13 @@ export class ConferenceComponent implements OnInit {
           }
         });
         break;
+      case 'mobile':
+        this.calendarImages.forEach(image => {
+          if ((image.file.id !== null && image.file.id !== undefined) && image.file.id === image2Delete.file.id) {
+            image.toDelete = true;
+          }
+        });
+        break;
 
     }
   }
@@ -931,6 +994,10 @@ export class ConferenceComponent implements OnInit {
 
       case 'background':
         this.backgroundImages = this.backgroundImages
+          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
+        break;
+      case 'mobile':
+        this.calendarImages = this.calendarImages
           .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
         break;
     }
@@ -1100,6 +1167,10 @@ export class ConferenceComponent implements OnInit {
       return 1;
     }
     return 0;
+  }
+
+  test(){
+    console.log(this.conference)
   }
 
 }
