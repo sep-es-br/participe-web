@@ -117,8 +117,8 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
           }
         }],
         yAxes: [{
-          barPercentage: 1,
-          categoryPercentage: 0.7,
+          // barPercentage: 1,
+          // categoryPercentage: 0.7,
           gridLines: {
             display: false
           },

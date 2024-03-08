@@ -53,41 +53,57 @@
           </form>
         </div>
         <section class="meetings-container">
-          <div class="meeting-item" *ngFor="let meeting of meetings">
-            <div class="info-container">
-              <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL'">
-                <img src="assets/layout/images/icons/marker-alt.png" class="marker-img-solo" alt="">
-              </div>
-              <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'VIRTUAL'">
-                <i class="pi pi-desktop icon-type-meeting desktop-icon"></i>
-              </div>
-              <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL_VIRTUAL'">
-                <img src="assets/layout/images/icons/marker-alt.png" class="marker-img" alt="">
-                <i class="pi pi-desktop icon-type-meeting"></i>
-              </div>
-              <div>
-                <h2>{{meeting.name}}</h2>
-                <div class="date-container">
-                  <span>{{meeting.beginDate}}</span>
-                  <span>a</span>
-                  <span>{{meeting.endDate}}</span>
+          <div class="meeting-item d-flex" *ngFor="let meeting of meetings">
+            <div class="col-12 col-md-4" >
+              <div class="info-container row">
+                <div class="col-md-2" >
+                  <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL'">
+                    <img src="assets/layout/images/icons/marker-alt.png" class="marker-img-solo" alt="">
+                  </div>
+                  <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'VIRTUAL'">
+                    <i class="pi pi-desktop icon-type-meeting desktop-icon"></i>
+                  </div>
+                  <div class="icon-container" *ngIf="meeting.typeMeetingEnum === 'PRESENCIAL_VIRTUAL'">
+                    <img src="assets/layout/images/icons/marker-alt.png" class="marker-img" alt="">
+                    <i class="pi pi-desktop icon-type-meeting"></i>
+                  </div>
+                </div>
+                <div class="col-md-10" >
+                  <div>
+                    <h2>{{meeting.name}}</h2>
+                    <div class="date-container">
+                      <span>{{meeting.beginDate}}</span>
+                      <span>a</span>
+                      <span>{{meeting.endDate}}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="locality-container">
-              <h2>{{meeting?.localityPlace?.name}}</h2>
-              <span>{{meeting.address}}</span>
+            <div class="col-12 col-md-4">
+              <div class="/*locality-container*/">
+                <h2>{{meeting?.localityPlace?.name}}</h2>
+                <span>{{meeting.address}}</span>
+              </div>
             </div>
-            <div class="locality-container">
-              <span>{{meeting?.showChannels}}</span>
+            <div class="col-12 col-md-2">
+              <div class="/*locality-container*/">
+                <span>{{meeting?.showChannels}}</span>
+              </div>
             </div>
-            <div class="action-container">
-              <button class="action-button" pButton id="pencil" (click)="handleCreateOrEdit(meeting.id)"
-                pTooltip="{{'conference.meeting.action.edit' | translate}}" icon="pi pi-pencil"></button>
-              <button class="action-button" pButton (click)="handleShowPanel(meeting.id)"
-                pTooltip="{{'conference.meeting.action.panel' | translate}}"icon="pi pi-external-link"></button>
-              <button class="action-button" pButton (click)="handleDelete(meeting)"
-                pTooltip="{{'conference.meeting.action.delete' | translate}}"icon="pi pi-trash"></button>
+            <div class=" col-12 col-md-2 d-flex justify-content-center" >
+              <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-solid fa-ellipsis"></i>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item pointer" (click)="generateQRCodeAutoChekIn(meeting)"><span class="icon" ><i class="fa fa-qrcode" ></i></span>{{'conference.meeting.action.qrcode' | translate}}</a></li>
+                  <li><a class="dropdown-item pointer" (click)="generateLinkMeetingPrecadastro(meeting)"><span class="icon" ><i class="fa fa-link" ></i></span>{{'conference.meeting.action.link' | translate}}</a></li>
+                  <li><a class="dropdown-item pointer"  id="pencil" (click)="handleCreateOrEdit(meeting.id)"><span class="icon" ><i class="pi pi-pencil" ></i></span>{{'conference.meeting.action.edit' | translate}}</a></li>
+                  <li><a class="dropdown-item pointer" (click)="handleShowPanel(meeting.id)"><span class="icon" ><i class="pi pi-external-link" ></i></span>{{'conference.meeting.action.panel' | translate}}</a></li>
+                  <li><a class="dropdown-item pointer" (click)="handleDelete(meeting)"><span class="icon" ><i class="pi pi-trash" ></i></span>{{'conference.meeting.action.delete' | translate}}</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -325,7 +341,33 @@
   </div>
 </app-template>
 
-<p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
+<app-modal id="geraLink" [modalData]="modalData">
+  <div *ngIf="meetingUrl && meetingUrl.url != '';else noLinkContent" >
+    <div class="text-center">
+      <span class="text-center"><a href="{{meetingUrl.url}}" target="_blank">{{meetingUrl.url}}</a></span><br>
+      <button class="btn btn-outline-primary mt-3" (click)="copyUrl(meetingUrl.url)" type="button" ><span class="m-2"><i class="far fa-copy" ></i></span>Copiar</button>
+    </div>
+  </div>
+  <ng-template #noLinkContent>
+    <div class="text-center">
+      <span class="text-center">Nenhum link gerado para este evento.</span><br>
+    </div>
+    
+  </ng-template>
+</app-modal>
+<app-modal id="QRCodeImage" [modalData]="modalData">
+  <div *ngIf="ImageQrCode && ImageQrCode != ''" >
+    <div class="text-center">
+      <h3>Auto Check In</h3>
+      <div class="col-12 text-center" >
+        <img class="img-fluid" src="{{ImageQrCode}}" />
+      </div>
+      <a href="{{ImageQrCode}}" class="btn btn-outline-primary mt-3" download="{{'QRCode auto check in ' + meetingDataSelected.name + '.png'}}"  ><span class="m-2"><i class="fas fa-download" ></i></span>Baixar</a>
+    </div>
+  </div>
+</app-modal>
+
+<p-dialog class="" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
           [header]="'moderation.label.select_conference' | translate" [visible]="showSelectConference">
   <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
        (click)="selectOtherConference(conference)">

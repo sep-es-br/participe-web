@@ -28,6 +28,9 @@
 
       @media screen and (max-width: 786px){
         max-width: 100vw;
+        .xs-w-100 {
+          width: 100%;
+        }
       }
 
       @media screen and (max-width: 486px){
@@ -37,6 +40,7 @@
           border-top-right-radius: 3px;
           border-bottom-left-radius: 0;
         }
+        
         .ui-button {
           display: flex;
           flex: 1;

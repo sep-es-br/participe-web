@@ -76,6 +76,7 @@ import { AppMenuComponent } from '@app/core/menu/app.menu.component';
 import { AppSubMenuComponent } from '@app/core/menu/submenu/app.submenu.component';
 import { AppFooterComponent } from '@app/core/footer/app.footer.component';
 import { AppTemplateComponent } from '@app/core/template/app.template.component';
+import { ModalComponent } from './modal/modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateChangeService } from '../shared/services/translateChange.service';
@@ -158,7 +159,8 @@ import { TranslateChangeService } from '../shared/services/translateChange.servi
     AppMenuComponent,
     AppTopBarComponent,
     AppSubMenuComponent,
-    AppTemplateComponent
+    AppTemplateComponent,
+    ModalComponent
    ],
    exports: [
     FontAwesomeModule,
@@ -234,6 +236,7 @@ import { TranslateChangeService } from '../shared/services/translateChange.servi
     AppTopBarComponent,
     AppSubMenuComponent,
     AppTemplateComponent,
+    ModalComponent,
     ReactiveFormsModule
    ],
    providers: [

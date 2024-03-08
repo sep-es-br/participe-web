@@ -15,6 +15,10 @@ import {LocalityService} from '@app/shared/services/locality.service';
 import * as moment from 'moment';
 import 'moment-timezone';
 import { formatNumber } from '@angular/common';
+import { ModalService } from '@app/core/modal/modal.service';
+import { ModalData } from '@app/shared/interface/IModalData';
+import { BarcodeFormat } from '@zxing/library';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -28,6 +32,25 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
   newAccount = false;
+  modalData: ModalData;
+  readingQRCode: boolean = false;
+  scannerEnabled: boolean = false;
+  availableDevices: MediaDeviceInfo[];
+  deviceCurrent: MediaDeviceInfo;
+  deviceSelected: string;
+
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.QR_CODE,
+  ];
+
+  hasDevices: boolean = false;
+  hasPermission: boolean;
+
+  qrResultString: string;
+
+  torchEnabled = false;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  tryHarder = false;
 
   constructor(
     protected messageSrv: MessageService,
@@ -37,6 +60,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     protected actionbarSrv: ActionBarService,
     public authSrv: AuthService,
     public localitySrv: LocalityService,
+    public modalService: ModalService,
     @Inject(Injector) injector: Injector
   ) {
     super(injector, false);
@@ -45,9 +69,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
-    setTimeout( () => {
-      this.searchByName();
-    }, 300)
   }
 
   ngOnDestroy(): void {
@@ -92,7 +113,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
       this.isAttendeeSelected = false;
       this.selectedAttende = null;
-      //this.cleanListAtendees();
+      this.cleanListAtendees();
       await this.setActionBar();
     } else {
       this.messageSrv.add({
@@ -149,5 +170,89 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.form.patchValue(
       {name: $event.target.value.replace(/\s+$/gm, '')},
       {emitEvent: false});
+  }
+
+  readQRCode(){
+    if(!this.availableDevices){
+      return this.messageSrv.add({
+        severity: 'error',
+        summary: this.translate.instant('error'),
+        detail: "Você não pode realizar o check in nesse dispositivo pois não possui nenhuma câmera disponível",
+        life:5000
+      });
+    }
+    this.scannerEnabled = true;
+    this.modalData = {title: "Realizar Check In"};
+    console.log("Dispositivos",this.availableDevices);
+    this.modalService.open('QRCodeReader'); 
+  }
+
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    this.hasDevices = Boolean(devices && devices.length);
+  }
+
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
+    console.log('Código Lido', this.qrResultString);
+    this.modalService.close('QRCodeReader'); 
+    this.scannerEnabled = false;
+
+    // alert(this.qrResultString);
+  }
+
+  onDeviceSelectChange(selected: string) {
+    const selectedStr = selected || '';
+    if (this.deviceSelected === selectedStr) { return; }
+    this.deviceSelected = selectedStr;
+    const device = this.availableDevices.find(x => x.deviceId === selected);
+    this.deviceCurrent = device || undefined;
+  }
+
+  onDeviceChange(device: MediaDeviceInfo) {
+    const selectedStr =  device != null ? device.deviceId : '';
+    if (this.deviceSelected === selectedStr) { return; }
+    this.deviceSelected = selectedStr;
+    this.deviceCurrent = device || undefined;
+  }
+
+  openFormatsDialog() {
+    const data = {
+      formatsEnabled: this.formatsEnabled,
+    };
+
+    // this._dialog
+    //   .open(FormatsDialogComponent, { data })
+    //   .afterClosed()
+    //   .subscribe(x => {
+    //     if (x) {
+    //       this.formatsEnabled = x;
+    //     }
+    //   });
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
+
+  openInfoDialog() {
+    const data = {
+      hasDevices: this.hasDevices,
+      hasPermission: this.hasPermission,
+    };
+
+    // this._dialog.open(AppInfoDialogComponent, { data });
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
+  }
+
+  toggleTorch(): void {
+    this.torchEnabled = !this.torchEnabled;
+  }
+
+  toggleTryHarder(): void {
+    this.tryHarder = !this.tryHarder;
   }
 }

@@ -196,7 +196,9 @@
       "action": {
         "edit": "Editar",
         "panel": "Exibir painel",
-        "delete": "Excluir"
+        "delete": "Excluir",
+		"link": "Gerar link de pré cadastro da reunião",
+		"qrcode": "Gerar qr code de check-in automático"
       }
 		},
 		"moderator": {

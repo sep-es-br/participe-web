@@ -7,6 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { EditComponent } from './edit/edit.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '@app/shared/components/components.module';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
   declarations: [AttendanceComponent, RegisterComponent, EditComponent],
@@ -15,7 +16,8 @@ import { ComponentsModule } from '@app/shared/components/components.module';
     CommonModule,
     CoreModule,
     TranslateModule,
-    ComponentsModule
+    ComponentsModule,
+    ZXingScannerModule
   ],
 })
 export class AttendanceModule { }
