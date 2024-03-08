@@ -9,6 +9,8 @@ import { IQueryOptions } from '../interface/IQueryOptions';
 import Common from '../util/Common';
 import { IPerson } from '../interface/IPerson';
 import { IResultPlanItemByConference } from '../interface/IResultPlanItemByConference';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
@@ -81,5 +83,24 @@ export class MeetingService extends BaseService<Meeting> {
 
   getTotalAttendeesByMeeting(idMeeting: number): Promise<number> {
     return this.http.get<number>(`${this.urlBase}/${idMeeting}/participants/total`).toPromise();
+  }
+
+  generateLinkPreRegistration(idMeeting: number): Promise<any> {
+    return this.http.get<string>(`${this.urlBase}/${idMeeting}/generate-link-pre-registration`).toPromise();
+  }
+
+  generateQRCodeAutoCheckIn(idMeeting:number): Promise<any> {
+    return new Promise<string>((resolve, reject) => {
+      this.http.get(`${this.urlBase}/${idMeeting}/generate-qr-code-check-in`, { responseType: 'blob' })
+        .subscribe(blob => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve(reader.result as string);
+          };
+          reader.readAsDataURL(blob);
+        }, error => {
+          reject(error);
+        });
+    });
   }
 }

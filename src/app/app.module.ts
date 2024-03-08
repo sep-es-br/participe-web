@@ -49,6 +49,7 @@ import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/c
     CitizenModule,
     ModerationModule,
     ControlPanelDashboardModule,
+    
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

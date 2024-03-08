@@ -1,0 +1,14 @@
+<div class="app-modal bg-light modal-content">
+    <div class="app-modal-body" >
+        <div class="modal-header mb-2">
+            <h5 *ngIf="modalData?.title" class="modal-title">{{modalData.title}}</h5>
+            <button type="button" (click)="close()" class="btn-close" aria-label="Close"></button>
+        </div>
+        <ng-content></ng-content>
+        <div *ngIf="modalData?.buttons" class="modal-footer mt-2 p-2 g-10">
+            <button type="button" (click)="close()" class="btn btn-secondary">{{modalData.buttons.cancel}}</button>
+            <button type="button" class="btn btn-primary">{{modalData.buttons.confirm}}</button>
+        </div>
+    </div>
+</div>
+<div class="app-modal-background"></div>

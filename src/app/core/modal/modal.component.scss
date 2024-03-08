@@ -1,0 +1,80 @@
+/* MODAL STYLES
+-------------------------------*/
+app-modal {
+    /* modals are hidden by default */
+    display: none;
+    width: 500px;
+
+    .app-modal {
+        /* modal container fixed across whole screen */
+        position: fixed;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        // right: 0;
+        // bottom: 0;
+        left: 50%;
+        width: 500px;
+
+        /* z-index must be higher than .app-modal-background */
+        z-index: 1000;
+
+        /* enables scrolling for tall modals */
+        overflow: auto;
+
+        .app-modal-body {
+            padding: 20px;
+            background: var(--bs-backgroud-light);
+            box-shadow: 0 2px 8px #ffffff5c;
+
+            /* margin exposes part of the modal background */
+            overflow-y: auto;
+            // height: 51em;
+            // width: 79vw;
+            .modal-header{
+                border-bottom: 2px solid #dedede;
+                justify-content: space-between;
+            }
+
+            .modal-footer{
+                border-top: 2px solid #dedede;
+                justify-content: flex-end;
+            }
+           
+        }
+    }
+
+    .app-modal-background {
+        /* modal background fixed across whole screen */
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        /* semi-transparent black  */
+        background-color: #000;
+        opacity: 0.75;
+
+        /* z-index must be below .app-modal and above everything else  */
+        z-index: 900;
+    }
+}
+
+body.app-modal-open {
+    /* body overflow is hidden to hide main scrollbar when modal window is open */
+    overflow: hidden;
+}
+
+button.btn.btn-primary.btn-icon {
+    /* width: 50%; */
+    margin: auto;
+    text-align: center;
+    width: 3rem;
+    margin: 0.5rem;
+    color: #fff;
+    background-color: #189094;
+    font-weight: 500;
+    height: 3rem;
+    padding: 0.5rem;
+    border: 2px solid #5eb2b4;
+}
