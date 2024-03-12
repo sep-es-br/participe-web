@@ -3,7 +3,7 @@
 app-modal {
     /* modals are hidden by default */
     display: none;
-    width: 500px;
+    // width: 500px;
 
     .app-modal {
         /* modal container fixed across whole screen */
@@ -13,7 +13,7 @@ app-modal {
         // right: 0;
         // bottom: 0;
         left: 50%;
-        width: 500px;
+        width: auto;
 
         /* z-index must be higher than .app-modal-background */
         z-index: 1000;

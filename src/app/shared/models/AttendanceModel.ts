@@ -410,10 +410,8 @@ export class AttendanceModel {
         23, 59, 59, 999);
 
       let openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf())
-      // console.log(openMeeting)
       let closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()))
-      // console.log(closedMeeting)
-
+      
       if (type == 'open') {
         return openMeeting
       } else if (type == 'closed') {

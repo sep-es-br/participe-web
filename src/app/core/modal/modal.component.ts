@@ -17,7 +17,6 @@ export class ModalComponent implements OnInit, OnDestroy {
 
     constructor(private modalService: ModalService, private el: ElementRef) {
         this.element = el.nativeElement;
-        // this.dataModal = new ModalData({...this.modalData});
     }
 
     ngOnInit(): void {
@@ -26,8 +25,6 @@ export class ModalComponent implements OnInit, OnDestroy {
             console.error('modal must have an id');
             return;
         }
-        // this.dataModal = new ModalData({...this.modalData});
-        // console.log("DAtat Modal",this.dataModal);
 
         // move element to bottom of page (just before </body>) so it can be displayed above everything else
         document.body.appendChild(this.element);
@@ -43,10 +40,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         this.modalService.add(this);
     }
 
-    // ngOnChanges(){
-    //   console.log("Modal Atualizado ",new Date().toISOString());
-    // }
-
+    
     // remove self from modal service when component is destroyed
     ngOnDestroy(): void {
         this.modalService.remove(this.id);

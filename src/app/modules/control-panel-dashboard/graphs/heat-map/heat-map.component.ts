@@ -25,9 +25,6 @@ export class HeatMapComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private responsiveSrv: ResponsiveService,
   ) {
-    console.log("Locations", this.locations);
-    console.log("center",this.center);
-    console.log("zoom",this.zoom);
     this.responsiveSrv.observable.pipe(takeUntil(this.$destroy)).subscribe(value => {
       this.responsive = value;
     });
@@ -44,9 +41,6 @@ export class HeatMapComponent implements OnInit, OnDestroy, OnChanges {
         this.heatmapLayer.setData(mapData);
       }
     }
-    console.log("Locations", this.locations);
-    console.log("center",this.center);
-    console.log("zoom",this.zoom);
   }
 
   async ngOnInit() {
@@ -97,7 +91,6 @@ export class HeatMapComponent implements OnInit, OnDestroy, OnChanges {
       },
     };
     this.heatmapLayer = new HeatmapOverlay(cfg);
-    console.log("LAYER", this.heatmapLayer);
     const map = new L.Map('map', {
       center: new L.LatLng(this.center.lat, this.center.lng),
       boxZoom: true,
