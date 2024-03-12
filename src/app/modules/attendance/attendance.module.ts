@@ -8,6 +8,7 @@ import { EditComponent } from './edit/edit.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '@app/shared/components/components.module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [AttendanceComponent, RegisterComponent, EditComponent],
@@ -17,7 +18,8 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     CoreModule,
     TranslateModule,
     ComponentsModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    SweetAlert2Module.forRoot()
   ],
 })
 export class AttendanceModule { }

@@ -482,6 +482,16 @@
 		}
 	},
 	"published": "Publicado",
+	"qrcode":{
+		"checkIn": {
+			"alreadyJoined": "O participante já realizou o check In"
+		},
+		"noDevice": "Nenhum Dispositivo Selecionado",
+		"notAllowed": "Você não pode realizar o check in nesse dispositivo pois não possui nenhuma câmera disponível",
+		"titleModal": "Realizar Check In",
+		"turnoffTorch": "Desligar Flash",
+		"turnOnTorch": "Ligar Flash"
+	},
 	"register": {
 		"removed": "Registro removido"
 	},
@@ -560,7 +570,7 @@
 	},
 	"type": "Tipo",
 	"unauthorized.error": "Você não possui permissão de acesso a essa funcionalidade",
-  "expired.error": "Sua sessão expirou. Por favor faça login novamente.",
+  	"expired.error": "Sua sessão expirou. Por favor faça login novamente.",
 	"update": "Editar",
 	"warn": "Cuidado",
 	"years": "Anos",

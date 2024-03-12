@@ -19,6 +19,8 @@ import { ModalService } from '@app/core/modal/modal.service';
 import { ModalData } from '@app/shared/interface/IModalData';
 import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
+import { LoadingService } from '@app/shared/services/loading.service';
+import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 
 @Component({
   selector: 'app-register',
@@ -36,8 +38,19 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   readingQRCode: boolean = false;
   scannerEnabled: boolean = false;
   availableDevices: MediaDeviceInfo[];
-  deviceCurrent: MediaDeviceInfo;
+  deviceCurrent: MediaDeviceInfo = null;
   deviceSelected: string;
+  actionFlash: string = this.translate.instant('qrcode.turnOnTorch');
+  classFlash: string = "btn-orange";
+  modalSuceesPresence: boolean = false;
+  dataPresence = {
+    person:{
+      name:'Nome'
+    },
+    time: '12/03/2024 10:55'
+  };
+  timerModalSuccess:number = 5000;
+  
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.QR_CODE,
@@ -58,6 +71,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     protected meetingSrv: MeetingService,
     protected translate: TranslateService,
     protected actionbarSrv: ActionBarService,
+    protected loadingService: LoadingService,
+    protected preRegistrationService: PreRegistrationService,
     public authSrv: AuthService,
     public localitySrv: LocalityService,
     public modalService: ModalService,
@@ -173,40 +188,56 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   readQRCode(){
+    this.modalSuceesPresence = false;
     if(!this.availableDevices){
       return this.messageSrv.add({
         severity: 'error',
         summary: this.translate.instant('error'),
-        detail: "Você não pode realizar o check in nesse dispositivo pois não possui nenhuma câmera disponível",
+        detail: this.translate.instant('qrcode.notAllowed'),
         life:5000
       });
     }
     this.scannerEnabled = true;
-    this.modalData = {title: "Realizar Check In"};
-    console.log("Dispositivos",this.availableDevices);
+    this.deviceCurrent = this.availableDevices[0];
+    this.modalData = {title: this.translate.instant('qrcode.titleModal') };
     this.modalService.open('QRCodeReader'); 
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
+    this.deviceCurrent = this.availableDevices[0];
+    this.scannerEnabled = true;
     this.hasDevices = Boolean(devices && devices.length);
   }
 
   onCodeResult(resultString: string) {
     this.qrResultString = resultString;
-    console.log('Código Lido', this.qrResultString);
-    this.modalService.close('QRCodeReader'); 
-    this.scannerEnabled = false;
-
-    // alert(this.qrResultString);
+    if(!isNaN(Number(resultString))){
+      this.modalService.close('QRCodeReader'); 
+      this.scannerEnabled = false;
+      this.loadingService.loading(true);
+      this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
+      .then((resp)=>{
+        this.modalSuceesPresence = true;
+        this.dataPresence = resp;
+      })
+    .catch((err)=>{
+      setTimeout(() => {
+        this.readQRCode();
+      }, 1200);
+      
+    })
+    .finally(() => {
+        
+        this.loadingService.loading(false);
+      });
+    }
   }
 
   onDeviceSelectChange(selected: string) {
-    const selectedStr = selected || '';
-    if (this.deviceSelected === selectedStr) { return; }
-    this.deviceSelected = selectedStr;
+    this.scannerEnabled = true;
     const device = this.availableDevices.find(x => x.deviceId === selected);
-    this.deviceCurrent = device || undefined;
+    this.deviceCurrent = device || null;
   }
 
   onDeviceChange(device: MediaDeviceInfo) {
@@ -220,15 +251,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     const data = {
       formatsEnabled: this.formatsEnabled,
     };
-
-    // this._dialog
-    //   .open(FormatsDialogComponent, { data })
-    //   .afterClosed()
-    //   .subscribe(x => {
-    //     if (x) {
-    //       this.formatsEnabled = x;
-    //     }
-    //   });
   }
 
   onHasPermission(has: boolean) {
@@ -249,10 +271,22 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   toggleTorch(): void {
+    this.actionFlash = !this.torchEnabled == true ? this.translate.instant('qrcode.turnoffTorch'): this.translate.instant('qrcode.turnOnTorch');
+    this.classFlash = !this.torchEnabled == true ? "btn-dark" : "btn-orange" ;
     this.torchEnabled = !this.torchEnabled;
   }
 
   toggleTryHarder(): void {
     this.tryHarder = !this.tryHarder;
+  }
+  readAnother(){
+    this.modalSuceesPresence = false;
+    this.dataPresence = {
+      person:{
+        name:'Nome'
+      },
+      time: '00/00/0000 00:00'
+    };
+    this.readQRCode();
   }
 }
