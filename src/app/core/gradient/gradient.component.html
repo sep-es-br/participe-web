@@ -1,0 +1,24 @@
+<div #principalGradient class="principal" (click)="obterPontoDeClique($event)" [ngStyle]="{'background': backgroundGradient}" >
+    <div *ngFor="let point of points; trackBy: trackByPoints" class="marker" [style.left]="point.left" [style.display]="point.show ? 'block' : 'none'"></div>
+</div>
+<div class="row" >
+    <div class="col-md-4" style="position: relative;" >
+        <circular-slider [diameter]="diameter" [(angle)]="angle" (angleChange)="onAngleChange($event)"  ></circular-slider>
+    </div>
+    <div class="col-md-8">
+        <div *ngFor="let point of points; trackBy: trackByPoints; let i = index" class="points mt-2 row" [style.left]="point.left">
+            <div class="col-md-4">
+                <input type="color" class="form-control form-control-color w-100" value="{{point.color}}" (input)="atualizarCor($event.target.value, i)" />
+            </div>
+            <div class="col-md-4">
+                <input type="text" readonly class="form-control-plaintext w-100" value="{{point.color}}" />
+            </div>
+            <div class="col-md-3 m-auto">
+               <input type="text" class="form-control" value="{{point.position}}" (change)="atualizarPosicao($event.target.value, i)" />
+            </div>
+            <div class="col-md-1 m-auto">
+                <i class="fa fa-close text-danger cursor-poiter" (click)="removeColor(i)"  ></i>
+            </div>
+        </div>
+    </div>
+</div>

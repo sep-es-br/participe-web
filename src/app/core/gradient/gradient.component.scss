@@ -1,0 +1,50 @@
+app-gradient{
+
+    div.principal{
+        margin: 2rem;
+        height: 80px;
+        width: calc(100% - 2.5rem);
+        border: 5px #1f2667 solid;
+        border-radius: 1.5rem ;
+        box-shadow: 0px 0px 2rem 5px rgb(117 115 115 / 42%);
+        position: relative;
+        // background-color: aqua;
+    }
+    div.principal::before{
+        // background-color: #f00;
+        // content: '';
+        content: " ";
+        border: 0.2rem #ffffff solid;
+        border-radius: 1rem;
+        width: 100%;
+        height: 70px;
+        display: block;
+    }
+    .marker{
+        width: 10px;
+        height: 80px;
+        background-color: red;
+        border: 5px #1f2667 solid;
+        position: absolute;
+        border-radius: 2REM;
+        top: 0;
+        transition: left 0.6s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+        display: block;
+        box-shadow: 0px 0px 0rem 0.2rem #fffafa7a;
+    }
+    .marker::before{
+        content: " ";
+        height: 80px;
+        border: 0.175rem #ffffff solid;
+        border-radius: 1rem;
+        display: block;
+        width: 9px;
+        top: -6px;
+        position: relative;
+        left: -5px;
+    }
+    input{
+        font-size: 0.8rem !important;
+        padding: 0.275rem 0.65rem !important;
+    }
+}

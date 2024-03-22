@@ -177,7 +177,6 @@ export class ConferenceComponent implements OnInit {
 
   async loadConference() {
     this.conference = await this.conferenceService.show(this.idConference);
-    console.log(this.conference)
     this.minDate = this.conference.beginDate && this.getDate(this.conference.beginDate);
     this.researchMinDate = this.conference.researchConfiguration && this.conference.researchConfiguration.beginDate
       && this.getDate(this.conference.researchConfiguration.beginDate);
@@ -268,6 +267,9 @@ export class ConferenceComponent implements OnInit {
       displayStatusConference: 'OPEN',
       preOpeningText: '',
       postClosureText: '',
+      colorBackground: '',
+      textColor: '',
+      typeColorBackground:'',
     });
     
     this.searchModeratorsForm = this.formBuilder.group({
@@ -1167,10 +1169,6 @@ export class ConferenceComponent implements OnInit {
       return 1;
     }
     return 0;
-  }
-
-  test(){
-    console.log(this.conference)
   }
 
 }
