@@ -43,7 +43,6 @@ export const routes: Routes = [
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {
     useHash: true,
     scrollPositionRestoration: 'enabled',
-    onSameUrlNavigation: 'reload',
-    relativeLinkResolution: 'legacy'
+    onSameUrlNavigation: 'reload'
 });
 
