@@ -1,3 +1,7 @@
+.dropdown-toggle::after {
+  display: none;
+}
+
 body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {
     background-color: #2196F3 !important;
     border-color: #2196F3 !important;
@@ -98,50 +102,94 @@ section.meetings-container {
       text-transform: capitalize;
       color: #666;
     }
-    .info-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      min-width: 350px;
-      flex: 0.5;
-      .date-container {
-        span {
-          margin-right: 10px;
-        }
-      }
-      .icon-container {
-        display: flex;
-        flex: 0.3;
-        justify-content: center;
-        align-items: center;
-        margin-right: 1em;
-      }
-      .marker-img {
-        width: 1em;
-        margin: 0 1em 0 0.5em;
-      }
-      .marker-img-solo {
-        width: 1em;
-        margin: 0 1.8em;
-      }
-      .desktop-icon {
-        margin: 0 0.65em;
-      }
-      .icon-type-meeting {
-        color: #f48730;
-        font-size: 2em;
-      }
-    }
-    .locality-container {
-      flex: 0.5;
-    }
-    .action-container {
-      display: flex;
-      //width: 70px;
-      justify-content: space-between;
+    // .info-container {
+    //   display: flex;
+    //   flex-direction: row;
+    //   justify-content: flex-start;
+    //   align-items: center;
+    //   // min-width: 350px;
+    //   flex: 0.5;
+    //   .date-container {
+    //     span {
+    //       margin-right: 10px;
+    //     }
+    //   }
+    //   .icon-container {
+    //     display: flex;
+    //     flex: 0.3;
+    //     justify-content: center;
+    //     align-items: center;
+    //     margin-right: 1em;
+    //   }
+    //   .marker-img {
+    //     width: 1em;
+    //     margin: 0 1em 0 0.5em;
+    //   }
+    //   .marker-img-solo {
+    //     width: 1em;
+    //     margin: 0 1.8em;
+    //   }
+    //   .desktop-icon {
+    //     margin: 0 0.65em;
+    //   }
+    //   .icon-type-meeting {
+    //     color: #f48730;
+    //     font-size: 2em;
+    //   }
+    // }
+    // .locality-container {
+    //   flex: 0.5;
+    // }
+    // .action-container {
+    //   // display: flex;
+    //   width: auto;
+    //   justify-content: center;
+    // }
+  }
+}
+
+.info-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  // min-width: 350px;
+  flex: 0.5;
+  .date-container {
+    span {
+      margin-right: 10px;
     }
   }
+  .icon-container {
+    display: flex;
+    flex: 0.3;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1em;
+  }
+  .marker-img {
+    width: 1em;
+    margin: 0 1em 0 0.5em;
+  }
+  .marker-img-solo {
+    width: 1em;
+    margin: 0 1.8em;
+  }
+  .desktop-icon {
+    margin: 0 0.65em;
+  }
+  .icon-type-meeting {
+    color: #f48730;
+    font-size: 2em;
+  }
+}
+.locality-container {
+  flex: 0.5;
+}
+.action-container {
+  // display: flex;
+  width: auto;
+  justify-content: center;
 }
 
 .header-table {

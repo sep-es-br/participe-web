@@ -124,7 +124,6 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   }
 
   async handleConferenceSelected(event?) {
-    //console.log(event);
     if (this.filters.selectedConference !== null) {
       this.clearFilters(false);
       await this.loadConference();
@@ -407,7 +406,6 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
         barStrategicAreaSelected,
         !this.showStrategicAreaChart
       );
-     //console.log(result);
       if (result) {
         this.dashboardDataResponse = Object.assign({}, result);
         this.dashboardData = Object.assign({}, result);

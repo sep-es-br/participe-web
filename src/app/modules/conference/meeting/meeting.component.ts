@@ -28,6 +28,8 @@ import {IResultPlanItemByConference} from '@app/shared/interface/IResultPlanItem
 import {IChannel} from '@app/shared/interface/IChannel';
 import {CustomValidators} from '@app/shared/util/CustomValidators';
 import { analyzeNgModules } from '@angular/compiler';
+import { ModalService } from '@app/core/modal/modal.service';
+import { ModalData } from '@app/shared/interface/IModalData';
 
 @Component({
   selector: 'app-meeting',
@@ -74,6 +76,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
   beginDateLengh2:number;
   endDateLengh1:string;
   endDateLengh2:number;
+  showModalLink:Boolean = false;
+  modalData: ModalData;
+  meetingDataSelected?:Meeting;
+  meetingUrl: {
+    url: string
+  };
+  ImageQrCode:any;
 
   localityPlaceValidators = Validators.required;
   addressValidators = Validators.required;
@@ -96,6 +105,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     private moderationSrv: ModerationService,
     private datePipe: DatePipe,
     private location: Location,
+    private ModalService: ModalService,
   ) {
   }
 
@@ -707,4 +717,39 @@ export class MeetingComponent implements OnInit, OnDestroy {
     }
     return true;
   }
+
+  async generateLinkMeetingPrecadastro(meeting: Meeting){
+    this.meetingUrl = await this.meetingSrv.generateLinkPreRegistration(meeting.id);
+    this.modalData = {title: meeting.name};
+    this.ModalService.open('geraLink'); 
+    this.meetingDataSelected = meeting;
+  }
+
+  copyUrl(url: string){
+    const el = document.createElement('textarea');
+    el.value = url;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+
+    this.messageSrv.add({
+      severity: 'success',
+      summary: this.translate.instant('success'),
+      detail: 'Link copiado para a àrea de trnasferência',
+    });
+  }
+
+  generateQRCodeAutoChekIn(meeting: Meeting){
+    this.ImageQrCode = '';
+    this.meetingSrv.generateQRCodeAutoCheckIn(meeting.id).
+    then(url => {
+      this.ImageQrCode = url;
+    });
+    this.modalData = {title: meeting.name};
+    this.ModalService.open('QRCodeImage'); 
+    this.meetingDataSelected = meeting;
+  }
+
+  
 }

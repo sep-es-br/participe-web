@@ -73,16 +73,72 @@
       </div>
     </ng-container>
     <ng-template #list>
-      <div class="top-bar">
-        <div class="search">
-          <input type="text" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
-          <button id="btnSearchRegister" pButton [disabled]="!this.idMeeting" icon="pi pi-search"
-                  [label]="'search' | translate" (click)="searchByName()"></button>
+      <div class=" row">
+        <div class="col-12">
+          <div class="col-md-4 text-center m-auto">
+            <button type="button" class="btn btn-lg btn-orange" (click)="readQRCode()" value="" ><span class="icon" ><i class="fa fa-qrcode" ></i></span>Ler QR Code</button>
+          </div>
         </div>
-        <div class="new">
-          <button pButton icon="pi pi-plus" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
+        <div class="col-12 col-md-8 mt-3">
+          <div class="row">
+            <div class="col-12 col-md-8 ">
+              <input type="text" class="form-control mt-1" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
+            </div>
+            <div class="col-12 col-md-4">
+              <button id="btnSearchRegister" class="xs-w-100 mt-1" pButton [disabled]="!this.idMeeting" icon="pi pi-search"
+                      [label]="'search' | translate" (click)="searchByName()"></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 mt-3 new">
+          <button pButton icon="pi pi-plus" class="xs-w-100 mt-1" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
         </div>
       </div>
+      <app-modal id="QRCodeReader"  [modalData]="modalData">
+        <div class="row"  >
+          <div class="col-md-6 col-12 text-center">
+            <!-- <label>Dispositivos</label> -->
+            <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
+              <!-- <option value="" [selected]="!deviceCurrent">{{ 'qrcode.noDevice' | translate }}</option> -->
+              <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+                [selected]="deviceCurrent && device.deviceId === deviceCurrent.deviceId">{{device.label}}</option>
+            </select>
+            <!-- <p-dropdown   [options]="availableDevices" ></p-dropdown> -->
+          </div>
+          <div class="col-md-6 col-12 text-center">
+            <a *ngIf="torchAvailable$?.value" (click)="toggleTorch()" class="btn btn-sm {{classFlash}}" >
+              <span class="m-2"><i class="fas fa-bolt" ></i></span>
+              {{actionFlash}}              
+            </a>
+          </div>
+          <!-- <input type="button" class="btn btn-sm btn-orange" value="" > -->
+        </div>
+        <div class="col-12 mt-3 p2">
+          <zxing-scanner 
+          [enable]="scannerEnabled"  
+          [torch]="torchEnabled" 
+          [(device)]="deviceCurrent" 
+          
+          (scanSuccess)="onCodeResult($event)"
+          [formats]="formatsEnabled" 
+          [tryHarder]="tryHarder" 
+          (permissionResponse)="onHasPermission($event)"
+          (camerasFound)="onCamerasFound($event)" 
+          (torchCompatible)="onTorchCompatible($event)" ></zxing-scanner>
+        </div>
+      </app-modal>
+      <swal
+          [swalVisible]="modalSuceesPresence"
+          title="Presença Confirmada"
+          html=" <b>{{dataPresence.person.name}}</b> teve a sua presença confirmada em <b>{{dataPresence.time}}</b> "
+          icon="success"
+          timer="{{timerModalSuccess}}"
+          timerProgressBar="true"
+          showCloseButton="true"
+          (confirm)="readAnother()"
+          confirmButtonText="Registrar outro"
+          >
+      </swal>
       <div class="p-grid list-result">
         <div class="p-col-12" *ngIf="noResult">
           <div class="no-result">{{ 'attendance.noResult' | translate }}</div>

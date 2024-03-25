@@ -26,6 +26,7 @@ import { NgModule } from '@angular/core';
 import { PlanModule } from './modules/plan/plan.module';
 import { StructureModule } from './modules/structure/structure.module';
 import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/control-panel-dashboard.module';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/c
     CitizenModule,
     ModerationModule,
     ControlPanelDashboardModule,
+    SweetAlert2Module.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
