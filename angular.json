@@ -49,7 +49,13 @@
               "./node_modules/@fullcalendar/interaction/main.js",
               "./node_modules/prismjs/prism.js",
               "./node_modules/quill/dist/quill.js"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "test": {
@@ -136,7 +142,8 @@
                 }
               ]
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
