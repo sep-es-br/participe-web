@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DatePipe, Location} from '@angular/common';
 import {take} from 'rxjs/operators';
 import {MessageService, SelectItem} from 'primeng/api';
@@ -47,10 +47,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
   typeMeetingAlreadySet = false;
   attendaceListModesEnum = attendanceListModeEnum;
 
-  form: FormGroup;
-  searchForm: FormGroup;
-  searchFormReceptionists: FormGroup;
-  formChannels: FormGroup;
+  form: UntypedFormGroup;
+  searchForm: UntypedFormGroup;
+  searchFormReceptionists: UntypedFormGroup;
+  formChannels: UntypedFormGroup;
   conference: Conference;
   conferenceId: number;
   meetings: Meeting[] = [];
@@ -95,7 +95,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     public localitySrv: LocalityService,
     private planSrv: PlanService,
     private personSrv: PersonService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageSrv: MessageService,
     private translate: TranslateService,
     private translateChange: TranslateChangeService,
@@ -119,7 +119,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1], argsTime[2]);
   }
 
-  private static markFormGroupTouched(formGroup: FormGroup) {
+  private static markFormGroupTouched(formGroup: UntypedFormGroup) {
     formGroup.markAllAsTouched();
   }
 

@@ -1,7 +1,7 @@
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Structure } from '@app/shared/models/structure';
 import { StructureService } from '@app/shared/services/structure.service';
@@ -17,16 +17,16 @@ import { CustomValidators } from '@app/shared/util/CustomValidators';
   styleUrls: [ './structure.component.scss' ],
 })
 export class StructureComponent implements OnInit {
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   structures: Structure[] = [];
   structureTree: TreeNode[];
-  structureForm: FormGroup;
+  structureForm: UntypedFormGroup;
   structure: Structure;
   selectedRootNode: TreeNode;
   structureCreated: Structure;
 
-  structureItemForm: FormGroup;
+  structureItemForm: UntypedFormGroup;
   structureItems: string[];
   structureItem: StructureItem;
   selectedStructureItem: StructureItem;
@@ -47,7 +47,7 @@ export class StructureComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private confirmationService: ConfirmationService,
     private structureService: StructureService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private structureItemService: StructureItemService,
     private messageService: MessageService,
     private translate: TranslateService,
@@ -434,7 +434,7 @@ export class StructureComponent implements OnInit {
     return true;
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 

@@ -2,7 +2,7 @@ import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
 import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DatePipe, Location} from '@angular/common';
 import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
 import {Conference} from '@app/shared/models/conference';
@@ -34,14 +34,14 @@ import { FileUpload } from 'primeng/fileupload';
 export class ConferenceComponent implements OnInit {
 
   idConference: number;
-  conferenceForm: FormGroup;
+  conferenceForm: UntypedFormGroup;
   conference: Conference;
   plans: SelectItem[] = [];
   localitiesOfDomain: SelectItem[] = [];
   structureRegionalization = false;
   moderators: IPerson[] = [];
   moderatorsEnabled: IPerson[] = [];
-  searchModeratorsForm: FormGroup;
+  searchModeratorsForm: UntypedFormGroup;
   localitycitizenSelected = false;
   minDate: Date = new Date();
   researchMinDate: Date = new Date();
@@ -55,13 +55,13 @@ export class ConferenceComponent implements OnInit {
   howItWorkSteps: IHowItWorkStep[] = [];
   clonedSteps: { [s: string]: IHowItWorkStep; } = {};
   externalLinksMenuLabel: string;
-  externalLinksForm: FormGroup;
+  externalLinksForm: UntypedFormGroup;
   externalLinks: IExternalLinks[] = [];
   clonedExternalLinks: { [s: string]: IExternalLinks; } = {};
   showTargetedByItems = false;
-  conferenceResearchForm: FormGroup;
-  menuLabelForm: FormGroup;
-  howItWorksForm: FormGroup;
+  conferenceResearchForm: UntypedFormGroup;
+  menuLabelForm: UntypedFormGroup;
+  howItWorksForm: UntypedFormGroup;
 
   participationImages: FileCtrl[] = [];
   authenticationImages: FileCtrl[] = [];
@@ -74,7 +74,7 @@ export class ConferenceComponent implements OnInit {
     private conferenceService: ConferenceService,
     private planService: PlanService,
     private localityService: LocalityService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private datePipe: DatePipe,
     private messageService: MessageService,
     private translate: TranslateService,
@@ -1129,7 +1129,7 @@ export class ConferenceComponent implements OnInit {
     return true;
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 

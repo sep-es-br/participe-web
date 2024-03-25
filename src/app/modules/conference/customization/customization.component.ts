@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, AfterContentChecked, ChangeDetectorRef, AfterViewInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
 
 @Component({
     selector: 'app-conference-customization',
@@ -8,8 +8,8 @@ import { FormBuilder, FormGroup } from "@angular/forms";
   })
   export class ConferenceCustomizationComponent implements OnInit,AfterViewInit   {
 
-    @Input() dataForm: FormGroup;
-    @Output() FormGroupChange = new EventEmitter<FormGroup>();
+    @Input() dataForm: UntypedFormGroup;
+    @Output() FormGroupChange = new EventEmitter<UntypedFormGroup>();
     typeColorInput: 'color' | 'gradient' = 'color';
     backgroundColor: string = '#153961';
     colorText: string = '#ffffff';
@@ -18,14 +18,14 @@ import { FormBuilder, FormGroup } from "@angular/forms";
     textAccentCard: string = 'Este é um exemplo de como o conteúdo será exibido quando estiver em destaque, como em ações de ativo e hover. Experimente diferentes cores para garantir que o texto se destaque da maneira desejada.';
     backgroundCardColor: string = "#ffffff";
     textCardColor: string = "#000000";
-    customStylesheet: FormGroup;
+    customStylesheet: UntypedFormGroup;
     colorBorder: string = '#ffffff';
     colorAccent: string = '#00a198';
     colorAccentCard: string = '#00a198';
     colorFontAccent: string = '#ffffff';
 
     constructor(
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private changeDetectorRef: ChangeDetectorRef
     ){}
 

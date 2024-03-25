@@ -1,4 +1,4 @@
-import {AbstractControl, FormControl, ValidationErrors} from '@angular/forms';
+import {AbstractControl, UntypedFormControl, ValidationErrors} from '@angular/forms';
 
 export class CustomValidators {
   static ValidateCPF(control: AbstractControl): ValidationErrors {
@@ -114,7 +114,7 @@ export class CustomValidators {
     return { custom: { invalid: true, message: 'conference.meeting.error.doesNotContainChannel' } };
   }
 
-  static noWhitespaceValidator(control: FormControl) {
+  static noWhitespaceValidator(control: UntypedFormControl) {
     const isWhitespace = control.value ? control.value.match(/^ *$/) !== null : true;
     return !isWhitespace ? null : {custom: {invalid: true, message: 'erro.field-cannot-be-empty'}};
   }
@@ -125,7 +125,7 @@ export class CustomValidators {
     };
   }
 
-  static onlyLettersAndSpaceValidator(control: FormControl) {
+  static onlyLettersAndSpaceValidator(control: UntypedFormControl) {
     const acceptable = control.value ? control.value.match(/^[A-Za-z0-9À-ÖØ-öø-ÿ\s]*$/) !== null : false;
     return acceptable ? null : {custom: {invalid: true, message: 'erro.field-must-contain-only-letters'}};
   }

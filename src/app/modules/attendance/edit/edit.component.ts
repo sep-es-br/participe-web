@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
 import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
@@ -31,7 +31,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   constructor(
     protected messageSrv: MessageService,
     public localitySrv: LocalityService,
-    protected formBuilder: FormBuilder,
+    protected formBuilder: UntypedFormBuilder,
     public authSrv: AuthService,
     @Inject(Injector) injector: Injector
   ) {

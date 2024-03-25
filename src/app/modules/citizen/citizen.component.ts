@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService, SelectItem } from 'primeng/api';
 
 import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
@@ -30,7 +30,7 @@ import { LocalityService } from '@app/shared/services/locality.service';
 export class CitizenComponent extends BasePageList<CitizenModel> implements OnInit, OnDestroy {
 
   formEdit: boolean = false;
-  citizenForm: FormGroup;
+  citizenForm: UntypedFormGroup;
   localities: SelectItem[] = [];
   filteredLocalities: SelectItem[] = [];
   authentications: SelectItem[] = [];
@@ -55,7 +55,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   conferenceSelect: Conference = new Conference();
   sort: string = 'name';
   search: any = { status: '' };
-  selectedLocalities: FormControl = new FormControl('');
+  selectedLocalities: UntypedFormControl = new UntypedFormControl('');
   selectedLocalitiesSub: Subscription;
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
@@ -83,7 +83,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   constructor(
     private breadcrumbService: BreadcrumbService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private citizenSrv: CitizenService,
     private translateSrv: TranslateService,
