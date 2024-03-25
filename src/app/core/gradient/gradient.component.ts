@@ -15,7 +15,7 @@ interface Point {
 })
 export class GradientComponent implements OnInit, OnDestroy {
 
-    @ViewChild('principalGradient',{static: false}) containerRef: ElementRef;
+    @ViewChild('principalGradient') containerRef: ElementRef;
     @Output() BackgroudDefined = new EventEmitter<string>();
     points: Point[] = [
         {left: '0%',show: true,color: '#2a72c2', position: 0},
