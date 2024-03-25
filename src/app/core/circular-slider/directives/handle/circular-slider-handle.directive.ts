@@ -85,8 +85,8 @@ export class CircularSliderHandleDirective implements OnInit {
         }),
         map(event => parseTouchEvent(event)),
       );
-      this.elementStartSubscription = merge(mousedown$, touchstart$).subscribe(windowPoint => {
-        this.dragStart(windowPoint);
+      this.elementStartSubscription = merge(mousedown$, touchstart$).subscribe(() => {
+        this.dragStart();
       });
     });
   }
@@ -137,8 +137,7 @@ export class CircularSliderHandleDirective implements OnInit {
     }
   }
 
-  private dragStart(windowPoint: Point) {
-    this.windowStart = windowPoint;
+  private dragStart() {
     this.registerMove();
   }
 
