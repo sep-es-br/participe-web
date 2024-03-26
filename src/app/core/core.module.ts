@@ -12,7 +12,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
-import { CodeHighlighterModule } from 'primeng/codehighlighter';
+// import { CodeHighlighterModule } from 'primeng/codehighlighter';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -22,15 +22,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FullCalendarModule } from 'primeng/fullcalendar';
+// import { FullCalendarModule } from 'primeng/fullcalendar';
 import { GalleriaModule } from 'primeng/galleria';
-import { GrowlModule } from 'primeng/growl';
+// import { GrowlModule } from 'primeng/growl';
 import { InplaceModule } from 'primeng/inplace';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { LightboxModule } from 'primeng/lightbox';
+// import { LightboxModule } from 'primeng/lightbox';
 import { ListboxModule } from 'primeng/listbox';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { MenuModule } from 'primeng/menu';
@@ -96,7 +96,6 @@ import { GradientComponent } from './gradient/gradient.component';
     ChartModule,
     CheckboxModule,
     ChipsModule,
-    CodeHighlighterModule,
     ConfirmDialogModule,
     ColorPickerModule,
     ContextMenuModule,
@@ -106,15 +105,12 @@ import { GradientComponent } from './gradient/gradient.component';
     EditorModule,
     FieldsetModule,
     FileUploadModule,
-    FullCalendarModule,
     GalleriaModule,
-    GrowlModule,
     InplaceModule,
     InputMaskModule,
     InputSwitchModule,
     InputTextModule,
     InputTextareaModule,
-    LightboxModule,
     ListboxModule,
     MegaMenuModule,
     MenuModule,
@@ -178,7 +174,6 @@ import { GradientComponent } from './gradient/gradient.component';
     ChartModule,
     CheckboxModule,
     ChipsModule,
-    CodeHighlighterModule,
     ConfirmDialogModule,
     ColorPickerModule,
     ContextMenuModule,
@@ -188,15 +183,12 @@ import { GradientComponent } from './gradient/gradient.component';
     EditorModule,
     FieldsetModule,
     FileUploadModule,
-    FullCalendarModule,
     GalleriaModule,
-    GrowlModule,
     InplaceModule,
     InputMaskModule,
     InputSwitchModule,
     InputTextModule,
     InputTextareaModule,
-    LightboxModule,
     ListboxModule,
     MegaMenuModule,
     MenuModule,

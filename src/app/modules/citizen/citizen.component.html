@@ -50,7 +50,7 @@
               </div>
             </div>
           </div>
-          <p-table [columns]="cols" [value]="data" [lazy]="true" [lazyLoadOnInit]="false" [responsive]="true"
+          <p-table [columns]="cols" [value]="data" [lazy]="true" [lazyLoadOnInit]="false" 
             (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords">
             <ng-template pTemplate="header" let-columns>
               <tr>

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output, ViewChild, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, ViewChild, EventEmitter, OnChanges, SimpleChanges, input } from '@angular/core';
 import { UIChart } from 'primeng/chart';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -15,7 +15,8 @@ import { Subject } from 'rxjs';
 export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() chartData: IHorizontalBarChartItem[];
-
+  @Input() typeBar: 'region' | 'strategic';
+ 
   height: number;
   labels: string[];
   data;
@@ -28,6 +29,8 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
   anchor: string;
   labelColor: string;
 
+  @Output() graphRegionClicked = new EventEmitter();
+  @Output() graphStrategicClicked = new EventEmitter();
   @Output() graphClicked = new EventEmitter();
 
   @ViewChild('graphBar', { static: true }) graphBar: UIChart;
@@ -63,9 +66,14 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
       await this.loadConfig();
       await this.loadPlugins();
     });
-    Chart.plugins.register(ChartDataLabels);
-    this.loadData();
-    this.loadPlugins();
+    console.log("ANTES ||| ", Chart.defaults.backgroundColor.toString());
+    Chart.defaults.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+    console.log("DEPOIS ||| ", Chart.defaults.backgroundColor);
+    Chart.defaults.borderColor = 'rgba(0, 0, 0, 0)';
+    // Chart.defaults.color = '#db4b1f';
+    Chart.register(ChartDataLabels);
+    // this.loadData();
+    // this.loadPlugins();
   }
 
   ngOnDestroy(): void {
@@ -77,8 +85,11 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
     const data = this.chartData.map(item => item.quantity);
     const maxData = Math.max(...data);
     this.config = {
-      onClick: (e, item) => this.graphClicked.next(item),
+      events: ['click'],
+      indexAxis: 'y',
+      onClick: (e, item) => this.registerEvent(item),
       plugins: {
+        legend: false,
         datalabels: {
           align: this.align,
           anchor: this.anchor,
@@ -89,7 +100,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
             return context.dataset.data[context.dataIndex] > 0;
           },
           font: {
-            size: this.responsive ? 10 : 10
+            size: 10
           },
           formatter: Math.round
         }
@@ -100,11 +111,8 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
       tooltips: {
         enabled: false
       },
-      legend: {
-        display: false,
-      },
       scales: {
-        xAxes: [{
+        x: {
           offset: true,
           gridLines: {
             display: false,
@@ -115,8 +123,8 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
             display: false,
             max: maxData * 1.15,
           }
-        }],
-        yAxes: [{
+        },
+        y:{
           // barPercentage: 1,
           // categoryPercentage: 0.7,
           gridLines: {
@@ -124,6 +132,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
           },
           ticks: {
             callback: (label) => {
+              label = this.chartData[label].description
               const maxValue = this.responsive ? 15 : 20;
               if (/\s/.test(label) && label.length > maxValue) {
                 const labelText = label.split(' ');
@@ -148,7 +157,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
             fontSize: this.responsive ? 10 : 10,
           },
           offset: true
-        }],
+        },
       },
     };
     this.height = (data.length * 60) < 100 ? 100 : (data.length * 60);
@@ -163,30 +172,33 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
     this.labels = this.chartData.map(item => item.description.toUpperCase());
     this.data = {
       labels: this.labels,
-      datasets: [{
-        data: this.chartData.map(item => item.quantity),
-        onClick: (e, item) => this.graphClicked.next(item),
-        datalabels: {
-          align: this.align,
-          anchor: this.anchor,
-          clamp: 'true',
-          barThickness: 'flex',
-          color: this.labelColor,
-          display(context) {
-            return context.dataset.data[context.dataIndex] > 0;
+      datasets: [
+        {
+          data: this.chartData.map(item => item.quantity),
+          onClick: (e, item) => this.graphClicked.next(item),
+          datalabels: {
+            align: this.align,
+            anchor: this.anchor,
+            clamp: 'true',
+            barThickness: 'flex',
+            color: this.labelColor,
+            display(context) {
+              return context.dataset.data[context.dataIndex] > 0;
+            },
+            font: {
+              size: this.responsive ? 12 : 12
+            },
+            formatter: Math.round,
           },
-          font: {
-            size: this.responsive ? 12 : 12
-          },
-          formatter: Math.round,
-        },
-      }],
+        }
+    ],
     };
     // this.height = this.data.labels.length * 60;
   }
 
   async loadPlugins() {
     const gradientLenght = this.responsive ? 200 : 400;
+    Chart.defaults.plugins.tooltip.enabled = false;
     this.plugins = [{
       beforeDatasetDraw: (chart) => {
         const chartInstance = chart;
@@ -197,15 +209,29 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
         gradient.addColorStop(0, 'rgb(219, 75, 31)');
         gradient.addColorStop(1, 'rgb(245, 134, 52)');
         data.datasets.forEach((dataset, i) => {
-          const meta = chartInstance.controller.getDatasetMeta(i);
+          const meta = chartInstance.getDatasetMeta(i);
           meta.data.forEach((bar, index) => {
-            if (!bar._model) { return; }
-            const valor = +dataset.data[index];
-            bar._view.backgroundColor = gradient;
+            console.log('META ||| ',bar);
+            bar.options.backgroundColor = gradient;
+            bar.options.borderColor = gradient;
           });
         });
       }
     }];
+  }
+
+  registerEvent(item){
+    switch (this.typeBar) {
+      case 'region':
+        this.graphRegionClicked.next(item);
+        break;
+      case 'strategic':
+        this.graphStrategicClicked.next(item);
+        break;
+      default:
+        this.graphClicked.next(item);
+        break;
+    }
   }
 
 }

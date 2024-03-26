@@ -38,7 +38,7 @@
               <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <label for="plan">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
                 <p-multiSelect [options]="localities" formControlName="localities"
-                               [defaultLabel]="'placeholder.select'|translate" class="ng-dirty ng-invalid">
+                               [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid">
                 </p-multiSelect>
               </div>
 

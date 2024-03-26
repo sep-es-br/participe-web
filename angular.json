@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["sweetalert2","moment","qs","moment-timezone","quill","heatmap.js","lodash"],
             "outputPath": "dist/participe",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -28,27 +29,28 @@
               "src/assets" 
             ],
             "styles": [
-              "./node_modules/primeng/resources/primeng.min.css",
-              "./node_modules/primeicons/primeicons.css",
-              "./node_modules/@fullcalendar/core/main.min.css",
-              "./node_modules/@fullcalendar/daygrid/main.min.css",
-              "./node_modules/@fullcalendar/timegrid/main.min.css",
-              "./node_modules/leaflet/dist/leaflet.css",
-              "./node_modules/quill/dist/quill.snow.css",
-              "./node_modules/primeflex/primeflex.css",
-              "./src/assets/theme/blue/theme-light.scss",
-              "./src/assets/layout/css/layout-turquoise.scss",
-              "./src/styles.scss"
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/@fullcalendar/core/main.min.css",
+              "node_modules/@fullcalendar/daygrid/main.min.css",
+              "node_modules/@fullcalendar/timegrid/main.min.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/primeflex/primeflex.css",
+              "src/assets/theme/blue/theme-light.scss",
+              "src/assets/layout/css/layout-turquoise.scss",
+              "node_modules/primeng/resources/themes/nova/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "./node_modules/chart.js/dist/Chart.js",
-              "./node_modules/@fullcalendar/core/main.js",
-              "./node_modules/@fullcalendar/daygrid/main.js",
-              "./node_modules/@fullcalendar/timegrid/main.js",
-              "./node_modules/@fullcalendar/interaction/main.js",
-              "./node_modules/prismjs/prism.js",
-              "./node_modules/quill/dist/quill.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/@fullcalendar/core/main.js",
+              "node_modules/@fullcalendar/daygrid/main.js",
+              "node_modules/@fullcalendar/timegrid/main.js",
+              "node_modules/@fullcalendar/interaction/main.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/quill/dist/quill.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

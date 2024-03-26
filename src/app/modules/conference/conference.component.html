@@ -68,7 +68,7 @@
                   </div>
                 </form>
                 <div *ngIf="moderators.length > 0">
-                  <p-table [value]="moderators" selectionMode="single" dataKey="vin" [responsive]="true">
+                  <p-table [value]="moderators" selectionMode="single" dataKey="vin" >
                     <ng-template pTemplate="caption">
                       {{'conference.moderators'|translate}}
                     </ng-template>
@@ -97,7 +97,7 @@
                 </div>
                 <br *ngIf="moderators.length > 0 && moderatorsEnabled.length > 0" />
                 <div *ngIf="moderatorsEnabled && moderatorsEnabled.length > 0">
-                  <p-table [value]="moderatorsEnabled" selectionMode="single" dataKey="vin" [responsive]="true">
+                  <p-table [value]="moderatorsEnabled" selectionMode="single" dataKey="vin" >
                     <ng-template pTemplate="caption">
                       {{'conference.moderator.enabled'|translate}}
                     </ng-template>
@@ -353,7 +353,7 @@
                   </div>
                 </form>
                 <div class="steps-table-container" *ngIf="howItWorkSteps && howItWorkSteps.length > 0">
-                  <p-table [value]="howItWorkSteps" dataKey="tableId" editMode="row" [responsive]="true">
+                  <p-table [value]="howItWorkSteps" dataKey="tableId" editMode="row" >
                     <ng-template pTemplate="header">
                       <tr>
                         <th class="col-step">{{'conference.step' | translate}}</th>
@@ -442,7 +442,7 @@
                   </div>
                 </form>
                 <div class="external-links-table-container" *ngIf="externalLinks && externalLinks.length > 0">
-                  <p-table [value]="externalLinks" dataKey="tableId" editMode="row" [responsive]="true">
+                  <p-table [value]="externalLinks" dataKey="tableId" editMode="row" >
                     <ng-template pTemplate="header">
                       <tr>
                         <th class="col-label">{{'conference.label' | translate}}</th>

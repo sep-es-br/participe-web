@@ -40,7 +40,7 @@ export const routes: Routes = [
   }
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {
+export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes, {
     useHash: true,
     scrollPositionRestoration: 'enabled',
     onSameUrlNavigation: 'reload'

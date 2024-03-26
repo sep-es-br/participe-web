@@ -27,7 +27,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {IResultPlanItemByConference} from '@app/shared/interface/IResultPlanItemByConference';
 import {IChannel} from '@app/shared/interface/IChannel';
 import {CustomValidators} from '@app/shared/util/CustomValidators';
-import { analyzeNgModules } from '@angular/compiler';
 import { ModalService } from '@app/core/modal/modal.service';
 import { ModalData } from '@app/shared/interface/IModalData';
 

@@ -48,7 +48,7 @@
             </form>
           </div>
           <p-table [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
-                   [responsive]="true" paginatorPosition="both">
+                   paginatorPosition="both">
             <ng-template pTemplate="header">
               <tr>
                 <th>{{'name'|translate}}</th>
