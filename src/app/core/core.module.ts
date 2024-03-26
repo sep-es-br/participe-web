@@ -68,6 +68,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TreeModule } from 'primeng/tree';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import { CircularSliderModule } from './circular-slider/circular-slider.module';
 import { MessageService } from 'primeng/api';
 
 import { AppActionBarComponent } from '@app/core/actionbar/app.actionbar.component';
@@ -80,6 +81,7 @@ import { ModalComponent } from './modal/modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateChangeService } from '../shared/services/translateChange.service';
+import { GradientComponent } from './gradient/gradient.component';
 
 @NgModule({
   imports: [
@@ -151,7 +153,8 @@ import { TranslateChangeService } from '../shared/services/translateChange.servi
     TreeTableModule,
     VirtualScrollerModule,
     ReactiveFormsModule,
-    TranslateModule
+    TranslateModule,
+    CircularSliderModule
    ],
    declarations: [
     AppActionBarComponent,
@@ -160,7 +163,8 @@ import { TranslateChangeService } from '../shared/services/translateChange.servi
     AppTopBarComponent,
     AppSubMenuComponent,
     AppTemplateComponent,
-    ModalComponent
+    ModalComponent,
+    GradientComponent
    ],
    exports: [
     FontAwesomeModule,
@@ -237,6 +241,7 @@ import { TranslateChangeService } from '../shared/services/translateChange.servi
     AppSubMenuComponent,
     AppTemplateComponent,
     ModalComponent,
+    GradientComponent,
     ReactiveFormsModule
    ],
    providers: [

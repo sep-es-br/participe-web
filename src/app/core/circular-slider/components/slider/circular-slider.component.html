@@ -1,0 +1,9 @@
+<div class="circle m-auto" [ngStyle]="{ 'width.px': diameter, 'height.px': diameter }" >
+  <div class="rotation">{{ angle }}º</div>
+  <div class="circle-handle"
+    #circularSliderHandle
+    circularSliderHandle
+    [diameter]="diameter"
+    [(angle)]="angle" >
+  </div>
+</div>
