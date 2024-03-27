@@ -1,50 +1,68 @@
 <app-template>
   <div class="p-grid ui-fluid">
-    <div class="p-col-12 p-lg-12">
+    <div class="col-12 p-lg-12">
       <div class="card card-w-title">
 
         <!-- Conference Form -->
         <section class="p-grid ui-fluid">
           <form [formGroup]="conferenceForm" *ngIf="conferenceForm">
-            <div>
-              <div class="p-col-12 p-md-6">
+            <div class="row">
+              <div class="col-12 col-md-12">
                 <span *ngIf="idConference">{{'update' | translate }}</span>
                 <span *ngIf="!idConference">{{'new' | translate }}</span>
                 {{'administration.conference'|translate}}
               </div>
-              <div class="p-col-12 p-md-6">
-                <label for="name">{{'conference.name'|translate}}</label>
-                <input pInputText (change)="validateName($event)" (input)="onInput($event)" (blur)="onBlur($event)"
+              <div class="col-12  col-md-6">
+                <div class="form-floating mb-3">
+                  <input pInputText class="form-control" (change)="validateName($event)" (input)="onInput($event)" (blur)="onBlur($event)"
                   formControlName="name">
-                <tt-input-message [form]="conferenceForm" field="name"></tt-input-message>
+                  <label  class="form-label" for="name">{{'conference.name'|translate}}</label>
+                  <tt-input-message [form]="conferenceForm" field="name"></tt-input-message>
+                </div>
               </div>
-              <div class="p-col-12 p-md-6">
-                <label for="description">{{'description'|translate}}</label>
-                <textarea [rows]="3" [cols]="30" pInputTextarea formControlName="description" autoResize="autoResize">
-                </textarea>
-                <tt-input-message [form]="conferenceForm" field="description"></tt-input-message>
+              <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                  <textarea [rows]="3" [cols]="30" class="form-control" pInputTextarea formControlName="description" autoResize="autoResize">
+                  </textarea>
+                  <label class="form-label" for="description">{{'description'|translate}}</label>
+                  <tt-input-message [form]="conferenceForm" field="description"></tt-input-message>
+                </div>
               </div>
-              <div class="p-col-12 p-md-6">
-                <label for="plan">{{'plan.label'|translate}}</label>
-                <p-dropdown [options]="plans" formControlName="plan" [placeholder]="'placeholder.select'|translate"
-                  class="ng-dirty ng-invalid" (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
+              <div class="col-12 col-md-6">
+                <span class="p-float-label">
+                  <p-dropdown [options]="plans" [styleClass]="'w-100'" formControlName="plan" [placeholder]="'placeholder.select'|translate"
+                  class="ng-dirty w-100" (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
                   [readonly]="selfdeclarations > 0">
-                </p-dropdown>
-                <tt-input-message [form]="conferenceForm" field="plan"></tt-input-message>
+                  </p-dropdown>
+                  <label class="form-label" for="plan">{{'plan.label'|translate}}</label>
+                  <tt-input-message [form]="conferenceForm" field="plan"></tt-input-message>
+              </span>
+                <!-- <div class="form-floating mb-3">
+                  <textarea  class="form-control">
+                  </textarea> -->
+                  <!-- <select class="form-select" (onChange)="onChangePlans($event.value)" formControlName="plan" id="plan" >
+                    <option *ngFor="let itemPlan of plans"  [value]="itemPlan.value">{{itemPlan.label}}</option>
+                  </select>
+
+                </div> --> 
               </div>
-              <div class="p-col-12 p-md-6 server-name">
-                <label for="serverName">{{'conference.serverName'|translate}}</label>
-                <input pInputText formControlName="serverName" (blur)="validateDefaultConferenceServer()"
+              <div class="col-12 col-md-6 ">
+                <div class="form-floating mb-3">
+                  <input pInputText class="form-control" formControlName="serverName" (blur)="validateDefaultConferenceServer()"
                   placeholder="https://my.domain.com/">
-                <tt-input-message [form]="conferenceForm" field="serverName"></tt-input-message>
+                  <label class="form-label" for="serverName">{{'conference.serverName'|translate}}</label>
+                  <tt-input-message [form]="conferenceForm" field="serverName"></tt-input-message>
+                </div>
               </div>
-              <div class="p-col-12 p-md-6 switch-default-conference">
-                <p-inputSwitch id="input-switch-default-conference" formControlName="defaultServerConference"
-                  [readonly]="conferenceForm.controls.serverName.invalid"
-                  (onChange)="validateDefaultConferenceServer()">
-                </p-inputSwitch>
-                <label class="targeted-label"
-                  for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>
+              <div class="col-12 col-md-6 switch-default-conference">
+                <div class="form-check form-switch">
+                  <p-inputSwitch id="input-switch-default-conference" class="form-check-input" formControlName="defaultServerConference"
+                    [readonly]="conferenceForm.controls.serverName.invalid"
+                    (onChange)="validateDefaultConferenceServer()">
+                  </p-inputSwitch>
+                  <label class="form-check-label"
+                    for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>
+                </div>
               </div>
             </div>
             <p-accordion [multiple]="true">
@@ -126,7 +144,7 @@
                 </div>
               </p-accordionTab>
               <p-accordionTab header="{{'conference.segmentation' | translate}}" class="segmentation-accordion">
-                <div class="p-col-12 p-md-6 switch-segmentation">
+                <div class="col-12 col-md-6 switch-segmentation">
                   <p-inputSwitch id="input-switch-segmentation" formControlName="segmentation"
                     (onChange)="showTargetedByItems=!showTargetedByItems"
                     [readonly]="conferenceForm.controls.plan.invalid">
@@ -203,7 +221,7 @@
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
                     styleClass="tabStyleClass">
-                    <div class="p-col-12 p-md-6" *ngIf="noSavedImages2Show(authenticationImages)">
+                    <div class="col-12 col-md-6" *ngIf="noSavedImages2Show(authenticationImages)">
                       <h3>{{'file.label'|translate}}</h3>
                       <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                         (onSelect)="syncFiles2Upload($event, 'authentication')"
@@ -212,7 +230,7 @@
                       </p-fileUpload>
                     </div>
                     <div *ngFor="let image of authenticationImages">
-                      <div class="p-col-12 p-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                      <div class="col-12 p-md-2" *ngIf="image.file.id != null && !image.toDelete">
                         <h3>{{'conference.image'|translate}}</h3>
                         <img [src]="getUrlFile(image.file.id)" alt="Imagem Autenticação" width="120px"
                           style="padding: 20px;">
@@ -221,30 +239,30 @@
                       </div>
                     </div>
 
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="titleAuthentication">{{'conference.title'|translate}}</label>
                       <input pInputText formControlName="titleAuthentication">
                       <tt-input-message [form]="conferenceForm" field="titleAuthentication"></tt-input-message>
                     </div>
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="subtitleAuthentication">{{'conference.sub-title'|translate}}</label>
                       <input pInputText formControlName="subtitleAuthentication">
                       <tt-input-message [form]="conferenceForm" field="subtitleAuthentication"></tt-input-message>
                     </div>
 
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="localityType">{{'conference.locality-citizen'|translate}}</label>
                       <p-dropdown [options]="localitiesOfDomain" formControlName="localityType"
                         [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid"
                         [readonly]="!localitycitizenSelected || selfdeclarations > 0">
                       </p-dropdown>
-                      <div class="p-col-12 p-md-6 switch-show-statistics">
+                      <div class="col-12 col-md-6 switch-show-statistics">
                         <p-inputSwitch id="input-switch-show-statistics" formControlName="showStatistics">
                         </p-inputSwitch>
                         <label class="targeted-label"
                           for="input-switch-show-statistics">{{'conference.showStatistics'|translate}}</label>
                       </div>
-                      <div class="p-col-12 p-md-6 switch-show-calendar">
+                      <div class="col-12 col-md-6 switch-show-calendar">
                         <p-inputSwitch id="input-switch-show-calendar" formControlName="showCalendar">
                         </p-inputSwitch>
                         <label class="targeted-label"
@@ -254,7 +272,7 @@
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
-                    <div class="p-col-12 p-md-6" *ngIf="noSavedImages2Show(participationImages)">
+                    <div class="col-12 col-md-6" *ngIf="noSavedImages2Show(participationImages)">
                       <h3>{{'file.label'|translate}}</h3>
                       <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                         (onSelect)="syncFiles2Upload($event, 'participation')"
@@ -262,7 +280,7 @@
                         [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate"></p-fileUpload>
                     </div>
                     <div *ngFor="let image of participationImages">
-                      <div class="p-col-12 p-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                      <div class="col-12 p-md-2" *ngIf="image.file.id != null && !image.toDelete">
                         <h3>{{'conference.image'|translate}}</h3>
                         <img [src]="getUrlFile(image.file.id)" alt="Imagem Participação" width="120px"
                           style="padding: 20px;">
@@ -270,19 +288,19 @@
                           (click)="prepare2RemoveSavedImage(image, 'participation')"></button>
                       </div>
                     </div>
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="titleParticipation">{{'conference.title'|translate}}</label>
                       <input pInputText formControlName="titleParticipation">
                       <tt-input-message [form]="conferenceForm" field="titleParticipation"></tt-input-message>
                     </div>
 
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="subtitleParticipation">{{'conference.sub-title'|translate}}</label>
                       <input pInputText formControlName="subtitleParticipation">
                       <tt-input-message [form]="conferenceForm" field="subtitleParticipation"></tt-input-message>
                     </div>
 
-                    <div class="p-col-12 p-md-6 switch-show-statistics-panel">
+                    <div class="col-12 col-md-6 switch-show-statistics-panel">
                       <p-inputSwitch id="input-switch-show-statistics-panel" formControlName="showStatisticsPanel">
                       </p-inputSwitch>
                       <label class="targeted-label"
@@ -294,20 +312,20 @@
 
                   <p-accordionTab header="{{'conference.regionalization-Pages' | translate}}"
                     *ngIf="structureRegionalization">
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="titleRegionalization">{{'conference.title'|translate}}</label>
                       <input pInputText formControlName="titleRegionalization">
                       <tt-input-message [form]="conferenceForm" field="titleRegionalization"></tt-input-message>
                     </div>
 
-                    <div class="p-col-12 p-md-6">
+                    <div class="col-12 col-md-6">
                       <label for="subtitleRegionalization">{{'conference.sub-title'|translate}}</label>
                       <input pInputText formControlName="subtitleRegionalization">
                       <tt-input-message [form]="conferenceForm" field="subtitleRegionalization"></tt-input-message>
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.preOpening' | translate}}">
-                    <div class="p-col-12 p-md-12">
+                    <div class="col-12 p-md-12">
                       <label for="preOpeningText">{{'conference.text'|translate}} (HTML) </label>
                       <textarea [rows]="4" [cols]="30" pInputTextarea formControlName="preOpeningText"
                         autoResize="autoResize">
@@ -316,7 +334,7 @@
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.postClosure' | translate}}">
-                    <div class="p-col-12 p-md-12">
+                    <div class="col-12 p-md-12">
                       <label for="postClosureText">{{'conference.text'|translate}} (HTML) </label>
                       <textarea [rows]="4" [cols]="30" pInputTextarea formControlName="postClosureText"
                         autoResize="autoResize">
@@ -328,7 +346,7 @@
               </div>
             </div>
           </form>
-          <div class="p-col-12 p-md-12 accordion-citizen-container">
+          <div class="col-12 p-md-12 accordion-citizen-container">
             <p-accordion [multiple]="true" class="accordion-citizen-portal">
               <p-accordionTab header="{{'conference.howWork' | translate}}">
                 <form [formGroup]="howItWorksForm" *ngIf="howItWorksForm">
@@ -413,7 +431,7 @@
               <p-accordionTab header="{{'conference.externalLinks' | translate}}">
                 <form [formGroup]="menuLabelForm" *ngIf="menuLabelForm">
                   <div class="p-grid ui-fluid">
-                    <div class="p-col-12 p-md-3">
+                    <div class="col-12 p-md-3">
                       <label>{{'conference.menuLabel'|translate}}</label>
                       <input pInputText formControlName="menuLabel">
                       <tt-input-message [form]="menuLabelForm" field="menuLabel"></tt-input-message>
@@ -488,7 +506,7 @@
                   </p-table>
                 </div>
                 <form [formGroup]="conferenceForm" *ngIf="conferenceForm">
-                  <div class="p-col-12 p-md-6 switch-show-external-links">
+                  <div class="col-12 col-md-6 switch-show-external-links">
                     <p-inputSwitch id="input-switch-show-external-links" formControlName="showExternalLinks">
                     </p-inputSwitch>
                     <label class="targeted-label"
@@ -542,12 +560,12 @@
                       </p-calendar>
                       <tt-input-message [form]="conferenceResearchForm" field="endDate"></tt-input-message>
                     </div>
-                    <div class="p-col-12 p-md-12">
+                    <div class="col-12 p-md-12">
                       <label for="researchLink">Link</label>
                       <input pInputText formControlName="researchLink">
                       <tt-input-message [form]="conferenceResearchForm" field="researchLink"></tt-input-message>
                     </div>
-                    <div class="p-col-12 p-md-12">
+                    <div class="col-12 p-md-12">
                       <label for="estimatedTimeResearch">{{'conference.estimatedTime'|translate}}</label>
                       <input pInputText formControlName="estimatedTimeResearch">
                       <tt-input-message [form]="conferenceResearchForm" field="estimatedTimeResearch">
@@ -558,7 +576,7 @@
               </p-accordionTab>
               <p-accordionTab header="{{'conference.backgroundImages' | translate}}">
                 <div class="p-grid p-fluid">
-                  <div class="p-col-12 fileupload-container">
+                  <div class="col-12 fileupload-container">
                     <h3>{{'conference.desktop'|translate}}</h3>
                     <p-fileUpload #uploader name="files" multiple="multiple" accept="image/*" maxFileSize="5000000"
                       auto="auto" customUpload="true" (onSelect)="addFiles2Upload($event, 'background')"
@@ -567,7 +585,7 @@
                     </p-fileUpload>
                   </div>
                   <div *ngFor="let image of backgroundImages"
-                    class="p-col-12 p-md-4 p-lg-3 p-xl-2 list-images-container">
+                    class="col-12 p-md-4 p-lg-3 p-xl-2 list-images-container">
                     <div class="list-image-item"
                       *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
                       <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
@@ -575,7 +593,7 @@
                       <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
                     </div>
                   </div>
-                  <div class="p-col-12 fileupload-container">
+                  <div class="col-12 fileupload-container">
                     <h3>{{'conference.mobile'|translate}}</h3>
                     <p-fileUpload name="files"  accept="image/*" maxFileSize="5000000"
                       auto="auto" customUpload="true" (onSelect)="addFiles2Upload($event, 'mobile')"
@@ -584,7 +602,7 @@
                     </p-fileUpload>
                   </div>
                   <div *ngFor="let image of calendarImages"
-                    class="p-col-12 p-md-4 p-lg-3 p-xl-2 list-images-container">
+                    class="col-12 p-md-4 p-lg-3 p-xl-2 list-images-container">
                     <div class="list-image-item"
                       *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
                       <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
@@ -599,7 +617,7 @@
               </p-accordionTab>
             </p-accordion>
           </div>
-          <div class="p-col-12 p-md-6">
+          <div class="col-12 col-md-6">
             <div class="form-actions">
               <button pButton icon="pi pi-check" type="button" [label]="'save'|translate"
                 (click)="saveConference(conferenceForm.value)"></button>

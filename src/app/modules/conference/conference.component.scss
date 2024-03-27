@@ -422,3 +422,10 @@ form {
     text-align: left !important;
   }
 }
+.p-element.p-inputwrapper,
+.p-dropdown.p-component,
+.p-element.p-inputwrapper > div,
+.p-dropdown{
+  width: 100% !important;
+  display: block;
+}

@@ -113,7 +113,7 @@
           <div class="p-col-12 p-md-12" style="height: 60px;">{{ 'conference.meeting.title' | translate }}</div>
           <form [formGroup]="form" (submit)="save(form.value)" *ngIf="form">
             <div class="p-col-9">
-              <span class="p-col-3" *ngFor="let type of optionsTypesMeeting">
+              <span class="p-col-3 form-check" *ngFor="let type of optionsTypesMeeting">
                 <p-radioButton [disabled]="typeMeetingAlreadySet" [id]="type.value" name="type"
                                 [value]="type.value"
                                 formControlName="type"
@@ -123,7 +123,7 @@
             </div>
             <div class="p-col-12 p-md-12">
               <label for="name">{{'conference.meeting.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText class="form-control form-control-input"  formControlName="name">
               <tt-input-message [form]="form" field="name"></tt-input-message>
             </div>
             <div class="p-col-8 inline">

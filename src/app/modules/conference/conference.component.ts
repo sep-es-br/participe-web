@@ -138,6 +138,7 @@ export class ConferenceComponent implements OnInit {
           label: plan.name,
         });
       });
+      console.log('Planos ', this.plans);
     } catch (err) {
       console.error(err);
       this.messageService.add({
@@ -329,6 +330,8 @@ export class ConferenceComponent implements OnInit {
       this.showTargetedByItems = this.conference && this.conference.segmentation;
       this.targetedByItemsSelected = this.conference.targetedByItems.length > 1 ? 'TODOS' : this.conference.targetedByItems[0].toString();
     }
+
+    console.log("PLAN SUBMIT ",this.conference.plan);
 
     this.conferenceForm.controls.id.setValue(this.conference.id);
     this.conferenceForm.controls.name.setValue(this.conference.name);
@@ -685,6 +688,8 @@ export class ConferenceComponent implements OnInit {
         }
       });
 
+      console.log('COnference ',this.conference);
+
       /*
       this.moderatorsEnabled.forEach(async moderator => {
         await this.personService.postOperator('Moderator', moderator);
@@ -1006,6 +1011,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   async onChangePlans(plan, conference?) {
+    console.log("Mudou plano ",plan);
     this.localitiesOfDomain = [];
     const visit = {};
     let localities = [];

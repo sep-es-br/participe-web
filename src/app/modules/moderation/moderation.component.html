@@ -18,8 +18,8 @@
         </div>
       </div>
       <div class="p-col-12 p-md-12" *ngIf="search">
-        <div class="p-grid ui-fluid search-complete">
-          <div class="p-col-12 p-md-3 form-group">
+        <div class="row p-grid ui-fluid search-complete">
+          <div class="col-md-3 p-col-12 p-md-3 form-group">
             <label class="form-label">{{ 'moderation.filters.status' | translate }}</label>
             <p-dropdown [options]="statusOptions" [(ngModel)]="filter.status">
             </p-dropdown>
@@ -61,8 +61,8 @@
         {{ 'moderation.label.empty_comments' | translate }}
       </div>
       <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
-        <div class="p-grid ui-fluid">
-          <div class="p-col-12 p-md-6">
+        <div class="row p-grid ui-fluid">
+          <div class="p-col-12 col-md-6">
             <div class="row">
               <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span>
               <span
@@ -81,11 +81,11 @@
               {{ comment.localityName }}
             </div>
           </div>
-          <div class="p-col-12 p-md-3">
+          <div class="p-col-12 col-md-3">
             <div class="row info">{{ comment.structureItemName }}</div>
             <div>{{ comment.planItemName }}</div>
           </div>
-          <div class="p-col-12 p-md-2 p-col-align-center options">
+          <div class="p-col-12 col-md-2 align-middle  options">
             <p-radioButton [name]="'optionModeration_' + comment.commentId"
                            (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
                            value="Proposal" [label]="'moderation.label.proposal' | translate">
@@ -95,12 +95,12 @@
                            value="Comment" [label]="'moderation.label.comment'| translate ">
             </p-radioButton>
           </div>
-          <div class="p-col-12 p-md-1 p-col-align-center actions">
-            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate"
+          <div class="col-12 col-md-1 align-middle actions">
+            <button pButton class="btn align-middle align-middle btn-sm btn-primary" [disabled]="comment.disableModerate"
                     [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
               <img src="assets/layout/images/icons/internet.svg" alt=""/>
             </button>
-            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" icon=""
+            <button pButton class="btn align-middle align-middle btn-sm btn-primary" [disabled]="comment.disableModerate" icon=""
                     [pTooltip]="'moderation.label.btnModerate' | translate"
                     (click)="moderate(comment)">
               <img src="assets/layout/images/icons/king.svg" alt=""/>
