@@ -42,6 +42,7 @@ export class ConferenceComponent implements OnInit {
   moderators: IPerson[] = [];
   moderatorsEnabled: IPerson[] = [];
   searchModeratorsForm: UntypedFormGroup;
+  conferenceCustomProperties: UntypedFormGroup;
   localitycitizenSelected = false;
   minDate: Date = new Date();
   researchMinDate: Date = new Date();
@@ -268,9 +269,19 @@ export class ConferenceComponent implements OnInit {
       displayStatusConference: 'OPEN',
       preOpeningText: '',
       postClosureText: '',
-      colorBackground: '',
-      textColor: '',
-      typeColorBackground:'',
+    });
+
+    this.conferenceCustomProperties = this.formBuilder.group({
+      typeBackgroundColor: '',
+      background: '',
+      fontColor: '',
+      borderColor: '',
+      accentColor: '',
+      cardColor: '',
+      cardFontColor: '',
+      cardColorHover: '',
+      cardFontColorHover: '',
+      cardBorderColor: ''
     });
     
     this.searchModeratorsForm = this.formBuilder.group({
@@ -331,8 +342,6 @@ export class ConferenceComponent implements OnInit {
       this.targetedByItemsSelected = this.conference.targetedByItems.length > 1 ? 'TODOS' : this.conference.targetedByItems[0].toString();
     }
 
-    console.log("PLAN SUBMIT ",this.conference.plan);
-
     this.conferenceForm.controls.id.setValue(this.conference.id);
     this.conferenceForm.controls.name.setValue(this.conference.name);
     this.conferenceForm.controls.description.setValue(this.conference.description);
@@ -361,6 +370,10 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.preOpeningText.setValue(this.conference.preOpeningText);
     this.conferenceForm.controls.postClosureText.setValue(this.conference.postClosureText);
 
+    if(this.conference.customProperties){
+      this.setConferenceCustomProperties()
+    }
+
     if (this.conference.researchConfiguration) {
       this.setConferenceResearchForm();
     }
@@ -380,6 +393,19 @@ export class ConferenceComponent implements OnInit {
     this.conferenceResearchForm.controls.estimatedTimeResearch.setValue(this.conference.researchConfiguration.estimatedTimeResearch);
 
     this.setResearchDisplayStatus();
+  }
+
+  setConferenceCustomProperties(){
+    this.conferenceCustomProperties.controls.typeBackgroundColor.setValue(this.conference.customProperties.typeBackgroundColor);
+    this.conferenceCustomProperties.controls.background.setValue(this.conference.customProperties.background);
+    this.conferenceCustomProperties.controls.fontColor.setValue(this.conference.customProperties.fontColor);
+    this.conferenceCustomProperties.controls.borderColor.setValue(this.conference.customProperties.borderColor);
+    this.conferenceCustomProperties.controls.cardColorHover.setValue(this.conference.customProperties.cardColorHover);
+    this.conferenceCustomProperties.controls.cardColor.setValue(this.conference.customProperties.cardColor);
+    this.conferenceCustomProperties.controls.accentColor.setValue(this.conference.customProperties.accentColor);
+    this.conferenceCustomProperties.controls.cardFontColor.setValue(this.conference.customProperties.cardFontColor);
+    this.conferenceCustomProperties.controls.cardFontColorHover.setValue(this.conference.customProperties.cardFontColorHover);
+    this.conferenceCustomProperties.controls.cardBorderColor.setValue(this.conference.customProperties.cardBorderColor);
   }
 
   addHowItWorkStep() {
@@ -718,7 +744,19 @@ export class ConferenceComponent implements OnInit {
           estimatedTimeResearch: this.conferenceResearchForm.controls.estimatedTimeResearch.value,
         },
         backgroundImages: this.conference.backgroundImages,
-        calendarImages: this.conference.calendarImages
+        calendarImages: this.conference.calendarImages,
+        customProperties:{
+          typeBackgroundColor: this.conferenceCustomProperties.controls.typeBackgroundColor.value,
+          background: this.conferenceCustomProperties.controls.background.value,
+          fontColor: this.conferenceCustomProperties.controls.fontColor.value,
+          borderColor: this.conferenceCustomProperties.controls.borderColor.value,
+          cardColorHover: this.conferenceCustomProperties.controls.cardColorHover.value,
+          cardColor: this.conferenceCustomProperties.controls.cardColor.value,
+          accentColor: this.conferenceCustomProperties.controls.accentColor.value,
+          cardFontColor: this.conferenceCustomProperties.controls.cardFontColor.value,
+          cardFontColorHover: this.conferenceCustomProperties.controls.cardFontColorHover.value,
+          cardBorderColor: this.conferenceCustomProperties.controls.cardBorderColor.value,          
+        }
       };
 
       this.conferenceService.save(formData, !!this.idConference);

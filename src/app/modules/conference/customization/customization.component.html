@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-8">
         <h3 class="fw-bolder text-center">Configurações</h3>
-        <form [formGroup]="customStylesheet"  *ngIf="dataForm">
+        <form [formGroup]="dataForm"  *ngIf="dataForm">
             <table class="table table-striped">
                 <tbody>
                 <tr>
@@ -11,10 +11,10 @@
                 </td>
                 <td>
                     <div>
-                        <p-radioButton class="mr-2 me-2" name="targetedByItemsGroup" (click)="getBackgroundInput('color')"  [value]="'color'" [label]="'Cor Sólida'" formControlName="typeColorBackground"></p-radioButton>
-                        <p-radioButton name="targetedByItemsGroup" [value]="'gradient'" (click)="getBackgroundInput('gradient')" [label]="'Gradiente'" formControlName="typeColorBackground"></p-radioButton>
-                        <div id="colorPicker" name="colorPicker" *ngIf="typeColorInput==='color'; else gradientPicker" class="mt-2" >
-                            <input type="color"  class="form-control form-control-color" name="colorBackground" formControlName="colorBackground" (change)="changeColorBackground()"  />
+                        <p-radioButton class="mr-2 me-2" id="typeBackground1" (click)="getBackgroundInput('color')"    [value]="'color'"      [label]="'Cor Sólida'" formControlName="typeBackgroundColor"></p-radioButton>
+                        <p-radioButton class="mr-2 me-2" id="typeBackground2" (click)="getBackgroundInput('gradient')" [value]="'gradient'"   [label]="'Gradiente'"  formControlName="typeBackgroundColor"></p-radioButton>
+                        <div  *ngIf="typeColorInput==='color'; else gradientPicker" class="mt-2" >
+                            <input type="color"  class="form-control form-control-color" name="background" formControlName="background" (onChange)="changeColorBackground()"  />
                         </div>
                         <ng-template #gradientPicker>
                             <div>
@@ -29,7 +29,7 @@
                         <label class="fw-bold mr-2 me-2">Texto:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="textColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="fontColor" (change)="changeColorText()"  />
                     </td>
                 </tr>
                 <tr>
@@ -37,7 +37,7 @@
                         <label class="fw-bold mr-2 me-2">Borda:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="borderColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="borderColor" (change)="changeBorderColor($event)"  />
                     </td>
                 </tr>
                 <tr>
@@ -45,7 +45,7 @@
                         <label class="fw-bold mr-2 me-2">Destaque:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="accentColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="accentColor" (change)="changeAccentColor($event)"  />
                     </td>
                 </tr>
                 <tr>
@@ -53,7 +53,7 @@
                         <label class="fw-bold mr-2 me-2">Card:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="cardBackgroundColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="cardColor" (change)="changeCardColor($event)"  />
                     </td>
                 </tr>
                 <tr>
@@ -61,7 +61,7 @@
                         <label class="fw-bold mr-2 me-2">Card em destaque:</label>
                     </td>
                     <td>
-                       <input type="color"  class="form-control form-control-color" formControlName="accentCardColor" (change)="changeColorText()"  />
+                       <input type="color"  class="form-control form-control-color" formControlName="cardColorHover" (change)="changeCardColorAccent($event)"  />
                     </td>
                 </tr>
                 <tr>
@@ -69,7 +69,7 @@
                         <label class="fw-bold mr-2 me-2">Texto do card:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="cardTextColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="cardFontColor" (change)="changeCardText($event)"  />
                     </td>
                 </tr>
                 <tr>
@@ -77,7 +77,7 @@
                         <label class="fw-bold mr-2 me-2">Texto destacado no card:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="accentFontColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="cardFontColorHover" (change)="changeCardTextAccent($event)"  />
                     </td>
                 </tr>
                 <tr>
@@ -85,7 +85,7 @@
                         <label class="fw-bold mr-2 me-2">Borda do card:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="textColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="cardBorderColor" (change)="changeCardBorderColor($event)"  />
                     </td>
                 </tr>
             </tbody>
@@ -97,6 +97,6 @@
         <div class="container p-2" [ngStyle]="{'background-color': backgroundColor, 'color': colorText}" >
           <p class="text-justify" > {{textExample}} </p>
         </div>
-        <div class="card shadow mt-2" [ngStyle]="{'background-color': backgroundCardColor, 'color': textCardColor}" >{{textCard}}</div>
+        <div class="card shadow mt-2" [ngStyle]="{'background-color': colorCard, 'color': colorTextCard}" >{{textCard}}</div>
       </div>
     </div>
