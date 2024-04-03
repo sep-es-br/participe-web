@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-8">
         <h3 class="fw-bolder text-center">Configurações</h3>
-        <form [formGroup]="dataForm"  *ngIf="dataForm">
+        <form [formGroup]="customStylesheet"   *ngIf="dataForm">
             <table class="table table-striped">
                 <tbody>
                 <tr>
@@ -18,7 +18,7 @@
                         </div>
                         <ng-template #gradientPicker>
                             <div>
-                                <app-gradient (BackgroudDefined)="updateBackground($event)" ></app-gradient>
+                                <app-gradient (BackgroudDefined)="updateBackground($event)" [initialBackground]="backgroundColor" ></app-gradient>
                             </div>
                         </ng-template>                             
                     </div>
@@ -29,7 +29,7 @@
                         <label class="fw-bold mr-2 me-2">Texto:</label>
                     </td>
                     <td>
-                        <input type="color"  class="form-control form-control-color" formControlName="fontColor" (change)="changeColorText()"  />
+                        <input type="color"  class="form-control form-control-color" formControlName="fontColor" (change)="changeColorText($event)"  />
                     </td>
                 </tr>
                 <tr>

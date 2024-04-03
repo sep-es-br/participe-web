@@ -16,6 +16,7 @@ interface Point {
 export class GradientComponent implements OnInit, OnDestroy {
 
     @ViewChild('principalGradient') containerRef: ElementRef;
+    @Input() initialBackground?: string;
     @Output() BackgroudDefined = new EventEmitter<string>();
     points: Point[] = [
         {left: '0%',show: true,color: '#2a72c2', position: 0},
@@ -36,7 +37,19 @@ export class GradientComponent implements OnInit, OnDestroy {
 
     atualizaBackgroundInicial(){
         /**Verificar no backend se já existe, caso contrário utilizar o default */
-        this.backgroundGradient = this.defaultBackground;
+        console.log('Vai definir background ',this.initialBackground);
+        if(this.initialBackground != null && this.initialBackground != '' ){
+            this.backgroundGradient = this.initialBackground;
+            this.BackgroudDefined.next(this.initialBackground);
+            this.backgroundGradient = this.initialBackground;
+            console.log("Definiu +++");
+        }else{
+            this.backgroundGradient =  this.defaultBackground;
+            console.log("Definiu ---");
+        }
+        console.log('Definiu background ',this.backgroundGradient);
+        console.log('this.backgroundGradient',this.backgroundGradient);
+        
         this.BackgroudDefined.next(this.backgroundGradient);
     }
 

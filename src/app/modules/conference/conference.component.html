@@ -30,8 +30,8 @@
               </div>
               <div class="col-12 col-md-6">
                 <span class="p-float-label">
-                  <p-dropdown [options]="plans" [styleClass]="'w-100'" formControlName="plan" [placeholder]="'placeholder.select'|translate"
-                  class="ng-dirty w-100" (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
+                  <p-dropdown [options]="plans" [styleClass]="'d-flex form-control'" formControlName="plan" [placeholder]="'placeholder.select'|translate"
+                  class="ng-dirty w-100"  (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
                   [readonly]="selfdeclarations > 0">
                   </p-dropdown>
                   <label class="form-label" for="plan">{{'plan.label'|translate}}</label>
@@ -660,13 +660,13 @@
                       *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
                       <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
                         alt="Imagem Background">
-                      <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
+                      <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'mobile')"></i>
                     </div>
                   </div>
                 </div>
               </p-accordionTab>
               <p-accordionTab header="Estilos CSS" >
-               <app-conference-customization [(dataForm)]="conferenceCustomProperties" ></app-conference-customization>
+               <app-conference-customization *ngIf="loadCustomPreferences" [dataForm]="conferenceCustomProperties" (dataFormChange)="handleFormChange($event)" ></app-conference-customization>
               </p-accordionTab>
             </p-accordion>
           </div>

@@ -211,7 +211,6 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
         data.datasets.forEach((dataset, i) => {
           const meta = chartInstance.getDatasetMeta(i);
           meta.data.forEach((bar, index) => {
-            console.log('META ||| ',bar);
             bar.options.backgroundColor = gradient;
             bar.options.borderColor = gradient;
           });

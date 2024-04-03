@@ -1,26 +1,28 @@
 <app-template>
-  <div class="p-grid ui-fluid">
-    <div class="p-col-12 p-lg-12">
+  <div class="row ui-fluid">
+    <div class="col-12 p-lg-12">
       <div class="card card-w-title">
         <section *ngIf="!showPlanForm && !showPlanItemForm">
-          <div class="p-grid ui-fluid actions">
-            <div class="ui-g-5 ui-md-2 ui-lg-2">
+          <div class="row ui-fluid actions">
+            <div class="col-5 col-md-2 ui-lg-2">
               <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus" (click)="showCreatePlan()">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
-            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+            <div class="col-2 col-md-8 col-lg-9"></div>
+            <div class="col-5 col-md-2 col-lg-1 search">
               <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchPlans(searchForm.value)">
-              <div class="p-grid ui-fluid">
-                <div class="ui-g-12 ui-md-6">
-                  <label for="query">{{'plan.name'|translate}}</label>
-                  <input id="search-input" pInputText formControlName="query">
+              <div class="row ui-fluid">
+                <div class="col-12 col-md-9">
+                  <div class="form-floating mb-3">
+                    <input class="form-control" placeholder="" id="search-input" pInputText formControlName="query">
+                    <label class="form-label" for="query">{{'plan.name'|translate}}</label>
+                  </div>
                 </div>
-                <div class="ui-g-12 ui-md-3">
+                <div class="col-12 col-md-3 m-auto">
                   <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
@@ -63,38 +65,38 @@
 
         <!-- Plan Form -->
 
-        <section class="p-grid ui-fluid" *ngIf="showPlanForm">
+        <section class="row ui-fluid" *ngIf="showPlanForm">
           <form [formGroup]="planForm" (submit)="savePlan(planForm.value)">
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <span *ngIf="edit">{{'update' | translate }}</span>
               <span *ngIf="!edit">{{'new' | translate }}</span>
                {{'administration.plan'|translate}}
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'plan.name'|translate}}</label>
-              <input pInputText (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
+              <input pInputText class="form-control" (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="planForm" field="name"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6">
-              <label for="structure">{{'administration.structure'|translate}}</label>
-              <p-dropdown [options]="structures" [disabled]="edit" [placeholder]="'placeholder.select'|translate" formControlName="structure"
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="structure">{{'administration.structure'|translate}}</label>
+              <p-dropdown [styleClass]="'d-flex form-control'" placeholder="Select a City"  [options]="structures" [disabled]="edit" [placeholder]="'placeholder.select'|translate" formControlName="structure"
                 class="ng-dirty ng-invalid" (onChange)="onChangeStructures($event.value)"></p-dropdown>
               <tt-input-message [form]="planForm" field="structure"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="domain">{{'administration.domain'|translate}}</label>
-              <p-dropdown [options]="domains" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate"
+              <p-dropdown [options]="domains" [styleClass]="'d-flex form-control'" [disabled]="edit" formControlName="domain" [placeholder]="'placeholder.select'|translate"
               class="ng-dirty ng-invalid" (onChange)="onChangeDomains($event.value)"></p-dropdown>
             </div>
 
-            <div class="p-col-12 p-md-6" *ngIf="structSelected || edit">
+            <div class="col-12 col-md-6" *ngIf="structSelected || edit">
               <label for="regionalized">{{'plan.RegionalizedBy'|translate}}</label>
-              <p-dropdown [options]="typesDomaim" [disabled]="edit || !domainSelected" [placeholder]="'placeholder.select'|translate" formControlName="localitytype"
+              <p-dropdown [options]="typesDomaim" [styleClass]="'d-flex form-control'" [disabled]="edit || !domainSelected" [placeholder]="'placeholder.select'|translate" formControlName="localitytype"
               class="ng-dirty ng-invalid" ></p-dropdown>
               <tt-input-message [form]="planForm" field="localitytype" *ngIf="domainSelected"></tt-input-message>
             </div>
 
-            <div class="p-col-12 p-md-4">
+            <div class="col-12 col-md-4">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
@@ -106,33 +108,33 @@
 
         <!-- Plan Item Form -->
 
-        <section class="p-grid ui-fluid" *ngIf="showPlanItemForm">
+        <section class="row ui-fluid" *ngIf="showPlanItemForm">
           <form [formGroup]="planItemForm" (submit)="savePlanItem(planItemForm.value)">
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               {{ planBreadcrumb }} <span class="label-parent">{{ structureBreadcrumb }}</span>
             </div>
 
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'plan.item.name'|translate}}</label>
-              <input pInputText formControlName="name"  maxlength="150">
+              <input class="form-control" pInputText formControlName="name"  maxlength="150">
               <tt-input-message [form]="planItemForm" field="name"></tt-input-message>
             </div>
 
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'description'|translate}}</label>
-              <textarea [rows]="3" [cols]="30" pInputTextarea maxlength="200"
+              <textarea class="form-control" [rows]="3" [cols]="30" pInputTextarea maxlength="200"
                 formControlName="description" autoResize="autoResize">
               </textarea>
             </div>
 
-            <div class="p-col-12 p-md-6" *ngIf="loadRegionFineshed && structureItem.locality">
+            <div class="col-12 col-md-6" *ngIf="loadRegionFineshed && structureItem.locality">
               <h3>{{'plan.locality'|translate}}</h3>
               <p-listbox [options]="localitiesPlanItem"  [multiple]="true" [checkbox]="true"
               [filter]="true"  optionLabel="name" [(ngModel)]="localitiesPlanItemSelected" [ngModelOptions]="{standalone: true}">
               </p-listbox>
             </div>
 
-            <div class="p-col-12 p-md-6" *ngIf="structureItem.logo && !planItem.file">
+            <div class="col-12 col-md-6" *ngIf="structureItem.logo && !planItem.file">
               <h3>{{'file.label'|translate}}</h3>
               <!--p-fileUpload name="file" accept="image/*" maxFileSize="1000000" auto="auto" [url]="getUrlUploadFile()"
                 [headers]="getHeadersUploadFile()" customUpload="true"
@@ -148,14 +150,14 @@
               </p-fileUpload>
             </div>
 
-            <div class="p-col-12 p-md-2" *ngIf="structureItem.logo && planItem.file">
+            <div class="col-12 col-md-2" *ngIf="structureItem.logo && planItem.file">
               <h3>{{'plan.file'|translate}}</h3>
               <img [src]="getUrlFile(planItem.file.id)" alt="Logo do Plano" width="120px" style="padding: 20px;">
               <button pButton icon="pi pi-trash" type="button" [label]="'file.remove'|translate"
                 (click)="prepare2RemoveSavedImage(planItem.file, 'cardImage')"></button>
             </div>
 
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-actions">
                 <button pButton *ngIf="!edit" icon="pi pi-check" type="submit" [label]="'saveContinue'|translate"
                   (click)="setSaveAndContinue(true)"></button>

@@ -2,7 +2,7 @@ import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
 import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe, Location} from '@angular/common';
 import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
 import {Conference} from '@app/shared/models/conference';
@@ -34,15 +34,15 @@ import { FileUpload } from 'primeng/fileupload';
 export class ConferenceComponent implements OnInit {
 
   idConference: number;
-  conferenceForm: UntypedFormGroup;
+  conferenceForm: FormGroup;
   conference: Conference;
   plans: SelectItem[] = [];
   localitiesOfDomain: SelectItem[] = [];
   structureRegionalization = false;
   moderators: IPerson[] = [];
   moderatorsEnabled: IPerson[] = [];
-  searchModeratorsForm: UntypedFormGroup;
-  conferenceCustomProperties: UntypedFormGroup;
+  searchModeratorsForm: FormGroup;
+  conferenceCustomProperties: FormGroup;
   localitycitizenSelected = false;
   minDate: Date = new Date();
   researchMinDate: Date = new Date();
@@ -56,13 +56,14 @@ export class ConferenceComponent implements OnInit {
   howItWorkSteps: IHowItWorkStep[] = [];
   clonedSteps: { [s: string]: IHowItWorkStep; } = {};
   externalLinksMenuLabel: string;
-  externalLinksForm: UntypedFormGroup;
+  externalLinksForm: FormGroup;
   externalLinks: IExternalLinks[] = [];
   clonedExternalLinks: { [s: string]: IExternalLinks; } = {};
   showTargetedByItems = false;
-  conferenceResearchForm: UntypedFormGroup;
-  menuLabelForm: UntypedFormGroup;
-  howItWorksForm: UntypedFormGroup;
+  conferenceResearchForm: FormGroup;
+  menuLabelForm: FormGroup;
+  howItWorksForm: FormGroup;
+  loadCustomPreferences: boolean = false;
 
   participationImages: FileCtrl[] = [];
   authenticationImages: FileCtrl[] = [];
@@ -185,7 +186,7 @@ export class ConferenceComponent implements OnInit {
     this.selfdeclarations = await this.conferenceService.selfdeclarations(this.conference.id);
     const plan = this.plans.find(p => p.value.id === this.conference.plan.id);
     await this.onChangePlans(plan.value, this.conference);
-    this.setConferenceForm();
+    await this.setConferenceForm();
     if (this.conference.plan) {
       await this.loadStructureItens(this.conference.plan);
     }
@@ -336,7 +337,7 @@ export class ConferenceComponent implements OnInit {
     });
   }
 
-  setConferenceForm() {
+  async setConferenceForm() {
     if (this.conference && this.conference.targetedByItems) {
       this.showTargetedByItems = this.conference && this.conference.segmentation;
       this.targetedByItemsSelected = this.conference.targetedByItems.length > 1 ? 'TODOS' : this.conference.targetedByItems[0].toString();
@@ -370,8 +371,13 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.preOpeningText.setValue(this.conference.preOpeningText);
     this.conferenceForm.controls.postClosureText.setValue(this.conference.postClosureText);
 
+    console.log("Custom ||| ",this.conference.customProperties);
+
     if(this.conference.customProperties){
-      this.setConferenceCustomProperties()
+      await this.setConferenceCustomProperties();
+      this.loadCustomPreferences = true;
+    }else{
+      this.loadCustomPreferences = true;
     }
 
     if (this.conference.researchConfiguration) {
@@ -395,7 +401,8 @@ export class ConferenceComponent implements OnInit {
     this.setResearchDisplayStatus();
   }
 
-  setConferenceCustomProperties(){
+  async setConferenceCustomProperties(){
+    console.log("Vai definir dados ||| ",this.conference.customProperties);
     this.conferenceCustomProperties.controls.typeBackgroundColor.setValue(this.conference.customProperties.typeBackgroundColor);
     this.conferenceCustomProperties.controls.background.setValue(this.conference.customProperties.background);
     this.conferenceCustomProperties.controls.fontColor.setValue(this.conference.customProperties.fontColor);
@@ -406,6 +413,7 @@ export class ConferenceComponent implements OnInit {
     this.conferenceCustomProperties.controls.cardFontColor.setValue(this.conference.customProperties.cardFontColor);
     this.conferenceCustomProperties.controls.cardFontColorHover.setValue(this.conference.customProperties.cardFontColorHover);
     this.conferenceCustomProperties.controls.cardBorderColor.setValue(this.conference.customProperties.cardBorderColor);
+    console.log('Preferências ||| ',this.conferenceCustomProperties);
   }
 
   addHowItWorkStep() {
@@ -705,6 +713,7 @@ export class ConferenceComponent implements OnInit {
         else if (this.calendarImages[i].file.id !== null
           && this.calendarImages[i].file.id !== undefined
           && this.calendarImages[i].toDelete) {
+            debugger
           await this.removeFile(this.calendarImages[i].file.id, 'mobile');
         }
       }
@@ -980,6 +989,9 @@ export class ConferenceComponent implements OnInit {
       case 'background':
         this.backgroundImages = this.backgroundImages.filter(image => image.file.id !== id);
         break;
+      case 'mobile':
+        this.calendarImages  = this.calendarImages.filter(image => image.file.id !== id);
+        break;
     }
   }
 
@@ -1173,7 +1185,7 @@ export class ConferenceComponent implements OnInit {
     return true;
   }
 
-  private markFormGroupTouched(formGroup: UntypedFormGroup) {
+  private markFormGroupTouched(formGroup: FormGroup) {
     (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 
@@ -1213,6 +1225,11 @@ export class ConferenceComponent implements OnInit {
       return 1;
     }
     return 0;
+  }
+
+  handleFormChange(event){
+    console.log('Mudou aqui ||| ',event);
+    this.conferenceCustomProperties.setValue(event.value);
   }
 
 }
