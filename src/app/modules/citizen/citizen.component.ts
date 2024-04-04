@@ -21,6 +21,7 @@ import { ModerationService } from '@app/shared/services/moderation.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { LocalityService } from '@app/shared/services/locality.service';
+import { StoreKeys } from '@app/shared/constants';
 
 @Component({
   selector: 'app-citizen',
@@ -101,10 +102,15 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async ngOnInit() {
+    this.conferenceSelect = JSON.parse(sessionStorage.getItem('selectedConference'));
+
+    console.log('Iniciando o componente. O base já rodou?'); 
     this.setForm({});
+    console.log('Já definiu o form do componente. O base já rodou?');
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
+    console.log('Pegou as autenticações do componente. O base já rodou?');
     await this.prepareScreen();
-    this.selectedLocalitiesSub = this.selectedLocalities.valueChanges.subscribe(change => this.search.locality = change.map(v => v.value));
+    // this.selectedLocalitiesSub = this.selectedLocalities.valueChanges.subscribe(change => this.search.locality = change.map(v => v.value));
   }
 
   configureActionBar() {
@@ -125,15 +131,26 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async prepareScreen() {
+
+
+    console.log('Vai preparar a screen do componente. O base já rodou?');
     if (!this.conferenceSelect.id) {
+      console.log('Está passando por aqui. O base já rodou?');
       await this.loadConferencesActives();
+      console.log('Já passou por aqui. O base já rodou?');
     }
+    console.log('Está aqui. O base já rodou?');
     this.search.conferenceId = this.conferenceSelect.id;
     if (!this.conferenceSelect.id) {
+      console.log('Não tem conferencia');
+      
       return this.messageService.add({ severity: 'warn', detail: this.translateSrv.instant('empty.conference') });
     } else {
+      console.log('Tem conferencia');
+      
       await this.loadData();
     }
+    console.log('Também está aqui. O base já rodou?');
     this.buildBreadcrumb();
     await this.loadLocalitiesOptions();
     this.configureActionBar();
@@ -141,7 +158,9 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async loadConferencesActives() {
     try {
+      console.log('Dentro de loadConferencesActives. O base já rodou?');
       const data = await this.moderationSrv.getConferencesActive(false);
+      console.log('Tenho Data. O base já rodou?');
       this.conferencesActives = data;
       if (data.length > 0) {
         if (data.filter(conf => conf.isActive).length === 0) {
@@ -252,7 +271,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
         this.translateSrv.instant('citizen.inserted', { name })
     });
     this.cancel();
-    await this.loadData();
+    // await this.loadData();
   }
 
   get iconSave() {
@@ -321,12 +340,17 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   filterLocalities({ query }) {
+    console.log('CONSULTA - ',query);
+    console.log('Locais - ',this.localities);
+    console.log('Tipinho   ||| ',typeof this.localities);  
     if (!query) {
+      console.timeLog('Localidades ||| ',this.filteredLocalities);  
       return this.filteredLocalities = this.localities;
     }
     this.filteredLocalities = this.localities
       .filter(l => !this.selectedLocalities.value.length || !this.selectedLocalities.value.find(s => s.label === l.label))
       .filter(l => this.toStandardText(l.label).indexOf(this.toStandardText(query)) !== -1);
+    console.timeLog('Final filterLocalities ||| ',this.filteredLocalities);  
   }
 
   toStandardText(str: string) {

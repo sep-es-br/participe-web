@@ -91,11 +91,6 @@ a.p-accordion-header-link{
 
 .form-actions {
   display: inline-flex;
-  button,
-  p-splitButton {
-    margin-right: 10px;
-  }
-
 }
 
 .form-group {
@@ -276,10 +271,14 @@ span.icon{
   text-align: justify !important;
 }
 
-.p-dropdown-items, .p-multiselect-items{
+.p-dropdown-items, 
+.p-multiselect-items,
+.p-autocomplete-items,
+.p-element.p-dropdown-label.p-placeholder, 
+.p-tieredmenu-root-list{
   padding: 0;
 }
 
-.p-element.p-dropdown-label.p-placeholder{
-  padding: 0;
+ul.p-autocomplete-multiple-container{
+  padding: 0 !important;
 }

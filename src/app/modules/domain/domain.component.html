@@ -1,26 +1,26 @@
 <app-template>
   <div class="row ui-fluid">
-    <div class="col-12 p-lg-12">
+    <div class="col-12 col-lg-12">
       <div class="card card-w-title">
         <section *ngIf="!showDomainForm && !showLocalityForm">
           <div class="row ui-fluid actions">
-            <div class="ui-g-5 ui-md-2 ui-lg-2">
+            <div class="col-5 col-md-2 col-lg-2">
               <button pButton type="button" class="button-new" [label]="'new' | translate" (click)="showCreateDomain()" icon="pi pi-plus">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
-            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+            <div class="col-2 col-md-8 col-lg-9"></div>
+            <div class="col-5 col-md-2 col-lg-1 search">
               <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchDomains(searchForm.value)">
               <div class="row ui-fluid">
-                <div class="ui-g-12 ui-md-6 ui">
+                <div class="col-12 col-md-6 ui">
                   <label for="query">{{'domain.name' | translate}}</label>
-                  <input id="search-input" pInputText formControlName="query">
+                  <input id="search-input" class="form-control" pInputText formControlName="query">
                 </div>
-                <div class="ui-g-12 ui-md-3">
+                <div class="col-12 col-md-3">
                   <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search' | translate"></button>
                 </div>
               </div>

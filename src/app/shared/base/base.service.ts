@@ -49,6 +49,8 @@ export abstract class BaseService<T> {
   }
 
   public async GetAllPaginated(options?: IQueryOptions): Promise<any> {
+    console.log('URL   ',this.urlBase);
+    console.log('Options   ',options);
     const response = await
       this.http.get<IResultPaginated<T>>(`${this.urlBase}${PrepareHttpQuery(options)}`,
         { headers: Common.buildHeaders() }

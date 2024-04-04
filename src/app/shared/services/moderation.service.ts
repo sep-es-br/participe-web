@@ -60,6 +60,7 @@ export class ModerationService {
   }
 
   getConferencesActive(isActive: boolean) {
+    console.log('Dentro do moderation service. O base já rodou?');
     return this.http.get<Conference[]>(`${environment.apiEndpoint}/moderation/conferences?activeConferences=${isActive}`,
       {headers: Common.buildHeaders()}
     ).toPromise();

@@ -17,7 +17,9 @@ export class AuthService {
   providers: IAuthenticationProvider[] = [
     { tag: 'participe', icon: 'assets/layout/images/icons/participe.svg', label: 'Participe' },
     { tag: 'acessocidadao', icon: 'assets/layout/images/icons/acessocidadao.svg', label: 'Acesso Cidadão' },
-    { tag: 'google', icon: 'assets/layout/images/icons/google.svg', label: 'Google' }
+    { tag: 'google', icon: 'assets/layout/images/icons/google.svg', label: 'Google' },
+    { tag: 'facebook', icon: 'assets/layout/images/icons/facebook.svg', label: 'Facebook' },
+    { tag: 'twitter', icon: 'assets/layout/images/icons/twitter.svg', label: 'Twitter' }
   ];
 
   constructor(
@@ -119,7 +121,6 @@ export class AuthService {
   }
 
   getAuthenticationIcon(authProvider: string): string {
-    console.log('Aqui no service',authProvider);
     return this.providers.find(p => p.tag === authProvider.toLowerCase()).icon;
   }
 
