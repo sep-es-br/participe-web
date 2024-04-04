@@ -31,8 +31,6 @@ export abstract class BasePageList<T> {
         this.sort = `${event.sortField},${event.sortOrder === 1 ? 'asc' : 'desc'}`;
       }
     }
-    console.log('SEARCH ',this.search);
-    console.log('EVENT  ',event);
     
     const response = await this.service.GetAllPaginated({
       page: this.page,

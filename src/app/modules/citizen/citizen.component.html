@@ -32,9 +32,10 @@
               </div>
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
-                <p-autoComplete   [styleClass]="'w-100'" [inputStyleClass]="'w-100 d-flex form-control'" [suggestions]="filteredLocalities" [formControl]="selectedLocalities" (completeMethod)="filterLocalities($event)"
+                <p-autoComplete [styleClass]="'w-100'" [inputStyleClass]="'w-100 d-flex form-control'" [(ngModel)]="selectedLocalities" [suggestions]="filteredLocalities" (completeMethod)="filterLocalities($event)" (ngModelChange)="setSearchLocality()"  [placeholder]="'search' | translate" [multiple]="true"></p-autoComplete>
+                <!-- <p-autoComplete   [styleClass]="'w-100'" [inputStyleClass]="'w-100 d-flex form-control'" [suggestions]="filteredLocalities" [formControl]="selectedLocalities" (completeMethod)="filterLocalities($event)"
                   [size]="30" [minLength]="1" field="label" [placeholder]="'search' | translate" [multiple]="true">
-                </p-autoComplete>
+                </p-autoComplete> -->
               </div>
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{'citizen.status'|translate}}</label>
@@ -46,7 +47,7 @@
               </div>
               <div class="col-12 col-md-4 col-lg-3">
                 <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
-                  (click)="search = { conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities.setValue([]);"></button>
+                  (click)="search = { conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
               </div>
             </div>
           </div>
@@ -108,10 +109,10 @@
                   <div [innerHTML]="getAuthenticationsFromCitizen"></div>
                 </div>
                 <div class="options-container">
-                  <p-radioButton name="optionsAuthentication" value="cpf" label="CPF"
+                  <p-radioButton name="typeAuthentication" value="cpf" label="CPF"
                     (onClick)="changeTypeAuthentication()" formControlName="typeAuthentication">
                   </p-radioButton>
-                  <p-radioButton name="optionsAuthentication" value="mail" label="E-mail"
+                  <p-radioButton name="typeAuthentication" value="mail" label="E-mail"
                     (onClick)="changeTypeAuthentication()" formControlName="typeAuthentication">
                   </p-radioButton>
                 </div>
@@ -151,8 +152,8 @@
             <div class="col-12 col-md-12 radiobutton-status" *ngIf="idCitizen > 0">
               <label for="status">Status</label>
               <div>
-                <p-radioButton name="status" [value]="true" [label]="'status.active' | translate" formControlName="statusIsActive"></p-radioButton>
-                <p-radioButton name="status" [value]="false" [label]="'status.inactive' | translate" formControlName="statusIsActive"></p-radioButton>
+                <p-radioButton name="statusIsActive" [value]="true" [label]="'status.active' | translate" formControlName="statusIsActive"></p-radioButton>
+                <p-radioButton name="statusIsActive" [value]="false" [label]="'status.inactive' | translate" formControlName="statusIsActive"></p-radioButton>
               </div>
             </div>
             <div class="col-12 col-md-12">

@@ -66,9 +66,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
       await this.loadConfig();
       await this.loadPlugins();
     });
-    console.log("ANTES ||| ", Chart.defaults.backgroundColor.toString());
     Chart.defaults.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-    console.log("DEPOIS ||| ", Chart.defaults.backgroundColor);
     Chart.defaults.borderColor = 'rgba(0, 0, 0, 0)';
     // Chart.defaults.color = '#db4b1f';
     Chart.register(ChartDataLabels);

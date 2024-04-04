@@ -422,7 +422,6 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   }
 
   async handleStrategicAreaChartClicked(event) {
-    console.log('Chamou handleStrategicAreaChartClicked');
     const selectedIndex = Array.isArray(event) && event.length >= 0 ? event[0].index : undefined;
     if (selectedIndex != undefined) {
       const indexStructureItemSelected =
@@ -460,7 +459,6 @@ export class ControlPanelDashboardComponent implements OnInit, OnDestroy {
   }
 
   async handleMicroregionChartClicked(event) {
-    console.log('chamou handleMicroregionChartClicked');
     const selectedIndex = Array.isArray(event) && event.length >= 0 ? event[0].index : undefined;
     if (selectedIndex != undefined) {
       const indexGroupSelected =
