@@ -354,7 +354,9 @@ export class AttendanceModel {
         },
       ]);
     }
+
     await this.setActionBar();
+    await this.searchByName();
     this.showSelectMeeting = false;
   }
 

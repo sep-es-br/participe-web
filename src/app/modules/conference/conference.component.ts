@@ -140,7 +140,6 @@ export class ConferenceComponent implements OnInit {
           label: plan.name,
         });
       });
-      console.log('Planos ', this.plans);
     } catch (err) {
       console.error(err);
       this.messageService.add({
@@ -371,8 +370,6 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.preOpeningText.setValue(this.conference.preOpeningText);
     this.conferenceForm.controls.postClosureText.setValue(this.conference.postClosureText);
 
-    console.log("Custom ||| ",this.conference.customProperties);
-
     if(this.conference.customProperties){
       await this.setConferenceCustomProperties();
       this.loadCustomPreferences = true;
@@ -402,7 +399,6 @@ export class ConferenceComponent implements OnInit {
   }
 
   async setConferenceCustomProperties(){
-    console.log("Vai definir dados ||| ",this.conference.customProperties);
     this.conferenceCustomProperties.controls.typeBackgroundColor.setValue(this.conference.customProperties.typeBackgroundColor);
     this.conferenceCustomProperties.controls.background.setValue(this.conference.customProperties.background);
     this.conferenceCustomProperties.controls.fontColor.setValue(this.conference.customProperties.fontColor);
@@ -413,7 +409,6 @@ export class ConferenceComponent implements OnInit {
     this.conferenceCustomProperties.controls.cardFontColor.setValue(this.conference.customProperties.cardFontColor);
     this.conferenceCustomProperties.controls.cardFontColorHover.setValue(this.conference.customProperties.cardFontColorHover);
     this.conferenceCustomProperties.controls.cardBorderColor.setValue(this.conference.customProperties.cardBorderColor);
-    console.log('Preferências ||| ',this.conferenceCustomProperties);
   }
 
   addHowItWorkStep() {
@@ -722,8 +717,6 @@ export class ConferenceComponent implements OnInit {
           return image.file;
         }
       });
-
-      console.log('COnference ',this.conference);
 
       /*
       this.moderatorsEnabled.forEach(async moderator => {
@@ -1061,7 +1054,6 @@ export class ConferenceComponent implements OnInit {
   }
 
   async onChangePlans(plan, conference?) {
-    console.log("Mudou plano ",plan);
     this.localitiesOfDomain = [];
     const visit = {};
     let localities = [];
@@ -1228,7 +1220,6 @@ export class ConferenceComponent implements OnInit {
   }
 
   handleFormChange(event){
-    console.log('Mudou aqui ||| ',event);
     this.conferenceCustomProperties.setValue(event.value);
   }
 

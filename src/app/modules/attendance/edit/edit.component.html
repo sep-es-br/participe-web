@@ -180,13 +180,39 @@
   </div>
 </ng-template>
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
-          [(visible)]="showSelectMeeting">
-  <div class="label">Consulta</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference"
-              optionLabel="name"></p-dropdown>
-  <div class="label">Reunião</div>
-  <p-dropdown [options]="optionsMeeting" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-  <button pButton class="change-button" [label]="'change' | translate" icon="pi pi-sort-alt"
-          (click)="setCurrentMeeting()"></button>
+
+<p-dialog modal="true" [maximizable]="true" [draggable]="false" [(visible)]="showSelectMeeting">
+	<ng-template pTemplate="body">
+		<div class="row mb-3" >
+			<div class="col-12 col-md-12 mb-3">
+				<label class="label">Consulta</label>
+				<p-dropdown [options]="optionsConference" [styleClass]="'d-flex form-control'" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+			</div>
+			<div class="col-12 col-md-12 mb-auto">
+				<label class="label">Reunião</label>
+				<p-dropdown [options]="optionsMeeting" [styleClass]="'d-flex form-control'"  [virtualScroll]="true"  [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="footer">
+		<button pButton class="change-button btn btn-lg btn-primary" [label]="'change' | translate" icon="fa-solid fa-arrow-right-arrow-left" (click)="setCurrentMeeting()"></button>
+		<!-- <p-button icon="pi pi-check" (click)="visible = false" label="Ok" pAutoFocus [autofocus]="true"></p-button> -->
+	</ng-template>
 </p-dialog>
+
+<!-- <p-dialog class="modal-change-meeting" modal="true" [maximizable]="true" [draggable]="false" [resizable]="true" [(visible)]="showSelectMeeting">
+	<div class="row" >
+		<div class="col-12 col-md-12 mb-3">
+			<label class="label">Consulta</label>
+			<p-dropdown [options]="optionsConference" [styleClass]="'d-flex form-control'" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+		</div>
+		<div class="col-12 col-md-12 mb-auto">
+			<label class="label">Reunião</label>
+			<p-dropdown [options]="optionsMeeting" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+		</div>
+		<div class="col-12 col-md-12 m-auto text-center">
+			<button pButton class="change-button btn btn-lg btn-primary" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+		</div>
+
+	</div>
+</p-dialog> -->

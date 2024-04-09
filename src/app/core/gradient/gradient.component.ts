@@ -16,7 +16,8 @@ interface Point {
 export class GradientComponent implements OnInit, OnDestroy {
 
     @ViewChild('principalGradient') containerRef: ElementRef;
-    @Input() initialBackground?: string;
+    @Input() initialBackground: string;
+    @Input() formLoaded: boolean;
     @Output() BackgroudDefined = new EventEmitter<string>();
     points: Point[] = [
         {left: '0%',show: true,color: '#2a72c2', position: 0},
@@ -36,20 +37,15 @@ export class GradientComponent implements OnInit, OnDestroy {
     }
 
     atualizaBackgroundInicial(){
-        /**Verificar no backend se já existe, caso contrário utilizar o default */
-        console.log('Vai definir background ',this.initialBackground);
+        if(this.formLoaded !== true){
+            return;
+        }
         if(this.initialBackground != null && this.initialBackground != '' ){
             this.backgroundGradient = this.initialBackground;
-            this.BackgroudDefined.next(this.initialBackground);
-            this.backgroundGradient = this.initialBackground;
-            console.log("Definiu +++");
+            this.processarTexto(this.backgroundGradient);
         }else{
             this.backgroundGradient =  this.defaultBackground;
-            console.log("Definiu ---");
         }
-        console.log('Definiu background ',this.backgroundGradient);
-        console.log('this.backgroundGradient',this.backgroundGradient);
-        
         this.BackgroudDefined.next(this.backgroundGradient);
     }
 
@@ -138,7 +134,7 @@ export class GradientComponent implements OnInit, OnDestroy {
         if (this.points.length > 2) {
             this.points.splice(index, 1);
         } else {
-            console.log("Não é possível excluir. Deve haver pelo menos três opções.");
+            console.log("Não é possível excluir. Deve haver pelo menos duas opções.");
         }
         this.atualizaBackground();
     }
@@ -146,4 +142,32 @@ export class GradientComponent implements OnInit, OnDestroy {
     onAngleChange(newAngle: number) {
         this.atualizaBackground();
     }
+
+
+    processarTexto(texto: string): Point[] {
+        const regex =/linear-gradient\((.*?),\s*(.*)\)/;
+        const match = regex.exec(texto);
+      
+        if (match) {
+          const gradientData = match[2];
+          const pontosGradiente = gradientData.split(",").filter(Boolean).map((item) => {
+            const [color, position] = item.trim().split(" ");
+      
+            return {
+              left: parseInt(position) >= 100 ? '99%' : position,
+              show: true,
+              color: `${color}`,
+              position: parseInt(position),
+            };
+          });
+          this.angle = parseInt(match[1]);
+
+          this.points = pontosGradiente;
+      
+          return pontosGradiente;
+        }
+      
+        return [];
+      }
+      
 }

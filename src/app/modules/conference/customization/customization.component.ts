@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, FormGroup  } from "@angular/forms";
+import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
 
 @Component({
     selector: 'app-conference-customization',
@@ -25,6 +25,7 @@ import { UntypedFormBuilder, FormGroup  } from "@angular/forms";
     colorTextCard: string = '#000000';
     colorFontAccent: string = '#ffffff';
     borderColorCard: string = '#ffffff';
+    formLoaded: boolean = false;
     
 
     constructor(
@@ -34,54 +35,66 @@ import { UntypedFormBuilder, FormGroup  } from "@angular/forms";
     }
 
 
-    ngOnInit(): void {
-        this.initComponent();
+    async ngOnInit(): Promise<void> {
+        await this.initComponent();
+        await this.UpdateLocalForm();
+        await this.updateForm();
     }
 
-    initComponent(){
-        this.initForm();
-        if (!this.dataForm) {
-            console.log('Erro: FormGroup inválido ou valor ausente');
-            return;
-        }else{
-            this.updateForm();
-            this.customStylesheet.valueChanges.subscribe(() => {
-                this.dataFormChange.emit(this.customStylesheet);
-            });
-        }
-    }
-
-    initForm(){
-        // console.log("TEM DATA NESSE FORM? ||| ",this.dataForm);
-        console.log("INICIANDO FORM");
+    async UpdateLocalForm(): Promise<void>{
         
-        this.customStylesheet = this.formBuilder.group({
-            typeBackgroundColor: this.typeColorInput ,
-            background: this.backgroundColor,
-            fontColor: this.colorText,
-            borderColor: this.borderColor,
-            accentColor: this.colorAccent,
-            cardColor: this.colorCard,
-            cardColorHover: this.colorAccentCard,
-            cardFontColor: this.colorTextCard,
-            cardFontColorHover: this.colorFontAccent,
-            cardBorderColor: this.borderColorCard,
-        })
+        this.backgroundColor = this.dataForm.controls.background.value != '' ? this.dataForm.controls.background.value : this.backgroundColor;
+        this.colorText = this.dataForm.controls.fontColor.value != '' ? this.dataForm.controls.fontColor.value : this.colorText;
+        this.borderColor = this.dataForm.controls.borderColor.value != '' ? this.dataForm.controls.borderColor.value : this.borderColor;
+        this.colorAccent = this.dataForm.controls.accentColor.value != '' ? this.dataForm.controls.accentColor.value : this.colorAccent;
+        this.colorCard = this.dataForm.controls.cardColor.value != '' ? this.dataForm.controls.cardColor.value : this.colorCard;
+        this.colorAccentCard = this.dataForm.controls.cardColorHover.value != '' ? this.dataForm.controls.cardColorHover.value : this.colorAccentCard;
+        this.colorTextCard = this.dataForm.controls.cardFontColor.value != '' ? this.dataForm.controls.cardFontColor.value : this.colorTextCard;
+        this.colorFontAccent = this.dataForm.controls.cardFontColorHover.value != '' ? this.dataForm.controls.cardFontColorHover.value : this.colorFontAccent;
+        this.borderColorCard = this.dataForm.controls.cardBorderColor.value != '' ? this.dataForm.controls.cardBorderColor.value : this.borderColorCard;
+        this.typeColorInput = this.dataForm.controls.typeBackgroundColor.value != '' ? this.dataForm.controls.typeBackgroundColor.value : this.typeColorInput;
+
+        this.customStylesheet.controls.typeBackgroundColor.setValue(this.typeColorInput);
+        this.customStylesheet.controls.background.setValue(this.backgroundColor);
+        this.customStylesheet.controls.fontColor.setValue(this.colorText);
+        this.customStylesheet.controls.borderColor.setValue(this.borderColor);
+        this.customStylesheet.controls.accentColor.setValue(this.colorAccent);
+        this.customStylesheet.controls.cardColor.setValue(this.colorCard);
+        this.customStylesheet.controls.cardFontColor.setValue(this.colorTextCard);
+        this.customStylesheet.controls.cardColorHover.setValue(this.colorAccentCard);
+        this.customStylesheet.controls.cardFontColorHover.setValue(this.colorFontAccent);
+        this.customStylesheet.controls.cardBorderColor.setValue(this.borderColorCard);
+        
     }
 
-    ngAfterViewChecked(): void {
-        console.info(">> Atualizando ViewChecked <<");
-        // this.FormGroupChange.emit(this.customStylesheet);
+    async initComponent(){
+        await this.initForm();        
+    }
+
+    async initForm(){
+        this.customStylesheet = this.formBuilder.group({
+            typeBackgroundColor: '',
+            background: '',
+            fontColor: '',
+            borderColor: '',
+            accentColor: '',
+            cardColor: '',
+            cardColorHover: '',
+            cardFontColor: '',
+            cardFontColorHover: '',
+            cardBorderColor: '',
+        })
+        this.customStylesheet.valueChanges.subscribe(() => {
+            this.dataFormChange.emit(this.customStylesheet);
+            this.updateInputColorPreview();
+        });
     }
 
     updateForm(){
-        console.log("data desse form ||| ",this.dataForm);
         
         if(!this.dataForm){
-            console.log("++ Não faz nada ++ ",this.dataForm);
             return;
         }else{
-            console.log("--+ Faça tudo! +-- ",this.dataForm);
             this.typeColorInput = this.dataForm.controls.typeBackgroundColor.value;
             this.backgroundColor = this.dataForm.controls.background.value;
             this.customStylesheet.controls.typeBackgroundColor.setValue(this.dataForm.controls.typeBackgroundColor.value);
@@ -95,7 +108,7 @@ import { UntypedFormBuilder, FormGroup  } from "@angular/forms";
             this.customStylesheet.controls.cardFontColorHover.setValue(this.dataForm.controls.cardFontColorHover.value);
             this.customStylesheet.controls.cardBorderColor.setValue(this.dataForm.controls.cardBorderColor.value);
         }
-        console.log("*** Por quê chegou aqui? ***");
+        this.formLoaded = true;
     }
 
     getBackgroundInput(typeInput: 'color' | 'gradient'){
@@ -114,50 +127,20 @@ import { UntypedFormBuilder, FormGroup  } from "@angular/forms";
         this.changeColorBackground();
     }
 
-    changeColorText(event){
-        console.log("Cor atual ",this.customStylesheet.controls.fontColor.value);
-        
-        this.colorText = event.target.value;
-        // this.dataForm.controls.fontColor.setValue(this.colorText);
-    }
 
-    changeBorderColor(event){
-        console.log("changeBorderColor ",event);
-        
-    }
-
-    changeAccentColor(event){
-        console.log("changeAccentColor ",event);
-        
-    }
-
-    changeCardColor(event){
-        console.log("changeCardColor ",event);
-        
-    }
-
-    changeCardColorAccent(event){
-        console.log("changeCardColorAccent ",event);
-        
-    }
-
-    changeCardText(event){
-        console.log("changeCardText ",event);
-        
-    }
-
-    changeCardTextAccent(event){
-        console.log("changeCardTextAccent ",event);
-        
-    }
-
-    changeCardBorderColor(event){
-        console.log("changeCardBorderColor ",event);
-        
-    }
-
-    test(){
-        console.log('Mudou o form',this.customStylesheet );
+    updateInputColorPreview(){
+        if(this.formLoaded){
+            this.backgroundColor = this.customStylesheet.controls.background.value;
+            this.colorText = this.customStylesheet.controls.fontColor.value;
+            this.borderColor = this.customStylesheet.controls.borderColor.value;
+            this.colorAccent = this.customStylesheet.controls.accentColor.value;
+            this.colorCard = this.customStylesheet.controls.cardColor.value;
+            this.colorAccentCard = this.customStylesheet.controls.cardColorHover.value;
+            this.colorTextCard = this.customStylesheet.controls.cardFontColor.value;
+            this.colorFontAccent = this.customStylesheet.controls.cardFontColorHover.value;
+            this.borderColorCard = this.customStylesheet.controls.cardBorderColor.value;
+            this.typeColorInput = this.customStylesheet.controls.typeBackgroundColor.value;
+        }
     }
     
 

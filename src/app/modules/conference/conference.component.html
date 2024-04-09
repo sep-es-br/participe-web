@@ -665,7 +665,7 @@
                   </div>
                 </div>
               </p-accordionTab>
-              <p-accordionTab header="Estilos CSS" >
+              <p-accordionTab header="{{ 'conference.cssTab.title' | translate }}" >
                <app-conference-customization *ngIf="loadCustomPreferences" [dataForm]="conferenceCustomProperties" (dataFormChange)="handleFormChange($event)" ></app-conference-customization>
               </p-accordionTab>
             </p-accordion>
