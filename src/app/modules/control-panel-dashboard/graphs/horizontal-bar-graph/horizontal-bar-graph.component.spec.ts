@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HorizontalBarGraphComponent } from './horizontal-bar-graph.component';
 
@@ -6,7 +6,7 @@ describe('HorizontalBarGraphComponent', () => {
   let component: HorizontalBarGraphComponent;
   let fixture: ComponentFixture<HorizontalBarGraphComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ HorizontalBarGraphComponent ]
     })

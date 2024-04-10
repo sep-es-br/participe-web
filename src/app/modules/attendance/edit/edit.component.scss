@@ -14,8 +14,8 @@
       margin: 0 10px;
     }
 
-    .county.ui-float-label {
-      .ui-inputtext,
+    .county.p-float-label {
+      .p-inputtext,
       label {
         padding-left: 15px;
       }
@@ -148,9 +148,9 @@
   }
 
   .top-bar {
-    > {
-      margin: 0 15px;
-    }
+   
+    margin: 0 15px;
+   
 
     input.ng-valid.ng-touched.ng-dirty:focus,
     p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,

@@ -1,7 +1,7 @@
 import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
 import {Component, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem, TreeNode} from 'primeng/api';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 
 import {Domain} from '@app/shared/models/domain';
 import {DomainService} from '@app/shared/services/domain.service';
@@ -17,18 +17,18 @@ import {CustomValidators} from '@app/shared/util/CustomValidators';
   styleUrls: ['./domain.component.scss']
 })
 export class DomainComponent implements OnInit {
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   domains: Domain[] = [];
   domainCreated: Domain;
   domainTree: TreeNode[];
   selectedNode: TreeNode;
-  domainForm: FormGroup;
+  domainForm: UntypedFormGroup;
   domain: Domain;
 
   types: SelectItem[] = [];
 
-  localityForm: FormGroup;
+  localityForm: UntypedFormGroup;
   localities: string[];
   locality: Locality;
   selectedLocality: Locality;
@@ -46,7 +46,7 @@ export class DomainComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private confirmationService: ConfirmationService,
     private domainService: DomainService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private localityService: LocalityService,
     private localityTypeService: LocalityTypeService,
     private messageService: MessageService,
@@ -433,7 +433,7 @@ export class DomainComponent implements OnInit {
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./input-message.component.scss']
 })
 export class InputMessageComponent {
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
   @Input() field: string;
 
   constructor(

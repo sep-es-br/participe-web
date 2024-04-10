@@ -1,46 +1,46 @@
 <app-template>
-  <div class="p-grid ui-fluid">
+  <div class="row ui-fluid">
     <div class="p-col-12 p-lg-12">
       <div class="card card-w-title">
         <section>
-          <div class="p-grid ui-fluid actions">
-            <div class="ui-g-5 ui-md-2 ui-lg-2">
+          <div class="row ui-fluid actions">
+            <div class="col-5 col-md-2 col-lg-2">
               <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
                       (click)="handleCreateConference()">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
-            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+            <div class="col-2 col-md-8 col-lg-9"></div>
+            <div class="col-5 col-md-2 col-lg-1 search">
               <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') |translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchConferences(searchForm.value)">
-              <div class="p-grid ui-fluid">
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="row ui-fluid">
+                <div class="col-12 col-md-6 col-lg-3">
                   <label for="nameSearch">{{'conference.name'|translate}}</label>
-                  <input id="search-input" pInputText formControlName="nameSearch">
+                  <input class="form-control" id="search-input" pInputText formControlName="nameSearch">
                 </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="col-12 col-md-6 col-lg-3">
                   <label for="planSearch">{{'plan.label'|translate}}</label>
-                  <p-dropdown [options]="plans" formControlName="planSearch" class="ng-dirty ng-invalid"
+                  <p-dropdown [styleClass]="'d-flex form-control'" [options]="plans" formControlName="planSearch" class="ng-dirty ng-invalid"
                               [placeholder]="'placeholder.select'|translate"></p-dropdown>
                 </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="col-12 col-md-6 col-lg-3">
                   <label for="monthSearch">{{'month.label'|translate}}</label>
-                  <p-dropdown [options]="months" formControlName="monthSearch" class="ng-dirty ng-invalid"
+                  <p-dropdown [styleClass]="'d-flex form-control'" [options]="months" formControlName="monthSearch" class="ng-dirty ng-invalid"
                               [placeholder]="'placeholder.select'|translate"></p-dropdown>
                 </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                <div class="col-12 col-md-6 col-lg-3">
                   <label for="yearSearch">{{'years'|translate}}</label>
-                  <p-dropdown [options]="years" formControlName="yearSearch" class="ng-dirty ng-invalid"
+                  <p-dropdown [styleClass]="'d-flex form-control'" [options]="years" formControlName="yearSearch" class="ng-dirty ng-invalid"
                               [placeholder]="'placeholder.select'|translate"></p-dropdown>
                 </div>
 
-                <div class="ui-g-12 ui-md-3 ui-lg-3">
+                <div class="col-12 col-md-3 col-lg-3">
                   <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
                 </div>
-                <div class="ui-g-12 ui-md-4 ui-lg-3">
+                <div class="col-12 col-md-4 col-lg-3">
                   <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
                           (click)="clearSearch()"></button>
                 </div>
@@ -48,7 +48,7 @@
             </form>
           </div>
           <p-table [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
-                   [responsive]="true" paginatorPosition="both">
+                   paginatorPosition="both">
             <ng-template pTemplate="header">
               <tr>
                 <th>{{'name'|translate}}</th>

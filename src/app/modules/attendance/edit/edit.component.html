@@ -1,9 +1,9 @@
 <app-template>
   <div class="edit-attendees">
     <ng-container *ngIf="isAttendeeSelected; else list">
-      <div class="p-col-12 p-md-6">
-        <form class="p-grid form-edit-account" [formGroup]="form" (submit)="saveEdit()">
-          <div class="p-col-12 title">
+      <div class="col-12 col-md-6 m-a">
+        <form class="row form-edit-account" [formGroup]="form" (submit)="saveEdit()">
+          <div class="col-12 title">
             <span>{{ 'attendance.editAttendanceIn' | translate }}</span>
             <span class="remove-action" (click)="uncheckIn()" [pTooltip]="getTooltipRemoveText()"
                   tooltipStyleClass="tooltip-uncheck">
@@ -11,18 +11,18 @@
               {{ 'attendance.removeAttendee' | translate }}
             </span>
           </div>
-          <div class="p-col-12">
-            <label class="required">{{ 'name' | translate }}</label>
-            <input pInputText formControlName="name">
+          <div class="col-12">
+            <label class="required form-label">{{ 'name' | translate }}</label>
+            <input pInputText class="form-control" formControlName="name">
             <tt-input-message [form]="form" field="name"></tt-input-message>
           </div>
-          <div class="p-col-12">
-            <label class="required">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
-            <p-dropdown [options]="optionsLocalities" formControlName="locality"
+          <div class="col-12">
+            <label class="required form-label">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
+            <p-dropdown [options]="optionsLocalities" formControlName="locality" [styleClass]="'w-100'"
                         [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
-          <div class="p-col-12">
+          <div class="col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
               <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
@@ -33,31 +33,31 @@
                              formControlName="authType"></p-radioButton>
             </div>
           </div>
-          <div class="p-col-12 p-md-6">
+          <div class="col-12 col-md-6">
             <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
             <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-                         slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
+                         slotChar="___.___.___-__" styleClass="form-control"  formControlName="cpf"></p-inputMask>
             <tt-input-message [form]="form" field="cpf"></tt-input-message>
           </div>
-          <div class="p-col-12 p-md-6">
+          <div class="col-12 col-md-6">
             <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.password' | translate }}</label>
-            <input pInputText formControlName="password" [maxLength]="6">
+            <input pInputText class="form-control" formControlName="password" [maxLength]="6">
             <tt-input-message [form]="form" field="password"></tt-input-message>
           </div>
-          <div class="p-col-12">
+          <div class="col-12">
             <label [class.required]="form.get('authType').value === 'E-Mail'">{{ 'citizen.mail' | translate }}</label>
-            <input pInputText formControlName="email">
+            <input pInputText class="form-control" formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
             <p-checkbox class="checkbox-reset" *ngIf="form.get('authType').value === 'E-Mail'" [binary]="true"
                         [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
           </div>
-          <div class="p-col-12">
+          <div class="col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
             <p-inputMask mask="(99) 99999-9999" placeholder="(00) 00000-0000" unmask="true"
-                         formControlName="phone"></p-inputMask>
+                         formControlName="phone" [styleClass]="'form-control'" ></p-inputMask>
             <tt-input-message [form]="form" field="phone"></tt-input-message>
           </div>
-          <div class="p-col-12">
+          <div class="col-12">
             <div class="form-actions">
               <button pButton icon="pi pi-check" type="submit" [label]="'save' | translate"></button>
               <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
@@ -68,35 +68,43 @@
       </div>
     </ng-container>
     <ng-template #list>
-      <div class="top-bar">
-        <p-dropdown [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" (onChange)="searchByName()">
-          <ng-template let-option pTemplate="selectedItem">
-            {{ ('attendance.orderBy' | translate) + ': ' + (option.label | translate) }}
-          </ng-template>
-          <ng-template let-option pTemplate="item">
-            {{ option.label | translate }}
-          </ng-template>
-        </p-dropdown>
-        <div class="county ui-float-label">
-          <p-autoComplete id="search-county" field="name" [(ngModel)]="selectedCounty"
-                          [suggestions]="resultSearchCounty"
-                          (completeMethod)="handleSearchCounty($event)" [forceSelection]="true"
-                          (onSelect)="searchByName()"></p-autoComplete>
-          <label for="search-county">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
+      <div class="row col-md-6">
+        <div class="col-md-4">
+          <p-dropdown [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" [styleClass]="''" (onChange)="searchByName()">
+            <ng-template let-option pTemplate="selectedItem">
+              {{ ('attendance.orderBy' | translate) + ': ' + (option.label | translate) }}
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              {{ option.label | translate }}
+            </ng-template>
+          </p-dropdown>
         </div>
-        <div class="search">
-          <div class="ui-float-label">
-            <input type="text" id="search-name" pInputText [(ngModel)]="nameSearch" (keydown.enter)="searchByName()"/>
-            <label for="search-name"> {{ 'search' | translate }}</label>
+        <div class="col-md-4">
+          <div class="county p-float-label">
+            <p-autoComplete id="search-county" field="name" [(ngModel)]="selectedCounty" class="d-flex h-100"
+                            [suggestions]="resultSearchCounty" [inputStyleClass]="'h-100 form-control'"
+                            (completeMethod)="handleSearchCounty($event)" [forceSelection]="true"
+                            (onSelect)="searchByName()"></p-autoComplete>
+            <label for="search-county">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
           </div>
-          <button pButton icon="pi pi-search" (click)="searchByName()"></button>
+        </div>
+        <div class="col-md-4">
+          <div class="search">
+            <div class="input-group mb-3">
+              <input type="text" class=" d-flex form-control" id="search-name" pInputText [(ngModel)]="nameSearch" (keydown.enter)="searchByName()"/>
+              <label class="input-group-text cursor-pointer"  (click)="searchByName()" for="search-name"> {{ 'search' | translate }}
+              <i class="ps-1 fa fa-search"></i>
+                <!-- <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> -->
+              </label>
+            </div>
+          </div>
         </div>
       </div>
       <div class="p-grid list-result">
-        <div class="p-col-12" *ngIf="noResult">
+        <div class="col-12" *ngIf="noResult">
           <div class="no-result">{{ 'attendance.noResult' | translate }}</div>
         </div>
-        <div class="p-col-12 result" *ngFor="let attendee of listAttendees">
+        <div class="col-12 result" *ngFor="let attendee of listAttendees">
           <div class="name-icon">
             <div class="letter-icon" [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name)}">
               {{ attendee.name ? attendee.name[0].toUpperCase() : 'A' }}
@@ -139,7 +147,7 @@
 </app-template>
 
 <ng-template #loadingList let-letters>
-  <div class="p-col-12 result loading" *ngFor="let letter of letters">
+  <div class="col-12 result loading" *ngFor="let letter of letters">
     <div class="name-icon">
       <div class="letter-icon">{{ letter }}</div>
     </div>
@@ -172,13 +180,39 @@
   </div>
 </ng-template>
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
-          [(visible)]="showSelectMeeting">
-  <div class="label">Consulta</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference"
-              optionLabel="name"></p-dropdown>
-  <div class="label">Reunião</div>
-  <p-dropdown [options]="optionsMeeting" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-  <button pButton class="change-button" [label]="'change' | translate" icon="pi pi-sort-alt"
-          (click)="setCurrentMeeting()"></button>
+
+<p-dialog modal="true" [maximizable]="true" [draggable]="false" [(visible)]="showSelectMeeting">
+	<ng-template pTemplate="body">
+		<div class="row mb-3" >
+			<div class="col-12 col-md-12 mb-3">
+				<label class="label">Consulta</label>
+				<p-dropdown [options]="optionsConference" [styleClass]="'d-flex form-control'" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+			</div>
+			<div class="col-12 col-md-12 mb-auto">
+				<label class="label">Reunião</label>
+				<p-dropdown [options]="optionsMeeting" [styleClass]="'d-flex form-control'"  [virtualScroll]="true"  [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="footer">
+		<button pButton class="change-button btn btn-lg btn-primary" [label]="'change' | translate" icon="fa-solid fa-arrow-right-arrow-left" (click)="setCurrentMeeting()"></button>
+		<!-- <p-button icon="pi pi-check" (click)="visible = false" label="Ok" pAutoFocus [autofocus]="true"></p-button> -->
+	</ng-template>
 </p-dialog>
+
+<!-- <p-dialog class="modal-change-meeting" modal="true" [maximizable]="true" [draggable]="false" [resizable]="true" [(visible)]="showSelectMeeting">
+	<div class="row" >
+		<div class="col-12 col-md-12 mb-3">
+			<label class="label">Consulta</label>
+			<p-dropdown [options]="optionsConference" [styleClass]="'d-flex form-control'" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+		</div>
+		<div class="col-12 col-md-12 mb-auto">
+			<label class="label">Reunião</label>
+			<p-dropdown [options]="optionsMeeting" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+		</div>
+		<div class="col-12 col-md-12 m-auto text-center">
+			<button pButton class="change-button btn btn-lg btn-primary" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+		</div>
+
+	</div>
+</p-dialog> -->

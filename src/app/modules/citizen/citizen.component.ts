@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService, SelectItem } from 'primeng/api';
 
 import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
@@ -21,6 +21,7 @@ import { ModerationService } from '@app/shared/services/moderation.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { LocalityService } from '@app/shared/services/locality.service';
+import { StoreKeys } from '@app/shared/constants';
 
 @Component({
   selector: 'app-citizen',
@@ -30,7 +31,7 @@ import { LocalityService } from '@app/shared/services/locality.service';
 export class CitizenComponent extends BasePageList<CitizenModel> implements OnInit, OnDestroy {
 
   formEdit: boolean = false;
-  citizenForm: FormGroup;
+  citizenForm: UntypedFormGroup;
   localities: SelectItem[] = [];
   filteredLocalities: SelectItem[] = [];
   authentications: SelectItem[] = [];
@@ -55,8 +56,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   conferenceSelect: Conference = new Conference();
   sort: string = 'name';
   search: any = { status: '' };
-  selectedLocalities: FormControl = new FormControl('');
-  selectedLocalitiesSub: Subscription;
+  selectedLocalities: [];
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
   mailValidators = [ Validators.required, Validators.email ];
@@ -83,7 +83,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   constructor(
     private breadcrumbService: BreadcrumbService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private citizenSrv: CitizenService,
     private translateSrv: TranslateService,
@@ -96,15 +96,15 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   ngOnDestroy(): void {
-    this.selectedLocalitiesSub.unsubscribe();
     this.actionbarSrv.setItems([]);
   }
 
   async ngOnInit() {
+    this.conferenceSelect = JSON.parse(sessionStorage.getItem('selectedConference'));
+
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
     await this.prepareScreen();
-    this.selectedLocalitiesSub = this.selectedLocalities.valueChanges.subscribe(change => this.search.locality = change.map(v => v.value));
   }
 
   configureActionBar() {
@@ -125,13 +125,17 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async prepareScreen() {
+
+
     if (!this.conferenceSelect.id) {
       await this.loadConferencesActives();
     }
     this.search.conferenceId = this.conferenceSelect.id;
     if (!this.conferenceSelect.id) {
+      
       return this.messageService.add({ severity: 'warn', detail: this.translateSrv.instant('empty.conference') });
     } else {
+      
       await this.loadData();
     }
     this.buildBreadcrumb();
@@ -321,12 +325,10 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   filterLocalities({ query }) {
-    if (!query) {
+    if (!query) { 
       return this.filteredLocalities = this.localities;
     }
-    this.filteredLocalities = this.localities
-      .filter(l => !this.selectedLocalities.value.length || !this.selectedLocalities.value.find(s => s.label === l.label))
-      .filter(l => this.toStandardText(l.label).indexOf(this.toStandardText(query)) !== -1);
+    this.filteredLocalities = this.localities.map(item => item).filter( value => value.label.toLowerCase().includes(query.toLowerCase())); 
   }
 
   toStandardText(str: string) {
@@ -348,5 +350,8 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     this.citizenForm.patchValue(
       {'name': $event.target.value.replace(/\s+$/gm, '')},
       {emitEvent: false});
+  }
+  setSearchLocality(){
+    this.search.locality = this.selectedLocalities.map(item => item['value'] );
   }
 }

@@ -1,5 +1,5 @@
-@import '~@fortawesome/fontawesome-free/css/all.css';
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 body {
   padding: 0;
@@ -68,17 +68,9 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
     }
   }
 }
-
-form {
-  label {
-    margin-bottom: 5px;
-    margin-left: 1px;
-    float: left;
-  }
-  .label-parent {
-    font-weight: 500;
-    margin-right: 5px;
-  }
+.p-accordion-tab-active
+a.p-accordion-header-link{
+  color: #e0e0e0 !important;
 }
 
 .search-form form .ui-fluid {
@@ -88,11 +80,6 @@ form {
 
 .form-actions {
   display: inline-flex;
-  button,
-  p-splitButton {
-    margin-right: 10px;
-  }
-
 }
 
 .form-group {
@@ -271,4 +258,20 @@ span.icon{
 
 .text-justify{
   text-align: justify !important;
+}
+
+.p-dropdown-items, 
+.p-multiselect-items,
+.p-autocomplete-items,
+.p-element.p-dropdown-label.p-placeholder, 
+.p-tieredmenu-root-list{
+  padding: 0;
+}
+
+ul.p-autocomplete-multiple-container{
+  padding: 0 !important;
+}
+
+.p-dialog-content{
+  overflow: unset !important;
 }

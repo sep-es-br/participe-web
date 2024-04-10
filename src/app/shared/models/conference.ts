@@ -5,6 +5,7 @@ import {LocalityType} from './locality-type';
 import {IHowItWorkStep} from '../interface/IHowItWorkStep';
 import {IExternalLinks} from '../interface/IExternalLinks';
 import {Meeting} from './Meeting';
+import { customProperties } from './CustomProperties';
 
 export class Conference {
   id: number;
@@ -54,4 +55,5 @@ export class Conference {
     estimatedTimeResearch: string;
   };
   localityType?: LocalityType;
+  customProperties?:customProperties;
 }

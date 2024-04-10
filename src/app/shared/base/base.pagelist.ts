@@ -31,6 +31,7 @@ export abstract class BasePageList<T> {
         this.sort = `${event.sortField},${event.sortOrder === 1 ? 'asc' : 'desc'}`;
       }
     }
+    
     const response = await this.service.GetAllPaginated({
       page: this.page,
       pageSize: this.pageSize,

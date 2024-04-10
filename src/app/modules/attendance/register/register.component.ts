@@ -1,6 +1,6 @@
 import { delay } from 'rxjs/operators';
 import {AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Message, MessageService} from 'primeng/api';
 import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
@@ -67,7 +67,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   constructor(
     protected messageSrv: MessageService,
-    protected formBuilder: FormBuilder,
+    protected formBuilder: UntypedFormBuilder,
     protected meetingSrv: MeetingService,
     protected translate: TranslateService,
     protected actionbarSrv: ActionBarService,

@@ -1,26 +1,26 @@
 <app-template>
-  <div class="p-grid ui-fluid">
-    <div class="p-col-12 p-lg-12">
+  <div class="row ui-fluid">
+    <div class="col-12 col-lg-12">
       <div class="card card-w-title">
         <section *ngIf="!showDomainForm && !showLocalityForm">
-          <div class="p-grid ui-fluid actions">
-            <div class="ui-g-5 ui-md-2 ui-lg-2">
+          <div class="row ui-fluid actions">
+            <div class="col-5 col-md-2 col-lg-2">
               <button pButton type="button" class="button-new" [label]="'new' | translate" (click)="showCreateDomain()" icon="pi pi-plus">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
-            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+            <div class="col-2 col-md-8 col-lg-9"></div>
+            <div class="col-5 col-md-2 col-lg-1 search">
               <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
             </div>
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchDomains(searchForm.value)">
-              <div class="p-grid ui-fluid">
-                <div class="ui-g-12 ui-md-6 ui">
+              <div class="row ui-fluid">
+                <div class="col-12 col-md-6 ui">
                   <label for="query">{{'domain.name' | translate}}</label>
-                  <input id="search-input" pInputText formControlName="query">
+                  <input id="search-input" class="form-control" pInputText formControlName="query">
                 </div>
-                <div class="ui-g-12 ui-md-3">
+                <div class="col-12 col-md-3">
                   <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search' | translate"></button>
                 </div>
               </div>
@@ -56,19 +56,19 @@
             </ng-template>
           </p-treeTable>
         </section>
-        <section class="p-grid ui-fluid" *ngIf="showDomainForm">
+        <section class="row ui-fluid" *ngIf="showDomainForm">
           <form [formGroup]="domainForm" (submit)="saveDomain(domainForm.value)">
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <span *ngIf="edit">{{'update' | translate }}</span>
               <span *ngIf="!edit">{{'new' | translate }}</span>
                {{'administration.domain'|translate}}
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'domain.name'|translate}}</label>
-              <input pInputText (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
+              <input pInputText class="form-control" (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="domainForm" field="name"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-4">
+            <div class="col-12 p-md-4">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate"
@@ -77,33 +77,33 @@
             </div>
           </form>
         </section>
-        <section class="p-grid ui-fluid" *ngIf="showLocalityForm">
+        <section class="row ui-fluid" *ngIf="showLocalityForm">
           <form [formGroup]="localityForm" (submit)="saveLocality(localityForm.value)">
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               {{ localityBreadcrumb }}
               <span *ngIf="edit">> {{'update' | translate }}</span>
               <span *ngIf="!edit">> {{'domain.locality.new' | translate }}</span>
                {{'locality'|translate}}
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'type'|translate}}</label>
-              <p-dropdown [options]="types" [disabled]="disableSelectLocalityType" formControlName="type"
+              <p-dropdown [options]="types" [styleClass]="'d-flex form-control'" [disabled]="disableSelectLocalityType" formControlName="type"
                 class="ng-dirty ng-invalid" [placeholder]="'placeholder.select'|translate"></p-dropdown>
               <tt-input-message [form]="localityForm" field="type"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6">
-              <label for="name">{{'domain.locality.name'|translate}}</label>
-              <p-autoComplete formControlName="name" [suggestions]="localities"
+            <div class="col-12 col-md-6">
+              <label class="w-100" for="name">{{'domain.locality.name'|translate}}</label>
+              <p-autoComplete [styleClass]="'w-100'" [inputStyleClass]="'w-100 form-control'" formControlName="name" [suggestions]="localities"
                 (completeMethod)="searchLocalities($event, localityForm.value.type)">
               </p-autoComplete>
               <tt-input-message [form]="localityForm" field="name"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="latitudeLongitude">{{'domain.locality.latitudeLongitude'|translate}}</label>
-              <input formControlName="latitudeLongitude" pInputText>
+              <input class="form-control" formControlName="latitudeLongitude" pInputText>
               <tt-input-message [form]="localityForm" field="latitudeLongitude"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-actions">
                 <button pButton *ngIf="!edit" [icon]="loadingIcon()" [disabled]="loading" type="submit" [label]="'saveContinue'|translate"
                   (click)="setSaveAndContinue(true)"></button>

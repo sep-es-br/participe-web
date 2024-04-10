@@ -1,6 +1,9 @@
 .dropdown-toggle::after {
   display: none;
 }
+p-radiobutton {
+  vertical-align: text-bottom !important;
+}
 
 body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {
     background-color: #2196F3 !important;

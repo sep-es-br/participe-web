@@ -1,7 +1,7 @@
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService, SelectItem, TreeNode } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FileCtrl } from './../../shared/models/file';
 import { File } from '@app/shared/models/file';
 
@@ -34,7 +34,7 @@ export class local {
   styleUrls: [ './plan.component.scss' ],
 })
 export class PlanComponent implements OnInit {
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   contrastPlan: number = -1;
   localitiesPlanItem: local[] = [];
@@ -44,7 +44,7 @@ export class PlanComponent implements OnInit {
 
   plans: Plan[] = [];
   planTree: TreeNode[];
-  planForm: FormGroup;
+  planForm: UntypedFormGroup;
   plan: Plan;
   planCreated: Plan;
 
@@ -61,7 +61,7 @@ export class PlanComponent implements OnInit {
 
   planItem: PlanItem;
   planItemParent: PlanItem;
-  planItemForm: FormGroup;
+  planItemForm: UntypedFormGroup;
   localities: TreeNode[];
   selectedLocalities: TreeNode[];
   toDelete: File;
@@ -80,7 +80,7 @@ export class PlanComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private confirmationService: ConfirmationService,
     private domainService: DomainService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private planService: PlanService,
     private planItemService: PlanItemService,
@@ -797,7 +797,7 @@ export class PlanComponent implements OnInit {
     return Array.from(setIds);
   }
 
-  private markFormGroupTouched(formGroup: FormGroup) {
+  private markFormGroupTouched(formGroup: UntypedFormGroup) {
     (Object as any).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 

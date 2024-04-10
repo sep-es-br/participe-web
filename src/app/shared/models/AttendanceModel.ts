@@ -13,7 +13,7 @@ import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.serv
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { ConferenceService } from '../services/conference.service';
 import { MeetingService } from '../services/meeting.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../util/CustomValidators';
 import { Subscription } from 'rxjs';
 import { CitizenSenderModel } from './CitizenSenderModel';
@@ -61,7 +61,7 @@ export class AttendanceModel {
   selectedCounty: Locality;
   localities: Locality[];
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   localityLabel: string;
   optionsLocalities: SelectItem[];
   authTypeEnum: string[] = Object.values(AuthTypeEnum);
@@ -76,7 +76,7 @@ export class AttendanceModel {
   protected meetingSrv: MeetingService;
   protected translate: TranslateService;
   protected messageSrv: MessageService;
-  protected formBuilder: FormBuilder;
+  protected formBuilder: UntypedFormBuilder;
   protected citizenSrv: CitizenService;
   protected localitySrv: LocalityService;
 
@@ -90,7 +90,7 @@ export class AttendanceModel {
     this.meetingSrv = injector.get(MeetingService);
     this.translate = injector.get(TranslateService);
     this.messageSrv = injector.get(MessageService);
-    this.formBuilder = injector.get(FormBuilder);
+    this.formBuilder = injector.get(UntypedFormBuilder);
     this.citizenSrv = injector.get(CitizenService);
     this.localitySrv = injector.get(LocalityService);
 
@@ -354,7 +354,9 @@ export class AttendanceModel {
         },
       ]);
     }
+
     await this.setActionBar();
+    await this.searchByName();
     this.showSelectMeeting = false;
   }
 

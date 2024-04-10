@@ -1,35 +1,45 @@
 <app-template>
   <div class="app-dashboard">
     <div class="p-grid p-fluid" *ngIf="loadTranslate">
-      <div class="p-col-12 p-xl-2 item-filter">
-        <label>{{'dashboard.conference'|translate}}</label>
-        <p-dropdown [options]="conferenceOptions" [autoDisplayFirst]="false" (onChange)="handleConferenceSelected($event)"
-          [(ngModel)]="filters.selectedConference">
-        </p-dropdown>
-      </div>
-      <div class="p-col-12 p-xl-2 item-filter">
-        <label>{{'dashboard.result'|translate}}</label>
-        <p-dropdown [options]="resultOptions" (onChange)="loadChartsSelectedResult()"
-          [(ngModel)]="filters.selectedResult" [autoDisplayFirst]="false"></p-dropdown>
-      </div>
-      <div class="p-col-12 p-xl-2 item-filter">
-        <label>{{'dashboard.origin'|translate}}</label>
-        <p-dropdown [options]="originOptions" (onChange)="handleOriginSelected()" [(ngModel)]="filters.selectedOrigin"
-          [autoDisplayFirst]="false"></p-dropdown>
-      </div>
-      <div class="p-col-12 p-xl-2 item-filter">
-        <label>{{'dashboard.presential'|translate}}</label>
-        <p-multiSelect [options]="meetingListOptions" [(ngModel)]="filters.selectedMeeting"
-          [disabled]="validateOriginSelectedPresential()" [defaultLabel]="'select'|translate" [filter]="true"
-          (onChange)="loadCharts()">
-        </p-multiSelect>
-      </div>
-      <div class="p-col-12 p-xl-4 refresh-filter">
-        <div class="refresh-filter-container" (click)="clearFilters(true)">
-          <i class="pi pi-refresh"></i>
-          <span>{{'dashboard.restore'|translate}}</span>
+      <div class="grid">
+
+        <div class=" col-md-2 p-col-12 p-xl-2 item-filter">
+          <label>{{'dashboard.conference'|translate}}</label>
+          <p-dropdown [options]="conferenceOptions" [autoDisplayFirst]="false" (onChange)="handleConferenceSelected($event)"
+            [(ngModel)]="filters.selectedConference">
+          </p-dropdown>
         </div>
+
+        <div class="col-md-2 p-col-12 p-xl-2 item-filter">
+          <label>{{'dashboard.result'|translate}}</label>
+          <p-dropdown [options]="resultOptions" (onChange)="loadChartsSelectedResult()"
+            [(ngModel)]="filters.selectedResult" [autoDisplayFirst]="false"></p-dropdown>
+        </div>
+
+        <div class=" col-md-2 p-col-12 p-xl-2 item-filter">
+          <label>{{'dashboard.origin'|translate}}</label>
+          <p-dropdown [options]="originOptions" (onChange)="handleOriginSelected()" [(ngModel)]="filters.selectedOrigin"
+            [autoDisplayFirst]="false"></p-dropdown>
+        </div>
+
+        <div class="col-md-2 p-col-12 p-xl-2 item-filter">
+          <label>{{'dashboard.presential'|translate}}</label>
+          <p-multiSelect [options]="meetingListOptions" [(ngModel)]="filters.selectedMeeting"
+            [disabled]="validateOriginSelectedPresential()" [placeholder]="'select'|translate" [filter]="true"
+            (onChange)="loadCharts()">
+          </p-multiSelect>
+        </div>
+        <div class="col-md-2">&nbsp;</div>
+        
+        <div class="offset-md-1 mt-auto refresh-filter">
+          <div class="refresh-filter-container float-end" (click)="clearFilters(true)">
+            <i class="pi pi-refresh"></i>
+            <span>{{'dashboard.restore'|translate}}</span>
+          </div>
+        </div>
+
       </div>
+        
 
       <div class="p-col-12 card-indicators-container" *ngIf="dashboardData">
         <div class="card-indicator">
@@ -49,9 +59,9 @@
           <label>{{'dashboard.counties'|translate}}</label>
         </div>
       </div>
-      <div class="p-col-12">
-        <div class="p-grid p-jc-between" *ngIf="conference">
-          <div class="p-col-12 p-xl-4">
+      <div class="col-12">
+        <div class="grid p-jc-between" *ngIf="conference">
+          <div class="col-12 col-md-4">
             <div class="chart-container">
               <div class="chart-header-container">
                 <div class="chart-header">
@@ -95,8 +105,8 @@
                 <hr />
               </div>
               <div class="chart" *ngIf="dashboardData && dashboardData.microregionChart">
-                <app-horizontal-bar-graph [chartData]="dashboardData?.microregionChart"
-                  (graphClicked)="handleMicroregionChartClicked($event)">
+                <app-horizontal-bar-graph [chartData]="dashboardData?.microregionChart" [typeBar]="'strategic'"
+                  (graphStrategicClicked)="handleMicroregionChartClicked($event)">
                 </app-horizontal-bar-graph>
               </div>
               <div class="selected-bar-values" *ngIf="!showMicroregionChart">
@@ -105,7 +115,8 @@
               </div>
             </div>
           </div>
-          <div class="p-col-12 p-xl-4">
+
+          <div class="col-12 col-md-4">
             <div class="chart-container chart-heatmap-container">
               <div class="chart-header-container">
                 <div class="chart-header">
@@ -128,7 +139,8 @@
               </div>
             </div>
           </div>
-          <div class="p-col-12 p-xl-4">
+
+          <div class="col-12 col-md-4">
             <div class="chart-container">
               <div class="chart-header-container">
                 <div class="chart-header">
@@ -168,8 +180,8 @@
                 <hr />
               </div>
               <div class="chart" *ngIf="dashboardData && dashboardData.strategicAreaChart">
-                <app-horizontal-bar-graph [chartData]="dashboardData?.strategicAreaChart"
-                  (graphClicked)="handleStrategicAreaChartClicked($event)">
+                <app-horizontal-bar-graph [chartData]="dashboardData?.strategicAreaChart" [typeBar]="'region'"
+                  (graphRegionClicked)="handleStrategicAreaChartClicked($event)">
                 </app-horizontal-bar-graph>
               </div>
               <div class="selected-bar-values" *ngIf="!showStrategicAreaChart">
