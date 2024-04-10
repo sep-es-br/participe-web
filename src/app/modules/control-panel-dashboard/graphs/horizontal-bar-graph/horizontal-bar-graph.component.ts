@@ -68,10 +68,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
     });
     Chart.defaults.backgroundColor = 'rgba(0, 0, 0, 0.1)';
     Chart.defaults.borderColor = 'rgba(0, 0, 0, 0)';
-    // Chart.defaults.color = '#db4b1f';
     Chart.register(ChartDataLabels);
-    // this.loadData();
-    // this.loadPlugins();
   }
 
   ngOnDestroy(): void {
@@ -123,8 +120,6 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
           }
         },
         y:{
-          // barPercentage: 1,
-          // categoryPercentage: 0.7,
           gridLines: {
             display: false
           },
@@ -191,7 +186,6 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
         }
     ],
     };
-    // this.height = this.data.labels.length * 60;
   }
 
   async loadPlugins() {

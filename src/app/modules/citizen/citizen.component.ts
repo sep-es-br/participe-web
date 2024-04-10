@@ -256,7 +256,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
         this.translateSrv.instant('citizen.inserted', { name })
     });
     this.cancel();
-    // await this.loadData();
+    await this.loadData();
   }
 
   get iconSave() {
