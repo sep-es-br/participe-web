@@ -16,13 +16,11 @@
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchPlans(searchForm.value)">
               <div class="row ui-fluid">
-                <div class="col-12 col-md-9">
-                  <div class="form-floating mb-3">
-                    <input class="form-control" placeholder="" id="search-input" pInputText formControlName="query">
+                <div class="col-12 col-md-7">
                     <label class="form-label" for="query">{{'plan.name'|translate}}</label>
-                  </div>
+                    <input class="form-control" placeholder="" id="search-input" pInputText formControlName="query">
                 </div>
-                <div class="col-12 col-md-3 m-auto">
+                <div class="col-12 col-md-3 align-content-end">
                   <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>

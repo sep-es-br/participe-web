@@ -16,14 +16,14 @@
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchStructures(searchForm.value)">
               <div class="row">
-                <div class="col-12 col-md-9">
-                  <div class="form-floating ">
-                    <input class="form-control" placeholder=""  id="search-input"  formControlName="query">
+                <div class="col-12 col-md-7">
+                  <!-- <div class="form-floating "> -->
                     <label class="form-label" for="query">{{'structure.name'|translate}}</label>
-                  </div>
+                    <input class="form-control" placeholder=""  id="search-input"  formControlName="query">
+                  <!-- </div> -->
                 </div>
-                <div class="col-12 col-md-3 align-content-center">
-                  <button pButton [icon]="loadingIcon('pi pi-search')"  [disabled]="loading" type="submit" [label]="'search'|translate"></button>
+                <div class="col-12 col-md-3  align-content-end">
+                  <button pButton [icon]="loadingIcon('pi pi-search')" class="btn btn-primary"  [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
             </form>

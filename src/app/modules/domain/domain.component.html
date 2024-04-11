@@ -16,7 +16,7 @@
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchDomains(searchForm.value)">
               <div class="row ui-fluid">
-                <div class="col-12 col-md-6 ui">
+                <div class="col-12 col-md-7">
                   <label for="query">{{'domain.name' | translate}}</label>
                   <input id="search-input" class="form-control" pInputText formControlName="query">
                 </div>
