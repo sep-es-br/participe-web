@@ -116,6 +116,7 @@ export class ConferenceComponent implements OnInit {
       await this.loadConference();
     } else {
       this.instanceConferenceForm();
+      this.loadCustomPreferences = true;
     }
     this.loadListOptions();
     this.translateChange.getCurrentLang().subscribe(({lang}) => {
