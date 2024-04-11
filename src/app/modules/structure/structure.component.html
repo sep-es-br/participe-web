@@ -17,12 +17,12 @@
             <form [formGroup]="searchForm" (submit)="searchStructures(searchForm.value)">
               <div class="row">
                 <div class="col-12 col-md-9">
-                  <div class="form-floating mb-3">
+                  <div class="form-floating ">
                     <input class="form-control" placeholder=""  id="search-input"  formControlName="query">
                     <label class="form-label" for="query">{{'structure.name'|translate}}</label>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 m-auto">
+                <div class="col-12 col-md-3 align-content-center">
                   <button pButton [icon]="loadingIcon('pi pi-search')"  [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
@@ -45,7 +45,7 @@
                   <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
                     [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
                     (click)="showCreateStructureItem(rowNode)">
-                    <img src="assets/layout/images/icons/triangule_plus.png"  alt=""/>
+                    <img class="img-fluid" src="assets/layout/images/icons/triangule_plus.svg"  alt=""/>
                   </button>
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
                     (click)="showEdit(rowNode)"></button>
@@ -71,10 +71,14 @@
               <input pInputText class="form-control" (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="structureForm" field="name"></tt-input-message>
             </div>
-            <div class="col-12 col-md-6 input-switch">
-              <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
-              <p-inputSwitch id="input-switch-logo" class="m-auto" [styleClass]="'m-auto'" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+            <div class="col-12 col-md-6  input-switch">
+              <!-- <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+                <label class="form-check-label" for="flexSwitchCheckDefault">{{'structure.regionalization'|translate}}</label>
+              </div> -->
+              <p-inputSwitch id="input-switch-logo" class="" [styleClass]="''" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
               </p-inputSwitch>
+             <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
             </div>
             <div class="col-12 col-md-6">
               <div class="form-actions">

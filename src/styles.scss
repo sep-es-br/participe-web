@@ -1,6 +1,27 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
+$inputSwitchWidth: 2rem;
+$inputSwitchHeight: 1.25rem;
+$inputSwitchBorderRadius: 30px;
+$inputSwitchHandleWidth: 0.75rem;
+$inputSwitchHandleHeight: 0.75rem;
+$inputSwitchHandleBorderRadius: 50%;
+$inputSwitchSliderPadding: .25rem;
+
+.p-inputswitch {
+  width: 2.5rem;
+  height: 1.25rem !important;
+}
+
+.p-inputswitch .p-inputswitch-slider:before {
+  
+  width: 1rem !important;
+  height: 1rem !important;
+  left:0rem !important;
+  margin-top: -0.5rem !important;
+}
+
 body {
   padding: 0;
 }

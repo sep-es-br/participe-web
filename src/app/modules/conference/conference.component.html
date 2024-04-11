@@ -45,13 +45,13 @@
                   <label class="form-label" for="serverName">{{'conference.serverName'|translate}}</label>
                   <tt-input-message [form]="conferenceForm" field="serverName"></tt-input-message>
                 </div>
-                <div class="col-12 col-md-12 switch-default-conference">             
-                    <p-inputSwitch id="input-switch-default-conference" formControlName="defaultServerConference"
-                    (onChange)="validateDefaultConferenceServer()"
-                    [readonly]="conferenceForm.controls.serverName.invalid">
-                    </p-inputSwitch>
-                    <label class="form-check-label" for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>                
-                </div>
+              </div>
+              <div class="col-12 col-md-6 switch-default-conference">             
+                  <p-inputSwitch inputId="input-switch-default-conference" formControlName="defaultServerConference"
+                  (onChange)="validateDefaultConferenceServer()"
+                  [readonly]="conferenceForm.controls.serverName.invalid">
+                  </p-inputSwitch>
+                  <label class="form-check-label ml-2" for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>                
               </div>
             </div>
             <p-accordion [multiple]="true">
