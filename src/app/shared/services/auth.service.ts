@@ -6,7 +6,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
-import * as jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { StoreKeys } from '../constants';
 import { IPerson } from '../interface/IPerson';
 import { ISocialLoginResult } from './../interface/ISocialLoginResult';

@@ -42,15 +42,17 @@
                   <span style="vertical-align: middle">{{rowData.name}}</span>
                 </td>
                 <td class="column-actions">
-                  <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                  <button pButton class="ui-button btn-icon"
                     [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
                     (click)="showCreateStructureItem(rowNode)">
                     <img class="img-fluid" src="assets/layout/images/icons/triangule_plus.svg"  alt=""/>
                   </button>
-                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
-                    (click)="showEdit(rowNode)"></button>
-                  <button pButton icon="pi pi-trash" type="button" [disabled]="disableBtnDelete(rowNode)"
-                    (click)="delete(rowNode)"></button>
+                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" (click)="showEdit(rowNode)">
+                    <i class="pi pi-pencil"></i>
+                  </button>
+                  <button pButton class="ui-button btn-icon" type="button" [disabled]="disableBtnDelete(rowNode)" (click)="delete(rowNode)">
+                    <i class="pi pi-trash"></i>
+                  </button>
                 </td>
               </tr>
             </ng-template>
