@@ -73,12 +73,15 @@
                   <span style="vertical-align: middle">{{conference.endDate?.toLocaleString('pt-BR')}}</span>
                 </td>
                 <td class="column-actions">
-                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
-                          (click)="handleEditConference(conference)"></button>
-                  <button pButton icon="pi pi-users" type="button" style="margin-right: 2px;"
-                          [routerLink]="goToMetting(conference)"></button>
-                  <button pButton icon="pi pi-trash" type="button" (click)="delete(conference)"
-                          [disabled]="disableBtnDelete(conference)"></button>
+                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" (click)="handleEditConference(conference)">
+                    <i class="pi pi-pencil" ></i>
+                  </button>
+                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" [routerLink]="goToMetting(conference)">
+                    <i class="pi pi-users" ></i>
+                  </button>
+                  <button pButton class="ui-button btn-icon" type="button" (click)="delete(conference)" [disabled]="disableBtnDelete(conference)">
+                    <i class="pi pi-trash" ></i>
+                  </button>
                 </td>
               </tr>
             </ng-template>

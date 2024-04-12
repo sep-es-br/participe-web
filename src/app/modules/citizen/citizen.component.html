@@ -32,7 +32,7 @@
               </div>
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
-                <p-autoComplete [styleClass]="'w-100'" [inputStyleClass]="'w-100 d-flex form-control'" [(ngModel)]="selectedLocalities" [suggestions]="filteredLocalities" (completeMethod)="filterLocalities($event)" (ngModelChange)="setSearchLocality()"  [placeholder]="'search' | translate" [multiple]="true"></p-autoComplete>
+                <p-autoComplete [styleClass]="'w-100 d-flex'" [inputStyleClass]="'w-100 form-control'" [(ngModel)]="selectedLocalities" [suggestions]="filteredLocalities" (completeMethod)="filterLocalities($event)" (ngModelChange)="setSearchLocality()"  [placeholder]="'search' | translate" [multiple]="true"></p-autoComplete>
                 <!-- <p-autoComplete   [styleClass]="'w-100'" [inputStyleClass]="'w-100 d-flex form-control'" [suggestions]="filteredLocalities" [formControl]="selectedLocalities" (completeMethod)="filterLocalities($event)"
                   [size]="30" [minLength]="1" field="label" [placeholder]="'search' | translate" [multiple]="true">
                 </p-autoComplete> -->
