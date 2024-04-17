@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["sweetalert2","moment","qs","moment-timezone","quill","heatmap.js","lodash"],
+            "allowedCommonJsDependencies": ["sweetalert2","moment","qs","moment-timezone","quill","heatmap.js","lodash","jwt-decode"],
             "outputPath": "dist/participe",
             "index": "src/index.html",
             "main": "src/main.ts",

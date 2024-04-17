@@ -61,7 +61,7 @@
         {{ 'moderation.label.empty_comments' | translate }}
       </div>
       <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
-        <div class="row row ui-fluid">
+        <div class="row ui-fluid">
           <div class="col-12 col-md-6">
             <div class="row">
               <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span>
@@ -71,10 +71,10 @@
                 {{ comment.moderatorName }} | {{ timesAgo(comment?.moderateTime) }}
               </span>
             </div>
-            <div class="row description">
+            <div class="description">
               {{ comment.text }}
             </div>
-            <div class="row info">
+            <div class="info">
               {{ comment.citizenName }} |
               {{ 'moderation.label.' + comment?.from.toLowerCase() | translate }} |
               {{ timesAgo(comment?.time) }} |
@@ -82,29 +82,35 @@
             </div>
           </div>
           <div class="col-12 col-md-3">
-            <div class="row info">{{ comment.structureItemName }}</div>
+            <div class="info">{{ comment.structureItemName }}</div>
             <div>{{ comment.planItemName }}</div>
           </div>
-          <div class="col-12 col-md-2 align-middle  options">
-            <p-radioButton [name]="'optionModeration_' + comment.commentId"
-                           (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
-                           value="Proposal" [label]="'moderation.label.proposal' | translate">
-            </p-radioButton>
-            <p-radioButton [name]="'optionModeration_' + comment.commentId"
-                           (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
-                           value="Comment" [label]="'moderation.label.comment'| translate ">
-            </p-radioButton>
+          <div class="col-12 col-md-2 align-middle ">
+            <div class="col-12">
+              <p-radioButton [name]="'optionModeration_' + comment.commentId"
+                             (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
+                             value="Proposal" [label]="'moderation.label.proposal' | translate">
+              </p-radioButton>
+            </div>
+            <div class="col-12">
+              <p-radioButton [name]="'optionModeration_' + comment.commentId"
+                             (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
+                             value="Comment" [label]="'moderation.label.comment'| translate ">
+              </p-radioButton>
+            </div>
           </div>
-          <div class="col-12 col-md-1 align-middle actions">
-            <button pButton class="btn align-middle align-middle btn-sm btn-primary" [disabled]="comment.disableModerate"
-                    [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
-              <img src="assets/layout/images/icons/internet.svg" alt=""/>
-            </button>
-            <button pButton class="btn align-middle align-middle btn-sm btn-primary" [disabled]="comment.disableModerate" icon=""
-                    [pTooltip]="'moderation.label.btnModerate' | translate"
-                    (click)="moderate(comment)">
-              <img src="assets/layout/images/icons/king.svg" alt=""/>
-            </button>
+          <div class="col-12 col-md-1 align-content-center actions">
+            <!-- <div class="row actions"> -->
+              <button pButton class="btn align-content-center btn-sm btn-primary" [disabled]="comment.disableModerate"
+                      [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
+                <img src="assets/layout/images/icons/internet.svg" alt=""/>
+              </button>
+              <button pButton class="btn align-content-center btn-sm btn-primary" [disabled]="comment.disableModerate" icon=""
+                      [pTooltip]="'moderation.label.btnModerate' | translate"
+                      (click)="moderate(comment)">
+                <img src="assets/layout/images/icons/king.svg" alt=""/>
+              </button>
+            <!-- </div> -->
           </div>
         </div>
       </div>

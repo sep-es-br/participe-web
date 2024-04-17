@@ -16,14 +16,14 @@
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchStructures(searchForm.value)">
               <div class="row">
-                <div class="col-12 col-md-9">
-                  <div class="form-floating mb-3">
-                    <input class="form-control" placeholder=""  id="search-input"  formControlName="query">
+                <div class="col-12 col-md-7">
+                  <!-- <div class="form-floating "> -->
                     <label class="form-label" for="query">{{'structure.name'|translate}}</label>
-                  </div>
+                    <input class="form-control" placeholder=""  id="search-input"  formControlName="query">
+                  <!-- </div> -->
                 </div>
-                <div class="col-12 col-md-3 m-auto">
-                  <button pButton [icon]="loadingIcon('pi pi-search')"  [disabled]="loading" type="submit" [label]="'search'|translate"></button>
+                <div class="col-12 col-md-3  align-content-end">
+                  <button pButton [icon]="loadingIcon('pi pi-search')" class="btn btn-primary"  [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
             </form>
@@ -42,15 +42,17 @@
                   <span style="vertical-align: middle">{{rowData.name}}</span>
                 </td>
                 <td class="column-actions">
-                  <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                  <button pButton class="ui-button btn-icon"
                     [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
                     (click)="showCreateStructureItem(rowNode)">
-                    <img src="assets/layout/images/icons/triangule_plus.png"  alt=""/>
+                    <img class="img-fluid" src="assets/layout/images/icons/triangule_plus.svg"  alt=""/>
                   </button>
-                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
-                    (click)="showEdit(rowNode)"></button>
-                  <button pButton icon="pi pi-trash" type="button" [disabled]="disableBtnDelete(rowNode)"
-                    (click)="delete(rowNode)"></button>
+                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" (click)="showEdit(rowNode)">
+                    <i class="pi pi-pencil"></i>
+                  </button>
+                  <button pButton class="ui-button btn-icon" type="button" [disabled]="disableBtnDelete(rowNode)" (click)="delete(rowNode)">
+                    <i class="pi pi-trash"></i>
+                  </button>
                 </td>
               </tr>
             </ng-template>
@@ -71,10 +73,14 @@
               <input pInputText class="form-control" (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="structureForm" field="name"></tt-input-message>
             </div>
-            <div class="col-12 col-md-6 input-switch">
-              <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
-              <p-inputSwitch id="input-switch-logo" class="m-auto" [styleClass]="'m-auto'" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+            <div class="col-12 col-md-6  input-switch">
+              <!-- <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+                <label class="form-check-label" for="flexSwitchCheckDefault">{{'structure.regionalization'|translate}}</label>
+              </div> -->
+              <p-inputSwitch id="input-switch-logo" class="" [styleClass]="''" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
               </p-inputSwitch>
+             <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
             </div>
             <div class="col-12 col-md-6">
               <div class="form-actions">
