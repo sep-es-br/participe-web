@@ -127,6 +127,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       });
 
       this.isAttendeeSelected = false;
+      this.modalSuceesPresence = false;
       this.selectedAttende = null;
       this.cleanListAtendees();
       await this.setActionBar();
@@ -169,6 +170,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   toggleNewAccount() {
+    this.modalSuceesPresence = false;
     this.newAccount = !this.newAccount;
     this.form.reset();
     this.form.controls.authType.setValue(AuthTypeEnum.CPF);
