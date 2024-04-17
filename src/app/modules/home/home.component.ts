@@ -10,6 +10,7 @@ import { ISocialLoginResult } from '@app/shared/interface/ISocialLoginResult';
 import { IPerson } from '@app/shared/interface/IPerson';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
+import * as moment from 'moment';
 
 @Component({
   selector: 'tt-home',
@@ -78,8 +79,8 @@ export class HomeComponent implements OnInit {
   }
 
   private async HaveMeetingsForReceptionist() {
-
-    const allConfs = await this.conferenceService.getConferencesWithPresentialMeetings();
+    const date = moment().format('DD/MM/YYYY HH:mm:ss');
+    const allConfs = await this.conferenceService.getConferencesWithPresentialMeetings(date);
 
     return ((allConfs.length > 0) && (this.IsAMeetingRunning(allConfs)));
   }
