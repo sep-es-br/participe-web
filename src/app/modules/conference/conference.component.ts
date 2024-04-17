@@ -38,6 +38,7 @@ export class ConferenceComponent implements OnInit {
   conference: Conference;
   plans: SelectItem[] = [];
   localitiesOfDomain: SelectItem[] = [];
+  locales: SelectItem[] = [];
   structureRegionalization = false;
   moderators: IPerson[] = [];
   moderatorsEnabled: IPerson[] = [];
@@ -1075,6 +1076,7 @@ export class ConferenceComponent implements OnInit {
           },
           label: locality.type.name,
         });
+        this.locales = this.localitiesOfDomain;
       }
 
     });

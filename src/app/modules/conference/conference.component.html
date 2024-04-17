@@ -250,7 +250,7 @@
 
                     <div class="col-12 col-md-12">
                       <label for="localityType">{{'conference.locality-citizen'|translate}}</label>
-                      <p-dropdown [options]="localitiesOfDomain" formControlName="localityType"
+                      <p-dropdown [options]="locales" formControlName="localityType"
                         [placeholder]="'placeholder.select'|translate"  [styleClass]="'w-100'" class="ng-dirty ng-invalid"
                         [readonly]="!localitycitizenSelected || selfdeclarations > 0">
                       </p-dropdown>
