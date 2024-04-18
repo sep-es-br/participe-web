@@ -42,7 +42,7 @@ export class ModerationService {
     //filter.localityIds = undefined;
     //filter.planItemIds = undefined;
 
-    const pageNumber = (pageOpts.page + 1);
+    const pageNumber = pageOpts.page;
     const rowsPerPage = pageOpts.rows;
 
     const query = {
@@ -52,8 +52,8 @@ export class ModerationService {
     const url = `${environment.apiEndpoint}/moderation${qs.stringify(query, {addQueryPrefix: true})}`
       .concat(localityId ? `&localityIds=${localityId.toString()}` : '')
       .concat(planItensId ? `&planItemIds=${planItensId.toString()}` : '')
-      .concat(pageNumber ? `&pageNumber=${pageNumber.toString()}` : '')
-      .concat(rowsPerPage ? `&rowsPerPage=${rowsPerPage.toString()}` : '');
+      .concat(`&pageNumber=${pageNumber.toString()}`)
+      .concat(`&rowsPerPage=${rowsPerPage.toString()}`);
     return this.http.get<IResultPaginated<ModerationComments>>(url, {headers: Common.buildHeaders()}).toPromise();
   }
 
