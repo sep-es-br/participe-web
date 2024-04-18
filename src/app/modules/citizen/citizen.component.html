@@ -51,7 +51,7 @@
               </div>
             </div>
           </div>
-          <p-table [columns]="cols" [value]="data" [lazy]="false" [lazyLoadOnInit]="false" 
+          <p-table [columns]="cols" [value]="data" [lazy]="true" [lazyLoadOnInit]="true" 
             (onLazyLoad)="loadData($event)" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords">
             <ng-template pTemplate="header" let-columns>
               <tr>
@@ -169,7 +169,7 @@
     </div>
   </div>
 </app-template>
-<p-dialog class="modal" modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
+<p-dialog modal="true" [draggable]="false" [style]="{width: '500px'}" [closable]="false"
   [visible]="showSelectConference">
   <div class="conferences-item-select-modal" *ngFor="let conference of conferencesActives"
     (click)="selectOtherConference(conference)">
