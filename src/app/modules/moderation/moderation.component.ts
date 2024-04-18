@@ -209,8 +209,8 @@ export class ModerationComponent implements OnInit, OnDestroy {
           this.pageState
         )
         .then((data) => {
-          this.paginatorTotalRecords = data.totalElements;
-          this.conferenceComments = data.content;
+          this.paginatorTotalRecords = data.totalElements ?? 0;
+          this.conferenceComments = data.content ?? [];
         });
     } catch (error) {
       if (this.conferenceSelect.id != null) {
@@ -229,9 +229,10 @@ export class ModerationComponent implements OnInit, OnDestroy {
     }
   }
 
-  async pageChange(event: PaginatorState) {
+  async onPageChange(event: PaginatorState) {
     this.pageState = event;
     await this.loadComments();
+    this.configureActionBar();
   }
 
   timesAgo(time: string): string {
@@ -313,6 +314,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
 
   async changeSmallFilter(status: string) {
     this.filter.status = status;
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 15,
+    };
     await this.loadComments();
     setTimeout(() => {
       this.configureActionBar();
