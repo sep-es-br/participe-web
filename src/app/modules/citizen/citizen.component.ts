@@ -102,6 +102,10 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async ngOnInit() {
     this.conferenceSelect = JSON.parse(sessionStorage.getItem('selectedConference'));
 
+    if(this.conferenceSelect === null){
+      await this.loadConferencesActives();
+    }
+
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
     await this.prepareScreen();
@@ -127,7 +131,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async prepareScreen() {
 
 
-    if (!this.conferenceSelect.id) {
+    if (this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) {
       await this.loadConferencesActives();
     }
     this.search.conferenceId = this.conferenceSelect.id;
