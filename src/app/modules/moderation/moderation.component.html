@@ -60,6 +60,9 @@
       <div class="card card-w-title moderation-item" *ngIf="conferenceComments?.length === 0">
         {{ 'moderation.label.empty_comments' | translate }}
       </div>
+      <div class="row my-2" *ngIf="conferenceComments.length > 0">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="pageState.first" [rows]="pageState.rows" [totalRecords]="paginatorTotalRecords" [rowsPerPageOptions]="[15, 35, 50]"></p-paginator>
+      </div>
       <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
         <div class="row ui-fluid">
           <div class="col-12 col-md-6">
@@ -113,6 +116,9 @@
             <!-- </div> -->
           </div>
         </div>
+      </div>
+      <div class="row my-2" *ngIf="conferenceComments.length > 0">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="pageState.first" [rows]="pageState.rows" [totalRecords]="paginatorTotalRecords" [rowsPerPageOptions]="[15, 35, 50]"></p-paginator>
       </div>
     </div>
   </div>
