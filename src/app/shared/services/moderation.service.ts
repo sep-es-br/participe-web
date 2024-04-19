@@ -10,6 +10,8 @@ import {environment} from '@environments/environment';
 import {HttpClient} from '@angular/common/http';
 import Common from '../util/Common';
 import * as qs from 'qs';
+import { PaginatorState } from 'primeng/paginator';
+import { IResultPaginated } from '../interface/IResultPaginated';
 
 @Injectable({providedIn: 'root'})
 export class ModerationService {
@@ -34,19 +36,25 @@ export class ModerationService {
     ).toPromise();
   }
 
-  getCommentsForModeration(conferenceId: number, filter: ModerationFilter) {
+  getCommentsForModeration(conferenceId: number, filter: ModerationFilter, pageOpts: PaginatorState) {
     const localityId = filter.localityId;
     const planItensId = filter.planItemId;
     //filter.localityIds = undefined;
     //filter.planItemIds = undefined;
+
+    const pageNumber = pageOpts.page;
+    const rowsPerPage = pageOpts.rows;
+
     const query = {
       conferenceId,
       ...filter
     };
     const url = `${environment.apiEndpoint}/moderation${qs.stringify(query, {addQueryPrefix: true})}`
       .concat(localityId ? `&localityIds=${localityId.toString()}` : '')
-      .concat(planItensId ? `&planItemIds=${planItensId.toString()}` : '');
-    return this.http.get<ModerationComments[]>(url, {headers: Common.buildHeaders()}).toPromise();
+      .concat(planItensId ? `&planItemIds=${planItensId.toString()}` : '')
+      .concat(`&pageNumber=${pageNumber.toString()}`)
+      .concat(`&rowsPerPage=${rowsPerPage.toString()}`);
+    return this.http.get<IResultPaginated<ModerationComments>>(url, {headers: Common.buildHeaders()}).toPromise();
   }
 
   getLocalities(conferenceId: number) {
