@@ -3,6 +3,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AppTemplateComponent} from '../template/app.template.component';
 
 import {
+  faClipboardCheck,
   faClipboardList,
   faCog,
   faComments,
@@ -33,6 +34,9 @@ export class AppMenuComponent implements OnInit {
 
   ngOnInit() {
     const person = this.userAuth.getUserInfo;
+
+    console.log(person)
+
     this.model = [];
 
     if (person.roles.includes('Moderator') || person.roles.includes('Administrator')) {
@@ -40,6 +44,15 @@ export class AppMenuComponent implements OnInit {
         {label: this.translateSrv.instant('control-panel'), icon: faTachometerAlt, routerLink: ['/home']}
       );
       this.model.push({label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search']});
+    }
+
+    // <-- Avaliação de propostas
+
+    // Alterar condição do if para mais roles
+    if(person.roles.includes('Administrator')) {
+      this.model.push(
+        {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+      )
     }
 
     if (person.roles.includes('Recepcionist') && person.roles.includes('Administrator')) {
