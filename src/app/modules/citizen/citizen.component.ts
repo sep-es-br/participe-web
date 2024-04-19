@@ -100,11 +100,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async ngOnInit() {
-    this.conferenceSelect = JSON.parse(sessionStorage.getItem('selectedConference'));
-
-    if(this.conferenceSelect === null){
-      await this.loadConferencesActives();
-    }
+    await this.loadConferencesActives();
 
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
@@ -172,6 +168,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       { label: 'administration.label' },
       { label: this.conferenceSelect.name, routerLink: ['/administration/citizen'] }
     ]);
+    console.log(this.breadcrumbService)
   }
 
   clearSearch() {
