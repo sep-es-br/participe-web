@@ -1,0 +1,50 @@
+<app-template>
+
+    <p>teste</p>
+
+
+  <ng-container
+    *ngIf="showSelectConference"
+    [ngTemplateOutlet]="changeConference"
+  ></ng-container>
+</app-template>
+
+<ng-template #changeConference>
+  <p-dialog
+    class=""
+    modal="true"
+    [draggable]="false"
+    [style]="{ width: '500px' }"
+    [closable]="false"
+    [header]="'moderation.label.select_conference' | translate"
+    [visible]="showSelectConference"
+  >
+    <div
+      class="conferences-item-select-modal"
+      *ngFor="let conference of conferences"
+      (click)="selectOtherConference(conference)"
+    >
+      <h4>{{ conference.name }}</h4>
+      <small>{{ conference.description }}</small>
+      <div class="date-container">
+        <div class="date">
+          <i class="pi pi-calendar"></i>
+          {{ conference.beginDate }}
+        </div>
+        <div class="date">
+          <i class="pi pi-calendar"></i>
+          {{ conference.endDate }}
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="action-modal">
+        <button
+          pButton
+          label="Fechar"
+          (click)="showSelectConference = false"
+        ></button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</ng-template>
