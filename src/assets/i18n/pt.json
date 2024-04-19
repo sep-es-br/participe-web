@@ -511,6 +511,7 @@
 			"contain-conference": "Plano não pode ser excluído, pois está vinculado a uma consulta"
 		}
 	},
+	"proposal_evaluation": "Avaliação de Propostas",
 	"published": "Publicado",
 	"qrcode": {
 		"checkIn": {

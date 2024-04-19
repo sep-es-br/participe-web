@@ -472,6 +472,7 @@
 			"contain-conference": "Plan cannot be deleted, because it is linked to a conference"
 		}
 	},
+	"proposal_evaluation": "Proposal Evaluation",
 	"published": "Published",
 	"register": {
 		"removed": "Register removed"
