@@ -42,12 +42,12 @@
                 <p-dropdown [styleClass]="'d-flex form-control'" [options]="status" [(ngModel)]="search.status"
                   [placeholder]="'placeholder.select'|translate"></p-dropdown>
               </div>
-              <div class="col-12 col-md-3 col-lg-3">
-                <button pButton icon="pi pi-search" type="button" (click)="searchHandle()" [label]="'search'|translate"></button>
-              </div>
-              <div class="col-12 col-md-4 col-lg-3">
-                <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
-                  (click)="search = { conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
+              <div class=" col-12 col-md-6 col-lg-9">
+                <div class="justify-content-end d-flex">
+                    <button pButton icon="pi pi-search" class="me-2" type="button" (click)="searchHandle()" [label]="'search'|translate"></button>
+                    <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
+                      (click)="search = { conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
+                </div>
               </div>
             </div>
           </div>
