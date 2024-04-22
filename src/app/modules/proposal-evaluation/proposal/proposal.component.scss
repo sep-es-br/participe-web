@@ -1,0 +1,52 @@
+.test {
+  border: 1px solid black;
+}
+
+.status-microrregion {
+  span.status-text {
+    font-weight: 700;
+    margin-right: 5px;
+    font-size: 1rem;
+
+    &.evaluated {
+      color: #00c853;
+    }
+
+    &.not-evaluated {
+      color: #ef8533;
+    }
+  }
+
+  span.divider,
+  span.microrregion-text {
+    color: #9a9a9a;
+    margin-left: 0.5rem;
+  }
+}
+
+.description-text p {
+  text-align: justify;
+}
+
+.themearea-budgetcategory {
+  span.divider {
+    color: #9a9a9a;
+    margin: auto 0.75rem;
+  }
+
+  span.themearea-text,
+  span.budgetcategory-text {
+    color: #9a9a9a;
+  }
+}
+
+button.entity-badge {
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  margin-right: 0.7rem;
+  padding: 0 2rem;
+  color: white;
+  background-color: #00c853;
+  font-size: 0.75rem;
+}
