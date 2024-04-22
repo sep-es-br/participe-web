@@ -13,19 +13,19 @@
         <div class="row">
           <div class="col-3">
             <label class="form-label">Situação</label>
-            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+            <p-dropdown styleClass="d-flex form-control" [options]="proposalStatusOptions" [(ngModel)]="filter.proposalStatus"></p-dropdown>
           </div>
           <div class="col-3">
             <label class="form-label">Microrregião</label>
-            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+            <p-dropdown styleClass="d-flex form-control" [options]="microrregionOptions" [(ngModel)]="filter.microrregion"></p-dropdown>
           </div>
           <div class="col-3">
             <label class="form-label">Área Temática</label>
-            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+            <p-dropdown styleClass="d-flex form-control" [options]="themeAreaOptions" [(ngModel)]="filter.themeArea"></p-dropdown>
           </div>
           <div class="col-3">
             <label class="form-label">Categoria Orçamentária</label>
-            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+            <p-dropdown styleClass="d-flex form-control" [options]="budgetCategoryOptions" [(ngModel)]="filter.budgetCategory"></p-dropdown>
           </div>
         </div>
       </div>
@@ -33,15 +33,15 @@
         <div class="row">
           <div class="col-3">
             <label class="form-label">Órgão</label>
-            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+            <p-dropdown styleClass="d-flex form-control" [options]="entityOptions" [(ngModel)]="filter.entity"></p-dropdown>
           </div>
           <div class="col-3">
             <label class="form-label">Proposta Incluída na próxima LOA</label>
-            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+            <p-dropdown styleClass="d-flex form-control" [options]="loaIncludedOptions" [(ngModel)]="filter.loaIncluded"></p-dropdown>
           </div>
           <div class="col-3">
             <label class="form-label">Texto</label>
-            <input pInputText class="form-control" />
+            <input pInputText class="form-control" [(ngModel)]="filter.text"/>
           </div>
           <div class="col-3 mt-auto">
             <button
