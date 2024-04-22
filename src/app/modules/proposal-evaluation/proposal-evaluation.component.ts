@@ -2,9 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { ActionBarService } from "@app/core/actionbar/app.actionbar.actions.service";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { IProposal } from "@app/shared/interface/IProposal";
+import { ProposalEvaluationFilter } from "@app/shared/models/ProposalEvaluationFilter";
 import { Conference } from "@app/shared/models/conference";
 import { ConferenceService } from "@app/shared/services/conference.service";
+import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 import { HelperUtils } from "@app/shared/util/HelpersUtil";
+import { SelectItem } from "primeng/api";
 
 @Component({
   selector: "app-proposal-evaluation",
@@ -14,73 +17,40 @@ import { HelperUtils } from "@app/shared/util/HelpersUtil";
 })
 export class ProposalEvaluationComponent implements OnInit {
   loading: boolean = false;
+
   conferences: Conference[];
   conferenceSelect: Conference = new Conference();
-  search: boolean = false;
   showSelectConference: boolean = false;
+
+  proposalStatusOptions: SelectItem[] = [];
+  microrregionOptions: SelectItem[] = [];
+  themeAreaOptions: SelectItem[] = [];
+  budgetCategoryOptions: SelectItem[] = [];
+  entityOptions: SelectItem[] = [];
+  loaIncludedOptions: SelectItem[] = [];
+
+  search: boolean = false;
+  filter: ProposalEvaluationFilter;
+
   proposalList: IProposal[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private actionBarService: ActionBarService,
-    private conferenceService: ConferenceService
+    private conferenceService: ConferenceService,
+    private proposalEvaluationService: ProposalEvaluationService
   ) {
-    this.proposalList = [
-      {
-        status: "Avaliado",
-        microrregion: "Caparaó",
-        descriptionText:
-          "Elaborar e implementar um plano abrangente de educação e formação profissional direcionado a indivíduos detidos, visando proporcionar-lhes oportunidades significativas para adquirir novas habilidades, competências e conhecimentos que os habilitem a reintegrar-se de forma eficaz e construtiva na comunidade após o período de encarceramento.",
-        themeArea: "02. Segurança Pública e Justiça",
-        budgetCategory: "Segurança e Cidadania",
-        entities: [
-          "SECULT",
-          "SEAMA",
-          "SEDU",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-          "PGE",
-        ],
-      },
-      {
-        status: "Não Avaliado",
-        microrregion: "Central Serrana",
-        descriptionText:
-          "Propor a inserção de um currículo dedicado à Robótica nos programas educacionais do Estado do Espírito Santo, tanto teórico quanto prático, incluindo laboratórios específicos para a aprendizagem e experimentação nesse campo. Esta iniciativa não apenas ampliaria o leque de disciplinas oferecidas, mas também prepararia os estudantes para as demandas crescentes do mercado de trabalho em áreas relacionadas à tecnologia e inovação.",
-        themeArea: "01. Educação, Cultura, Esporte e Lazer",
-        budgetCategory: "Educação",
-        entities: [
-          "SECULT",
-          "SEAMA",
-          "SEDU",
-          // "PGE",
-          // "PGE",
-          // "PGE",
-          // "PGE",
-          // "PGE",
-          // "PGE",
-        ],
-      },
-    ];
+    const propEvalFilter = sessionStorage.getItem("propEvalFilter");
+
+    this.filter = propEvalFilter
+      ? JSON.parse(propEvalFilter)
+      : new ProposalEvaluationFilter();
   }
 
   async ngOnInit() {
     await this.loadConferences();
+    this.populateSearchFilterOptions();
+    this.loadProposals();
   }
 
   async loadConferences() {
@@ -94,6 +64,33 @@ export class ProposalEvaluationComponent implements OnInit {
         this.buildBreadcrumb();
         this.configureActionBar();
       });
+  }
+
+  populateSearchFilterOptions() {
+    const filterOptions = this.proposalEvaluationService.getFilterOptions();
+
+    this.proposalStatusOptions = filterOptions.proposalStatusOptions;
+    this.proposalStatusOptions.unshift({ label: "Todos", value: null });
+
+    this.microrregionOptions = filterOptions.microrregionOptions;
+    this.microrregionOptions.unshift({ label: "Todos", value: null });
+
+    this.themeAreaOptions = filterOptions.themeAreaOptions;
+    this.themeAreaOptions.unshift({ label: "Todos", value: null });
+
+    this.budgetCategoryOptions = filterOptions.budgetCategoryOptions;
+    this.budgetCategoryOptions.unshift({ label: "Todos", value: null });
+
+    this.entityOptions = filterOptions.entityOptions;
+    this.entityOptions.unshift({ label: "Todos", value: null });
+
+    this.loaIncludedOptions = filterOptions.loaIncludedOptions;
+    this.loaIncludedOptions.unshift({ label: "Todos", value: null });
+  }
+
+  loadProposals() {
+    this.proposalList =
+      this.proposalEvaluationService.getProposalListForEvaluation();
   }
 
   selectOtherConference(conference: Conference) {
@@ -112,7 +109,9 @@ export class ProposalEvaluationComponent implements OnInit {
     return HelperUtils.loadingIcon(icon, this.loading);
   }
 
-  searchHandle() {}
+  searchHandle() {
+    sessionStorage.setItem("propEvalFilter", JSON.stringify(this.filter));
+  }
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
