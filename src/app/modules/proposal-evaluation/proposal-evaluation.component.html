@@ -1,7 +1,65 @@
 <app-template>
+  <div class="d-flex justify-content-between">
+    <div class="col-12 text-end">
+      <a class="search" (click)="toggleSearch()">{{
+        (search ? "hide" : "search") | translate
+      }}</a>
+    </div>
+  </div>
 
-    <p>teste</p>
+  <div *ngIf="search">
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-3">
+            <label class="form-label">Situação</label>
+            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Microrregião</label>
+            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Área Temática</label>
+            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Categoria Orçamentária</label>
+            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-3">
+            <label class="form-label">Órgão</label>
+            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Proposta Incluída na próxima LOA</label>
+            <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Texto</label>
+            <input pInputText class="form-control" />
+          </div>
+          <div class="col-3 mt-auto">
+            <button
+              pButton
+              [icon]="getIcon('pi pi-search')"
+              [disabled]="loading"
+              (click)="searchHandle()"
+              [label]="'search' | translate"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div *ngFor="let proposal of proposalList">
+    <app-proposal [proposalData]="proposal"></app-proposal>
+  </div>
 
   <ng-container
     *ngIf="showSelectConference"
