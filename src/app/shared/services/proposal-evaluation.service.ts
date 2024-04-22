@@ -1,0 +1,135 @@
+import { Injectable } from "@angular/core";
+import { SelectItem } from "primeng/api";
+
+@Injectable({
+  providedIn: "root",
+})
+export class ProposalEvaluationService {
+  private proposalStatusOptions: SelectItem[] = [
+    { label: "Avaliado", value: "Avaliado" },
+    { label: "Não Avaliado", value: "Não Avaliado" },
+  ];
+
+  private loaIncludedOptions: SelectItem[] = [
+    { label: "Sim", value: true },
+    { label: "Não", value: false },
+  ];
+
+  constructor() {}
+
+  private getMicrorregionOptions(): SelectItem[] {
+    // chamada http
+    return [
+      { label: "Caparaó", value: 1 },
+      { label: "Central Serrana", value: 2 },
+      { label: "Central Sul", value: 3 },
+      { label: "Centro Oeste", value: 4 },
+      { label: "Literal Sul", value: 5 },
+      { label: "Metropolitana", value: 6 },
+      { label: "Nordeste", value: 7 },
+      { label: "Noroeste", value: 8 },
+      { label: "Rio Doce", value: 9 },
+      { label: "Sudeste Serrana", value: 10 },
+    ];
+  }
+
+  private getThemeAreaOptions(): SelectItem[] {
+    // chamada http
+    return [
+      { label: "01. Educação, Cultura, Esporte e Lazer", value: 1 },
+      { label: "02. Segurança Pública e Justiça", value: 2 },
+      { label: "03. Proteção Social, Saúde e Direitos Humanos", value: 3 },
+      { label: "04. Agricultura e Meio Ambiente", value: 4 },
+    ];
+  }
+
+  private getBudgetCategoryOptions(): SelectItem[] {
+    // chamada http
+    return [
+      { label: "Saneamento Básico", value: 1 },
+      { label: "Habitação", value: 2 },
+      { label: "Infraestrutura Rodoviária", value: 3 },
+      { label: "Transporte Público", value: 4 },
+      { label: "Crédito e Regularização Fundiária", value: 5 },
+    ];
+  }
+
+  private getEntityOptions(): SelectItem[] {
+    // chamada http
+    return [
+      { label: "10101 - SVC", value: 1 },
+      { label: "10102 - SCM", value: 2 },
+      { label: "10103 - SECONT", value: 3 },
+      { label: "10104 - SECOM", value: 4 },
+      { label: "10109 - RTV-ES", value: 5 },
+      { label: "10904 - FECC", value: 6 },
+      { label: "16101 - PGE", value: 7 },
+    ];
+  }
+
+  public getFilterOptions(): any {
+    return {
+      proposalStatusOptions: this.proposalStatusOptions,
+      microrregionOptions: this.getMicrorregionOptions(),
+      themeAreaOptions: this.getThemeAreaOptions(),
+      budgetCategoryOptions: this.getBudgetCategoryOptions(),
+      entityOptions: this.getEntityOptions(),
+      loaIncludedOptions: this.loaIncludedOptions,
+    };
+  }
+
+  public getProposalListForEvaluation() {
+    // chamada http
+
+    return [
+      {
+        status: "Avaliado",
+        microrregion: "Caparaó",
+        descriptionText:
+          "Elaborar e implementar um plano abrangente de educação e formação profissional direcionado a indivíduos detidos, visando proporcionar-lhes oportunidades significativas para adquirir novas habilidades, competências e conhecimentos que os habilitem a reintegrar-se de forma eficaz e construtiva na comunidade após o período de encarceramento.",
+        themeArea: "02. Segurança Pública e Justiça",
+        budgetCategory: "Segurança e Cidadania",
+        entities: [
+          "SEAMA",
+          "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+        ],
+      },
+      {
+        status: "Não Avaliado",
+        microrregion: "Central Serrana",
+        descriptionText:
+          "Propor a inserção de um currículo dedicado à Robótica nos programas educacionais do Estado do Espírito Santo, tanto teórico quanto prático, incluindo laboratórios específicos para a aprendizagem e experimentação nesse campo. Esta iniciativa não apenas ampliaria o leque de disciplinas oferecidas, mas também prepararia os estudantes para as demandas crescentes do mercado de trabalho em áreas relacionadas à tecnologia e inovação.",
+        themeArea: "01. Educação, Cultura, Esporte e Lazer",
+        budgetCategory: "Educação",
+        entities: [
+          "SECULT",
+          "SEAMA",
+          "SEDU",
+          "SEDES",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+          // "PGE",
+        ],
+      },
+    ];
+  }
+}
