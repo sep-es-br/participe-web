@@ -22,7 +22,7 @@ export class ProposalEvaluationComponent implements OnInit {
   conferenceSelect: Conference = new Conference();
   showSelectConference: boolean = false;
 
-  proposalStatusOptions: SelectItem[] = [];
+  evaluationStatusOptions: SelectItem[] = [];
   microrregionOptions: SelectItem[] = [];
   themeAreaOptions: SelectItem[] = [];
   budgetCategoryOptions: SelectItem[] = [];
@@ -69,8 +69,8 @@ export class ProposalEvaluationComponent implements OnInit {
   populateSearchFilterOptions() {
     const filterOptions = this.proposalEvaluationService.getFilterOptions();
 
-    this.proposalStatusOptions = filterOptions.proposalStatusOptions;
-    this.proposalStatusOptions.unshift({ label: "Todos", value: null });
+    this.evaluationStatusOptions = filterOptions.evaluationStatusOptions;
+    this.evaluationStatusOptions.unshift({ label: "Todos", value: null });
 
     this.microrregionOptions = filterOptions.microrregionOptions;
     this.microrregionOptions.unshift({ label: "Todos", value: null });
@@ -91,6 +91,10 @@ export class ProposalEvaluationComponent implements OnInit {
   loadProposals() {
     this.proposalList =
       this.proposalEvaluationService.getProposalListForEvaluation();
+
+    // await this.proposalEvaluationService
+    //   .getProposalListForEvaluation()
+    //   .then((data) => console.log(data));
   }
 
   selectOtherConference(conference: Conference) {
@@ -110,6 +114,7 @@ export class ProposalEvaluationComponent implements OnInit {
   }
 
   searchHandle() {
+    console.log(this.filter)
     sessionStorage.setItem("propEvalFilter", JSON.stringify(this.filter));
   }
 

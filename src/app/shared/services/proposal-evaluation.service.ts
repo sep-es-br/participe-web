@@ -1,11 +1,13 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { SelectItem } from "primeng/api";
+import Common from "../util/Common";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProposalEvaluationService {
-  private proposalStatusOptions: SelectItem[] = [
+  private evaluationStatusOptions: SelectItem[] = [
     { label: "Avaliado", value: "Avaliado" },
     { label: "Não Avaliado", value: "Não Avaliado" },
   ];
@@ -15,7 +17,7 @@ export class ProposalEvaluationService {
     { label: "Não", value: false },
   ];
 
-  constructor() {}
+  constructor(private _http: HttpClient) {}
 
   private getMicrorregionOptions(): SelectItem[] {
     // chamada http
@@ -69,7 +71,7 @@ export class ProposalEvaluationService {
 
   public getFilterOptions(): any {
     return {
-      proposalStatusOptions: this.proposalStatusOptions,
+      evaluationStatusOptions: this.evaluationStatusOptions,
       microrregionOptions: this.getMicrorregionOptions(),
       themeAreaOptions: this.getThemeAreaOptions(),
       budgetCategoryOptions: this.getBudgetCategoryOptions(),
@@ -132,4 +134,9 @@ export class ProposalEvaluationService {
       },
     ];
   }
+
+  // public getProposalListForEvaluation() {
+  //   // const url = "http://localhost:8080/participe/comments"; -> NÃO É ISSO
+  //   return this._http.get(url, { headers: Common.buildHeaders() }).toPromise();
+  // }
 }
