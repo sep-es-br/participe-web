@@ -1,50 +1,76 @@
-import {MeetingComponent} from './modules/conference/meeting/meeting.component';
+import { MeetingComponent } from "./modules/conference/meeting/meeting.component";
 
-import {ModerateComponent} from './modules/moderation/moderate/moderate.component';
-import {ModerationComponent} from './modules/moderation/moderation.component';
-import {LoginComponent} from './modules/login/login.component';
-import {RouterModule, Routes} from '@angular/router';
-import {ModuleWithProviders} from '@angular/core';
+import { ModerateComponent } from "./modules/moderation/moderate/moderate.component";
+import { ModerationComponent } from "./modules/moderation/moderation.component";
+import { LoginComponent } from "./modules/login/login.component";
+import { RouterModule, Routes } from "@angular/router";
+import { ModuleWithProviders } from "@angular/core";
 
-import {DomainComponent} from '@app/modules/domain/domain.component';
+import { DomainComponent } from "@app/modules/domain/domain.component";
 
-import {AdministrationDashboardComponent} from './modules/administration-dashboard/administration-dashboard.component';
-import {StructureComponent} from './modules/structure/structure.component';
-import {PlanComponent} from './modules/plan/plan.component';
-import {ConferenceComponent} from './modules/conference/conference.component';
-import {HomeComponent} from './modules/home/home.component';
-import {CitizenComponent} from './modules/citizen/citizen.component';
-import {ControlPanelDashboardComponent} from './modules/control-panel-dashboard/control-panel-dashboard.component';
-import {ConferenceListComponent} from './modules/conference/conference-list/conference-list.component';
-import { MeetPanelComponent } from './modules/conference/meeting/meet-panel/meet-panel.component';
-import { ProposalEvaluationComponent } from './modules/proposal-evaluation/proposal-evaluation.component';
+import { AdministrationDashboardComponent } from "./modules/administration-dashboard/administration-dashboard.component";
+import { StructureComponent } from "./modules/structure/structure.component";
+import { PlanComponent } from "./modules/plan/plan.component";
+import { ConferenceComponent } from "./modules/conference/conference.component";
+import { HomeComponent } from "./modules/home/home.component";
+import { CitizenComponent } from "./modules/citizen/citizen.component";
+import { ControlPanelDashboardComponent } from "./modules/control-panel-dashboard/control-panel-dashboard.component";
+import { ConferenceListComponent } from "./modules/conference/conference-list/conference-list.component";
+import { MeetPanelComponent } from "./modules/conference/meeting/meet-panel/meet-panel.component";
+import { ProposalEvaluationComponent } from "./modules/proposal-evaluation/proposal-evaluation.component";
+import { EvaluateComponent } from "./modules/proposal-evaluation/evaluate/evaluate.component";
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent},
-  {path: 'home', component: HomeComponent},
-  {path: 'control-panel-dashboard', component: ControlPanelDashboardComponent},
-  {path: 'administration/dashboard', component: AdministrationDashboardComponent},
-  {path: 'administration/domains', component: DomainComponent},
-  {path: 'administration/structures', component: StructureComponent},
-  {path: 'administration/plans', component: PlanComponent},
-  {path: 'administration/conferences', component: ConferenceListComponent},
-  {path: 'administration/conferences/conference', component: ConferenceComponent},
-  {path: 'administration/conferences/:id/meeting', component: MeetingComponent},
-  {path: 'administration/conferences/:id/meeting/:idm/panel', component: MeetPanelComponent},
-  {path: 'administration/citizen', component: CitizenComponent},
-  {path: 'moderation/search', component: ModerationComponent},
-  {path: 'moderation/moderate/:id/:conferenceId', component: ModerateComponent},
+  { path: "", redirectTo: "login", pathMatch: "full" },
+  { path: "login", component: LoginComponent },
+  { path: "home", component: HomeComponent },
   {
-    path: 'attendance',
-    loadChildren: async () => (await import('./modules/attendance/attendance.module')).AttendanceModule
+    path: "control-panel-dashboard",
+    component: ControlPanelDashboardComponent,
   },
-  {path: 'proposal-evaluation', component: ProposalEvaluationComponent}
+  {
+    path: "administration/dashboard",
+    component: AdministrationDashboardComponent,
+  },
+  { path: "administration/domains", component: DomainComponent },
+  { path: "administration/structures", component: StructureComponent },
+  { path: "administration/plans", component: PlanComponent },
+  { path: "administration/conferences", component: ConferenceListComponent },
+  {
+    path: "administration/conferences/conference",
+    component: ConferenceComponent,
+  },
+  {
+    path: "administration/conferences/:id/meeting",
+    component: MeetingComponent,
+  },
+  {
+    path: "administration/conferences/:id/meeting/:idm/panel",
+    component: MeetPanelComponent,
+  },
+  { path: "administration/citizen", component: CitizenComponent },
+  { path: "moderation/search", component: ModerationComponent },
+  {
+    path: "moderation/moderate/:id/:conferenceId",
+    component: ModerateComponent,
+  },
+  {
+    path: "attendance",
+    loadChildren: async () =>
+      (await import("./modules/attendance/attendance.module")).AttendanceModule,
+  },
+  { path: "proposal-evaluation", component: ProposalEvaluationComponent },
+  {
+    path: "proposal-evaluation/:conferenceId/:proposalId",
+    component: EvaluateComponent,
+  },
 ];
 
-export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes, {
+export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(
+  routes,
+  {
     useHash: true,
-    scrollPositionRestoration: 'enabled',
-    onSameUrlNavigation: 'reload'
-});
-
+    scrollPositionRestoration: "enabled",
+    onSameUrlNavigation: "reload",
+  }
+);
