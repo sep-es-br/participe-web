@@ -6,6 +6,7 @@ import { CoreModule } from "@app/core/core.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProposalEvaluationComponent } from "./proposal-evaluation.component";
 import { ProposalComponent } from "./proposal/proposal.component";
+import { EvaluateComponent } from "./evaluate/evaluate.component";
 
 @NgModule({
   imports: [
@@ -15,8 +16,12 @@ import { ProposalComponent } from "./proposal/proposal.component";
     CoreModule,
     TranslateModule,
   ],
-  declarations: [ProposalComponent, ProposalEvaluationComponent],
-  exports: [ProposalComponent, ProposalEvaluationComponent],
+  declarations: [
+    ProposalComponent,
+    ProposalEvaluationComponent,
+    EvaluateComponent,
+  ],
+  exports: [ProposalComponent, ProposalEvaluationComponent, EvaluateComponent],
   providers: [],
 })
 export class ProposalEvaluationModule {}
