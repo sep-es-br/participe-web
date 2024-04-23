@@ -161,11 +161,15 @@
               <div class="locality">{{ attendee.locality }}</div>
               <div class="region">{{ attendee.superLocality }}</div>
             </div>
+            <div class="authNameIcon">
+              <img [src]="authSrv.getAuthenticationIcon(attendee.authName)"/>
+            </div>
             <div class="info-checkin" *ngIf="attendee?.checkedIn">
               <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                 {{ getHowLongAgo(attendee.checkedInDate) }}
               </div>
             </div>
+            <div class="info-checkin" *ngIf="!attendee?.checkedIn"></div>
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">

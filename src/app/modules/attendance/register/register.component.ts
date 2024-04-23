@@ -152,7 +152,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           name: result.name,
           email: result.email,
           checkedIn: false,
-          checkingIn: false
+          checkingIn: false,
+          authName: result.authName
         };
         await this.checkIn(newAttendee);
         this.toggleNewAccount();

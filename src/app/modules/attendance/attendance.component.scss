@@ -99,6 +99,13 @@ $textFilterColor: #666;
         display: flex;
         flex: 1;
 
+        .authNameIcon{
+          display: flex;
+          img {
+            width: 20px;
+          }
+        }
+
         .info-place {
           display: flex;
           flex-direction: column;

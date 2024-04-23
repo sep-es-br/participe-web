@@ -11,4 +11,5 @@ export interface IAttendee {
   checkedIn: boolean;
   checkedInDate?: string;
   checkingIn?: boolean;
+  authName?: string;
 }
