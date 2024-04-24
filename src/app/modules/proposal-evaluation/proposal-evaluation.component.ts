@@ -58,7 +58,9 @@ export class ProposalEvaluationComponent implements OnInit {
       .listAll()
       .then((data) => {
         this.conferences = data;
-        this.conferenceSelect = this.conferences[0];
+        this.conferenceSelect =
+          JSON.parse(sessionStorage.getItem("selectedConference")) ??
+          this.conferences[0];
       })
       .then(() => {
         this.buildBreadcrumb();
@@ -91,10 +93,6 @@ export class ProposalEvaluationComponent implements OnInit {
   loadProposals() {
     this.proposalList =
       this.proposalEvaluationService.getProposalListForEvaluation();
-
-    // await this.proposalEvaluationService
-    //   .getProposalListForEvaluation()
-    //   .then((data) => console.log(data));
   }
 
   selectOtherConference(conference: Conference) {
@@ -114,7 +112,7 @@ export class ProposalEvaluationComponent implements OnInit {
   }
 
   searchHandle() {
-    console.log(this.filter)
+    console.log(this.filter);
     sessionStorage.setItem("propEvalFilter", JSON.stringify(this.filter));
   }
 
