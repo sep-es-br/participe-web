@@ -1,1 +1,135 @@
-<p>evaluate works!</p>
+<app-template>
+  <form [formGroup]="proposalEvaluationForm">
+    <div class="row">
+      <div class="col-12 d-inline-flex align-content-center flex-wrap">
+        <button
+          class="entity-badge pe-none"
+          [ngClass]="{
+            evaluated: formStatus == 'Avaliado',
+            'not-evaluated': formStatus == 'Não AValiado'
+          }"
+          *ngFor="let entity of formEntities"
+        >
+          {{ entity }}
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <label>Em avaliação por</label>
+        <p>{{ formEntities[0] }}</p>
+        <br />
+        <label>Área Temática</label>
+        <p>{{ formThemeArea }}</p>
+      </div>
+      <div class="col-4">
+        <label>Microrregião</label>
+        <p>{{ formMicrorregion }}</p>
+        <br />
+        <label>Categoria Orçamentária</label>
+        <p>{{ formBudgetCategory }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        <label>Proposta</label>
+        <p>{{ formDescriptionText }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        <label>Será incluída na LOA do próximo ano?</label>
+        <!-- checkbox -->
+        <div class="col-3 d-flex justify-content-between">
+          <div class="d-inline-flex align-items-center">
+            <p-radioButton
+              inputId="loaIncludedTrue"
+              [value]="true"
+              formControlName="loaIncluded"
+            ></p-radioButton>
+            <label for="loaIncludedTrue" class="ms-2">Sim</label>
+          </div>
+          <div class="d-inline-flex align-items-center">
+            <p-radioButton
+              inputId="loaIncludedFalse"
+              [value]="false"
+              formControlName="loaIncluded"
+            ></p-radioButton>
+            <label for="loaIncludedFalse" class="ms-2">Nâo</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-8">
+        <ng-container *ngIf="formLoaIncluded != null && formLoaIncluded">
+          <!-- <span>loaIncluded == true</span>
+          <p>{{ formLoaIncluded }}</p> -->
+
+          <div class="col-12 d-flex flex-column">
+            <label for="budgetUnit">Unidade Orçamentária</label>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              [options]="budgetUnitOptions"
+              formControlName="budgetUnit"
+            ></p-dropdown>
+          </div>
+
+          <br />
+
+          <div class="col-12 d-flex flex-column">
+            <label for="budgetAction">Ação Orçamentária</label>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              [options]="budgetActionOptions"
+              formControlName="budgetAction"
+            ></p-dropdown>
+          </div>
+
+          <br />
+
+          <div class="col-12 d-flex flex-column">
+            <label for="budgetPlan">Plano Orçamentário</label>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              [options]="budgetPlanOptions"
+              formControlName="budgetPlan"
+            ></p-dropdown>
+          </div>
+
+          <br />
+        </ng-container>
+        <ng-container *ngIf="formLoaIncluded != null && !formLoaIncluded">
+          <!-- <span>loaIncluded == false</span>
+          <p>{{ formLoaIncluded }}</p> -->
+
+          <label for="">Motivo da não inclusão?</label>
+
+          <div class="col-12 d-flex flex-column">
+            <ng-container
+              *ngFor="let reason of reasonOptions; let index; as: i"
+            >
+              <div class="d-inline-flex align-items-center">
+                <p-radioButton
+                  inputId="reason"
+                  [value]="reason"
+                  formControlName="reason"
+                ></p-radioButton>
+                <label for="reason" class="ms-2">{{ reason }}</label>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- botões -->
+      <div class="col-8">
+        <button pButton class="mx-2">Salver</button>
+        <button pButton class="mx-2">Cancelar</button>
+      </div>
+    </div>
+  </form>
+</app-template>
