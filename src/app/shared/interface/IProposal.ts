@@ -1,4 +1,5 @@
 export interface IProposal {
+    id: number;
     status: string;
     microrregion: string;
     descriptionText: string;
