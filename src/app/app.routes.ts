@@ -61,7 +61,7 @@ export const routes: Routes = [
   },
   { path: "proposal-evaluation", component: ProposalEvaluationComponent },
   {
-    path: "proposal-evaluation/:conferenceId/:proposalId",
+    path: "proposal-evaluation/:proposalId",
     component: EvaluateComponent,
   },
 ];
