@@ -161,8 +161,8 @@
               <div class="locality">{{ attendee.locality }}</div>
               <div class="region">{{ attendee.superLocality }}</div>
             </div>
-            <div class="authNameIcon">
-              <img [src]="authSrv.getAuthenticationIcon(attendee.authName)"/>
+            <div class="authNameIcon" >
+              <img *ngFor="let auth of attendee.authName" [src]="authSrv.getAuthenticationIcon(auth)" class="mx-1">
             </div>
             <div class="info-checkin" *ngIf="attendee?.checkedIn">
               <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">

@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import { StoreKeys } from '../constants';
 import { IPerson } from '../interface/IPerson';
 import { ISocialLoginResult } from './../interface/ISocialLoginResult';
+import { List } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -121,6 +122,7 @@ export class AuthService {
   }
 
   getAuthenticationIcon(authProvider: string): string {
+    console.log(authProvider)
     return this.providers.find(p => p.tag === authProvider.toLowerCase()).icon;
   }
 

@@ -84,6 +84,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+
   }
 
   ngOnDestroy(): void {
