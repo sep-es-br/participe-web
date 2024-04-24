@@ -85,6 +85,7 @@ export class ProposalEvaluationService {
 
     return [
       {
+        id: 1,
         status: "Avaliado",
         microrregion: "Caparaó",
         descriptionText:
@@ -114,6 +115,7 @@ export class ProposalEvaluationService {
         ],
       },
       {
+        id: 2,
         status: "Não Avaliado",
         microrregion: "Central Serrana",
         descriptionText:
@@ -132,6 +134,52 @@ export class ProposalEvaluationService {
           // "PGE",
         ],
       },
+    ];
+  }
+
+  public populateBudgetUnitOptions() {
+    return [
+      "10101 - SVC",
+      "10102 - SCM",
+      "10103 - SECONT",
+      "10104 - SECOM",
+      "10109 - RTV-ES",
+      "10904 - FECC",
+      "16101 - PGE",
+    ];
+  }
+
+  public populateBudgetActionOptions() {
+    return [
+      "1051 - Construção, Ampliação e Modernização da Rede de Serviços de Saúde do Estado",
+      "2619 - Seleção e Premiação de Projetos Culturais",
+      "2971 - Selecção e Premiação de Projetos de Patrimônio",
+      "8683 - Desenvolvimento Integrado e Esporte e Cultura nas Escolas",
+      "8657 - Expansão, Qualificação e Desenvolvimento da Oferta de Cursos Técnicos de Nível Médio",
+    ];
+  }
+
+  public populateBudgetPlanOptions() {
+    return [
+      "1051 - Construção, Ampliação e Modernização da Rede de Serviços de Saúde do Estado",
+      "2619 - Seleção e Premiação de Projetos Culturais",
+      "2971 - Selecção e Premiação de Projetos de Patrimônio",
+      "8683 - Desenvolvimento Integrado e Esporte e Cultura nas Escolas",
+      "8657 - Expansão, Qualificação e Desenvolvimento da Oferta de Cursos Técnicos de Nível Médio",
+    ];
+  }
+
+  public populateReasonOptions() {
+    return [
+      "Entrega já realizada",
+      "Conclusão prevista no ano vigente",
+      "Restrições legais",
+      "Restrições ambientais",
+      "Restrições técnicas",
+      "Restrições orçamentárias",
+      "Não é competência estadual",
+      "Não foi considerada prioridade estratégica para a microrregião",
+      "Demanda não específica",
     ];
   }
 
