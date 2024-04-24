@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { IProposal } from "@app/shared/interface/IProposal";
 
 @Component({
@@ -10,5 +11,11 @@ import { IProposal } from "@app/shared/interface/IProposal";
 export class ProposalComponent {
   @Input("proposalData") proposal: IProposal;
 
-  constructor() {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
+
+  evaluateProposal(proposalId: number){
+    this.router.navigate([`${proposalId}`], {
+      relativeTo: this.route,
+    })
+  }
 }
