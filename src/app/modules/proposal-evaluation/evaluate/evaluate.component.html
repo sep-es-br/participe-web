@@ -6,7 +6,7 @@
           class="entity-badge pe-none"
           [ngClass]="{
             evaluated: formStatus == 'Avaliado',
-            'not-evaluated': formStatus == 'Não AValiado'
+            'not-evaluated': formStatus == 'Não Avaliado'
           }"
           *ngFor="let entity of formEntities"
         >
@@ -39,7 +39,6 @@
     <div class="row">
       <div class="col-8">
         <label>Será incluída na LOA do próximo ano?</label>
-        <!-- checkbox -->
         <div class="col-3 d-flex justify-content-between">
           <div class="d-inline-flex align-items-center">
             <p-radioButton
@@ -64,9 +63,6 @@
     <div class="row">
       <div class="col-8">
         <ng-container *ngIf="formLoaIncluded != null && formLoaIncluded">
-          <!-- <span>loaIncluded == true</span>
-          <p>{{ formLoaIncluded }}</p> -->
-
           <div class="col-12 d-flex flex-column">
             <label for="budgetUnit">Unidade Orçamentária</label>
             <p-dropdown
@@ -101,15 +97,10 @@
           <br />
         </ng-container>
         <ng-container *ngIf="formLoaIncluded != null && !formLoaIncluded">
-          <!-- <span>loaIncluded == false</span>
-          <p>{{ formLoaIncluded }}</p> -->
-
           <label for="">Motivo da não inclusão?</label>
 
           <div class="col-12 d-flex flex-column">
-            <ng-container
-              *ngFor="let reason of reasonOptions; let index; as: i"
-            >
+            <ng-container *ngFor="let reason of reasonOptions">
               <div class="d-inline-flex align-items-center">
                 <p-radioButton
                   inputId="reason"
