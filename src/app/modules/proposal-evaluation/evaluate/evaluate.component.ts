@@ -32,15 +32,12 @@ export class EvaluateComponent implements OnInit {
     this.proposal = this.proposalEvaluationService
       .getProposalListForEvaluation()
       .find((proposal) => proposal.id == this.proposalId);
-    // console.log(this.proposal);
 
     this.populateOptionsLists();
 
     !!this.proposal
       ? this.initProposalForm(this.proposal)
       : this.initProposalForm();
-
-    // console.log(this.proposalEvaluationForm);
   }
 
   populateOptionsLists() {
@@ -97,10 +94,3 @@ export class EvaluateComponent implements OnInit {
     return this.proposalEvaluationForm.get("loaIncluded").value;
   }
 }
-
-// status: string;
-//     microrregion: string;
-//     descriptionText: string;
-//     themeArea: string;
-//     budgetCategory: string;
-//     entities: string[];
