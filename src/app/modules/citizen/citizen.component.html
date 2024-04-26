@@ -5,7 +5,7 @@
         <section *ngIf="!formEdit">
           <div class="row ui-fluid actions">
             <div class="col-5 col-md-2 col-lg-2">
-              <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
+              <button pButton [hidden]="true" type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
                 (click)="showEditOrInsert()">
               </button>
             </div>
@@ -108,36 +108,13 @@
                   <img *ngIf="(idCitizen === 0 || (!citizenHasNativeAuth && getFormValue('ckResetPassword')))" src="../../../assets/layout/images/icons/participe.svg"  alt=""/>
                   <div [innerHTML]="getAuthenticationsFromCitizen"></div>
                 </div>
-                <div class="options-container">
-                  <p-radioButton name="typeAuthentication" value="cpf" label="CPF"
-                    (onClick)="changeTypeAuthentication()" formControlName="typeAuthentication">
-                  </p-radioButton>
-                  <p-radioButton name="typeAuthentication" value="mail" label="E-mail"
-                    (onClick)="changeTypeAuthentication()" formControlName="typeAuthentication">
-                  </p-radioButton>
-                </div>
+               
               </div>
-            </div>
-            <div class="col-12   col-md-6" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'mail'}">
-              <label [class.required]="getFormValue('typeAuthentication') === 'cpf'" for="cpf">{{'citizen.cpf'|translate}}</label>
-              <p-inputMask [styleClass]="'form-control'"  formControlName="cpf" mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-                (onBlur)="onBlurCpf()"></p-inputMask>
-              <tt-input-message [form]="citizenForm" field="cpf"></tt-input-message>
-            </div>
-            <div class="col-12   col-md-6" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'mail'}">
-              <label [class.required]="getFormValue('typeAuthentication') === 'cpf'" for="password">{{'citizen.password'|translate}}</label>
-              <input pInputText class="form-control" formControlName="password" [maxLength]="6">
-              <tt-input-message [form]="citizenForm" field="password"></tt-input-message>
             </div>
             <div class="col-12 col-md-12" [ngClass]="{'input-disabled': getFormValue('typeAuthentication') === 'cpf'}">
               <label [class.required]="getFormValue('typeAuthentication') === 'mail'" for="mail">{{'citizen.mail'|translate}}</label>
-              <input pInputText class="form-control" formControlName="mail">
+              <input readonly pInputText class="form-control" formControlName="mail">
               <tt-input-message [form]="citizenForm" field="mail"></tt-input-message>
-              <div class="reset-password-container"
-                *ngIf="idCitizen > 0 && getFormValue('typeAuthentication') === 'mail'">
-                <input type="checkbox" id="ckResetPassword" formControlName="resetPassword"/>
-                <label for="ckResetPassword">{{ 'citizen.resetpassword' | translate}}</label>
-              </div>
             </div>
             <div class="col-12 col-md-12">
               <label for="phone">{{'citizen.phone'|translate}}</label>
@@ -152,7 +129,7 @@
             <div class="col-12 col-md-12 radiobutton-status" *ngIf="idCitizen > 0">
               <label for="status">Status</label>
               <div>
-                <p-radioButton name="statusIsActive" [value]="true" [label]="'status.active' | translate" formControlName="statusIsActive"></p-radioButton>
+                <p-radioButton name="statusIsActive" [value]="true" class="me-3" [label]="'status.active' | translate" formControlName="statusIsActive"></p-radioButton>
                 <p-radioButton name="statusIsActive" [value]="false" [label]="'status.inactive' | translate" formControlName="statusIsActive"></p-radioButton>
               </div>
             </div>
