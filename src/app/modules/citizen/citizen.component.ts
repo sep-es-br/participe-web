@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MessageService, SelectItem } from 'primeng/api';
+import { LazyLoadEvent, MessageService, SelectItem } from 'primeng/api';
 
 import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
 import { AuthService } from '@app/shared/services/auth.service';
@@ -30,6 +30,7 @@ import { StoreKeys } from '@app/shared/constants';
 })
 export class CitizenComponent extends BasePageList<CitizenModel> implements OnInit, OnDestroy {
 
+  allConference: Conference = new Conference();
   formEdit: boolean = false;
   citizenForm: UntypedFormGroup;
   localities: SelectItem[] = [];
@@ -54,7 +55,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   showSelectConference: boolean = false;
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
-  sort: string = 'name';
+  sort: string = "apoc.text.clean(name)";
   search: any = { status: '' };
   selectedLocalities: [];
   typeAuthentication: string = 'mail';
@@ -62,14 +63,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   mailValidators = [ Validators.required, Validators.email ];
   cpfValidators = [ Validators.required, Validators.maxLength(11), CustomValidators.ValidateCPF ];
   cols: ITableCol[] = [
-    { field: 'name', header: 'citizen.name', sorteable: true },
-    { field: 'email', header: 'citizen.mail', sorteable: true },
-    { field: 'localityName', header: 'citizen.locality', sorteable: false },
-    {
-      field: 'autentication', header: 'citizen.attendance_count', styleClass: 'col-attendance_count', handleView: (value, row) => {
-        return row.autentication.reduce((accumulate, auth) => (accumulate + auth.acesses), 0);
-      }
-    },
     {
       field: 'autentication', header: 'citizen.authentication', styleClass: 'col-authentication', handleView: (value, row) => {
         let container = '';
@@ -79,6 +72,18 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
         return container;
       }
     },
+    { field: 'name', header: 'citizen.name', sorteable: true },
+    { field: 'email', header: 'citizen.mail', sorteable: true },
+    { field: 'conferencesName', header: 'citizen.conferencia', handleView: (value, row) => {
+      return !!row.conferencesName ? row.conferencesName.join('\n') : '';
+    } },
+    { field: 'localityName', header: 'citizen.locality', sorteable: false },
+    {
+      field: 'autentication', header: 'citizen.attendance_count', styleClass: 'col-attendance_count', handleView: (value, row) => {
+        return row.autentication.reduce((accumulate, auth) => (accumulate + auth.acesses), 0);
+      }
+    },
+    
   ];
 
   constructor(
@@ -93,6 +98,8 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     public localitySrv: LocalityService
   ) {
     super(citizenSrv);
+    this.allConference.id = null;
+    this.allConference.name = 'Todas as Audiências Públicas';
   }
 
   ngOnDestroy(): void {
@@ -100,8 +107,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async ngOnInit() {
-    await this.loadConferencesActives();
-
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
     await this.prepareScreen();
@@ -118,10 +123,41 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     ]);
   }
 
+  async selectAllConference(conference: Conference){
+    this.conferenceSelect = conference;
+    this.showSelectConference = false;
+    this.search.conferenceId = this.conferenceSelect.id;
+    await this.loadData();
+    this.buildBreadcrumb();
+    await this.loadLocalitiesOptions();
+    this.configureActionBar();
+  }
+
+  async searchHandle() {
+    await this.loadData();
+    this.configureActionBar();
+  }
+
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     this.showSelectConference = false;
     await this.prepareScreen();
+  }
+
+  async citizenLoadData(event?: LazyLoadEvent){
+    if (this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) {
+      await this.loadConferencesActives();
+      console.log("Carregando a conferencia")
+    }
+    console.log(this.conferenceSelect.id)
+    this.search.conferenceId = this.conferenceSelect.id;
+    if (!this.conferenceSelect.id) {
+      
+      return this.messageService.add({ severity: 'warn', detail: this.translateSrv.instant('empty.conference') });
+    } else {
+      
+      await this.loadData(event);
+    }
   }
 
   async prepareScreen() {
@@ -168,7 +204,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       { label: 'administration.label' },
       { label: this.conferenceSelect.name, routerLink: ['/administration/citizen'] }
     ]);
-    console.log(this.breadcrumbService)
   }
 
   clearSearch() {

@@ -122,7 +122,6 @@ export class AuthService {
   }
 
   getAuthenticationIcon(authProvider: string): string {
-    console.log(authProvider)
     return this.providers.find(p => p.tag === authProvider.toLowerCase()).icon;
   }
 

@@ -79,7 +79,8 @@
 		"resetpassword": "Resetar senha",
 		"status": "Situação",
 		"updated": "Cidadão {{name}} atualizado",
-		"receive_informational": "Desejo receber mensagens informativas"
+		"receive_informational": "Desejo receber mensagens informativas",
+		"conferencia": "Conferência"
 	},
 	"clean": {
 		"search": "Limpar Pesquisa"
