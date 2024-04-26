@@ -12,8 +12,8 @@
             <tt-input-message [form]="form" field="name"></tt-input-message>
           </div>
           <div class="col-12">
-            <label class="required">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
-            <p-dropdown [options]="optionsLocalities" formControlName="locality" class=" " [styleClass]="'d-flex form-control'"
+            <label class="required" for="locality">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="optionsLocalities" formControlName="locality"
                         [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
