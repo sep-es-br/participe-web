@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import { StoreKeys } from '../constants';
 import { IPerson } from '../interface/IPerson';
 import { ISocialLoginResult } from './../interface/ISocialLoginResult';
+import { List } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
