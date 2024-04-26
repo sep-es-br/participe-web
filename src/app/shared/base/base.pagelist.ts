@@ -26,7 +26,6 @@ export abstract class BasePageList<T> {
 
   async loadData(event?: LazyLoadEvent) {
     if (event) {
-      console.log(event)
       this.page = event.first > 0 ? (event.first / this.pageSize) : 0;
       if (event.sortField) {
         this.sort = `${event.sortField},${event.sortOrder === 1 ? 'asc' : 'desc'}`;

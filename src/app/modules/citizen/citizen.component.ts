@@ -56,7 +56,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
   sort: string = "apoc.text.clean(name)";
-  search: any = { status: '' };
+  search: any = { status: ''};
   selectedLocalities: [];
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
@@ -109,6 +109,8 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async ngOnInit() {
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
+    this.authentications.unshift({label: 'Todos', value: '' })
+
     await this.prepareScreen();
   }
 
@@ -147,9 +149,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async citizenLoadData(event?: LazyLoadEvent){
     if (this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) {
       await this.loadConferencesActives();
-      console.log("Carregando a conferencia")
     }
-    console.log(this.conferenceSelect.id)
     this.search.conferenceId = this.conferenceSelect.id;
     if (!this.conferenceSelect.id) {
       
@@ -361,11 +361,26 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   filterLocalities({ query }) {
+    console.log(this.replaceSpecialChars)
     if (!query) { 
       return this.filteredLocalities = this.localities;
     }
-    this.filteredLocalities = this.localities.map(item => item).filter( value => value.label.toLowerCase().includes(query.toLowerCase())); 
+    this.filteredLocalities = this.localities.map(item => item).filter( value => this.replaceSpecialChars(value.label).includes(this.replaceSpecialChars(query))); 
   }
+
+  replaceSpecialChars(str)	{
+		if (!str) return '';			    
+		str = str.toLowerCase();
+    str = str.trim();
+    str = str.replace(/\s/g, '')
+		str = str.replace(/[aáàãäâ]/,'a');
+		str = str.replace(/[eéèëê]/,'e');
+		str = str.replace(/[iíìïî]/,'i');
+		str = str.replace(/[oóòõöô]/,'o');
+		str = str.replace(/[uúùüû]/,'u');
+    str = str.replace(/[ç]/,'c');
+		return str; 
+	  }
 
   toStandardText(str: string) {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
