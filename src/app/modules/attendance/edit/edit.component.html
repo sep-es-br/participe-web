@@ -18,7 +18,7 @@
           </div>
           <div class="col-12">
             <label class="required form-label">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
-            <p-dropdown [options]="optionsLocalities" formControlName="locality" [styleClass]="'w-100'"
+            <p-dropdown [options]="optionsLocalities" formControlName="locality" [styleClass]="'d-flex form-control'"
                         [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
@@ -29,27 +29,12 @@
                    src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
               <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)"
                    [title]="auth.loginName" [alt]="auth.loginName"/>
-              <p-radioButton *ngFor="let type of authTypeEnum" name="authType" [value]="type" [label]="type"
-                             formControlName="authType"></p-radioButton>
             </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
-            <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true"
-                         slotChar="___.___.___-__" styleClass="form-control"  formControlName="cpf"></p-inputMask>
-            <tt-input-message [form]="form" field="cpf"></tt-input-message>
-          </div>
-          <div class="col-12 col-md-6">
-            <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.password' | translate }}</label>
-            <input pInputText class="form-control" formControlName="password" [maxLength]="6">
-            <tt-input-message [form]="form" field="password"></tt-input-message>
           </div>
           <div class="col-12">
             <label [class.required]="form.get('authType').value === 'E-Mail'">{{ 'citizen.mail' | translate }}</label>
-            <input pInputText class="form-control" formControlName="email">
+            <input pInputText readonly class="form-control" formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
-            <p-checkbox class="checkbox-reset" *ngIf="form.get('authType').value === 'E-Mail'" [binary]="true"
-                        [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
           </div>
           <div class="col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
@@ -59,7 +44,7 @@
           </div>
           <div class="col-12">
             <div class="form-actions">
-              <button pButton icon="pi pi-check" type="submit" [label]="'save' | translate"></button>
+              <button pButton icon="pi pi-check" class="me-3" type="submit" [label]="'save' | translate"></button>
               <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                       (click)="toggleSelectedAttendee()"></button>
             </div>
@@ -196,23 +181,6 @@
 	</ng-template>
 	<ng-template pTemplate="footer">
 		<button pButton class="change-button btn btn-lg btn-primary" [label]="'change' | translate" icon="fa-solid fa-arrow-right-arrow-left" (click)="setCurrentMeeting()"></button>
-		<!-- <p-button icon="pi pi-check" (click)="visible = false" label="Ok" pAutoFocus [autofocus]="true"></p-button> -->
 	</ng-template>
 </p-dialog>
 
-<!-- <p-dialog class="modal-change-meeting" modal="true" [maximizable]="true" [draggable]="false" [resizable]="true" [(visible)]="showSelectMeeting">
-	<div class="row" >
-		<div class="col-12 col-md-12 mb-3">
-			<label class="label">Consulta</label>
-			<p-dropdown [options]="optionsConference" [styleClass]="'d-flex form-control'" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
-		</div>
-		<div class="col-12 col-md-12 mb-auto">
-			<label class="label">Reunião</label>
-			<p-dropdown [options]="optionsMeeting" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-		</div>
-		<div class="col-12 col-md-12 m-auto text-center">
-			<button pButton class="change-button btn btn-lg btn-primary" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
-		</div>
-
-	</div>
-</p-dialog> -->

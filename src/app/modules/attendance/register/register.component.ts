@@ -84,6 +84,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+
   }
 
   ngOnDestroy(): void {
@@ -152,7 +153,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           name: result.name,
           email: result.email,
           checkedIn: false,
-          checkingIn: false
+          checkingIn: false,
+          authName: result.authName
         };
         await this.checkIn(newAttendee);
         this.toggleNewAccount();

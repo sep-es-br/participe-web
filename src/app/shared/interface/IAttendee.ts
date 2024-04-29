@@ -1,3 +1,5 @@
+import { List } from "lodash";
+
 export interface IAttendee {
   personId: number;
   name: string;
@@ -11,4 +13,5 @@ export interface IAttendee {
   checkedIn: boolean;
   checkedInDate?: string;
   checkingIn?: boolean;
+  authName?: List<string>;
 }

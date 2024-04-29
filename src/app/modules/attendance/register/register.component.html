@@ -12,8 +12,8 @@
             <tt-input-message [form]="form" field="name"></tt-input-message>
           </div>
           <div class="col-12">
-            <label class="required">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
-            <p-dropdown [options]="optionsLocalities" formControlName="locality" class=" " [styleClass]="'d-flex form-control'"
+            <label class="required" for="locality">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="optionsLocalities" formControlName="locality"
                         [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
@@ -24,28 +24,12 @@
                    src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
               <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)"
                    [title]="auth.loginName" [alt]="auth.loginName"/>
-              <p-radioButton *ngFor="let type of authTypeEnum" name="authType" [value]="type" [label]="type"
-                             formControlName="authType"></p-radioButton>
             </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
-            <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true" [styleClass]="'form-control'"
-                         slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
-            <tt-input-message [form]="form" field="cpf"></tt-input-message>
-          </div>
-          <div class="col-12 col-md-6">
-            <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.password' | translate }}</label>
-            <input pInputText class="form-control" formControlName="password" [maxLength]="6">
-            <tt-input-message [form]="form" field="password"></tt-input-message>
           </div>
           <div class="col-12">
             <label [class.required]="form.get('authType').value === 'E-Mail'">{{ 'citizen.mail' | translate }}</label>
-            <input pInputText class="form-control" formControlName="email">
+            <input pInputText readonly class="form-control" formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
-            <p-checkbox class="checkbox-reset" *ngIf="isAttendeeSelected && form.get('authType').value === 'E-Mail'"
-                        [binary]="true"
-                        [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
           </div>
           <div class="col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
@@ -57,12 +41,12 @@
             <div class="form-actions">
               <ng-container *ngIf="newAccount; else attendeeSelected">
                 <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
-                        [label]="'attendance.saveAndRegister' | translate"></button>
+                        [label]="'attendance.saveAndRegister' | translate" class="me-2" ></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                         (click)="toggleNewAccount()"></button>
               </ng-container>
               <ng-template #attendeeSelected>
-                <button pButton icon="pi pi-check" type="button" (click)="checkIn(selectedAttende)"
+                <button pButton icon="pi pi-check" type="button" class="me-2" (click)="checkIn(selectedAttende)"
                         [label]="'attendance.registerAttendance' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                         (click)="toggleSelectedAttendee()"></button>
@@ -90,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-4 mt-3 new">
+        <div class="col-12 col-md-4 mt-3 new " [hidden]="true" >
           <button pButton icon="pi pi-plus" class="xs-w-100 mt-1" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
         </div>
       </div>
@@ -161,11 +145,15 @@
               <div class="locality">{{ attendee.locality }}</div>
               <div class="region">{{ attendee.superLocality }}</div>
             </div>
+            <div class="authNameIcon" >
+              <img *ngFor="let auth of attendee.authName" [src]="authSrv.getAuthenticationIcon(auth)" class="mx-1">
+            </div>
             <div class="info-checkin" *ngIf="attendee?.checkedIn">
               <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                 {{ getHowLongAgo(attendee.checkedInDate) }}
               </div>
             </div>
+            <div class="info-checkin" *ngIf="!attendee?.checkedIn"></div>
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
