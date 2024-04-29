@@ -56,7 +56,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
   sort: string = "apoc.text.clean(name)";
-  search: any = { status: ''};
+  search: any = { status: '', autentication: ''};
   selectedLocalities: [];
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
@@ -110,8 +110,8 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
     this.authentications.unshift({label: 'Todos', value: '' })
-
     await this.prepareScreen();
+    console.log(this.search)
   }
 
   configureActionBar() {
@@ -361,7 +361,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   filterLocalities({ query }) {
-    console.log(this.replaceSpecialChars)
     if (!query) { 
       return this.filteredLocalities = this.localities;
     }
