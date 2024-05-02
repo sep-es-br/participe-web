@@ -52,8 +52,18 @@
             </p-calendar>
           </div>
           <div class="col-12 col-md-3 mt-auto">
-            <button pButton [icon]="getIcon('pi pi-search')" [disabled]="loading" (click)="searchHandle();"
+            <button pButton [icon]="getIcon('pi pi-search')" class="me-2" [disabled]="loading" (click)="searchHandle();"
                     [label]="'search' | translate"></button>
+            <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
+                    (click)="this.filter = {
+                      planItemId: null,
+                      localityId: null,
+                      status: 'Pending',
+                      from: null,
+                      text: '',
+                      initialDate: null,
+                      endDate: null,
+                    };searchHandle();"></button>
           </div>
         </div>
       </div>
