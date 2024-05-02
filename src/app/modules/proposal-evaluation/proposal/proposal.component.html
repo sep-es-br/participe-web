@@ -11,18 +11,21 @@
           >{{ proposal.status }}</span
         >
         <span class="divider">|</span>
-        <span class="microrregion-text ms-4">{{ proposal.microrregion }}</span>
+        <!-- <span class="microrregion-text ms-4">{{ proposal.microrregion }}</span> -->
+        <span class="microrregion-text ms-4">{{ proposal.locality.name }}</span>
       </div>
       <div class="description-text my-2">
-        <p>{{ proposal.descriptionText }}</p>
+        <!-- <p>{{ proposal.descriptionText }}</p> -->
+        <p>{{ proposal.description }}</p>
       </div>
 
       <div class="themearea-budgetcategory">
         <span>Área Temática: </span>
-        <span class="themearea-text">{{ proposal.themeArea }}</span>
+        <!-- <span class="themearea-text">{{ proposal.themeArea }}</span> -->
+        <span class="themearea-text">{{ proposal.planItemArea.name }}</span>
         <span class="divider">></span>
         <span>Categoria Orçamentária: </span>
-        <span class="budgetcategory-text">{{ proposal.budgetCategory }}</span>
+        <span class="budgetcategory-text">{{ proposal.planItem.name }}</span>
       </div>
     </div>
     <!-- Botão fixo na direita, badges de orgaos sem wrap -->
