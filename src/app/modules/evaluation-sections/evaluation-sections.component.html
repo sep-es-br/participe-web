@@ -28,7 +28,8 @@
           </ng-container>
           <div class="row">
             <div class="col-12">
-              <p-table>
+                <!-- Adicionar barras verticais nos tr do body -->
+              <p-table [value]="data">
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Órgão</th>
@@ -57,7 +58,7 @@
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        style="margin-right: 2px"
+                        style="margin: 0 2px"
                         (click)="showEdit(data)"
                       >
                         <i class="pi pi-pencil"></i>
