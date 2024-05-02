@@ -326,6 +326,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   async searchHandle() {
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 15,
+    };
     await this.loadComments();
 
     this.configureActionBar();
@@ -334,6 +339,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     sessionStorage.setItem("selectedConference", JSON.stringify(conference));
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 15,
+    };
     await this.prepareScreen();
     this.showSelectConference = false;
   }
