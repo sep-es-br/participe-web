@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
+import { EvaluationSectionsService } from "@app/shared/services/evaluation-sections.service";
 
 @Component({
   selector: "app-evaluation-sections",
@@ -11,10 +12,20 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
   search = false;
   showForm = false;
 
-  constructor(private breadcrumbService: BreadcrumbService) {}
+  data: any[] = [];
+
+  constructor(
+    private breadcrumbService: BreadcrumbService,
+    private evaluationSectionsService: EvaluationSectionsService
+  ) {}
 
   ngOnInit(): void {
     this.buildBreadcrumb();
+    this.getData();
+  }
+
+  public getData() {
+    this.data = this.evaluationSectionsService.getEvaluationSectionsMock();
   }
 
   public showCreateEvaluator(data?: any) {
@@ -23,7 +34,7 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       console.log(data);
     }
 
-    this.showForm = true
+    this.showForm = true;
   }
 
   public showEdit(data: any) {
