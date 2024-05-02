@@ -10,6 +10,5 @@ export class CitizenService extends BaseService<CitizenModel> {
   ) {
     super('citizen', injector);
   }
-
 }
 
