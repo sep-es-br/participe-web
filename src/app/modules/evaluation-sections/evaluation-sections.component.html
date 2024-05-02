@@ -1,1 +1,120 @@
-<p>evaluation-sections works!</p>
+<app-template>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-w-title">
+        <ng-container *ngIf="!showForm; else evaluatorsForm">
+          <div class="row">
+            <div class="col-5">
+              <button
+                pButton
+                type="button"
+                class="button-new"
+                [label]="'new' | translate"
+                (click)="showCreateEvaluator()"
+                icon="pi pi-plus"
+              ></button>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-5 d-flex justify-content-end align-items-center">
+              <a class="pointer" (click)="search = !search">{{
+                (search ? "hide" : "search") | translate
+              }}</a>
+            </div>
+          </div>
+          <ng-container *ngIf="search">
+            <div class="row mt-3">
+              <p>search: {{ search }}</p>
+            </div>
+          </ng-container>
+          <div class="row">
+            <div class="col-12">
+              <p-table>
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Órgão</th>
+                    <th>Setor</th>
+                    <th>Servidor</th>
+                    <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-data>
+                  <tr>
+                    <td>{{ data.entity }}</td>
+                    <td>{{ data.section }}</td>
+                    <td>{{ data.server }}</td>
+                    <td>
+                      <button
+                        pButton
+                        class="ui-button btn-icon"
+                        (click)="showCreateEvaluator(data)"
+                      >
+                        <img
+                          src="assets/layout/images/icons/triangule_plus.png"
+                          alt=""
+                        />
+                      </button>
+                      <button
+                        pButton
+                        class="ui-button btn-icon"
+                        type="button"
+                        style="margin-right: 2px"
+                        (click)="showEdit(data)"
+                      >
+                        <i class="pi pi-pencil"></i>
+                      </button>
+                      <button
+                        pButton
+                        class="ui-button btn-icon"
+                        type="button"
+                        (click)="delete(data)"
+                      >
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</app-template>
+
+<ng-template #evaluatorsForm let-data>
+  <div class="row">
+    <div class="col-6">
+      <div class="col-12">
+        <span class="fw-bold">Avaliadores</span>
+      </div>
+      <div class="col-12">
+        <label for="">Orgao</label>
+        <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+      </div>
+      <div class="col-12">
+        <label for="">Setor</label>
+        <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+      </div>
+      <div class="col-12">
+        <label for="">Servidor</label>
+        <p-dropdown styleClass="d-flex form-control"></p-dropdown>
+      </div>
+      <div class="col-12">
+        <button
+          pButton
+          icon="pi pi-check"
+          type="submit"
+          [label]="'save' | translate"
+        ></button>
+        <button
+          pButton
+          icon="pi pi-ban"
+          type="button"
+          [label]="'cancel' | translate"
+          (click)="showForm = false"
+        ></button>
+      </div>
+    </div>
+  </div>
+</ng-template>
