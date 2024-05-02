@@ -32,7 +32,8 @@ export class ProposalEvaluationComponent implements OnInit {
   search: boolean = false;
   filter: ProposalEvaluationFilter;
 
-  proposalList: IProposal[] = [];
+  // proposalList: IProposal[] = [];
+  proposalList: any[] = []; // por enquanto
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -50,7 +51,9 @@ export class ProposalEvaluationComponent implements OnInit {
   async ngOnInit() {
     await this.loadConferences();
     this.populateSearchFilterOptions();
-    this.loadProposals();
+    // this.loadProposals();
+
+    await this.testFetchProposals();
   }
 
   async loadConferences() {
@@ -66,6 +69,15 @@ export class ProposalEvaluationComponent implements OnInit {
         this.buildBreadcrumb();
         this.configureActionBar();
       });
+  }
+
+  async testFetchProposals() {
+    // console.log(this.conferenceSelect)
+    const conferenceId = this.conferenceSelect.id
+
+    await this.proposalEvaluationService
+      .testFetchProposals(conferenceId)
+      .then((data) => this.proposalList = data);
   }
 
   populateSearchFilterOptions() {
@@ -95,10 +107,11 @@ export class ProposalEvaluationComponent implements OnInit {
       this.proposalEvaluationService.getProposalListForEvaluation();
   }
 
-  selectOtherConference(conference: Conference) {
+  async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     sessionStorage.setItem("selectedConference", JSON.stringify(conference));
     this.buildBreadcrumb();
+    await this.testFetchProposals();
     this.showSelectConference = false;
   }
 

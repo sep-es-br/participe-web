@@ -183,6 +183,11 @@ export class ProposalEvaluationService {
     ];
   }
 
+  public testFetchProposals(conferenceId: number): Promise<any[]> {
+    const url = `http://localhost:8080/participe/proposal-evaluation?conferenceId=${conferenceId}`;
+    return this._http.get<any[]>(url, { headers: Common.buildHeaders() }).toPromise<any[]>();
+  }
+
   // public getProposalListForEvaluation() {
   //   // const url = "http://localhost:8080/participe/comments"; -> NÃO É ISSO
   //   return this._http.get(url, { headers: Common.buildHeaders() }).toPromise();

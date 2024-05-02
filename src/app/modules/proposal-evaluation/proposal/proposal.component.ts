@@ -9,7 +9,8 @@ import { IProposal } from "@app/shared/interface/IProposal";
   styleUrl: "./proposal.component.scss",
 })
 export class ProposalComponent {
-  @Input("proposalData") proposal: IProposal;
+  // @Input("proposalData") proposal: IProposal;
+  @Input("proposalData") proposal: any; // por enquanto
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
