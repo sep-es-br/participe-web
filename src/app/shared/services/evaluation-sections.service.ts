@@ -44,10 +44,44 @@ export class EvaluationSectionsService {
     },
   ];
 
+  private entityList = [
+    "SECOM - Superintendência Estadual de Comunicação Social",
+    "SCM - Secretaria da Casa Militar",
+    "SCV - Secretaria da Casa Civil",
+    "PGE - Procuradoria Geral do Estado",
+    "SEAG - Secretaria da Agricultura, Abastecimento, Aquicultura e Pesca",
+    "SEAMA - Secretaria do Meio Ambiente e Recursos Hídricos",
+  ];
+
+  private sectionList = [
+    "ASSESP - Assessoria Especial",
+    "GPO - Grupo de Planejamento e Orçamento",
+    "GETAD - Gerência Técnico Administrativa",
+    "SUBEPP - Subsecretaria de Estado de Planejamento e Projetos",
+  ];
+
+  private serverList = [
+    "CARLOS HENRIQUE DE ALMEIDA ESTAGIARIO JOVENS VALORES - NIVEL SUPERIOR - 20HS - CGTI - SEP - GOVES",
+    "MAX EMANUEL FLORES EVANGELISTA CALDERARO CHEFE GRUPO DE PLANEJAMENTO E ORCAMENTO QCE-05 - GPO - SEP - GOVES",
+    "FABIANA DO ESPIRITO SANTO CARDOSO CHEFE GRUPO RECURSOS HUMANOS QCE-05 - GRH - SEP - GOVES",
+  ];
+
   constructor(private _http: HttpClient) {}
 
   public getEvaluationSectionsMock() {
     return this.data;
+  }
+
+  public getEntityListMock() {
+    return this.entityList;
+  }
+
+  public getSectionListMock() {
+    return this.sectionList;
+  }
+
+  public getServerListMock() {
+    return this.serverList;
   }
 
   private getEvaluationSections(): Promise<any> {
