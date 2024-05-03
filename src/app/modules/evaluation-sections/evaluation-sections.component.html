@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="card card-w-title">
-        <ng-container *ngIf="!showForm; else evaluatorsForm">
+        <ng-container *ngIf="!showForm">
           <div class="row">
             <div class="col-5">
               <button
@@ -22,7 +22,7 @@
             </div>
           </div>
           <ng-container *ngIf="search">
-            <div class="row mt-3">
+            <div class="row my-3">
               <p>search: {{ search }}</p>
             </div>
           </ng-container>
@@ -76,44 +76,69 @@
             </div>
           </div>
         </ng-container>
+        <ng-container *ngIf="showForm">
+          <div class="row">
+            <div class="col-6">
+              <div class="col-12">
+                <span class="fw-bold">Avaliadores</span>
+              </div>
+              <form
+                [formGroup]="evaluatorsForm"
+                (submit)="saveEvaluatorsForm()"
+              >
+                <div class="col-12">
+                  <label for="entity">Orgao</label>
+                  <p-dropdown
+                    [options]="entityList"
+                    formControlName="entity"
+                    (onChange)="entityChanged($event)"
+                    styleClass="d-flex form-control"
+                    
+                  ></p-dropdown>
+                </div>
+                <div class="col-12">
+                  <label for="sections">Setor</label>
+                  <p-multiSelect
+                    [options]="sectionList"
+                    formControlName="sections"
+                    display="chip"
+                    showClear="true"
+                    (onChange)="sectionsChanged($event)"
+                    styleClass="d-flex form-control"
+                    class="ng-dirty ng-invalid"
+                  ></p-multiSelect>
+                </div>
+                <div class="col-12">
+                  <label for="servers">Servidor</label>
+                  <p-multiSelect
+                    [options]="serverList"
+                    formControlName="servers"
+                    display="chip"
+                    showClear="true"
+                    styleClass="d-flex form-control"
+                    class="ng-dirty ng-invalid"
+                  ></p-multiSelect>
+                </div>
+                <div class="col-12 form-actions">
+                  <button
+                    pButton
+                    icon="pi pi-check"
+                    type="submit"
+                    [label]="'save' | translate"
+                  ></button>
+                  <button
+                    pButton
+                    icon="pi pi-ban"
+                    type="button"
+                    [label]="'cancel' | translate"
+                    (click)="showForm = false"
+                  ></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </div>
 </app-template>
-
-<ng-template #evaluatorsForm let-data>
-  <div class="row">
-    <div class="col-6">
-      <div class="col-12">
-        <span class="fw-bold">Avaliadores</span>
-      </div>
-      <div class="col-12">
-        <label for="">Orgao</label>
-        <p-dropdown styleClass="d-flex form-control"></p-dropdown>
-      </div>
-      <div class="col-12">
-        <label for="">Setor</label>
-        <p-dropdown styleClass="d-flex form-control"></p-dropdown>
-      </div>
-      <div class="col-12">
-        <label for="">Servidor</label>
-        <p-dropdown styleClass="d-flex form-control"></p-dropdown>
-      </div>
-      <div class="col-12 form-actions">
-        <button
-          pButton
-          icon="pi pi-check"
-          type="submit"
-          [label]="'save' | translate"
-        ></button>
-        <button
-          pButton
-          icon="pi pi-ban"
-          type="button"
-          [label]="'cancel' | translate"
-          (click)="showForm = false"
-        ></button>
-      </div>
-    </div>
-  </div>
-</ng-template>
