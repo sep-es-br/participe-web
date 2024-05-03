@@ -17,6 +17,7 @@ export class CitizenModel {
   active?: boolean;
   // view
   count: number;
+  authName?: string[]
 }
 
 
