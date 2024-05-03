@@ -41,6 +41,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   loading: boolean = false;
   idCitizen: number = 0;
   authenticationsCitizen: CitizenAuthenticationModel[] = [];
+  authName:string[];
   labelLocality: string;
   status: SelectItem[] = [
     { value: '', label: 'Todos' },
@@ -359,6 +360,12 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
       if (success) {
         this.setForm(data);
+        this.authName = data.authName || [];
+        data.autentication.forEach(({ loginName }) => {
+           if(loginName === "Participe"){
+            this.authName.unshift(loginName)
+           }
+          });
         this.authenticationsCitizen = data.autentication || [];
       }
     } else {
@@ -404,9 +411,9 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   get getAuthenticationsFromCitizen(): string {
     let container = '';
     if (this.idCitizen > 0) {
-      this.authenticationsCitizen.forEach(({ loginName }) => {
-        container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
-      });
+        this.authName.forEach((name) => {
+          container += `<img class="authentication-icon" title="${name}" src="${this.authSrv.getAuthenticationIcon(name)}"  alt=""/>`;
+        });
     }
     return container;
   }
