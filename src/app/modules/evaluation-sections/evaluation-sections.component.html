@@ -16,14 +16,56 @@
             </div>
             <div class="col-2"></div>
             <div class="col-5 d-flex justify-content-end align-items-center">
-              <a class="pointer" (click)="search = !search">{{
+              <a class="pointer" (click)="showSearchForm()">{{
                 (search ? "hide" : "search") | translate
               }}</a>
             </div>
           </div>
           <ng-container *ngIf="search">
             <div class="row my-3">
-              <p>search: {{ search }}</p>
+              <form [formGroup]="searchForm" (submit)="searchEvaluators()">
+                <div
+                  class="d-flex flex-row justify-content-between align-items-end"
+                >
+                  <div class="col-3">
+                    <label for="searchEntity">Órgão</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="entity"
+                      pInputText
+                    />
+                  </div>
+                  <div class="col-3">
+                    <label for="searchSection">Setor</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="section"
+                      pInputText
+                    />
+                  </div>
+                  <div class="col-3">
+                    <label for="searchServer">Servidor</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="server"
+                      pInputText
+                    />
+                  </div>
+                  <div class="col-3 d-inline-flex justify-content-center">
+                    <button
+                      pButton
+                      class=""
+                      [icon]="loadingIcon('pi pi-search')"
+                      [disabled]="loading"
+                      type="submit"
+                      [label]="'search' | translate"
+                    ></button>
+                  </div>
+                </div>
+              </form>
             </div>
           </ng-container>
           <div class="row">
@@ -93,7 +135,7 @@
                     formControlName="entity"
                     (onChange)="entityChanged($event)"
                     styleClass="d-flex form-control"
-                    
+                    class="ng-dirty ng-invalid"
                   ></p-dropdown>
                 </div>
                 <div class="col-12">
