@@ -54,7 +54,7 @@ export abstract class BasePageList<T> {
     if (typeof (this.mapElementHandle) === 'function' && _.size(this.data) > 0) {
       this.data.map(this.mapElementHandle);
     }
-
+    console.log(this.pageSize)
   }
 
   toggleSearch() {
@@ -76,11 +76,14 @@ export abstract class BasePageList<T> {
   }
 
   get getCurrentTotalOfRecords() {
-    // let total = this.pageSize * (this.page + 1);
-    // if (total > this.totalRecords) {
-    //   const remainingRecods = this.totalRecords - total;
-    //   total = total - remainingRecods;
-    // }
-    return this.pageSize * (this.page + 1);
+    console.log(this.pageSize)
+    let total = this.pageState.rows * (this.pageState.page + 1);
+    if (total > this.totalRecords) {
+      const remainingRecods = total - this.totalRecords;
+      total = total - remainingRecods;
+    }
+
+    
+    return total;
   }
 }
