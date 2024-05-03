@@ -361,11 +361,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       if (success) {
         this.setForm(data);
         this.authName = data.authName || [];
-        data.autentication.forEach(({ loginName }) => {
-           if(loginName === "Participe"){
-            this.authName.unshift(loginName)
-           }
-          });
         this.authenticationsCitizen = data.autentication || [];
       }
     } else {
