@@ -46,19 +46,20 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     { value: '', label: 'Todos' },
     { value: true, label: 'Ativo' },
     { value: false, label: 'Inativo' }];
-  pageSizeOptions: SelectItem[] = [
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 30, label: '30' },
-    { value: 50, label: '50' },
-    { value: 100, label: '100' },
-    { value: 500, label: '500' },
+  pageSizeOptions: number[] = [
+    10 ,
+    20 ,
+    30 ,
+    50 ,
+    100 ,
+    500 ,
   ];
   showSelectConference: boolean = false;
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
   sort: string = "apoc.text.clean(name)";
   search: any = { status: '', autentication: ''};
+  dataSearch: any = { status: '', autentication: ''};
   selectedLocalities: [];
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
@@ -150,6 +151,12 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async searchHandle() {
 
 
+    this.search.name = this.dataSearch.name
+    this.search.email = this.dataSearch.email
+    this.search.autentication = this.dataSearch.autentication
+    this.search.status = this.dataSearch.status
+    this.search.locality = this.dataSearch.locality
+
     this.pageState = {
       first: 0,
       page: 0,
@@ -175,12 +182,15 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async citizenLoadData(event?: PaginatorState){
 
+    
     if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == 'Todas as Audiências Públicas')) {
-        await this.loadConferencesActives();
+      await this.loadConferencesActives();
     }
-
+    
     this.search.conferenceId = this.conferenceSelect.id;
-    await this.loadData(event);
+    
+      await this.loadData(event);
+    
     this.buildBreadcrumb();
     this.configureActionBar();
   }
@@ -443,6 +453,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       {emitEvent: false});
   }
   setSearchLocality(){
-    this.search.locality = this.selectedLocalities.map(item => item['value'] );
+    this.dataSearch.locality = this.selectedLocalities.map(item => item['value'] );
   }
 }
