@@ -46,7 +46,7 @@
                 <div class="justify-content-end d-flex">
                     <button pButton icon="pi pi-search" class="me-2" type="button" (click)="searchHandle()" [label]="'search'|translate"></button>
                     <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
-                      (click)="search = { status: '', autentication: '' , conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
+                      (click)="dataSearch = { status: '', autentication: '' , conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
                 </div>
               </div>
             </div>
