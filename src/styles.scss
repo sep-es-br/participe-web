@@ -69,7 +69,18 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
     border-left: 1px solid #e0e0e0 !important;
     border-right: 1px solid #e0e0e0 !important;
   }
+}
 
+.data-column table {
+  border-bottom: 1px solid #e0e0e0 !important;
+  th:last-child{
+    width: 20% !important;
+  }
+  td {
+    border: 0 !important;
+    border-left: 1px solid #e0e0e0 !important;
+    border-right: 1px solid #e0e0e0 !important;
+  }
 }
 
 .language-container {
