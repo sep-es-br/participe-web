@@ -10,10 +10,13 @@ import { EvaluationSectionsService } from "@app/shared/services/evaluation-secti
   styleUrl: "./evaluation-sections.component.scss",
 })
 export class EvaluationSectionsComponent implements OnInit, OnDestroy {
+  loading = false;
+
   search = false;
   showForm = false;
 
   evaluatorsForm: FormGroup;
+  searchForm: FormGroup;
 
   data: any[] = [];
 
@@ -37,6 +40,11 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
+  public showSearchForm() {
+    this.search = !this.search;
+    this.initSearchForm();
+  }
+
   public showCreateEvaluator(data?: any) {
     console.log("create");
     this.showForm = true;
@@ -56,6 +64,18 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
   public delete(data: any) {
     console.log("delete");
     console.log(data);
+  }
+
+  public initSearchForm() {
+    this.searchForm = new FormGroup({
+      entity: new FormControl(""),
+      section: new FormControl(""),
+      server: new FormControl(""),
+    });
+  }
+
+  public loadingIcon(icon = "pi pi-check") {
+    return this.loading ? "pi pi-spin pi-spinner" : icon;
   }
 
   public initEvaluatorsForm(data?: any) {
@@ -84,6 +104,10 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
     console.log(event.value);
     this.getServerList();
+  }
+
+  public searchEvaluators() {
+    console.log(this.searchForm.value);
   }
 
   public saveEvaluatorsForm() {
