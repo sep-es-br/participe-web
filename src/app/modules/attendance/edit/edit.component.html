@@ -25,8 +25,8 @@
           <div class="col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
-              <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
-                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
+              <!-- <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
+                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/> -->
               <img *ngFor="let auth of authName" [src]="authSrv.getAuthenticationIcon(auth)"
                    [title]="auth" [alt]="auth"/>
             </div>
