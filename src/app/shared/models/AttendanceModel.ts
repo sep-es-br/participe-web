@@ -233,6 +233,7 @@ export class AttendanceModel {
       });
     }
     this.isSearching = false;
+    
   }
 
   async loadNextPageRegister() {
@@ -358,7 +359,7 @@ export class AttendanceModel {
     }
 
     await this.setActionBar();
-    await this.searchByName();
+    // await this.searchByName();
     this.showSelectMeeting = false;
   }
 
