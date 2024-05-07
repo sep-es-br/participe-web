@@ -139,7 +139,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         detail: this.translate.instant('attendance.error.failedToCheckIn')
       });
     }
-
+    this.lastPage = true
     attendee.checkingIn = false;
   }
 
@@ -167,6 +167,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
     this.cleanListAtendees();
+    this.lastPage = true
     return success;
   }
 
