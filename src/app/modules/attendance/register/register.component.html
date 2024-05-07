@@ -20,10 +20,10 @@
           <div class="col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
-              <img *ngIf="newAccount || (form.get('resetPassword').value && !citizenHasNativeAuth)"
-                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
-              <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)"
-                   [title]="auth.loginName" [alt]="auth.loginName"/>
+              <!-- <img *ngIf="newAccount || (form.get('resetPassword').value && !citizenHasNativeAuth)"
+                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/> -->
+              <img *ngFor="let auth of authName" [src]="authSrv.getAuthenticationIcon(auth)"
+                   [title]="auth" [alt]="auth"/>
             </div>
           </div>
           <div class="col-12">
@@ -46,7 +46,7 @@
                         (click)="toggleNewAccount()"></button>
               </ng-container>
               <ng-template #attendeeSelected>
-                <button pButton icon="pi pi-check" type="button" class="me-2" (click)="checkIn(selectedAttende)"
+                <button pButton icon="pi pi-check" type="button" [disabled]="form.invalid" class="me-2" (click)="checkIn(selectedAttende)"
                         [label]="'attendance.registerAttendance' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                         (click)="toggleSelectedAttendee()"></button>

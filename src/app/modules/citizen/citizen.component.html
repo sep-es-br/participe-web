@@ -19,15 +19,15 @@
             <div class="row ui-fluid">
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{'citizen.name'|translate}}</label>
-                <input pInputText class="form-control" [(ngModel)]="search.name">
+                <input pInputText class="form-control" [(ngModel)]="dataSearch.name">
               </div>
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{'citizen.mail'|translate}}</label>
-                <input pInputText class="form-control" [(ngModel)]="search.email">
+                <input pInputText class="form-control" [(ngModel)]="dataSearch.email">
               </div>
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{'citizen.authentication'|translate}}</label>
-                <p-dropdown [styleClass]="'d-flex form-control'" [options]="authentications" [(ngModel)]="search.autentication"
+                <p-dropdown [styleClass]="'d-flex form-control'" [options]="authentications" [(ngModel)]="dataSearch.autentication"
                   [placeholder]="'placeholder.select'|translate"></p-dropdown>
               </div>
               <div class="col-12 col-md-6 col-lg-3">
@@ -39,20 +39,20 @@
               </div>
               <div class="col-12 col-md-6 col-lg-3">
                 <label>{{'citizen.status'|translate}}</label>
-                <p-dropdown [styleClass]="'d-flex form-control'" [options]="status" [(ngModel)]="search.status"
+                <p-dropdown [styleClass]="'d-flex form-control'" [options]="status" [(ngModel)]="dataSearch.status"
                   [placeholder]="'placeholder.select'|translate"></p-dropdown>
               </div>
               <div class=" col-12 col-md-6 col-lg-9">
                 <div class="justify-content-end d-flex">
                     <button pButton icon="pi pi-search" class="me-2" type="button" (click)="searchHandle()" [label]="'search'|translate"></button>
                     <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
-                      (click)="search = { conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
+                      (click)="dataSearch = { status: '', autentication: '' , conferenceId: conferenceSelect?.id }; searchHandle(); selectedLocalities = [];"></button>
                 </div>
               </div>
             </div>
           </div>
-          <p-table [columns]="cols" [value]="data" [lazy]="true" [lazyLoadOnInit]="true" 
-            (onLazyLoad)="citizenLoadData($event)" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords">
+          <p-table [columns]="cols" [value]="data" [rows]="pageSize" [totalRecords]="totalRecords">
+            
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th [class]="col.styleClass" *ngFor="let col of columns" [pSortableColumn]="col.field"
@@ -77,14 +77,10 @@
               </tr>
             </ng-template>
           </p-table>
+          <p-paginator [rows]="pageState.rows" (onPageChange)="citizenLoadData($event)" [first]="pageState.first"  [totalRecords]="totalRecords" [rowsPerPageOptions]="pageSizeOptions" ></p-paginator>
           <section class="pagesize-section">
             <div class="left-side">
-              {{ (pageSize * page) + 1 }}-{{ getCurrentTotalOfRecords }} {{ 'of' | translate }} {{ totalRecords }}
-            </div>
-            <div class="right-side">
-              <label>{{'rowPerPage'|translate}}</label>
-              <p-dropdown [options]="pageSizeOptions" [(ngModel)]="pageSize"
-                [placeholder]="'placeholder.select'|translate" (ngModelChange)="citizenLoadData()"></p-dropdown>
+              {{ (pageState.rows * pageState.page) + 1 }}-{{ getCurrentTotalOfRecords }} {{ 'of' | translate }} {{ totalRecords }}
             </div>
           </section>
         </section>
@@ -105,7 +101,7 @@
               <label>Autenticação</label>
               <div class="container">
                 <div class="icons-container">
-                  <img *ngIf="(idCitizen === 0 || (!citizenHasNativeAuth && getFormValue('ckResetPassword')))" src="../../../assets/layout/images/icons/participe.svg"  alt=""/>
+                  <!-- <img *ngIf="(idCitizen === 0 || (!citizenHasNativeAuth && getFormValue('ckResetPassword')))" src="../../../assets/layout/images/icons/participe.svg"  alt=""/> -->
                   <div [innerHTML]="getAuthenticationsFromCitizen"></div>
                 </div>
                

@@ -22,6 +22,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { LocalityService } from '@app/shared/services/locality.service';
 import { StoreKeys } from '@app/shared/constants';
+import { Router } from '@angular/router';
+import { PaginatorState } from 'primeng/paginator';
 
 @Component({
   selector: 'app-citizen',
@@ -39,24 +41,26 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   loading: boolean = false;
   idCitizen: number = 0;
   authenticationsCitizen: CitizenAuthenticationModel[] = [];
+  authName:string[];
   labelLocality: string;
   status: SelectItem[] = [
     { value: '', label: 'Todos' },
     { value: true, label: 'Ativo' },
     { value: false, label: 'Inativo' }];
-  pageSizeOptions: SelectItem[] = [
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 30, label: '30' },
-    { value: 50, label: '50' },
-    { value: 100, label: '100' },
-    { value: 500, label: '500' },
+  pageSizeOptions: number[] = [
+    10 ,
+    20 ,
+    30 ,
+    50 ,
+    100 ,
+    500 ,
   ];
   showSelectConference: boolean = false;
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
   sort: string = "apoc.text.clean(name)";
   search: any = { status: '', autentication: ''};
+  dataSearch: any = { status: '', autentication: ''};
   selectedLocalities: [];
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
@@ -66,7 +70,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     {
       field: 'autentication', header: 'citizen.authentication', styleClass: 'col-authentication', handleView: (value, row) => {
         let container = '';
-        row.autentication.filter(a => a.acesses > 0).forEach(({ loginName }) => {
+        row.autenticationIcon.filter(a => a.acesses > 0).forEach(({ loginName }) => {
           container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
         });
         return container;
@@ -74,17 +78,17 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     },
     { field: 'name', header: 'citizen.name', sorteable: true },
     { field: 'email', header: 'citizen.mail', sorteable: true },
+    { field: 'localityName', header: 'citizen.locality', sorteable: false },
     { field: 'conferencesName', header: 'citizen.conferencia', handleView: (value, row) => {
       return !!row.conferencesName ? row.conferencesName.join('\n') : '';
     } },
-    { field: 'localityName', header: 'citizen.locality', sorteable: false },
     {
       field: 'autentication', header: 'citizen.attendance_count', styleClass: 'col-attendance_count', handleView: (value, row) => {
         return row.autentication.reduce((accumulate, auth) => (accumulate + auth.acesses), 0);
       }
     },
-    
   ];
+  pageState: PaginatorState;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -95,9 +99,15 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     public authSrv: AuthService,
     private moderationSrv: ModerationService,
     private actionbarSrv: ActionBarService,
-    public localitySrv: LocalityService
+    public localitySrv: LocalityService,
+    private router: Router
   ) {
     super(citizenSrv);
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+   }
     this.allConference.id = null;
     this.allConference.name = 'Todas as Audiências Públicas';
   }
@@ -111,7 +121,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
     this.authentications.unshift({label: 'Todos', value: '' })
     await this.prepareScreen();
-    console.log(this.search)
   }
 
   configureActionBar() {
@@ -129,51 +138,73 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     this.conferenceSelect = conference;
     this.showSelectConference = false;
     this.search.conferenceId = this.conferenceSelect.id;
-    await this.loadData();
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+    }
+    await this.loadData(this.pageState);
     this.buildBreadcrumb();
     await this.loadLocalitiesOptions();
     this.configureActionBar();
   }
 
   async searchHandle() {
-    await this.loadData();
+
+
+    this.search.name = this.dataSearch.name
+    this.search.email = this.dataSearch.email
+    this.search.autentication = this.dataSearch.autentication
+    this.search.status = this.dataSearch.status
+    this.search.locality = this.dataSearch.locality
+
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+    }
+
+    await this.loadData(this.pageState);
+
     this.configureActionBar();
   }
 
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     this.showSelectConference = false;
-    await this.prepareScreen();
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+    }
+    await this.prepareScreen(this.pageState);
   }
 
-  async citizenLoadData(event?: LazyLoadEvent){
-    if (this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) {
+
+  async citizenLoadData(event?: PaginatorState){
+
+    
+    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == 'Todas as Audiências Públicas')) {
       await this.loadConferencesActives();
     }
+    
     this.search.conferenceId = this.conferenceSelect.id;
-    if (!this.conferenceSelect.id) {
-      
-      return this.messageService.add({ severity: 'warn', detail: this.translateSrv.instant('empty.conference') });
-    } else {
-      
+    
       await this.loadData(event);
-    }
+    
+    this.buildBreadcrumb();
+    this.configureActionBar();
   }
 
-  async prepareScreen() {
+  async prepareScreen(event?: PaginatorState) {
 
-
-    if (this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) {
+    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == 'Todas as Audiências Públicas')) {
       await this.loadConferencesActives();
     }
     this.search.conferenceId = this.conferenceSelect.id;
-    if (!this.conferenceSelect.id) {
-      
-      return this.messageService.add({ severity: 'warn', detail: this.translateSrv.instant('empty.conference') });
-    } else {
-      
-      await this.loadData();
-    }
+
+    await this.loadData(event);
+
     this.buildBreadcrumb();
     await this.loadLocalitiesOptions();
     this.configureActionBar();
@@ -263,6 +294,25 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async save(formData) {
+    try {
+      if(!this.conferenceSelect.id){
+        const data = await this.moderationSrv.getConferencesActive(false);
+        this.conferencesActives = data;
+        if (data.length > 0) {
+          if (data.filter(conf => conf.isActive).length === 0) {
+            this.conferenceSelect = data[0];
+          } else {
+            this.conferenceSelect = data.filter(conf => conf.isActive)[0];
+          }
+        }
+      }
+      } catch (error) {
+        console.error(error);
+        this.messageService.add({
+          severity: 'error', summary: 'Erro',
+          detail: this.translateSrv.instant('citizen.error.fetch.conferenceActive')
+        });
+      }
     if (!this.isValidForm(formData)) { return; }
     const { cpf, mail, password, typeAuthentication, locality, name, telephone, resetPassword, statusIsActive, receiveInformational }
     = formData.value;
@@ -284,6 +334,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       resetPassword,
       active: statusIsActive
     };
+
     await this.citizenSrv.save(sender as any, this.idCitizen);
     this.messageService.add({
       severity: 'success',
@@ -306,8 +357,10 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       const { success, data } = await this.citizenSrv.GetById(citizen.id, {
         search: { conferenceId: _.get(this.conferenceSelect, 'id', 0) }
       });
+
       if (success) {
         this.setForm(data);
+        this.authName = data.authName || [];
         this.authenticationsCitizen = data.autentication || [];
       }
     } else {
@@ -353,9 +406,9 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   get getAuthenticationsFromCitizen(): string {
     let container = '';
     if (this.idCitizen > 0) {
-      this.authenticationsCitizen.forEach(({ loginName }) => {
-        container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
-      });
+        this.authName.forEach((name) => {
+          container += `<img class="authentication-icon" title="${name}" src="${this.authSrv.getAuthenticationIcon(name)}"  alt=""/>`;
+        });
     }
     return container;
   }
@@ -402,6 +455,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       {emitEvent: false});
   }
   setSearchLocality(){
-    this.search.locality = this.selectedLocalities.map(item => item['value'] );
+    this.dataSearch.locality = this.selectedLocalities.map(item => item['value'] );
   }
 }

@@ -57,6 +57,7 @@ export class AttendanceModel {
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
   citizenAutentications: CitizenAuthenticationModel[] = [];
+  authName:string[]
 
   selectedCounty: Locality;
   localities: Locality[];
@@ -153,6 +154,7 @@ export class AttendanceModel {
         phone.setValue(data.telephone);
         this.selectedAttende.password = data.password;
         this.citizenAutentications = data.autentication || [];
+        this.authName = data.authName || [];
       }
     } catch (error) {
       this.messageSrv.add({
@@ -231,6 +233,7 @@ export class AttendanceModel {
       });
     }
     this.isSearching = false;
+    
   }
 
   async loadNextPageRegister() {
@@ -356,7 +359,7 @@ export class AttendanceModel {
     }
 
     await this.setActionBar();
-    await this.searchByName();
+    // await this.searchByName();
     this.showSelectMeeting = false;
   }
 
