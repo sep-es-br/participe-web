@@ -41,7 +41,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   loading: boolean = false;
   idCitizen: number = 0;
   authenticationsCitizen: CitizenAuthenticationModel[] = [];
-  authName:string[];
+  authName:string[] =[];
   labelLocality: string;
   status: SelectItem[] = [
     { value: '', label: 'Todos' },
