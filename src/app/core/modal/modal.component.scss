@@ -4,6 +4,7 @@ app-modal {
     /* modals are hidden by default */
     display: none;
 
+    width:fit-content;
     .app-modal {
 
         /* modal container fixed across whole screen */
@@ -13,7 +14,7 @@ app-modal {
         right: 0;
         bottom: 0;
         left: 50%;
-        width: 95%;
+        width: 50%;
         height: fit-content;
         max-height: 95%;
 
@@ -60,6 +61,12 @@ app-modal {
 
         /* z-index must be below .app-modal and above everything else  */
         z-index: 900;
+    }
+
+    @media screen and (max-width: 768px){
+        .app-modal{
+            width: 95%;
+        }
     }
 }
 
