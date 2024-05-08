@@ -80,7 +80,7 @@
       </div>
       <app-modal id="QRCodeReader"  [modalData]="modalData">
         <div class="row"  >
-          <div class="col-md-6 col-12 text-center">
+          <div class="col-12 col-md-6  text-center">
             <!-- <label>Dispositivos</label> -->
             <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
               <!-- <option value="" [selected]="!deviceCurrent">{{ 'qrcode.noDevice' | translate }}</option> -->
@@ -215,13 +215,16 @@
 </ng-template>
 
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
-          [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
   <div class="label">{{ 'administration.conference' | translate }}</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference"
-              optionLabel="name"></p-dropdown>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
   <div class="label">{{ 'meeting' | translate }}</div>
-  <p-dropdown [options]="optionsMeeting" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-  <button pButton class="change-button" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt"
-          (click)="setCurrentMeeting()"></button>
+  <div class="form-group">
+    <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'"  [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+  </div>
+  <div class=" col-12 col-md-6 col-lg-3 m-auto">
+    <div class="d-grid gap-2 mt-3">
+      <button pButton class=" btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+    </div>
+  </div>
 </p-dialog>

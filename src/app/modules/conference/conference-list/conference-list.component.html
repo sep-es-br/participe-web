@@ -47,8 +47,11 @@
               </div>
             </form>
           </div>
-          <p-table [value]="conferences" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
+          <p-table [value]="conferences" responsiveLayout="stack" styleClass="p-datatable-striped"  responsive="true" selectionMode="single" dataKey="vin" [paginator]="true" [rows]="10"
                    paginatorPosition="both">
+            <ng-template pTemplate="caption">
+                Consulta
+            </ng-template>
             <ng-template pTemplate="header">
               <tr>
                 <th>{{'name'|translate}}</th>
@@ -61,27 +64,46 @@
             <ng-template pTemplate="body" let-conference>
               <tr>
                 <td>
-                  <span style="vertical-align: middle">{{conference.name}}</span>
+                  <div class="row p-1">
+                    <div class="p-column-title">{{'name'|translate}}</div>
+                    <div class="">{{conference.name}}</div>
+                  </div>
                 </td>
                 <td>
-                  <span style="vertical-align: middle">{{conference.plan?.name}}</span>
+                  <div class="row">
+                    <div class="p-column-title">{{'plan.label'|translate}}</div>
+                    <div style="vertical-align: middle">{{conference.plan?.name}}</div>
+                  </div>
                 </td>
                 <td>
-                  <span style="vertical-align: middle">{{conference.beginDate?.toLocaleString('pt-BR')}}</span>
+                  <div class="row">
+                    <div class="p-column-title">{{'date.start'|translate}}</div>
+                    <div style="vertical-align: middle">{{conference.beginDate?.toLocaleString('pt-BR')}}</div>
+                  </div>
                 </td>
                 <td>
-                  <span style="vertical-align: middle">{{conference.endDate?.toLocaleString('pt-BR')}}</span>
+                  <div class="row">
+                    <div class="p-column-title">{{'date.end'|translate}}</div>
+                    <div style="vertical-align: middle">{{conference.endDate?.toLocaleString('pt-BR')}}</div>
+                  </div>
                 </td>
-                <td class="column-actions">
-                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" (click)="handleEditConference(conference)">
-                    <i class="pi pi-pencil" ></i>
-                  </button>
-                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" [routerLink]="goToMetting(conference)">
-                    <i class="pi pi-users" ></i>
-                  </button>
-                  <button pButton class="ui-button btn-icon" type="button" (click)="delete(conference)" [disabled]="disableBtnDelete(conference)">
-                    <i class="pi pi-trash" ></i>
-                  </button>
+                <td class="justify-content-center">
+                  <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fa-solid fa-ellipsis"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item pointer" (click)="handleEditConference(conference)"><span class="icon" ><i class="fa fa-pencil" ></i></span>{{'conference.actions.edit' | translate}}</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item pointer" [routerLink]="goToMetting(conference)"><span class="icon" ><i class="fa fa-users" ></i></span>{{'conference.actions.meeting' | translate}}</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item pointer" (click)="delete(conference)"  ><span class="icon" ><i class="fa fa-trash" ></i></span>{{'conference.actions.delete' | translate}}</a>
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             </ng-template>

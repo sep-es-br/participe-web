@@ -105,3 +105,7 @@ form {
     padding-left: 0.5em !important;
   }
 }
+
+.dropdown-toggle::after {
+  display: none;
+}
