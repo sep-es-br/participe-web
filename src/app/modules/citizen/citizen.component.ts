@@ -184,7 +184,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async citizenLoadData(event?: PaginatorState){
 
     
-    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == 'Todas as Audiências Públicas')) {
+    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
       await this.loadConferencesActives();
     }
     
@@ -198,7 +198,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async prepareScreen(event?: PaginatorState) {
 
-    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == 'Todas as Audiências Públicas')) {
+    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
       await this.loadConferencesActives();
     }
     this.search.conferenceId = this.conferenceSelect.id;

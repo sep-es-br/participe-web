@@ -254,6 +254,11 @@
 				"card":"Caixa",
 				"cardAccent":"Caixa em destaque"
 			}
+		},
+		"actions": {
+			"edit":"Editar Consulta",
+			"delete":"Excluir Consulta",
+			"meeting":"Visualizar Reuniões"
 		}
 	},
 	"dashboard": {
