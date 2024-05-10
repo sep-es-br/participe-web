@@ -293,6 +293,24 @@ ul.p-autocomplete-multiple-container{
   padding: 0 !important;
 }
 
+.p-dialog{
+  width: 60% !important;
+  max-height: 95% !important;
+  z-index: 1000 !important;
+  overflow: auto !important;
+  .p-dialog-content{
+    overflow: unset !important;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+  .p-dialog{
+    width: 95% !important;
+  }
+  
+}
+
 .p-dialog-content{
   overflow: unset !important;
 }
@@ -311,4 +329,16 @@ ul.p-autocomplete-multiple-container{
   i{
     font-size: 20px;
   }
+}
+
+.p-column-title{
+  font-weight: 700;
+  display: none;
+}
+
+@media screen and (max-width: 640px){
+  .p-column-title{
+    display: block;
+  }
+  
 }

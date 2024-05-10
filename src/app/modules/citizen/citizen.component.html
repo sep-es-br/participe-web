@@ -51,7 +51,7 @@
               </div>
             </div>
           </div>
-          <p-table [columns]="cols" [value]="data" [rows]="pageSize" [totalRecords]="totalRecords">
+          <p-table class="table-striped" [columns]="cols" [value]="data" responsiveLayout="stack" [rows]="pageSize" [totalRecords]="totalRecords">
             
             <ng-template pTemplate="header" let-columns>
               <tr>
@@ -66,9 +66,12 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr [class.citizen-inactive]="!rowData.active" [pTooltip]="rowData.active ? '' : ('status.inactiveUser' | translate )"
                 tooltipPosition="bottom">
-                <td [class]="col.styleClass" *ngFor="let col of columns">
-                  <!-- <span class="ui-column-title">{{ col.header | translate }}</span> -->
-                  <span class="table-field" [innerHTML]="getValue(col.field, rowData, col.handleView)"></span>
+                <td *ngFor="let col of columns">
+                  <div class="row">
+                    <div class="p-column-title">{{ col.header | translate }}</div>
+                    <div class="table-field" [class]="col.styleClass" [innerHTML]="getValue(col.field, rowData, col.handleView)"></div>
+                  </div>
+
                 </td>
                 <td class="column-actions">
                   <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
