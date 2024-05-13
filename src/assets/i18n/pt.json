@@ -4,12 +4,12 @@
 		"conference": "Consulta",
 		"conference-name": "Consulta: {{name}}",
 		"domain": "Domínio",
+		"evaluation-sections": "Setores Avaliadores",
 		"label": "Administração",
 		"moderation": "Moderação",
 		"plan": "Plano",
 		"presential-meeting": "Reuniões",
-		"structure": "Estrutura",
-		"evaluation-sections": "Setores Avaliadores"
+		"structure": "Estrutura"
 	},
 	"all": "Todos",
 	"begin": "Início",
@@ -356,6 +356,18 @@
 		"field-must-contain-only-letters": "O campo deve conter apenas letras"
 	},
 	"error": "Erro",
+	"evaluation-section": {
+		"organization": "Órgão",
+		"section": "Setor",
+		"sections": "Setores",
+		"server": "Servidor",
+		"servers": "Servidores",
+		"inserted": "Novo Setor Avaliador {{name}} inserido",
+		"updated": "Setor Avaliador {{name}} atualizado",
+		"error": {
+			"saving": "Erro ao salvar o setor avaliador"
+		}
+	},
 	"exists": {
 		"name": "Esse nome já existe"
 	},
