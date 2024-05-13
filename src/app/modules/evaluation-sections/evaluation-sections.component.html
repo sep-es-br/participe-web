@@ -27,6 +27,7 @@
                 <div
                   class="d-flex flex-row justify-content-between align-items-end"
                 >
+                  <!-- Mudar as labels e traduzir -->
                   <div class="col-3">
                     <label for="searchEntity">Órgão</label>
                     <input
@@ -70,25 +71,34 @@
           </ng-container>
           <div class="row">
             <div class="col-12">
-              <p-table [value]="data" class="data-column">
+              <p-table
+                [value]="evaluationSectionsList"
+                responsiveLayout="stack"
+                class="data-column"
+              >
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>Órgão</th>
-                    <th>Setor</th>
-                    <th>Servidor</th>
+                    <th>
+                      {{ "evaluation-section.organization" | translate }}
+                    </th>
+                    <!-- Órgão -->
+                    <th>{{ "evaluation-section.sections" | translate }}</th>
+                    <!-- Setores -->
+                    <th>{{ "evaluation-section.servers" | translate }}</th>
+                    <!-- Servidores -->
                     <th></th>
                   </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-data>
+                <ng-template pTemplate="body" let-evaluationSection>
                   <tr>
-                    <td>{{ data.entity }}</td>
-                    <td>{{ data.section }}</td>
-                    <td>{{ data.server }}</td>
+                    <td>{{ evaluationSection.organizationGuid }}</td>
+                    <td>{{ evaluationSection.sectionsGuid }}</td>
+                    <td>{{ evaluationSection.serversGuid }}</td>
                     <td class="column-actions">
                       <button
                         pButton
                         class="ui-button btn-icon"
-                        (click)="showCreateEvaluator(data)"
+                        (click)="showCreateEvaluator(evaluationSection)"
                       >
                         <img
                           src="assets/layout/images/icons/triangule_plus.png"
@@ -99,7 +109,7 @@
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        (click)="showEdit(data)"
+                        (click)="showEdit(evaluationSection)"
                       >
                         <i class="pi pi-pencil"></i>
                       </button>
@@ -107,7 +117,7 @@
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        (click)="delete(data)"
+                        (click)="delete(evaluationSection)"
                       >
                         <i class="pi pi-trash"></i>
                       </button>
@@ -120,64 +130,92 @@
         </ng-container>
         <ng-container *ngIf="showForm">
           <div class="row">
-            <div class="col-6">
-              <div class="col-12">
-                <span class="fw-bold">Avaliadores</span>
-              </div>
-              <form
-                [formGroup]="evaluatorsForm"
-                (submit)="saveEvaluatorsForm()"
-              >
-                <div class="col-12">
-                  <label for="entity">Orgao</label>
-                  <p-dropdown
-                    [options]="entityList"
-                    formControlName="entity"
-                    (onChange)="entityChanged($event)"
-                    styleClass="d-flex form-control"
-                    class="ng-dirty ng-invalid"
-                  ></p-dropdown>
-                </div>
-                <div class="col-12">
-                  <label for="sections">Setor</label>
-                  <p-multiSelect
-                    [options]="sectionList"
-                    formControlName="sections"
-                    display="chip"
-                    showClear="true"
-                    (onChange)="sectionsChanged($event)"
-                    styleClass="d-flex form-control"
-                    class="ng-dirty ng-invalid"
-                  ></p-multiSelect>
-                </div>
-                <div class="col-12">
-                  <label for="servers">Servidor</label>
-                  <p-multiSelect
-                    [options]="serverList"
-                    formControlName="servers"
-                    display="chip"
-                    showClear="true"
-                    styleClass="d-flex form-control"
-                    class="ng-dirty ng-invalid"
-                  ></p-multiSelect>
-                </div>
-                <div class="col-12 form-actions">
-                  <button
-                    pButton
-                    icon="pi pi-check"
-                    type="submit"
-                    [label]="'save' | translate"
-                  ></button>
-                  <button
-                    pButton
-                    icon="pi pi-ban"
-                    type="button"
-                    [label]="'cancel' | translate"
-                    (click)="showForm = false"
-                  ></button>
-                </div>
-              </form>
+            <div class="col-12">
+              <span>{{ formHeaderText }}</span>
             </div>
+
+            <form
+              [formGroup]="evaluatorsForm"
+              (submit)="saveEvaluatorsForm(evaluatorsForm)"
+            >
+              <div class="col-6">
+                <label for="organizationGuid">{{
+                  "evaluation-section.organization" | translate
+                }}</label>
+                <p-dropdown
+                  [options]="organizationsList"
+                  optionLabel="name"
+                  optionValue="guid"
+                  formControlName="organizationGuid"
+                  (onChange)="orgChanged($event)"
+                  styleClass="d-flex form-control"
+                  class="ng-dirty ng-invalid"
+                ></p-dropdown>
+                <tt-input-message
+                  [form]="evaluatorsForm"
+                  field="organizationGuid"
+                ></tt-input-message>
+              </div>
+              <div class="col-6">
+                <label for="sectionsGuid">{{
+                  "evaluation-section.section" | translate
+                }}</label>
+                <p-multiSelect
+                  [options]="sectionsList"
+                  optionLabel="name"
+                  optionValue="guid"
+                  formControlName="sectionsGuid"
+                  display="chip"
+                  showClear="true"
+                  (onChange)="sectionsChanged($event)"
+                  styleClass="d-flex form-control"
+                  class="ng-dirty ng-invalid"
+                ></p-multiSelect>
+                <tt-input-message
+                  [form]="evaluatorsForm"
+                  field="sectionsGuid"
+                ></tt-input-message>
+              </div>
+              <div class="col-6">
+                <label for="serversGuid">{{
+                  "evaluation-section.server" | translate
+                }}</label>
+                <p-multiSelect
+                  [options]="serversList"
+                  optionLabel="name"
+                  optionValue="guid"
+                  formControlName="serversGuid"
+                  display="chip"
+                  showClear="true"
+                  styleClass="d-flex form-control"
+                  class="ng-dirty ng-invalid"
+                ></p-multiSelect>
+              </div>
+              <!-- <div class="col-12">
+                <button
+                  pButton
+                  icon="pi pi-plus"
+                  type="button"
+                  label="Adicionar Setor"
+                  (click)="addSection()"
+                ></button>
+              </div> -->
+              <div class="col-12 form-actions">
+                <button
+                  pButton
+                  icon="pi pi-check"
+                  type="submit"
+                  [label]="'save' | translate"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-ban"
+                  type="button"
+                  [label]="'cancel' | translate"
+                  (click)="cancelForm()"
+                ></button>
+              </div>
+            </form>
           </div>
         </ng-container>
       </div>
