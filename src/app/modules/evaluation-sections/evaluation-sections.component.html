@@ -110,7 +110,7 @@
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        (click)="deleteEvaluationSection(evaluationSection)"
+                        (click)="deleteEvaluator(evaluationSection)"
                       >
                         <i class="pi pi-trash"></i>
                       </button>
@@ -207,4 +207,10 @@
       </div>
     </div>
   </div>
+  <p-confirmDialog
+    [header]="'evaluation-section.delete' | translate"
+    icon="pi pi-exclamation-triangle"
+    key="deleteEvaluationSection"
+  >
+  </p-confirmDialog>
 </app-template>
