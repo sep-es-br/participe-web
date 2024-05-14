@@ -357,6 +357,8 @@
 	},
 	"error": "Erro",
 	"evaluation-section": {
+		"new": "Novo Avaliador",
+		"edit": "Editar Avaliador",
 		"organization": "Órgão",
 		"section": "Setor",
 		"sections": "Setores",
