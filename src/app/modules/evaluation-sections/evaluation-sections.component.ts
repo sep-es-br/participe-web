@@ -1,13 +1,16 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+
+import { TranslateService } from "@ngx-translate/core";
+
+import { ConfirmationService, MessageService } from "primeng/api";
+
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
+import { EvaluationSectionsService } from "@app/shared/services/evaluation-sections.service";
 import {
   IEvaluationSection,
   IEvaluationSectionCreate,
 } from "@app/shared/interface/IEvaluationSection";
-import { EvaluationSectionsService } from "@app/shared/services/evaluation-sections.service";
-import { TranslateService } from "@ngx-translate/core";
-import { MessageService } from "primeng/api";
 
 @Component({
   selector: "app-evaluation-sections",
@@ -36,8 +39,9 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private breadcrumbService: BreadcrumbService,
-    private messageService: MessageService,
     private translateService: TranslateService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private evaluationSectionsService: EvaluationSectionsService
   ) {}
 
@@ -52,7 +56,6 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
   }
 
   public showCreateEvaluator() {
-    console.log("create");
     this.editEvaluatorSection = false;
     this.showForm = true;
 
@@ -61,21 +64,27 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
   }
 
   public showEditEvaluator(data: IEvaluationSection) {
-    console.log("edit");
     this.editEvaluatorSection = true;
     this.showForm = true;
 
-    // this.initCreateEvaluatorsForm(data)
     this.initEditEvaluatorsForm(data);
-    /* --- criar initEditEvaluatorsForm(data) ---*/
     this.formHeaderText = "evaluation-section.edit";
-
-    console.log(data);
   }
 
-  public deleteEvaluationSection(data: IEvaluationSection) {
-    console.log("delete");
-    console.log(data);
+  public async deleteEvaluator(data: IEvaluationSection) {
+    this.confirmationService.confirm({
+      message: this.translateService.instant(
+        "evaluation-section.confirm.delete",
+        { name: data.organizationGuid }
+      ),
+      key: "deleteEvaluationSection",
+      acceptLabel: this.translateService.instant("yes"),
+      rejectLabel: this.translateService.instant("no"),
+      accept: async () => {
+        await this.deleteEvaluationSection(data.id);
+      },
+      reject: () => {},
+    });
   }
 
   public loadingIcon(icon = "pi pi-check") {
@@ -138,8 +147,6 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
         : null,
     };
 
-    console.log(reqBody);
-
     if (this.editEvaluatorSection && this.evaluationSectionId) {
       await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
     } else {
@@ -153,13 +160,11 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
         reqBody
       );
 
-      // console.log(result)
-
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
         detail: this.translateService.instant("evaluation-section.inserted", {
-          name: reqBody.organizationGuid,
+          name: result.organizationGuid,
         }),
       });
     } catch (error) {
@@ -187,13 +192,11 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
         reqBody
       );
 
-      // console.log(result)
-
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
         detail: this.translateService.instant("evaluation-section.updated", {
-          name: reqBody.organizationGuid,
+          name: result.organizationGuid,
         }),
       });
     } catch (error) {
@@ -207,6 +210,28 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       });
     } finally {
       this.cancelForm();
+      await this.getEvaluationSectionsList();
+    }
+  }
+
+  private async deleteEvaluationSection(id: number) {
+    try {
+      const result =
+        await this.evaluationSectionsService.deleteEvaluationSection(id);
+
+      this.messageService.add({
+        severity: "success",
+        summary: this.translateService.instant("success"),
+        detail: this.translateService.instant("register.removed"),
+      });
+    } catch (error) {
+      console.error(error);
+      this.messageService.add({
+        severity: "warn",
+        summary: this.translateService.instant("warn"),
+        // detail: this.translateService.instant("evaluation-section.warn.algumacoisa"), // Possíveis erros ao deletar a setor avaliador
+      });
+    } finally {
       await this.getEvaluationSectionsList();
     }
   }
@@ -226,8 +251,6 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       serversGuid: new FormControl(""),
     });
 
-    console.log(this.evaluatorsForm.value);
-
     this.getOrganizationsList();
   }
 
@@ -238,7 +261,9 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       ? data.sectionsGuid.split(",")
       : data.sectionsGuid.split(" ");
 
-    const serversGuidFormControl = data.serversGuid.includes(",")
+    const serversGuidFormControl = !data.serversGuid
+      ? ""
+      : data.serversGuid.includes(",")
       ? data.serversGuid.split(",")
       : data.serversGuid.split(" ");
 
