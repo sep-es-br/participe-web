@@ -1,13 +1,14 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "@environments/environment";
-import Common from "../util/Common";
-import { IOrganogramaData } from "../interface/IOrganogramaData";
-import { Observable } from "rxjs";
+
 import {
   IEvaluationSection,
   IEvaluationSectionCreate,
 } from "../interface/IEvaluationSection";
+import { IOrganogramaData } from "../interface/IOrganogramaData";
+
+import Common from "../util/Common";
 
 @Injectable({
   providedIn: "root",
@@ -18,61 +19,6 @@ export class EvaluationSectionsService {
   private _urlApiAcessoCidadao = "";
 
   private headers: HttpHeaders = Common.buildHeaders();
-
-  private data = [
-    {
-      entity: "SECOM - SUPERINTENDÊNCIA ESTADUAL DE COMUNICAÇÃO SOCIAL",
-      sections: "GAF - GRUPO ADMINISTRATIVO FINANCEIRO",
-      servers: "CLAUDIO MARCIO NASCIMENTO",
-    },
-    {
-      entity: "SCM - SECRETARIA DA CASA MILITAR",
-      sections: "GRUPO FINANCEIRO SETORIAL-GFS-SCM",
-      servers: "Todos",
-    },
-    {
-      entity: "SEAG - SECRETARIA DA AGRICULTURA, ABASTECIMENTO, AQUICULTURA",
-      sections: "GPO - GRUPO DE PLANEJAMENTO E ORCAMENTO-SEAG",
-      servers: "MAX EMANUEL FLORES EVANGELISTA CALDERARO",
-    },
-    {
-      entity: "PGE - PROCURADORIA GERAL DO ESTADO",
-      sections: "GPO - GRUPO DE PLANEJAMENTO E ORCAMENTO-PGE",
-      servers: "CARLOS HENRIQUE DE ALMEIDA",
-    },
-    {
-      entity: "SEAMA - SECRETARIA DO MEIO AMBIENTE E RECURSOS HÍDRICOS",
-      sections: "GPO - GRUPO DE PLANEJAMENTO E ORCAMENTO-SEAMA",
-      servers: "HAMILTON PERILO SILVA DE OLIVEIRA",
-    },
-    {
-      entity: "SECONT - SECRETARIA DE CONTROLE E TRANSPARÊNCIA",
-      sections: "GPO - GRUPO DE PLANEJAMENTO E ORCAMENTO-SECONT",
-      servers: "LORENA DOS SANTOS SOUZA",
-    },
-  ];
-
-  // private entityList = [
-  //   "SECOM - Superintendência Estadual de Comunicação Social",
-  //   "SCM - Secretaria da Casa Militar",
-  //   "SCV - Secretaria da Casa Civil",
-  //   "PGE - Procuradoria Geral do Estado",
-  //   "SEAG - Secretaria da Agricultura, Abastecimento, Aquicultura e Pesca",
-  //   "SEAMA - Secretaria do Meio Ambiente e Recursos Hídricos",
-  // ];
-
-  // private sectionList = [
-  //   "ASSESP - Assessoria Especial",
-  //   "GPO - Grupo de Planejamento e Orçamento",
-  //   "GETAD - Gerência Técnico Administrativa",
-  //   "SUBEPP - Subsecretaria de Estado de Planejamento e Projetos",
-  // ];
-
-  // private serverList = [
-  //   "CARLOS HENRIQUE DE ALMEIDA ESTAGIARIO JOVENS VALORES - NIVEL SUPERIOR - 20HS - CGTI - SEP - GOVES",
-  //   "MAX EMANUEL FLORES EVANGELISTA CALDERARO CHEFE GRUPO DE PLANEJAMENTO E ORCAMENTO QCE-05 - GPO - SEP - GOVES",
-  //   "FABIANA DO ESPIRITO SANTO CARDOSO CHEFE GRUPO RECURSOS HUMANOS QCE-05 - GRH - SEP - GOVES",
-  // ];
 
   private organizationsMockList: Array<IOrganogramaData> = [
     { guid: "OrgTesteA", name: "Organização de Teste 1" },
@@ -98,10 +44,6 @@ export class EvaluationSectionsService {
   ];
 
   constructor(private _http: HttpClient) {}
-
-  public getEvaluationSectionsMock() {
-    return this.data;
-  }
 
   public getOrganizationsMockList() {
     return this.organizationsMockList;
@@ -146,7 +88,10 @@ export class EvaluationSectionsService {
 
   public deleteEvaluationSection(id: number): Promise<string> {
     return this._http
-      .delete<string>(`${this._url}/${id}`, { headers: this.headers })
+      .delete(`${this._url}/${id}`, {
+        headers: this.headers,
+        responseType: "text",
+      })
       .toPromise();
   }
 
