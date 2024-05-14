@@ -357,18 +357,22 @@
 	},
 	"error": "Erro",
 	"evaluation-section": {
-		"new": "Novo Avaliador",
+		"confirm": {
+			"delete": "Deseja realmente deletar {{name}}?"
+		},
+		"delete": "Excluir Setor Avaliador",
 		"edit": "Editar Avaliador",
+		"error": {
+			"saving": "Erro ao salvar o setor avaliador"
+		},
+		"inserted": "Novo Setor Avaliador {{name}} inserido",
+		"new": "Novo Avaliador",
 		"organization": "Órgão",
 		"section": "Setor",
 		"sections": "Setores",
 		"server": "Servidor",
 		"servers": "Servidores",
-		"inserted": "Novo Setor Avaliador {{name}} inserido",
-		"updated": "Setor Avaliador {{name}} atualizado",
-		"error": {
-			"saving": "Erro ao salvar o setor avaliador"
-		}
+		"updated": "Setor Avaliador {{name}} atualizado"
 	},
 	"exists": {
 		"name": "Esse nome já existe"

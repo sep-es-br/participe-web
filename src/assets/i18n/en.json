@@ -317,18 +317,23 @@
 	},
 	"error": "Error",
 	"evaluation-section": {
-		"new": "New Evaluator",
+		"confirm": {
+			"delete": "Are you sure you want to delete {{name}}?"
+		},
+		"delete": "Delete Evaluation Section",
 		"edit": "Edit Evaluator",
+		"error": {
+			"saving": "Error saving evaluation section"
+		},
+		"inserted": "New Evaluation Section {{name}} inserted",
+		"new": "New Evaluator",
 		"organization": "Organization",
 		"section": "Section",
 		"sections": "Sections",
 		"server": "Server",
 		"servers": "Servers",
-		"inserted": "New Evaluation Section {{name}} inserted",
-		"updated": "Evaluation Section {{name}} updated",
-		"error": {
-			"saving": "Error saving evaluation section"
-		}
+		"updated": "Evaluation Section {{name}} updated"
+		
 	},
 	"exists": {
 		"name": "This name already exists"
