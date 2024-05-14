@@ -1,11 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import {
   IEvaluationSection,
@@ -36,10 +30,6 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
   evaluationSectionsList: Array<IEvaluationSection> = [];
 
-  // entityList: any[] = [];
-  // sectionList: any[] = [];
-  // serverList: any[] = [];
-
   organizationsList = [];
   sectionsList = [];
   serversList = [];
@@ -51,12 +41,6 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
     private evaluationSectionsService: EvaluationSectionsService
   ) {}
 
-  // get formControls(): Array<AbstractControl<any, any>> {
-  //   const keys = Object.keys(this.evaluatorsForm.controls);
-
-  //   return keys.map((k) => this.evaluatorsForm.controls[k]);
-  // }
-
   async ngOnInit() {
     this.buildBreadcrumb();
     await this.getEvaluationSectionsList();
@@ -67,55 +51,42 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
     this.initSearchForm();
   }
 
-  public showCreateEvaluator(data?: IEvaluationSection) {
+  public showCreateEvaluator() {
     console.log("create");
     this.editEvaluatorSection = false;
     this.showForm = true;
 
     this.initCreateEvaluatorsForm();
-    this.formHeaderText = "Novo Avaliador";
-
-    if (data) {
-      this.prepareCreateEvaluatorsForm(data);
-      this.formHeaderText = data.organizationGuid + " > Novo Avaliador";
-    }
+    this.formHeaderText = "evaluation-section.new";
   }
 
-  public showEdit(data: IEvaluationSection) {
+  public showEditEvaluator(data: IEvaluationSection) {
     console.log("edit");
     this.editEvaluatorSection = true;
     this.showForm = true;
 
-    // this.initEvaluatorsForm(data)
-    this.formHeaderText = "Editar AValiador";
+    // this.initCreateEvaluatorsForm(data)
+    this.initEditEvaluatorsForm(data);
+    /* --- criar initEditEvaluatorsForm(data) ---*/
+    this.formHeaderText = "evaluation-section.edit";
 
     console.log(data);
   }
 
-  public delete(data: any) {
+  public deleteEvaluationSection(data: IEvaluationSection) {
     console.log("delete");
     console.log(data);
-  }
-
-  public initSearchForm() {
-    this.searchForm = new FormGroup({
-      entity: new FormControl(""),
-      section: new FormControl(""),
-      server: new FormControl(""),
-    });
   }
 
   public loadingIcon(icon = "pi pi-check") {
     return this.loading ? "pi pi-spin pi-spinner" : icon;
   }
 
-  public orgChanged(event: any) {
+  public organizationChanged(event: any) {
     // fazer GET para endpoint de setores passando event.value como queryParam
     // ex: localhost:8080/participe/setores?orgao=algumacoisa
 
     console.log(event.value);
-
-    // this.getSectionList();
     this.getSectionsList();
   }
 
@@ -124,8 +95,12 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
     // ex: localhost:8080/participe/servidores?setor=algumacoisa
 
     console.log(event.value);
-    // this.getServerList();
     this.getServersList();
+  }
+
+  public sectionsCleared() {
+    this.serversList = [];
+    this.evaluatorsForm.get("serversGuid").setValue(null);
   }
 
   public searchEvaluators() {
@@ -134,11 +109,11 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
   public cancelForm() {
     this.showForm = false;
+    this.editEvaluatorSection = false;
+    this.evaluatorsForm = null;
   }
 
   public async saveEvaluatorsForm(form: FormGroup) {
-    // console.log(form.value);
-
     const controls = form.controls;
 
     for (const key in controls) {
@@ -165,7 +140,7 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
     console.log(reqBody);
 
-    if (this.editEvaluatorSection) {
+    if (this.editEvaluatorSection && this.evaluationSectionId) {
       await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
     } else {
       await this.postEvaluatorsForm(reqBody);
@@ -183,7 +158,9 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("evaluation-section.inserted"),
+        detail: this.translateService.instant("evaluation-section.inserted", {
+          name: reqBody.organizationGuid,
+        }),
       });
     } catch (error) {
       console.error(error);
@@ -196,6 +173,7 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       });
     } finally {
       this.cancelForm();
+      await this.getEvaluationSectionsList();
     }
   }
 
@@ -214,7 +192,9 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("evaluation-section.updated"),
+        detail: this.translateService.instant("evaluation-section.updated", {
+          name: reqBody.organizationGuid,
+        }),
       });
     } catch (error) {
       console.error(error);
@@ -227,45 +207,56 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       });
     } finally {
       this.cancelForm();
+      await this.getEvaluationSectionsList();
     }
   }
 
-  /*
-    Alterar valores:
-    entity -> organizationName (?)
-    sections -> sectionsNames (?)
-    servers -> serversNames (?)
-  */
-  private initCreateEvaluatorsForm(data?: IEvaluationSection) {
+  private initSearchForm() {
+    this.searchForm = new FormGroup({
+      searchOrganization: new FormControl(""),
+      searchSection: new FormControl(""),
+      searchServer: new FormControl(""),
+    });
+  }
+
+  private initCreateEvaluatorsForm() {
     this.evaluatorsForm = new FormGroup({
-      organizationGuid: new FormControl(
-        data?.organizationGuid ?? "",
-        Validators.required
-      ),
-      sectionsGuid: new FormControl(
-        data?.sectionsGuid?.split(",") ?? "",
-        Validators.required
-      ),
-      serversGuid: new FormControl(data?.serversGuid?.split(",") ?? ""),
+      organizationGuid: new FormControl("", Validators.required),
+      sectionsGuid: new FormControl("", Validators.required),
+      serversGuid: new FormControl(""),
     });
 
     console.log(this.evaluatorsForm.value);
 
-    // this.getEntityList();
     this.getOrganizationsList();
   }
 
-  private prepareCreateEvaluatorsForm(data: IEvaluationSection) {
+  private initEditEvaluatorsForm(data: IEvaluationSection) {
     this.evaluationSectionId = data.id;
 
-    this.evaluatorsForm
-      .get("organizationGuid")
-      .patchValue(data.organizationGuid);
-    this.evaluatorsForm.get("organizationGuid").disable();
-    // this.evaluatorsForm.get("sections").patchValue(data.sections.split(","));
-    // this.evaluatorsForm.get("servers").patchValue(data.servers.split(","));
+    const sectionsGuidFormControl = data.sectionsGuid.includes(",")
+      ? data.sectionsGuid.split(",")
+      : data.sectionsGuid.split(" ");
 
-    console.log(this.evaluatorsForm.value);
+    const serversGuidFormControl = data.serversGuid.includes(",")
+      ? data.serversGuid.split(",")
+      : data.serversGuid.split(" ");
+
+    this.evaluatorsForm = new FormGroup({
+      organizationGuid: new FormControl(
+        data.organizationGuid,
+        Validators.required
+      ),
+      sectionsGuid: new FormControl(
+        sectionsGuidFormControl,
+        Validators.required
+      ),
+      serversGuid: new FormControl(serversGuidFormControl),
+    });
+
+    this.getOrganizationsList();
+    this.getSectionsList();
+    this.getServersList();
   }
 
   private buildBreadcrumb() {
@@ -283,16 +274,6 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       .getEvaluationSectionsList()
       .then((response) => (this.evaluationSectionsList = response));
   }
-
-  // private getEntityList() {
-  //   this.entityList = this.evaluationSectionsService.getEntityListMock();
-  // }
-  // private getSectionList() {
-  //   this.sectionList = this.evaluationSectionsService.getSectionListMock();
-  // }
-  // private getServerList() {
-  //   this.serverList = this.evaluationSectionsService.getServerListMock();
-  // }
 
   private getOrganizationsList() {
     this.organizationsList =
