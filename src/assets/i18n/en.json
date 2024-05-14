@@ -316,6 +316,20 @@
     "field-must-contain-only-letters": "The field must contain only letters"
 	},
 	"error": "Error",
+	"evaluation-section": {
+		"new": "New Evaluator",
+		"edit": "Edit Evaluator",
+		"organization": "Organization",
+		"section": "Section",
+		"sections": "Sections",
+		"server": "Server",
+		"servers": "Servers",
+		"inserted": "New Evaluation Section {{name}} inserted",
+		"updated": "Evaluation Section {{name}} updated",
+		"error": {
+			"saving": "Error saving evaluation section"
+		}
+	},
 	"exists": {
 		"name": "This name already exists"
 	},
