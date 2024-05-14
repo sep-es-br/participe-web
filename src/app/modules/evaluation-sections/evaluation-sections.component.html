@@ -27,31 +27,36 @@
                 <div
                   class="d-flex flex-row justify-content-between align-items-end"
                 >
-                  <!-- Mudar as labels e traduzir -->
                   <div class="col-3">
-                    <label for="searchEntity">Órgão</label>
+                    <label for="searchOrganization">{{
+                      "evaluation-section.organization" | translate
+                    }}</label>
                     <input
                       type="text"
                       class="form-control"
-                      formControlName="entity"
+                      formControlName="searchOrganization"
                       pInputText
                     />
                   </div>
                   <div class="col-3">
-                    <label for="searchSection">Setor</label>
+                    <label for="searchSection">{{
+                      "evaluation-section.section" | translate
+                    }}</label>
                     <input
                       type="text"
                       class="form-control"
-                      formControlName="section"
+                      formControlName="searchSection"
                       pInputText
                     />
                   </div>
                   <div class="col-3">
-                    <label for="searchServer">Servidor</label>
+                    <label for="searchServer">{{
+                      "evaluation-section.server" | translate
+                    }}</label>
                     <input
                       type="text"
                       class="form-control"
-                      formControlName="server"
+                      formControlName="searchServer"
                       pInputText
                     />
                   </div>
@@ -81,11 +86,9 @@
                     <th>
                       {{ "evaluation-section.organization" | translate }}
                     </th>
-                    <!-- Órgão -->
                     <th>{{ "evaluation-section.sections" | translate }}</th>
-                    <!-- Setores -->
                     <th>{{ "evaluation-section.servers" | translate }}</th>
-                    <!-- Servidores -->
+
                     <th></th>
                   </tr>
                 </ng-template>
@@ -93,23 +96,13 @@
                   <tr>
                     <td>{{ evaluationSection.organizationGuid }}</td>
                     <td>{{ evaluationSection.sectionsGuid }}</td>
-                    <td>{{ evaluationSection.serversGuid }}</td>
+                    <td>{{ evaluationSection.serversGuid ?? "Todos" }}</td>
                     <td class="column-actions">
                       <button
                         pButton
                         class="ui-button btn-icon"
-                        (click)="showCreateEvaluator(evaluationSection)"
-                      >
-                        <img
-                          src="assets/layout/images/icons/triangule_plus.png"
-                          alt=""
-                        />
-                      </button>
-                      <button
-                        pButton
-                        class="ui-button btn-icon"
                         type="button"
-                        (click)="showEdit(evaluationSection)"
+                        (click)="showEditEvaluator(evaluationSection)"
                       >
                         <i class="pi pi-pencil"></i>
                       </button>
@@ -117,7 +110,7 @@
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        (click)="delete(evaluationSection)"
+                        (click)="deleteEvaluationSection(evaluationSection)"
                       >
                         <i class="pi pi-trash"></i>
                       </button>
@@ -131,7 +124,7 @@
         <ng-container *ngIf="showForm">
           <div class="row">
             <div class="col-12">
-              <span>{{ formHeaderText }}</span>
+              <span>{{ formHeaderText | translate }}</span>
             </div>
 
             <form
@@ -146,8 +139,9 @@
                   [options]="organizationsList"
                   optionLabel="name"
                   optionValue="guid"
+                  [readonly]="editEvaluatorSection"
                   formControlName="organizationGuid"
-                  (onChange)="orgChanged($event)"
+                  (onChange)="organizationChanged($event)"
                   styleClass="d-flex form-control"
                   class="ng-dirty ng-invalid"
                 ></p-dropdown>
@@ -168,6 +162,7 @@
                   display="chip"
                   showClear="true"
                   (onChange)="sectionsChanged($event)"
+                  (onClear)="sectionsCleared()"
                   styleClass="d-flex form-control"
                   class="ng-dirty ng-invalid"
                 ></p-multiSelect>
@@ -191,15 +186,6 @@
                   class="ng-dirty ng-invalid"
                 ></p-multiSelect>
               </div>
-              <!-- <div class="col-12">
-                <button
-                  pButton
-                  icon="pi pi-plus"
-                  type="button"
-                  label="Adicionar Setor"
-                  (click)="addSection()"
-                ></button>
-              </div> -->
               <div class="col-12 form-actions">
                 <button
                   pButton
