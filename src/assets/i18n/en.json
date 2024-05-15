@@ -93,6 +93,8 @@
 		"preOpening": "Pre Opening",
 		"postClosure": "Post Closure",
 		"open": "Open",
+		"closed": "Closed",
+		"evaluation": "Evaluation",
 		"text": "Text",
 		"label": "Label",
 		"howWork": "How it works",

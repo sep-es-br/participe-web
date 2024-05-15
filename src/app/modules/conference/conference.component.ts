@@ -1,28 +1,28 @@
 import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
-import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
-import {UntypedFormBuilder, FormGroup, Validators} from '@angular/forms';
-import {DatePipe, Location} from '@angular/common';
-import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
-import {Conference} from '@app/shared/models/conference';
-import {ConferenceService} from '@app/shared/services/conference.service';
-import {IPerson} from '@app/shared/interface/IPerson';
-import {LocalityService} from '@app/shared/services/locality.service';
-import {Plan} from '@app/shared/models/plan';
-import {PlanService} from '@app/shared/services/plan.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TranslateChangeService} from '@app/shared/services/translateChange.service';
-import {TranslateService} from '@ngx-translate/core';
-import {calendar} from '@app/shared/constants';
-import {environment} from '@environments/environment';
-import {FilesService} from '@app/shared/services/files.service';
-import {File} from '@app/shared/models/file';
-import {StructureItemService} from '@app/shared/services/structure-item.service';
+import { AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { UntypedFormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DatePipe, Location } from '@angular/common';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
+import { Conference } from '@app/shared/models/conference';
+import { ConferenceService } from '@app/shared/services/conference.service';
+import { IPerson } from '@app/shared/interface/IPerson';
+import { LocalityService } from '@app/shared/services/locality.service';
+import { Plan } from '@app/shared/models/plan';
+import { PlanService } from '@app/shared/services/plan.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateChangeService } from '@app/shared/services/translateChange.service';
+import { TranslateService } from '@ngx-translate/core';
+import { calendar } from '@app/shared/constants';
+import { environment } from '@environments/environment';
+import { FilesService } from '@app/shared/services/files.service';
+import { File } from '@app/shared/models/file';
+import { StructureItemService } from '@app/shared/services/structure-item.service';
 import * as moment from 'moment';
-import {IHowItWorkStep} from '@app/shared/interface/IHowItWorkStep';
-import {IExternalLinks} from '@app/shared/interface/IExternalLinks';
-import {CustomValidators} from '@app/shared/util/CustomValidators';
+import { IHowItWorkStep } from '@app/shared/interface/IHowItWorkStep';
+import { IExternalLinks } from '@app/shared/interface/IExternalLinks';
+import { CustomValidators } from '@app/shared/util/CustomValidators';
 import { FileUpload } from 'primeng/fileupload';
 
 @Component({
@@ -44,6 +44,7 @@ export class ConferenceComponent implements OnInit {
   moderatorsEnabled: IPerson[] = [];
   searchModeratorsForm: FormGroup;
   conferenceCustomProperties: FormGroup;
+  conferenceEvaluationForm: FormGroup;
   localitycitizenSelected = false;
   minDate: Date = new Date();
   researchMinDate: Date = new Date();
@@ -52,6 +53,7 @@ export class ConferenceComponent implements OnInit {
   structureItems = [];
   targetedByItemsSelected: string;
   optionsStatusConference = [];
+  optionsStatusEvaluation = [];
   optionsStatusResearchConference = [];
   newStep: IHowItWorkStep;
   howItWorkSteps: IHowItWorkStep[] = [];
@@ -87,7 +89,7 @@ export class ConferenceComponent implements OnInit {
     private filesSrv: FilesService,
     private structureItemSrv: StructureItemService,
     private personService: PersonService,
-    private location: Location)  {
+    private location: Location) {
     this.actRouter.queryParams.subscribe(async queryParams => {
       this.idConference = queryParams.id;
     });
@@ -120,7 +122,7 @@ export class ConferenceComponent implements OnInit {
       this.loadCustomPreferences = true;
     }
     this.loadListOptions();
-    this.translateChange.getCurrentLang().subscribe(({lang}) => {
+    this.translateChange.getCurrentLang().subscribe(({ lang }) => {
       this.calendarTranslate = calendar[lang];
       this.loadListOptions();
     });
@@ -177,6 +179,17 @@ export class ConferenceComponent implements OnInit {
         value: 'INACTIVE',
       },
     ];
+
+    this.optionsStatusEvaluation = [
+      {
+        label: this.translate.instant('conference.closed'),
+        value: 'CLOSED',
+      },
+      {
+        label: this.translate.instant('conference.open'),
+        value: 'OPEN',
+      },
+    ]
   }
 
   async loadConference() {
@@ -271,7 +284,15 @@ export class ConferenceComponent implements OnInit {
       displayStatusConference: 'OPEN',
       preOpeningText: '',
       postClosureText: '',
+
     });
+
+    this.conferenceEvaluationForm = this.formBuilder.group({
+      evaluationBeginDate: null,
+      evaluationEndDate: null,
+      evaluationDisplayMode: "MANUAL",
+      evaluationDisplayStatus: "CLOSED",
+    })
 
     this.conferenceCustomProperties = this.formBuilder.group({
       typeBackgroundColor: '',
@@ -285,7 +306,7 @@ export class ConferenceComponent implements OnInit {
       cardFontColorHover: '',
       cardBorderColor: ''
     });
-    
+
     this.searchModeratorsForm = this.formBuilder.group({
       nameModerator: [''],
       emailModerator: ['', Validators.email],
@@ -295,7 +316,7 @@ export class ConferenceComponent implements OnInit {
     this.instanceMenuLabelForm();
     this.instanceExternalLinksForm();
     this.instanceConferenceResearchForm();
-    
+
   }
 
   instanceNewStep() {
@@ -372,13 +393,17 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.preOpeningText.setValue(this.conference.preOpeningText);
     this.conferenceForm.controls.postClosureText.setValue(this.conference.postClosureText);
 
-    if(this.conference.customProperties){
+    if (this.conference.customProperties) {
       await this.setConferenceCustomProperties();
       this.loadCustomPreferences = true;
-    }else{
+    } else {
       this.loadCustomPreferences = true;
     }
-
+    if (this.conference.evaluationConfiguration) {
+      console.log("antes do SET")
+      this.setConferenceEvaluation();
+    }
+    
     if (this.conference.researchConfiguration) {
       this.setConferenceResearchForm();
     }
@@ -389,7 +414,18 @@ export class ConferenceComponent implements OnInit {
     this.externalLinksMenuLabel = this.conference.externalLinksMenuLabel;
   }
 
+  setConferenceEvaluation() {
+    console.log(this.conference.evaluationConfiguration)
+    this.conferenceEvaluationForm.controls.evaluationBeginDate.setValue(this.getDate(this.conference.evaluationConfiguration.beginDate));
+    this.conferenceEvaluationForm.controls.evaluationEndDate.setValue(this.getDate(this.conference.evaluationConfiguration.endDate));
+    this.conferenceEvaluationForm.controls.evaluationDisplayMode.setValue(this.conference.evaluationConfiguration.displayMode);
+    this.conferenceEvaluationForm.controls.evaluationDisplayStatus.setValue(this.conference.evaluationConfiguration.evaluationDisplayStatus);
+
+    this.setEvaluationDisplayStatus();
+  }
+
   setConferenceResearchForm() {
+    
     this.conferenceResearchForm.controls.beginDate.setValue(this.getDate(this.conference.researchConfiguration.beginDate));
     this.conferenceResearchForm.controls.endDate.setValue(this.getDate(this.conference.researchConfiguration.endDate));
     this.conferenceResearchForm.controls.displayModeResearch.setValue(this.conference.researchConfiguration.displayModeResearch);
@@ -400,7 +436,7 @@ export class ConferenceComponent implements OnInit {
     this.setResearchDisplayStatus();
   }
 
-  async setConferenceCustomProperties(){
+  async setConferenceCustomProperties() {
     this.conferenceCustomProperties.controls.typeBackgroundColor.setValue(this.conference.customProperties.typeBackgroundColor);
     this.conferenceCustomProperties.controls.background.setValue(this.conference.customProperties.background);
     this.conferenceCustomProperties.controls.fontColor.setValue(this.conference.customProperties.fontColor);
@@ -429,7 +465,7 @@ export class ConferenceComponent implements OnInit {
     const title = this.howItWorksForm.controls.title.value;
     const text = this.howItWorksForm.controls.text.value;
 
-    this.newStep = {order, title, text};
+    this.newStep = { order, title, text };
 
     if (this.howItWorkSteps) {
       this.howItWorkSteps.push({
@@ -447,7 +483,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   onRowStepEditInit(step: IHowItWorkStep) {
-    this.clonedSteps[step.tableId] = {...step};
+    this.clonedSteps[step.tableId] = { ...step };
   }
 
   onRowStepEditSave(step: IHowItWorkStep) {
@@ -504,7 +540,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   onRowLinkEditInit(link: IExternalLinks) {
-    this.clonedExternalLinks[link.tableId] = {...link};
+    this.clonedExternalLinks[link.tableId] = { ...link };
   }
 
   isUrlValid(url: string): boolean {
@@ -599,6 +635,10 @@ export class ConferenceComponent implements OnInit {
     try {
       const researchDisplayStatus = this.conferenceResearchForm.controls.researchDisplayStatus.value;
 
+      const evaluationDisplayStatus = this.conferenceEvaluationForm.controls.evaluationDisplayStatus.value;
+
+
+
       if (researchDisplayStatus === 'ACTIVE') {
         this.conferenceResearchForm.controls.beginDate.setValidators([Validators.required]);
         this.conferenceResearchForm.controls.endDate.setValidators([Validators.required]);
@@ -629,9 +669,21 @@ export class ConferenceComponent implements OnInit {
         this.conferenceResearchForm.controls.estimatedTimeResearch.updateValueAndValidity();
       }
 
+      if(evaluationDisplayStatus === 'OPEN'){
+        this.conferenceEvaluationForm.controls.evaluationBeginDate.setValidators([Validators.required])
+        this.conferenceEvaluationForm.controls.evaluationEndDate.setValidators([Validators.required])
+      }else{
+        this.conferenceEvaluationForm.controls.evaluationBeginDate.clearValidators()
+        this.conferenceEvaluationForm.controls.evaluationEndDate.clearValidators()
+      }
+
+      this.conferenceEvaluationForm.controls.evaluationBeginDate.updateValueAndValidity()
+      this.conferenceEvaluationForm.controls.evaluationEndDate.updateValueAndValidity()
+      
       this.markFormGroupTouched(this.conferenceForm);
       this.markFormGroupTouched(this.conferenceResearchForm);
-      if (!this.isValidForm(this.conferenceForm) || !this.isValidForm(this.conferenceResearchForm)) {
+      this.markFormGroupTouched(this.conferenceEvaluationForm)
+      if (!this.isValidForm(this.conferenceForm) || !this.isValidForm(this.conferenceResearchForm) || !this.isValidForm(this.conferenceEvaluationForm)) {
         return;
       }
       const targetedByItemsSelectedOption = this.conferenceForm.controls.segmentation && this.conferenceForm.controls.targetedByItems.value;
@@ -643,16 +695,21 @@ export class ConferenceComponent implements OnInit {
       const conferenceEndDate = this.conferenceForm.controls.endDate.value &&
         this.setDate(this.conferenceForm.controls.endDate.value);
 
+      const evaluationBeginDate = this.conferenceEvaluationForm.controls.evaluationBeginDate.value &&
+        this.setDate(this.conferenceEvaluationForm.controls.evaluationBeginDate.value);
+      const evaluationEndDate = this.conferenceEvaluationForm.controls.evaluationEndDate.value &&
+        this.setDate(this.conferenceEvaluationForm.controls.evaluationEndDate.value);
+
       const researchBeginDate = this.conferenceResearchForm.controls.beginDate.value &&
         this.setDate(this.conferenceResearchForm.controls.beginDate.value);
       const researchEndDate = this.conferenceResearchForm.controls.endDate.value &&
         this.setDate(this.conferenceResearchForm.controls.endDate.value);
 
       let i = 0;
-      for (i = this.authenticationImages.length-1; i >= 0 ; i--) {
-       if ((this.authenticationImages[i].file.id === null
-            || this.authenticationImages[i].file.id === undefined)
-            && this.authenticationImages[i].toAdd) {
+      for (i = this.authenticationImages.length - 1; i >= 0; i--) {
+        if ((this.authenticationImages[i].file.id === null
+          || this.authenticationImages[i].file.id === undefined)
+          && this.authenticationImages[i].toAdd) {
           this.conference.fileAuthentication = await this.uploadFile(i, 'authentication');
         }
         else if (this.authenticationImages[i].file.id !== null
@@ -663,10 +720,10 @@ export class ConferenceComponent implements OnInit {
         }
       }
 
-      for (i = this.participationImages.length-1; i >= 0 ; i--) {
+      for (i = this.participationImages.length - 1; i >= 0; i--) {
         if ((this.participationImages[i].file.id === null
-            || this.participationImages[i].file.id === undefined)
-            && this.participationImages[i].toAdd) {
+          || this.participationImages[i].file.id === undefined)
+          && this.participationImages[i].toAdd) {
           this.conference.fileParticipation = await this.uploadFile(i, 'participation');
         }
         else if (this.participationImages[i].file.id !== null
@@ -677,10 +734,10 @@ export class ConferenceComponent implements OnInit {
         }
       }
 
-      for (i = this.backgroundImages.length-1; i >= 0; i--) {
+      for (i = this.backgroundImages.length - 1; i >= 0; i--) {
         if ((this.backgroundImages[i].file.id === null
-            || this.backgroundImages[i].file.id === undefined)
-            && this.backgroundImages[i].toAdd) {
+          || this.backgroundImages[i].file.id === undefined)
+          && this.backgroundImages[i].toAdd) {
           const uploadedFile: File = await this.uploadFile(i, 'background');
           if (uploadedFile !== null) {
             this.backgroundImages[i].file = uploadedFile;
@@ -698,10 +755,10 @@ export class ConferenceComponent implements OnInit {
         }
       });
 
-      for (i = this.calendarImages.length-1; i >= 0; i--) {
+      for (i = this.calendarImages.length - 1; i >= 0; i--) {
         if ((this.calendarImages[i].file.id === null
-            || this.calendarImages[i].file.id === undefined)
-            && this.calendarImages[i].toAdd) {
+          || this.calendarImages[i].file.id === undefined)
+          && this.calendarImages[i].toAdd) {
           const uploadedFile: File = await this.uploadFile(i, 'mobile');
           if (uploadedFile !== null) {
             this.calendarImages[i].file = uploadedFile;
@@ -710,7 +767,7 @@ export class ConferenceComponent implements OnInit {
         else if (this.calendarImages[i].file.id !== null
           && this.calendarImages[i].file.id !== undefined
           && this.calendarImages[i].toDelete) {
-            debugger
+          debugger
           await this.removeFile(this.calendarImages[i].file.id, 'mobile');
         }
       }
@@ -724,7 +781,7 @@ export class ConferenceComponent implements OnInit {
       this.moderatorsEnabled.forEach(async moderator => {
         await this.personService.postOperator('Moderator', moderator);
       });
-*/
+      */
       formData = {
         ...formData,
         serverName: this.conferenceForm.controls.serverName.value,
@@ -749,7 +806,7 @@ export class ConferenceComponent implements OnInit {
         },
         backgroundImages: this.conference.backgroundImages,
         calendarImages: this.conference.calendarImages,
-        customProperties:{
+        customProperties: {
           typeBackgroundColor: this.conferenceCustomProperties.controls.typeBackgroundColor.value,
           background: this.conferenceCustomProperties.controls.background.value,
           fontColor: this.conferenceCustomProperties.controls.fontColor.value,
@@ -759,7 +816,13 @@ export class ConferenceComponent implements OnInit {
           accentColor: this.conferenceCustomProperties.controls.accentColor.value,
           cardFontColor: this.conferenceCustomProperties.controls.cardFontColor.value,
           cardFontColorHover: this.conferenceCustomProperties.controls.cardFontColorHover.value,
-          cardBorderColor: this.conferenceCustomProperties.controls.cardBorderColor.value,          
+          cardBorderColor: this.conferenceCustomProperties.controls.cardBorderColor.value,
+        },
+        evaluationConfiguration: {
+          beginDate: evaluationBeginDate,
+          endDate: evaluationEndDate,
+          displayMode: this.conferenceEvaluationForm.controls.evaluationDisplayMode.value,
+          evaluationDisplayStatus: this.conferenceEvaluationForm.controls.evaluationDisplayStatus.value,
         }
       };
 
@@ -768,7 +831,7 @@ export class ConferenceComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant(this.idConference ? 'conference.updated' : 'conference.inserted', {name: formData.name}),
+        detail: this.translate.instant(this.idConference ? 'conference.updated' : 'conference.inserted', { name: formData.name }),
       });
 
       this.location.back();
@@ -807,6 +870,31 @@ export class ConferenceComponent implements OnInit {
     }
   }
 
+  changeEvaluationBeginDate(event) {
+    this.minDate = this.getDate(event);
+    if (this.conferenceEvaluationForm && this.conferenceEvaluationForm.value.evaluationEndDate) {
+      const endDate = this.getDate(this.conferenceEvaluationForm.value.evaluationEndDate);
+      if (endDate < this.minDate) {
+        this.conferenceEvaluationForm.get('evaluationEndDate').setValue(this.minDate);
+      }
+    }
+  }
+
+  changeEvaluationEndDate() {
+    const beginDate = this.conferenceEvaluationForm.controls.evaluationBeginDate.value;
+    const endDate = this.conferenceEvaluationForm.controls.evaluationEndDate.value;
+
+    if (endDate < beginDate) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translate.instant('warn'),
+        detail: this.translate.instant('conference.error.endDateOutOfRange'),
+      });
+
+      this.conferenceEvaluationForm.controls.evaluationEndDate.setValue(beginDate);
+    }
+  }
+
   async validateName(event) {
     const id = this.conferenceForm.value.id;
     const nameValid = await this.conferenceService.validate(event.target.value, id);
@@ -816,6 +904,35 @@ export class ConferenceComponent implements OnInit {
         summary: this.translate.instant('error'),
         detail: this.translate.instant('exists.name'),
       });
+    }
+  }
+
+  setEvaluationDisplayStatus() {
+    const beginDate = this.conferenceEvaluationForm.controls.evaluationBeginDate.value;
+    const endDate = this.conferenceEvaluationForm.controls.evaluationEndDate.value;
+    const displayMode = this.conferenceEvaluationForm.controls.evaluationDisplayMode.value;
+
+    const dataAtual = new Date();
+
+    if (displayMode === 'AUTOMATIC') {
+      if (beginDate !== null && (dataAtual < beginDate)) {
+        this.conferenceEvaluationForm.get('evaluationDisplayStatus').setValue('CLOSED');
+      }
+      if ((beginDate !== null && (dataAtual >= beginDate)) &&
+        (endDate !== null && (dataAtual < endDate))) {
+        this.conferenceEvaluationForm.get('evaluationDisplayStatus').setValue('OPEN');
+      }
+      if ((beginDate === null) &&
+        (endDate !== null && (dataAtual < endDate))) {
+        this.conferenceEvaluationForm.get('evaluationDisplayStatus').setValue('OPEN');
+      }
+      if ((beginDate !== null && (dataAtual >= beginDate)) &&
+        (endDate === null)) {
+        this.conferenceEvaluationForm.get('evaluationDisplayStatus').setValue('OPEN');
+      }
+      if (endDate !== null && (dataAtual > endDate)) {
+        this.conferenceEvaluationForm.get('evaluationDisplayStatus').setValue('CLOSED');
+      }
     }
   }
 
@@ -856,7 +973,7 @@ export class ConferenceComponent implements OnInit {
     const defaultConferenceName = await this.conferenceService.validateDefaultConferenceServer(serverName, this.conference.id);
     if (defaultConferenceName && defaultConferenceName.conferenceName && defaultConferenceName.conferenceName.length > 0) {
       this.confirmationService.confirm({
-        message: this.translate.instant('conference.confirm.defaultConferenceServer', {name: defaultConferenceName.conferenceName}),
+        message: this.translate.instant('conference.confirm.defaultConferenceServer', { name: defaultConferenceName.conferenceName }),
         key: 'defaultConference',
         acceptLabel: this.translate.instant('yes'),
         rejectLabel: this.translate.instant('no'),
@@ -914,51 +1031,51 @@ export class ConferenceComponent implements OnInit {
     }
   }
 
-  syncFiles2Upload(data: {files: File[]}, setFile: string) {
+  syncFiles2Upload(data: { files: File[] }, setFile: string) {
     let i = 0;
     switch (setFile) {
       case 'participation':
         this.participationImages = this.participationImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
         for (i = 0; i < data.files.length; i++) {
-          this.participationImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.participationImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
       case 'authentication':
         this.authenticationImages = this.authenticationImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
         for (i = 0; i < data.files.length; i++) {
-          this.authenticationImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.authenticationImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
       case 'background':
         this.backgroundImages = this.backgroundImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
         for (i = 0; i < data.files.length; i++) {
-          this.backgroundImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.backgroundImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
     }
   }
 
-  addFiles2Upload(data: {files: File[]}, setFile: string) {
+  addFiles2Upload(data: { files: File[] }, setFile: string) {
     let i = 0;
     switch (setFile) {
       case 'participation':
         for (i = 0; i < data.files.length; i++) {
-          this.participationImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.participationImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
       case 'authentication':
         for (i = 0; i < data.files.length; i++) {
-          this.authenticationImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.authenticationImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
       case 'background':
         for (i = 0; i < data.files.length; i++) {
-          this.backgroundImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.backgroundImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
       case 'mobile':
         for (i = 0; i < data.files.length; i++) {
-          this.calendarImages.push({file: data.files[i], toDelete: false, toAdd: true});
+          this.calendarImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
     }
@@ -985,7 +1102,7 @@ export class ConferenceComponent implements OnInit {
         this.backgroundImages = this.backgroundImages.filter(image => image.file.id !== id);
         break;
       case 'mobile':
-        this.calendarImages  = this.calendarImages.filter(image => image.file.id !== id);
+        this.calendarImages = this.calendarImages.filter(image => image.file.id !== id);
         break;
     }
   }
@@ -1032,7 +1149,7 @@ export class ConferenceComponent implements OnInit {
     }
   }
 
-  async removeUnsavedFile(data: {file: File}, from: string) {
+  async removeUnsavedFile(data: { file: File }, from: string) {
     switch (from) {
       case 'participation':
         this.participationImages = this.participationImages
@@ -1117,7 +1234,7 @@ export class ConferenceComponent implements OnInit {
         this.messageService.add({
           severity: 'warn',
           summary: this.translate.instant('warn'),
-          detail: this.translate.instant('conference.moderator.already-enabled', {name: moderator.name}),
+          detail: this.translate.instant('conference.moderator.already-enabled', { name: moderator.name }),
         });
         return;
       }
@@ -1150,21 +1267,21 @@ export class ConferenceComponent implements OnInit {
 
   onInput($event) {
     this.conferenceForm.patchValue(
-      {name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
-      {emitEvent: false},
+      { name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ') },
+      { emitEvent: false },
     );
   }
 
   onBlur($event) {
     this.conferenceForm.patchValue(
-      {name: $event.target.value.replace(/\s+$/gm, '')},
-      {emitEvent: false});
+      { name: $event.target.value.replace(/\s+$/gm, '') },
+      { emitEvent: false });
   }
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
-      {label: 'administration.label'},
-      {label: 'administration.conference', routerLink: ['/administration/conferences']},
+      { label: 'administration.label' },
+      { label: 'administration.conference', routerLink: ['/administration/conferences'] },
     ]);
   }
 
@@ -1208,21 +1325,21 @@ export class ConferenceComponent implements OnInit {
     });
   }
 
-  comparePersonName( a, b ) {
+  comparePersonName(a, b) {
     let aName: string = a.name;
     let bName: string = b.name;
     aName = aName.normalize().toUpperCase();
     bName = bName.normalize().toUpperCase();
-    if ( aName < bName ) {
+    if (aName < bName) {
       return -1;
     }
-    if ( aName > bName ) {
+    if (aName > bName) {
       return 1;
     }
     return 0;
   }
 
-  handleFormChange(event){
+  handleFormChange(event) {
     this.conferenceCustomProperties.setValue(event.value);
   }
 

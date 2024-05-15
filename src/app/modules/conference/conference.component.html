@@ -213,6 +213,58 @@
                       </div>
                     </div>
                   </p-accordionTab>
+                  <p-accordionTab header="{{'conference.evaluation' |translate}}">
+                    <form [formGroup]="conferenceEvaluationForm" *ngIf="conferenceForm">
+                      <div class="row ">
+                        <div class="col-12 col-md-6 col-lg-6">
+                          <div class="col-12">
+                            <label class="clearfix">{{'conference.mode'| translate}}</label>
+                          </div>
+                          <div class="options-container pl-2">
+                            <div class="display-item ">
+                              <p-radioButton name="evaluationDisplayMode" value="AUTOMATIC"
+                                (onClick)="setEvaluationDisplayStatus()" class="ng-dirty" [label]="'automatic'|translate"
+                                formControlName="evaluationDisplayMode">
+                              </p-radioButton>
+                            </div>
+                            <div class="display-item">
+                              <p-radioButton name="evaluationDisplayMode" class="ng-dirty" value="MANUAL" [label]="'manual'|translate"
+                                formControlName="evaluationDisplayMode">
+                              </p-radioButton>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                          <div class="col-12">
+                            <label class="clearfix">&nbsp;</label>
+                          </div>
+                          <p-dropdown [options]="optionsStatusEvaluation"  [styleClass]="'w-100'" formControlName="evaluationDisplayStatus"
+                            [placeholder]="'placeholder.select'|translate" class="ng-dirty"
+                            [readonly]="conferenceEvaluationForm.controls.evaluationDisplayMode.value === 'AUTOMATIC'">
+                          </p-dropdown>
+                          <tt-input-message [form]="conferenceEvaluationForm" field="evaluationDisplayStatus"></tt-input-message>
+                        </div>
+                      </div>
+                      <div class="row ">
+                        <div class="col-12 col-md-6 col-lg-6 begin-date">
+                          <label class="clearfix" for="evaluationBeginDate">{{'conference.opening'|translate}}</label>
+                          <p-calendar dateFormat="dd/mm/yy"
+                            (onSelect)="changeEvaluationBeginDate($event);  setEvaluationDisplayStatus()"  [styleClass]="'w-100'" [showTime]="true"
+                            [showSeconds]="true" formControlName="evaluationBeginDate"  [locale]="calendarTranslate" class="ng-dirty">
+                          </p-calendar>
+                          <tt-input-message [form]="conferenceEvaluationForm" field="evaluationBeginDate"></tt-input-message>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6 end-date">
+                          <label for="evaluationEndDate">{{'conference.closure'|translate}}</label>
+                          <p-calendar (onClose)="changeEvaluationEndDate()" [minDate]="minDate" [locale]="calendarTranslate"
+                            dateFormat="dd/mm/yy" (onSelect)="setEvaluationDisplayStatus()"  [styleClass]="'w-100'" formControlName="evaluationEndDate"
+                            [showTime]="true" [showSeconds]="true" class="ng-dirty">
+                          </p-calendar>
+                          <tt-input-message [form]="conferenceEvaluationForm" field="evaluationEndDate"></tt-input-message>
+                        </div>
+                      </div>
+                    </form>
+                  </p-accordionTab>
                   <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
                     styleClass="tabStyleClass">
                     <div class="col-12 col-md-12" *ngIf="noSavedImages2Show(authenticationImages)">
