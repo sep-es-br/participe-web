@@ -94,6 +94,8 @@
 		"preOpening": "Pré-abertura",
 		"postClosure": "Pós-encerramento",
 		"open": "Aberta",
+		"closed": "Fechado",
+		"evaluation": "Avaliação",
 		"text": "Texto",
 		"label": "Rótulo",
 		"howWork": "Como funciona",
