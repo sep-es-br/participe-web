@@ -754,6 +754,12 @@ export class ConferenceComponent implements OnInit {
           return image.file;
         }
       });
+      
+      if(formData.showCalendar){
+        this.calendarImages.forEach(image => {
+            image.toDelete = true;
+        });
+      }
 
       for (i = this.calendarImages.length - 1; i >= 0; i--) {
         if ((this.calendarImages[i].file.id === null
@@ -767,7 +773,7 @@ export class ConferenceComponent implements OnInit {
         else if (this.calendarImages[i].file.id !== null
           && this.calendarImages[i].file.id !== undefined
           && this.calendarImages[i].toDelete) {
-          debugger
+          
           await this.removeFile(this.calendarImages[i].file.id, 'mobile');
         }
       }
@@ -777,11 +783,6 @@ export class ConferenceComponent implements OnInit {
         }
       });
 
-      /*
-      this.moderatorsEnabled.forEach(async moderator => {
-        await this.personService.postOperator('Moderator', moderator);
-      });
-      */
       formData = {
         ...formData,
         serverName: this.conferenceForm.controls.serverName.value,

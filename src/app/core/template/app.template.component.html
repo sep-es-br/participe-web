@@ -4,7 +4,7 @@
                 'layout-menu-horizontal': isHorizontal(),
                 'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
 
-  <p-toast position="top-right"></p-toast>
+  <p-toast position="top-right" [breakpoints]="{'435px': {width: '87%'}}"></p-toast>
 
   <app-topbar></app-topbar>
 

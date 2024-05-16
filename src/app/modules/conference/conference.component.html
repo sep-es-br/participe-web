@@ -320,6 +320,26 @@
                       </div>
                       <tt-input-message [form]="conferenceForm" field="localityType"></tt-input-message>
                     </div>
+
+                    <div class="col-12 col-md-12" [hidden]="conferenceForm.controls['showCalendar'].value">
+                      <div class="col-12 fileupload-container">
+                        <h3>{{'conference.mobile'|translate}}</h3>
+                        <p-fileUpload name="files"  accept="image/*" maxFileSize="5000000"
+                          auto="auto" customUpload="true" (onSelect)="addFiles2Upload($event, 'mobile')"
+                          (onRemove)="removeUnsavedFile($event, 'mobile')" [chooseLabel]="'add'|translate"
+                          [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate">
+                        </p-fileUpload>
+                      </div>
+                      <div *ngFor="let image of calendarImages"
+                        class="col-12 col-md-4 col-lg-3 col-xl-2 list-images-container">
+                        <div class="list-image-item"
+                          *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
+                          <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
+                            alt="Imagem Background">
+                          <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'mobile')"></i>
+                        </div>
+                      </div>
+                    </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
                     <div class="col-12 col-md-12" *ngIf="noSavedImages2Show(participationImages)">
@@ -690,23 +710,7 @@
                       <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
                     </div>
                   </div>
-                  <div class="col-12 fileupload-container">
-                    <h3>{{'conference.mobile'|translate}}</h3>
-                    <p-fileUpload name="files"  accept="image/*" maxFileSize="5000000"
-                      auto="auto" customUpload="true" (onSelect)="addFiles2Upload($event, 'mobile')"
-                      (onRemove)="removeUnsavedFile($event, 'mobile')" [chooseLabel]="'add'|translate"
-                      [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate">
-                    </p-fileUpload>
-                  </div>
-                  <div *ngFor="let image of calendarImages"
-                    class="col-12 col-md-4 col-lg-3 col-xl-2 list-images-container">
-                    <div class="list-image-item"
-                      *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
-                      <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
-                        alt="Imagem Background">
-                      <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'mobile')"></i>
-                    </div>
-                  </div>
+                 
                 </div>
               </p-accordionTab>
               <p-accordionTab header="{{ 'conference.cssTab.title' | translate }}" >
