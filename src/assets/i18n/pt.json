@@ -48,7 +48,7 @@
 		"successDetail": {
 			"checkin": "Presença registrada para {{name}}",
 			"saveAccount": "Usuário salvo!",
-			"uncheckin": "Prenseça removida!"
+			"uncheckin": "Presença removida!"
 		},
 		"tooltipLabelCheckin": "Registrar presença de ",
 		"tooltipLabelUnchecking": "Remover presença de ",
