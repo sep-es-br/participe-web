@@ -9,7 +9,7 @@ import { Meeting } from './Meeting';
 import { Locality } from './locality';
 import { howLongAgo } from '../util/Date.utils';
 import { getColorBasedOnText } from '../util/Colors.utils';
-import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
+import { ActionBarService, ActionButtonItem } from '@app/core/actionbar/app.actionbar.actions.service';
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { ConferenceService } from '../services/conference.service';
 import { MeetingService } from '../services/meeting.service';
@@ -34,6 +34,7 @@ export class AttendanceModel {
 
   idMeeting: number;
   totalAttendees: number;
+  totalPreRegistered: number;
   listAttendees: IAttendee[] = [];
 
   nameSearch: string;
@@ -56,6 +57,7 @@ export class AttendanceModel {
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
+  selectedFilterBy = 'pres';
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
 
@@ -128,7 +130,11 @@ export class AttendanceModel {
   }
 
   async updateTotalAttendees() {
-    this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting);
+    this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting, false);
+  }
+
+  async updateTotalPreRegistered() {
+    this.totalPreRegistered = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting, true);
   }
 
   async selectAttendee(attendee: IAttendee) {
@@ -232,6 +238,7 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+    await this.setActionBar(this.getQueryListAttendees().search.filter);
     this.isSearching = false;
     
   }
@@ -363,8 +370,24 @@ export class AttendanceModel {
     this.showSelectMeeting = false;
   }
 
-  async setActionBar() {
+  async setActionBar(type?: string) {
     await this.updateTotalAttendees();
+    await this.updateTotalPreRegistered();
+
+    if(type) {
+      switch (type) {
+        case 'prereg_notpres':
+          this.totalAttendees = 0
+          break;
+        case 'notprereg_pres':
+          this.totalPreRegistered = 0;
+          break;
+        default:
+          break;
+      }
+    }
+
+    
     this.actionbarSrv.setItems([
       {
         position: 'LEFT',
@@ -377,6 +400,12 @@ export class AttendanceModel {
         icon: 'user-solid.svg',
         label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
       },
+      {
+        position: 'RIGHT',
+        handle: () => this.updateTotalPreRegistered(),
+        icon: 'preregister_phone.svg',
+        label: `${this.totalPreRegistered} Pré-credenciados`
+      }
     ]);
   }
 
@@ -448,6 +477,7 @@ export class AttendanceModel {
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
+        filter: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
       },
     };
@@ -472,7 +502,7 @@ export class AttendanceModel {
   }
 
   getListOfLettersForLoading(): string[] {
-    const lastInListLetter = this.listAttendees.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
+    const lastInListLetter = this.listAttendees?.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
     const indexLastLetter = this.alphabet.indexOf(lastInListLetter.toUpperCase());
     return this.alphabet.split('').splice(indexLastLetter, this.pageSize);
   }
