@@ -56,4 +56,10 @@ export class Conference {
   };
   localityType?: LocalityType;
   customProperties?:customProperties;
+  evaluationConfiguration:{
+    beginDate?: string;
+    endDate?: string;
+    displayMode?: string;
+    evaluationDisplayStatus?: string;
+  }
 }

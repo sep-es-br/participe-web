@@ -48,7 +48,7 @@
 		"successDetail": {
 			"checkin": "Presença registrada para {{name}}",
 			"saveAccount": "Usuário salvo!",
-			"uncheckin": "Prenseça removida!"
+			"uncheckin": "Presença removida!"
 		},
 		"tooltipLabelCheckin": "Registrar presença de ",
 		"tooltipLabelUnchecking": "Remover presença de ",
@@ -94,6 +94,8 @@
 		"preOpening": "Pré-abertura",
 		"postClosure": "Pós-encerramento",
 		"open": "Aberta",
+		"closed": "Fechado",
+		"evaluation": "Avaliação",
 		"text": "Texto",
 		"label": "Rótulo",
 		"howWork": "Como funciona",
