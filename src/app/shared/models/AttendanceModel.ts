@@ -9,7 +9,7 @@ import { Meeting } from './Meeting';
 import { Locality } from './locality';
 import { howLongAgo } from '../util/Date.utils';
 import { getColorBasedOnText } from '../util/Colors.utils';
-import { ActionBarService, ActionButtonItem } from '@app/core/actionbar/app.actionbar.actions.service';
+import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { ConferenceService } from '../services/conference.service';
 import { MeetingService } from '../services/meeting.service';
@@ -238,7 +238,7 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
-    await this.setActionBar(this.getQueryListAttendees().search.filter);
+    await this.setActionBar();
     this.isSearching = false;
     
   }
@@ -370,24 +370,11 @@ export class AttendanceModel {
     this.showSelectMeeting = false;
   }
 
-  async setActionBar(type?: string) {
-    await this.updateTotalAttendees();
-    await this.updateTotalPreRegistered();
+  async setActionBar() {
 
-    if(type) {
-      switch (type) {
-        case 'prereg_notpres':
-          this.totalAttendees = 0
-          break;
-        case 'notprereg_pres':
-          this.totalPreRegistered = 0;
-          break;
-        default:
-          break;
-      }
-    }
+    this.totalAttendees = this.listAttendees.length > 0 ? this.listAttendees.filter(p => p.checkedIn).length : 0
+    this.totalPreRegistered = this.listAttendees.length > 0 ? this.listAttendees.filter(p => p.preRegistered).length : 0
 
-    
     this.actionbarSrv.setItems([
       {
         position: 'LEFT',
@@ -396,13 +383,13 @@ export class AttendanceModel {
       },
       {
         position: 'RIGHT',
-        handle: () => this.updateTotalAttendees(),
+        // handle: () => this.updateTotalAttendees(),
         icon: 'user-solid.svg',
         label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
       },
       {
         position: 'RIGHT',
-        handle: () => this.updateTotalPreRegistered(),
+        // handle: () => this.updateTotalPreRegistered(),
         icon: 'preregister_phone.svg',
         label: `${this.totalPreRegistered} Pré-credenciados`
       }
