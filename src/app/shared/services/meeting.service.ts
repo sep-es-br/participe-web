@@ -81,8 +81,16 @@ export class MeetingService extends BaseService<Meeting> {
     ).toPromise();
   }
 
-  getTotalAttendeesByMeeting(idMeeting: number): Promise<number> {
-    return this.http.get<number>(`${this.urlBase}/${idMeeting}/participants/total`).toPromise();
+  getTotalAttendeesByMeeting(idMeeting: number, preReg?: boolean): Promise<number> {
+    if(preReg){
+      const params = {
+        preReg: true
+      }
+      return this.http.get<number>(`${this.urlBase}/${idMeeting}/participants/total`, {params: params}).toPromise();
+    } else {
+      return this.http.get<number>(`${this.urlBase}/${idMeeting}/participants/total`).toPromise();
+    }
+    
   }
 
   generateLinkPreRegistration(idMeeting: number): Promise<any> {

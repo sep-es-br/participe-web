@@ -132,11 +132,23 @@ $textFilterColor: #666;
             color: $grey;
           }
         }
+        .info-preregister {
+          display: flex;
+          text-align: right;
+          justify-content: flex-end;
+          align-items: center;
+          flex: 1;
+
+          .how-long-ago {
+            color: $grey;
+          }
+        }
       }
       .action {
         display: flex;
         align-items: center;
         color: $blue;
+        margin-left: 5%;
         fa-icon {
           cursor: pointer;
           &:active {
