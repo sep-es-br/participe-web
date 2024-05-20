@@ -373,8 +373,8 @@ export class AttendanceModel {
 
   async setActionBar() {
 
-    this.totalAttendees = this.listAttendees.length > 0 ? this.listAttendees.filter(p => p.checkedIn).length : 0
-    this.totalPreRegistered = this.listAttendees.length > 0 ? this.listAttendees.filter(p => p.preRegistered).length : 0
+    this.totalAttendees = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.checkedIn).length : 0
+    this.totalPreRegistered = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.preRegistered).length : 0
 
     this.actionbarSrv.setItems([
       {
