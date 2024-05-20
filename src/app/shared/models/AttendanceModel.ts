@@ -130,11 +130,7 @@ export class AttendanceModel {
   }
 
   async updateTotalAttendees() {
-    this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting, false);
-  }
-
-  async updateTotalPreRegistered() {
-    this.totalPreRegistered = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting, true);
+    this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting);
   }
 
   async selectAttendee(attendee: IAttendee) {
@@ -384,13 +380,13 @@ export class AttendanceModel {
       },
       {
         position: 'RIGHT',
-        // handle: () => this.updateTotalAttendees(),
+        handle: () => {},
         icon: 'user-solid.svg',
         label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
       },
       {
         position: 'RIGHT',
-        // handle: () => this.updateTotalPreRegistered(),
+        handle: () => {},
         icon: 'preregister_phone.svg',
         label: `${this.totalPreRegistered} Pré-credenciados`
       }
