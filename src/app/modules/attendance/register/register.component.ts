@@ -202,9 +202,19 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       });
     }
     this.scannerEnabled = true;
-    this.deviceCurrent = this.availableDevices[0];
+    this.getCamera();
     this.modalData = {title: this.translate.instant('qrcode.titleModal') };
     this.modalService.open('QRCodeReader'); 
+  }
+
+  getCamera(){
+    this.deviceCurrent = this.availableDevices[0];
+    for (const device of this.availableDevices) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        this.deviceCurrent = device;
+        break;
+      }
+    }
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -212,32 +222,28 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.deviceCurrent = this.availableDevices[0];
     for (const device of devices) {
       if (/back|rear|environment/gi.test(device.label)) {
-        // this.scannerEnabled = true;
         this.deviceCurrent = device;
         break;
       }
     }
-    // this.scannerEnabled = true;
     this.hasDevices = Boolean(devices && devices.length);
   }
 
-  onCodeResult(resultString: string) {
+  onCodeResult(resultString: string) {    
     this.qrResultString = resultString;
     if(!isNaN(Number(resultString))){
-      this.modalService.close('QRCodeReader'); 
-      this.scannerEnabled = false;
+      this.closeQRCodeReader();
+      this.modalService.close('QRCodeReader');
       this.loadingService.loading(true);
       this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
       .then((resp)=>{
-        this.closeQRCodeReader();
         this.modalSuceesPresence = true;
         this.dataPresence = resp;
       })
     .catch((err)=>{
       setTimeout(() => {
         this.readQRCode();
-      }, 1200);
-      
+      }, 2700);
     })
     .finally(() => {
         
@@ -247,7 +253,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   onDeviceSelectChange(selected: string) {
-    // this.scannerEnabled = true;
     const device = this.availableDevices.find(x => x.deviceId === selected);
     this.deviceCurrent = device || null;
   }
