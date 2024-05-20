@@ -239,8 +239,10 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       .then((resp)=>{
         this.modalSuceesPresence = true;
         this.dataPresence = resp;
+        this.playSoundNotification('success');
       })
     .catch((err)=>{
+      this.playSoundNotification('error');
       setTimeout(() => {
         this.readQRCode();
       }, 2700);
@@ -309,5 +311,12 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   closeQRCodeReader(){
     this.scannerEnabled = false;
+  }
+
+  playSoundNotification(type: string){
+    let audio = new Audio();
+    audio.src = type === 'success' ? 'assets/sounds/success.mp3' : 'assets/sounds/error.mp3';
+    audio.load();
+    audio.play();
   }
 }
