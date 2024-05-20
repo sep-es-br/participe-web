@@ -365,6 +365,7 @@ export class AttendanceModel {
       ]);
     }
 
+    await this.searchByName();
     await this.setActionBar();
     // await this.searchByName();
     this.showSelectMeeting = false;
