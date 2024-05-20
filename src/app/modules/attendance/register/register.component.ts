@@ -210,7 +210,14 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.deviceCurrent = this.availableDevices[0];
-    this.scannerEnabled = true;
+    for (const device of devices) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        // this.scannerEnabled = true;
+        this.deviceCurrent = device;
+        break;
+      }
+    }
+    // this.scannerEnabled = true;
     this.hasDevices = Boolean(devices && devices.length);
   }
 
@@ -222,6 +229,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.loadingService.loading(true);
       this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
       .then((resp)=>{
+        this.closeQRCodeReader();
         this.modalSuceesPresence = true;
         this.dataPresence = resp;
       })
@@ -239,7 +247,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   onDeviceSelectChange(selected: string) {
-    this.scannerEnabled = true;
+    // this.scannerEnabled = true;
     const device = this.availableDevices.find(x => x.deviceId === selected);
     this.deviceCurrent = device || null;
   }
@@ -292,5 +300,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       time: '00/00/0000 00:00'
     };
     this.readQRCode();
+  }
+
+  closeQRCodeReader(){
+    this.scannerEnabled = false;
   }
 }

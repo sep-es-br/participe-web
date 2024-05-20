@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 import { ModalService } from './modal.service';
 import { IModalData, ModalData } from '@app/shared/interface/IModalData';
@@ -13,6 +13,8 @@ export class ModalComponent implements OnInit, OnDestroy {
     @Input() id: string;
     private element: any;
     @Input() modalData:Partial<IModalData>;
+    @Output() closed: EventEmitter<void> = new EventEmitter<void>();
+
     dataModal;
 
     constructor(private modalService: ModalService, private el: ElementRef) {
@@ -57,5 +59,6 @@ export class ModalComponent implements OnInit, OnDestroy {
     close(): void {
         this.element.style.display = 'none';
         document.body.classList.remove('app-modal-open');
+        this.closed.emit();
     }
 }
