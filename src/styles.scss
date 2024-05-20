@@ -129,12 +129,15 @@ div.search {
   .action-item {
     display: flex;
     align-items: center;
+    margin-left: 15px;
     > * {
       margin: 3px;
     }
   }
 
   .actions-right {
+    display: flex;
+    flex-direction: row;
     color: silver;
     font-weight: 700;
     font-size: 13px;
