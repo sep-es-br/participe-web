@@ -6,7 +6,7 @@ import {
   IEvaluationSection,
   IEvaluationSectionCreate,
 } from "../interface/IEvaluationSection";
-import { IOrganogramaData } from "../interface/IOrganogramaData";
+import { IEvaluatorOrganization, IEvaluatorSection, IEvaluatorServer } from "../interface/IEvaluatorData";
 
 import Common from "../util/Common";
 
@@ -20,28 +20,28 @@ export class EvaluationSectionsService {
 
   private headers: HttpHeaders = Common.buildHeaders();
 
-  private organizationsMockList: Array<IOrganogramaData> = [
+  private organizationsMockList: Array<IEvaluatorOrganization> = [
     { guid: "OrgTesteA", name: "Organização de Teste 1" },
     { guid: "OrgTesteB", name: "Organização de Teste 2" },
     { guid: "OrgTesteC", name: "Organização de Teste 3" },
   ];
 
-  private sectionsMockList: Array<IOrganogramaData> = [
+  private sectionsMockList: Array<IEvaluatorSection> = [
     { guid: "SectionTesteA", name: "Setor de Teste 1" },
     { guid: "SectionTesteB", name: "Setor de Teste 2" },
     { guid: "SectionTesteC", name: "Setor de Teste 3" },
   ];
 
-  private serversMockList: Array<IOrganogramaData> = [
-    {
-      guid: "propidByAuthDoRelacionamentoIS_EVALUATED_BY",
-      name: "Artur Uhlig de Faria",
-    },
-    { guid: "guid1", name: "Bruno Matos Marques Barbosa" },
-    { guid: "guid2", name: "Luiz Guilherme Zortea Machado" },
-    { guid: "guid3", name: "Wagner Bertolino da Cruz" },
-    { guid: "guid4", name: "Diego Gutemberg Gaede" },
-  ];
+  // private serversMockList: Array<IEvaluatorServer> = [
+  //   {
+  //     guid: "propidByAuthDoRelacionamentoIS_EVALUATED_BY",
+  //     name: "Artur Uhlig de Faria",
+  //   },
+  //   { guid: "guid1", name: "Bruno Matos Marques Barbosa" },
+  //   { guid: "guid2", name: "Luiz Guilherme Zortea Machado" },
+  //   { guid: "guid3", name: "Wagner Bertolino da Cruz" },
+  //   { guid: "guid4", name: "Diego Gutemberg Gaede" },
+  // ];
 
   constructor(private _http: HttpClient) {}
 
@@ -54,7 +54,8 @@ export class EvaluationSectionsService {
   }
 
   public getServersMockList() {
-    return this.serversMockList;
+    // return this.serversMockList;
+    return []
   }
 
   public getEvaluationSectionsList(): Promise<Array<IEvaluationSection>> {
@@ -100,9 +101,9 @@ export class EvaluationSectionsService {
     - Entender os queryParams da url
   */
 
-  // private getOrganizationsList(): Promise<Array<IOrganogramaData>> {
+  // private getOrganizationsList(): Promise<Array<IEvaluatorData>> {
   //   return this._http
-  //     .get<Array<IOrganogramaData>>(this._urlApiOrganograma, {
+  //     .get<Array<IEvaluatorData>>(this._urlApiOrganograma, {
   //       headers: this.headers,
   //     })
   //     .toPromise();
@@ -110,9 +111,9 @@ export class EvaluationSectionsService {
 
   // private getSectionsList(
   //   organizationGuid: string
-  // ): Promise<Array<IOrganogramaData>> {
+  // ): Promise<Array<IEvaluatorData>> {
   //   return this._http
-  //     .get<Array<IOrganogramaData>>(this._urlApiOrganograma, {
+  //     .get<Array<IEvaluatorData>>(this._urlApiOrganograma, {
   //       headers: this.headers,
   //       params: { organizationGuid: organizationGuid },
   //     })
