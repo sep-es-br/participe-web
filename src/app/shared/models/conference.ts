@@ -24,6 +24,7 @@ export class Conference {
   subtitleRegionalization: string;
   fileParticipation: File;
   fileAuthentication: File;
+  fileFooter: File;
   locality: LocalityType;
   hasAttend: boolean;
   moderators: IPerson[];

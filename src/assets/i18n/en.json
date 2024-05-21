@@ -135,6 +135,8 @@
       "endDateOutOfRange": "Conference closure date must be after opening date"
     },
     "image": "Image",
+	"footer-image": "Footer image",
+	"header-image": "Header Image",
     "in-progress": "Conference in progress, cannot be deleted!",
     "inserted": "Inserted conference {{name}} ",
     "locality-citizen": "Type of citizen locality",
