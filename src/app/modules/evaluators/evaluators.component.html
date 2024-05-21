@@ -76,7 +76,13 @@
           </ng-container>
           <div class="row">
             <div class="col-12">
+
+              <div *ngIf="evaluationSectionsList.length == 0">
+                <p class="text-center">Sem resultados.</p>
+              </div>
+
               <p-table
+                *ngIf="evaluationSectionsList.length > 0"
                 [value]="evaluationSectionsList"
                 responsiveLayout="stack"
                 class="data-column"
@@ -139,6 +145,7 @@
                   [options]="organizationsList"
                   optionLabel="name"
                   optionValue="guid"
+                  filter="true"
                   [readonly]="editEvaluatorSection"
                   formControlName="organizationGuid"
                   (onChange)="organizationChanged($event)"

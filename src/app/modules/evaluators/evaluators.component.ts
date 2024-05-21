@@ -11,14 +11,21 @@ import {
   IEvaluationSection,
   IEvaluationSectionCreate,
 } from "@app/shared/interface/IEvaluationSection";
+import {
+  IEvaluatorOrganization,
+  IEvaluatorSection,
+  IEvaluatorServer,
+} from "@app/shared/interface/IEvaluatorData";
+import { DropdownChangeEvent } from "primeng/dropdown";
+import { MultiSelectChangeEvent } from "primeng/multiselect";
 
 @Component({
-  selector: "app-evaluation-sections",
+  selector: "app-evaluators",
   standalone: false,
-  templateUrl: "./evaluation-sections.component.html",
-  styleUrl: "./evaluation-sections.component.scss",
+  templateUrl: "./evaluators.component.html",
+  styleUrl: "./evaluators.component.scss",
 })
-export class EvaluationSectionsComponent implements OnInit, OnDestroy {
+export class EvaluatorsComponent implements OnInit, OnDestroy {
   loading = false;
 
   search = false;
@@ -33,9 +40,9 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
   evaluationSectionsList: Array<IEvaluationSection> = [];
 
-  organizationsList = [];
-  sectionsList = [];
-  serversList = [];
+  organizationsList: Array<IEvaluatorOrganization> = [];
+  sectionsList: Array<IEvaluatorSection> = [];
+  serversList: Array<IEvaluatorServer> = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -47,7 +54,8 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.buildBreadcrumb();
-    await this.getEvaluationSectionsList();
+    // await this.getEvaluationSectionsList();
+    await this.getOrganizationsList();
   }
 
   public showSearchForm() {
@@ -66,6 +74,8 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
   public showEditEvaluator(data: IEvaluationSection) {
     this.editEvaluatorSection = true;
     this.showForm = true;
+
+    console.log(data);
 
     this.initEditEvaluatorsForm(data);
     this.formHeaderText = "evaluation-section.edit";
@@ -91,20 +101,23 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
     return this.loading ? "pi pi-spin pi-spinner" : icon;
   }
 
-  public organizationChanged(event: any) {
-    // fazer GET para endpoint de setores passando event.value como queryParam
-    // ex: localhost:8080/participe/setores?orgao=algumacoisa
-
-    console.log(event.value);
-    this.getSectionsList();
+  public async organizationChanged(event: DropdownChangeEvent) {
+    await this.getSectionsList(event.value);
   }
 
-  public sectionsChanged(event: any) {
-    // fazer GET para endpoint de servidores passando event.value como queryParam
-    // ex: localhost:8080/participe/servidores?setor=algumacoisa
+  public async sectionsChanged(event: MultiSelectChangeEvent) {
+    if (event.value.length == 0) {
+      this.sectionsCleared();
+      return;
+    }
 
-    console.log(event.value);
-    this.getServersList();
+    const targetSection = event.itemValue;
+
+    if (targetSection.guid) {
+      await this.addToServersList(targetSection.guid);
+    } else {
+      await this.removeFromServerList(targetSection);
+    }
   }
 
   public sectionsCleared() {
@@ -120,6 +133,8 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
     this.showForm = false;
     this.editEvaluatorSection = false;
     this.evaluatorsForm = null;
+    this.sectionsList = [];
+    this.serversList = [];
   }
 
   public async saveEvaluatorsForm(form: FormGroup) {
@@ -250,11 +265,9 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       sectionsGuid: new FormControl("", Validators.required),
       serversGuid: new FormControl(""),
     });
-
-    this.getOrganizationsList();
   }
 
-  private initEditEvaluatorsForm(data: IEvaluationSection) {
+  private async initEditEvaluatorsForm(data: IEvaluationSection) {
     this.evaluationSectionId = data.id;
 
     const sectionsGuidFormControl = data.sectionsGuid.includes(",")
@@ -279,9 +292,13 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
       serversGuid: new FormControl(serversGuidFormControl),
     });
 
-    this.getOrganizationsList();
-    this.getSectionsList();
-    this.getServersList();
+    await this.getSectionsList(data.organizationGuid);
+
+    data.sectionsGuid
+      .split(",")
+      .forEach((server) => this.addToServersList(server));
+
+    // this.serversList = await this.getServersList(data.sectionsGuid);
   }
 
   private buildBreadcrumb() {
@@ -295,20 +312,62 @@ export class EvaluationSectionsComponent implements OnInit, OnDestroy {
   }
 
   private async getEvaluationSectionsList() {
-    await this.evaluationSectionsService
-      .getEvaluationSectionsList()
-      .then((response) => (this.evaluationSectionsList = response));
+    this.evaluationSectionsList =
+      await this.evaluationSectionsService.getEvaluationSectionsList();
+
+    console.log(this.evaluationSectionsList);
   }
 
-  private getOrganizationsList() {
+  private async getOrganizationsList() {
     this.organizationsList =
-      this.evaluationSectionsService.getOrganizationsMockList();
+      await this.evaluationSectionsService.getOrganizationsList();
   }
-  private getSectionsList() {
-    this.sectionsList = this.evaluationSectionsService.getSectionsMockList();
+
+  private async getSectionsList(orgGuid: string) {
+    this.sectionsList = await this.evaluationSectionsService.getSectionsList(
+      orgGuid
+    );
   }
-  private getServersList() {
-    this.serversList = this.evaluationSectionsService.getServersMockList();
+
+  private async getServersList(
+    unitGuid: string
+  ): Promise<Array<IEvaluatorServer>> {
+    const response = await this.evaluationSectionsService.getServersList(
+      unitGuid
+    );
+
+    if (response.length == 0) {
+      this.messageService.add({
+        severity: "warn",
+        // summary: this.translateService.instant("error"),
+        summary: "Atenção!",
+        // detail: this.translateService.instant("erro.invalid.data"),
+        detail: "A unidade não possui papéis atrelados á ela.",
+      });
+    } else {
+      return response;
+    }
+  }
+
+  private async addToServersList(unitGuid: string) {
+    await this.getServersList(unitGuid).then((response) => {
+      if (response) {
+        this.serversList = this.serversList.concat(response);
+      }
+    });
+  }
+
+  private async removeFromServerList(unitGuid: string) {
+    await this.getServersList(unitGuid).then((response) => {
+      if (response) {
+        response.forEach((target) => {
+          const targetServer = this.serversList.find(
+            (server) => server == target
+          );
+          this.serversList.splice(this.serversList.indexOf(targetServer), 1);
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {

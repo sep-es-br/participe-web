@@ -27,7 +27,7 @@ import { PlanModule } from './modules/plan/plan.module';
 import { StructureModule } from './modules/structure/structure.module';
 import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/control-panel-dashboard.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { EvaluationSectionsModule } from './modules/evaluation-sections/evaluation-sections.module';
+import { EvaluatorsModule } from './modules/evaluators/evaluators.module';
 
 @NgModule({
   imports: [
@@ -49,7 +49,7 @@ import { EvaluationSectionsModule } from './modules/evaluation-sections/evaluati
     CoreModule,
     StructureModule,
     CitizenModule,
-    EvaluationSectionsModule,
+    EvaluatorsModule,
     ModerationModule,
     ControlPanelDashboardModule,
     SweetAlert2Module.forRoot(),

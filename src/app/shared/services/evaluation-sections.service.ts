@@ -14,49 +14,11 @@ import Common from "../util/Common";
   providedIn: "root",
 })
 export class EvaluationSectionsService {
-  private _url = `${environment.apiEndpoint}/evaluation-sections`;
-  private _urlApiOrganograma = "";
-  private _urlApiAcessoCidadao = "";
+  private _url = `${environment.apiEndpoint}/evaluators`;
 
   private headers: HttpHeaders = Common.buildHeaders();
 
-  private organizationsMockList: Array<IEvaluatorOrganization> = [
-    { guid: "OrgTesteA", name: "Organização de Teste 1" },
-    { guid: "OrgTesteB", name: "Organização de Teste 2" },
-    { guid: "OrgTesteC", name: "Organização de Teste 3" },
-  ];
-
-  private sectionsMockList: Array<IEvaluatorSection> = [
-    { guid: "SectionTesteA", name: "Setor de Teste 1" },
-    { guid: "SectionTesteB", name: "Setor de Teste 2" },
-    { guid: "SectionTesteC", name: "Setor de Teste 3" },
-  ];
-
-  // private serversMockList: Array<IEvaluatorServer> = [
-  //   {
-  //     guid: "propidByAuthDoRelacionamentoIS_EVALUATED_BY",
-  //     name: "Artur Uhlig de Faria",
-  //   },
-  //   { guid: "guid1", name: "Bruno Matos Marques Barbosa" },
-  //   { guid: "guid2", name: "Luiz Guilherme Zortea Machado" },
-  //   { guid: "guid3", name: "Wagner Bertolino da Cruz" },
-  //   { guid: "guid4", name: "Diego Gutemberg Gaede" },
-  // ];
-
   constructor(private _http: HttpClient) {}
-
-  public getOrganizationsMockList() {
-    return this.organizationsMockList;
-  }
-
-  public getSectionsMockList() {
-    return this.sectionsMockList;
-  }
-
-  public getServersMockList() {
-    // return this.serversMockList;
-    return []
-  }
 
   public getEvaluationSectionsList(): Promise<Array<IEvaluationSection>> {
     return this._http
@@ -93,6 +55,24 @@ export class EvaluationSectionsService {
         headers: this.headers,
         responseType: "text",
       })
+      .toPromise();
+  }
+
+  public getOrganizationsList(): Promise<Array<IEvaluatorOrganization>> {
+    return this._http
+      .get<Array<IEvaluatorOrganization>>(`${this._url}/organizations`, { headers: this.headers })
+      .toPromise();
+  }
+
+  public getSectionsList(orgGuid: string): Promise<Array<IEvaluatorSection>> {
+    return this._http
+      .get<Array<IEvaluatorSection>>(`${this._url}/sections/${orgGuid}`, { headers: this.headers })
+      .toPromise();
+  }
+
+  public getServersList(unitGuid: string): Promise<Array<IEvaluatorServer>> {
+    return this._http
+      .get<Array<IEvaluatorServer>>(`${this._url}/servers/${unitGuid}`, { headers: this.headers })
       .toPromise();
   }
 

@@ -35,7 +35,7 @@ export class AdministrationDashboardComponent implements OnInit {
       {name: 'administration.structure', url: '/administration/structures', icon: faSitemap},
       {name: 'administration.plan', url: '/administration/plans', icon: faClipboardList},
       {name: 'administration.conference', url: '/administration/conferences', icon: faComments},
-      {name: 'administration.evaluation-sections', url: '/administration/evaluation-sections', icon: faPortrait},
+      {name: 'administration.evaluators', url: '/administration/evaluators', icon: faPortrait},
       {name: 'administration.citizen', url: '/administration/citizen', icon: faUsers},
     ];
   }
