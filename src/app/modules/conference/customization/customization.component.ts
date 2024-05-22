@@ -22,6 +22,7 @@ import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
     colorTextCard: string = '#000000';
     colorFontAccent: string = '#ffffff';
     borderColorCard: string = '#ffffff';
+    colorCardLogin: string = '#ffffff';
     formLoaded: boolean = false;
     
 
@@ -50,6 +51,7 @@ import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
         this.colorFontAccent = this.dataForm.controls.cardFontColorHover.value != '' ? this.dataForm.controls.cardFontColorHover.value : this.colorFontAccent;
         this.borderColorCard = this.dataForm.controls.cardBorderColor.value != '' ? this.dataForm.controls.cardBorderColor.value : this.borderColorCard;
         this.typeColorInput = this.dataForm.controls.typeBackgroundColor.value != '' ? this.dataForm.controls.typeBackgroundColor.value : this.typeColorInput;
+        this.colorCardLogin = this.dataForm.controls.cardLoginColor.value != '' ? this.dataForm.controls.cardLoginColor.value : this.colorCardLogin;
 
         this.customStylesheet.controls.typeBackgroundColor.setValue(this.typeColorInput);
         this.customStylesheet.controls.background.setValue(this.backgroundColor);
@@ -61,6 +63,7 @@ import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
         this.customStylesheet.controls.cardColorHover.setValue(this.colorAccentCard);
         this.customStylesheet.controls.cardFontColorHover.setValue(this.colorFontAccent);
         this.customStylesheet.controls.cardBorderColor.setValue(this.borderColorCard);
+        this.customStylesheet.controls.cardLoginColor.setValue(this.colorCardLogin);
         
     }
 
@@ -80,6 +83,7 @@ import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
             cardFontColor: '',
             cardFontColorHover: '',
             cardBorderColor: '',
+            cardLoginColor: '',
         })
         this.customStylesheet.valueChanges.subscribe(() => {
             this.dataFormChange.emit(this.customStylesheet);
@@ -104,6 +108,7 @@ import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
             this.customStylesheet.controls.cardColorHover.setValue(this.dataForm.controls.cardColorHover.value);
             this.customStylesheet.controls.cardFontColorHover.setValue(this.dataForm.controls.cardFontColorHover.value);
             this.customStylesheet.controls.cardBorderColor.setValue(this.dataForm.controls.cardBorderColor.value);
+            this.customStylesheet.controls.cardLoginColor.setValue(this.dataForm.controls.cardLoginColor.value);
         }
         this.formLoaded = true;
     }
@@ -137,6 +142,7 @@ import { UntypedFormBuilder, FormGroup, FormControl  } from "@angular/forms";
             this.colorFontAccent = this.customStylesheet.controls.cardFontColorHover.value;
             this.borderColorCard = this.customStylesheet.controls.cardBorderColor.value;
             this.typeColorInput = this.customStylesheet.controls.typeBackgroundColor.value;
+            this.colorCardLogin = this.customStylesheet.controls.cardLoginColor.value;
         }
     }
     

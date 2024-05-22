@@ -313,7 +313,8 @@ export class ConferenceComponent implements OnInit {
       cardFontColor: '',
       cardColorHover: '',
       cardFontColorHover: '',
-      cardBorderColor: ''
+      cardBorderColor: '',
+      cardLoginColor: ''
     });
 
     this.searchModeratorsForm = this.formBuilder.group({
@@ -454,6 +455,7 @@ export class ConferenceComponent implements OnInit {
     this.conferenceCustomProperties.controls.cardFontColor.setValue(this.conference.customProperties.cardFontColor);
     this.conferenceCustomProperties.controls.cardFontColorHover.setValue(this.conference.customProperties.cardFontColorHover);
     this.conferenceCustomProperties.controls.cardBorderColor.setValue(this.conference.customProperties.cardBorderColor);
+    this.conferenceCustomProperties.controls.cardLoginColor.setValue(this.conference.customProperties.cardLoginColor);
   }
 
   addHowItWorkStep() {
@@ -840,6 +842,7 @@ export class ConferenceComponent implements OnInit {
           cardFontColor: this.conferenceCustomProperties.controls.cardFontColor.value,
           cardFontColorHover: this.conferenceCustomProperties.controls.cardFontColorHover.value,
           cardBorderColor: this.conferenceCustomProperties.controls.cardBorderColor.value,
+          cardLoginColor: this.conferenceCustomProperties.controls.cardLoginColor.value,
         },
         evaluationConfiguration: {
           beginDate: evaluationBeginDate,

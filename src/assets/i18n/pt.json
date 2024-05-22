@@ -239,11 +239,12 @@
 				"accent": "Destaque",
 				"card": "Caixa",
 				"accentCard": "Caixa em destaque",
-				"textCard": "Texto do Card",
+				"textCard": "Texto da caixa",
 				"textAccentCard": "Texto em caixa destacada",
 				"borderCard": "Borda da caixa",
 				"solid": "Cor Sólida",
-				"gradient": "Gradiente"
+				"gradient": "Gradiente",
+				"cardLogin": "Caixa do login"
 			},
 			"preview": {
 				"titleSection": "Pré visualização",
@@ -256,7 +257,8 @@
 				"textCard": "Assim será apresentado o texto sobre a caixa",
 				"textAccentCard": "Assim será apresentado o texto sobre a caixa em destaque.",
 				"card":"Caixa",
-				"cardAccent":"Caixa em destaque"
+				"cardAccent":"Caixa em destaque",
+				"cardLogin": "Caixa do login"
 			}
 		},
 		"actions": {
