@@ -72,6 +72,8 @@ export class ConferenceComponent implements OnInit {
   authenticationImages: FileCtrl[] = [];
   backgroundImages: FileCtrl[] = [];
   calendarImages: FileCtrl[] = [];
+  footerImages: FileCtrl[] = [];
+
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -223,6 +225,13 @@ export class ConferenceComponent implements OnInit {
     if (this.conference.fileParticipation !== undefined && this.conference.fileParticipation !== null) {
       this.participationImages.push({
         file: this.conference.fileParticipation,
+        toAdd: false,
+        toDelete: false
+      });
+    }
+    if (this.conference.fileFooter !== undefined && this.conference.fileFooter !== null) {
+      this.footerImages.push({
+        file: this.conference.fileFooter,
         toAdd: false,
         toDelete: false
       });
@@ -400,7 +409,6 @@ export class ConferenceComponent implements OnInit {
       this.loadCustomPreferences = true;
     }
     if (this.conference.evaluationConfiguration) {
-      console.log("antes do SET")
       this.setConferenceEvaluation();
     }
     
@@ -415,7 +423,6 @@ export class ConferenceComponent implements OnInit {
   }
 
   setConferenceEvaluation() {
-    console.log(this.conference.evaluationConfiguration)
     this.conferenceEvaluationForm.controls.evaluationBeginDate.setValue(this.getDate(this.conference.evaluationConfiguration.beginDate));
     this.conferenceEvaluationForm.controls.evaluationEndDate.setValue(this.getDate(this.conference.evaluationConfiguration.endDate));
     this.conferenceEvaluationForm.controls.evaluationDisplayMode.setValue(this.conference.evaluationConfiguration.displayMode);
@@ -734,6 +741,20 @@ export class ConferenceComponent implements OnInit {
         }
       }
 
+      for (i = this.footerImages.length - 1; i >= 0; i--) {
+        if ((this.footerImages[i].file.id === null
+          || this.footerImages[i].file.id === undefined)
+          && this.footerImages[i].toAdd) {
+          this.conference.fileFooter = await this.uploadFile(i, 'footer');
+        }
+        else if (this.footerImages[i].file.id !== null
+          && this.footerImages[i].file.id !== undefined
+          && this.footerImages[i].toDelete) {
+          await this.removeFile(this.footerImages[i].file.id, 'footer');
+          this.conference.fileFooter = null;
+        }
+      }
+
       for (i = this.backgroundImages.length - 1; i >= 0; i--) {
         if ((this.backgroundImages[i].file.id === null
           || this.backgroundImages[i].file.id === undefined)
@@ -792,6 +813,7 @@ export class ConferenceComponent implements OnInit {
         localityType: formData.localityType,
         fileAuthentication: this.conference.fileAuthentication,
         fileParticipation: this.conference.fileParticipation,
+        fileFooter: this.conference.fileFooter,
         targetedByItems,
         moderators: this.moderatorsEnabled,
         howItWork: this.howItWorkSteps,
@@ -1007,6 +1029,13 @@ export class ConferenceComponent implements OnInit {
             return await this.filesSrv.uploadFile(formData);
           }
           break;
+        case 'footer':
+          if (this.footerImages[index].file.id === null || this.footerImages[index].file.id === undefined) {
+            file = this.footerImages[index].file;
+            formData.append('file', file, file.name);
+            return await this.filesSrv.uploadFile(formData);
+          }
+          break;  
         case 'background':
           if (this.backgroundImages[index].file.id === null || this.backgroundImages[index].file.id === undefined) {
             file = this.backgroundImages[index].file;
@@ -1041,6 +1070,12 @@ export class ConferenceComponent implements OnInit {
           this.participationImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
+      case 'footer':
+        this.footerImages = this.footerImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
+        for (i = 0; i < data.files.length; i++) {
+          this.footerImages.push({ file: data.files[i], toDelete: false, toAdd: true });
+         }
+         break;
       case 'authentication':
         this.authenticationImages = this.authenticationImages.filter(image => (image.file.id !== null && image.file.id !== undefined));
         for (i = 0; i < data.files.length; i++) {
@@ -1062,6 +1097,11 @@ export class ConferenceComponent implements OnInit {
       case 'participation':
         for (i = 0; i < data.files.length; i++) {
           this.participationImages.push({ file: data.files[i], toDelete: false, toAdd: true });
+        }
+        break;
+      case 'footer':
+        for (i = 0; i < data.files.length; i++) {
+           this.footerImages.push({ file: data.files[i], toDelete: false, toAdd: true });
         }
         break;
       case 'authentication':
@@ -1099,6 +1139,9 @@ export class ConferenceComponent implements OnInit {
       case 'participation':
         this.participationImages = this.participationImages.filter(image => image.file.id !== id);
         break;
+      case 'footer':
+        this.footerImages = this.footerImages.filter(image => image.file.id !== id);
+        break;
       case 'background':
         this.backgroundImages = this.backgroundImages.filter(image => image.file.id !== id);
         break;
@@ -1117,6 +1160,13 @@ export class ConferenceComponent implements OnInit {
     switch (from) {
       case 'participation':
         this.participationImages.forEach(image => {
+          if ((image.file.id !== null && image.file.id !== null) && image.file.id === image2Delete.file.id) {
+            image.toDelete = true;
+          }
+        });
+        break;
+      case 'footer':
+        this.footerImages.forEach(image => {
           if ((image.file.id !== null && image.file.id !== null) && image.file.id === image2Delete.file.id) {
             image.toDelete = true;
           }
@@ -1154,6 +1204,10 @@ export class ConferenceComponent implements OnInit {
     switch (from) {
       case 'participation':
         this.participationImages = this.participationImages
+          .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
+        break;
+      case 'footer':
+        this.footerImages = this.footerImages
           .filter(image => ((image.file.id !== null && image.file.id !== undefined) || image.file.name !== data.file.name));
         break;
 

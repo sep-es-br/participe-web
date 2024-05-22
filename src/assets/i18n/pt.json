@@ -142,6 +142,8 @@
 			"endDateOutOfRange": "A data de término da conferência deve ser posterior à data de abertura"
 		},
 		"image": "Imagem",
+		"footer-image": "Imagem de Rodapé",
+		"header-image": "Imagem de Cabeçalho",
 		"in-progress": "Consulta em andamento, não pode ser excluída!",
 		"inserted": "Consulta {{name}} inserida",
 		"locality-citizen": "Tipo de localidade do cidadão",
