@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { TranslateService } from "@ngx-translate/core";
@@ -6,18 +6,16 @@ import { TranslateService } from "@ngx-translate/core";
 import { ConfirmationService, MessageService } from "primeng/api";
 
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
-import { EvaluationSectionsService } from "@app/shared/services/evaluation-sections.service";
-import {
-  IEvaluationSection,
-  IEvaluationSectionCreate,
-} from "@app/shared/interface/IEvaluationSection";
+import { EvaluatorsService } from "@app/shared/services/evaluators.service";
+import { IEvaluator } from "@app/shared/interface/IEvaluator";
 import {
   IEvaluatorOrganization,
   IEvaluatorSection,
-  IEvaluatorServer,
+  IEvaluatorRole,
 } from "@app/shared/interface/IEvaluatorData";
 import { DropdownChangeEvent } from "primeng/dropdown";
 import { MultiSelectChangeEvent } from "primeng/multiselect";
+import { EvaluatorCreateFormModel } from "@app/shared/models/EvaluatorModel";
 
 @Component({
   selector: "app-evaluators",
@@ -25,7 +23,7 @@ import { MultiSelectChangeEvent } from "primeng/multiselect";
   templateUrl: "./evaluators.component.html",
   styleUrl: "./evaluators.component.scss",
 })
-export class EvaluatorsComponent implements OnInit, OnDestroy {
+export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
 
   search = false;
@@ -38,24 +36,27 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
 
   searchForm: FormGroup;
 
-  evaluationSectionsList: Array<IEvaluationSection> = [];
+  evaluatorsList: Array<IEvaluator> = [];
 
   organizationsList: Array<IEvaluatorOrganization> = [];
   sectionsList: Array<IEvaluatorSection> = [];
-  serversList: Array<IEvaluatorServer> = [];
+  rolesList: Array<IEvaluatorRole> = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private translateService: TranslateService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private evaluationSectionsService: EvaluationSectionsService
+    private evaluatorsService: EvaluatorsService
   ) {}
 
   async ngOnInit() {
     this.buildBreadcrumb();
-    // await this.getEvaluationSectionsList();
-    await this.getOrganizationsList();
+    await this.getEvaluatorsList();
+  }
+
+  async ngAfterViewInit() {
+    await this.prepareEvaluatorsTable();
   }
 
   public showSearchForm() {
@@ -64,29 +65,31 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   }
 
   public showCreateEvaluator() {
+    this.sectionsList = [];
+    this.rolesList = [];
+
     this.editEvaluatorSection = false;
     this.showForm = true;
 
     this.initCreateEvaluatorsForm();
-    this.formHeaderText = "evaluation-section.new";
+    this.formHeaderText = "evaluator.new";
   }
 
-  public showEditEvaluator(data: IEvaluationSection) {
+  public showEditEvaluator(data: IEvaluator) {
     this.editEvaluatorSection = true;
     this.showForm = true;
 
     console.log(data);
 
-    this.initEditEvaluatorsForm(data);
-    this.formHeaderText = "evaluation-section.edit";
+    // this.initEditEvaluatorsForm(data);
+    this.formHeaderText = "evaluator.edit";
   }
 
-  public async deleteEvaluator(data: IEvaluationSection) {
+  public async deleteEvaluator(data: IEvaluator) {
     this.confirmationService.confirm({
-      message: this.translateService.instant(
-        "evaluation-section.confirm.delete",
-        { name: data.organizationGuid }
-      ),
+      message: this.translateService.instant("evaluator.confirm.delete", {
+        name: data.organizationGuid,
+      }),
       key: "deleteEvaluationSection",
       acceptLabel: this.translateService.instant("yes"),
       rejectLabel: this.translateService.instant("no"),
@@ -114,27 +117,43 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     const targetSection = event.itemValue;
 
     if (targetSection.guid) {
-      await this.addToServersList(targetSection.guid);
+      await this.addToRolesList(targetSection.guid);
     } else {
-      await this.removeFromServerList(targetSection);
+      await this.removeFromRolesList(targetSection);
     }
   }
 
   public sectionsCleared() {
-    this.serversList = [];
-    this.evaluatorsForm.get("serversGuid").setValue(null);
+    this.rolesList = [];
+    this.evaluatorsForm.get("rolesGuid").setValue(null);
   }
 
   public searchEvaluators() {
     console.log(this.searchForm.value);
   }
 
-  public cancelForm() {
+  public async cancelForm() {
     this.showForm = false;
     this.editEvaluatorSection = false;
     this.evaluatorsForm = null;
-    this.sectionsList = [];
-    this.serversList = [];
+
+    await this.prepareEvaluatorsTable();
+  }
+
+  public getOrganizationName(orgGuid: string): string {
+    return this.organizationsList.find((org) => org.guid == orgGuid).name;
+  }
+
+  public getSectionNames(sectionsGuid: Array<String>): Array<string> {
+    return this.sectionsList
+      .filter((section) => sectionsGuid.includes(section.guid))
+      .map((section) => section.name);
+  }
+
+  public getRoleNames(rolesGuid: Array<string>): Array<string> {
+    return this.rolesList
+      .filter((role) => rolesGuid.includes(role.guid))
+      .map((role) => role.name);
   }
 
   public async saveEvaluatorsForm(form: FormGroup) {
@@ -154,13 +173,9 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const reqBody: IEvaluationSectionCreate = {
-      organizationGuid: form.value["organizationGuid"],
-      sectionsGuid: form.value["sectionsGuid"].join(","),
-      serversGuid: !!form.value["serversGuid"]
-        ? form.value["serversGuid"].join(",")
-        : null,
-    };
+    const reqBody = new EvaluatorCreateFormModel(form.value);
+
+    console.log(reqBody);
 
     if (this.editEvaluatorSection && this.evaluationSectionId) {
       await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
@@ -169,16 +184,14 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async postEvaluatorsForm(reqBody: IEvaluationSectionCreate) {
+  private async postEvaluatorsForm(reqBody: EvaluatorCreateFormModel) {
     try {
-      const result = await this.evaluationSectionsService.postEvaluationSection(
-        reqBody
-      );
+      const result = await this.evaluatorsService.postEvaluator(reqBody);
 
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("evaluation-section.inserted", {
+        detail: this.translateService.instant("evaluator.inserted", {
           name: result.organizationGuid,
         }),
       });
@@ -187,30 +200,25 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant(
-          "evaluation-section.error.saving"
-        ),
+        detail: this.translateService.instant("evaluator.error.saving"),
       });
     } finally {
       this.cancelForm();
-      await this.getEvaluationSectionsList();
+      await this.getEvaluatorsList();
     }
   }
 
   private async putEvaluatorsForm(
     id: number,
-    reqBody: IEvaluationSectionCreate
+    reqBody: EvaluatorCreateFormModel
   ) {
     try {
-      const result = await this.evaluationSectionsService.putEvaluationSection(
-        id,
-        reqBody
-      );
+      const result = await this.evaluatorsService.putEvaluator(id, reqBody);
 
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("evaluation-section.updated", {
+        detail: this.translateService.instant("evaluator.updated", {
           name: result.organizationGuid,
         }),
       });
@@ -219,20 +227,17 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant(
-          "evaluation-section.error.saving"
-        ),
+        detail: this.translateService.instant("evaluator.error.saving"),
       });
     } finally {
       this.cancelForm();
-      await this.getEvaluationSectionsList();
+      await this.getEvaluatorsList();
     }
   }
 
   private async deleteEvaluationSection(id: number) {
     try {
-      const result =
-        await this.evaluationSectionsService.deleteEvaluationSection(id);
+      const result = await this.evaluatorsService.deleteEvaluator(id);
 
       this.messageService.add({
         severity: "success",
@@ -244,10 +249,10 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("warn"),
-        // detail: this.translateService.instant("evaluation-section.warn.algumacoisa"), // Possíveis erros ao deletar a setor avaliador
+        // detail: this.translateService.instant("evaluator.warn.algumacoisa"), // Possíveis erros ao deletar a setor avaliador
       });
     } finally {
-      await this.getEvaluationSectionsList();
+      await this.getEvaluatorsList();
     }
   }
 
@@ -255,86 +260,79 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     this.searchForm = new FormGroup({
       searchOrganization: new FormControl(""),
       searchSection: new FormControl(""),
-      searchServer: new FormControl(""),
+      searchRole: new FormControl(""),
     });
   }
 
   private initCreateEvaluatorsForm() {
     this.evaluatorsForm = new FormGroup({
       organizationGuid: new FormControl("", Validators.required),
-      sectionsGuid: new FormControl("", Validators.required),
-      serversGuid: new FormControl(""),
+      sectionsGuid: new FormControl([], Validators.required),
+      rolesGuid: new FormControl([]),
     });
   }
 
-  private async initEditEvaluatorsForm(data: IEvaluationSection) {
-    this.evaluationSectionId = data.id;
+  // private async initEditEvaluatorsForm(data: IEvaluator) {
+  //   this.evaluationSectionId = data.id;
 
-    const sectionsGuidFormControl = data.sectionsGuid.includes(",")
-      ? data.sectionsGuid.split(",")
-      : data.sectionsGuid.split(" ");
+  //   const sectionsGuidFormControl = data.sectionsGuid.includes(",")
+  //     ? data.sectionsGuid.split(",")
+  //     : data.sectionsGuid.split(" ");
 
-    const serversGuidFormControl = !data.serversGuid
-      ? ""
-      : data.serversGuid.includes(",")
-      ? data.serversGuid.split(",")
-      : data.serversGuid.split(" ");
+  //   const serversGuidFormControl = !data.serversGuid
+  //     ? ""
+  //     : data.serversGuid.includes(",")
+  //     ? data.serversGuid.split(",")
+  //     : data.serversGuid.split(" ");
 
-    this.evaluatorsForm = new FormGroup({
-      organizationGuid: new FormControl(
-        data.organizationGuid,
-        Validators.required
-      ),
-      sectionsGuid: new FormControl(
-        sectionsGuidFormControl,
-        Validators.required
-      ),
-      serversGuid: new FormControl(serversGuidFormControl),
-    });
+  //   this.evaluatorsForm = new FormGroup({
+  //     organizationGuid: new FormControl(
+  //       data.organizationGuid,
+  //       Validators.required
+  //     ),
+  //     sectionsGuid: new FormControl(
+  //       sectionsGuidFormControl,
+  //       Validators.required
+  //     ),
+  //     serversGuid: new FormControl(serversGuidFormControl),
+  //   });
 
-    await this.getSectionsList(data.organizationGuid);
+  //   await this.getSectionsList(data.organizationGuid);
 
-    data.sectionsGuid
-      .split(",")
-      .forEach((server) => this.addToServersList(server));
+  //   data.sectionsGuid
+  //     .split(",")
+  //     .forEach((server) => this.addToServersList(server));
 
-    // this.serversList = await this.getServersList(data.sectionsGuid);
-  }
+  //   // this.serversList = await this.getServersList(data.sectionsGuid);
+  // }
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
       { label: "administration.label" },
       {
-        label: "administration.evaluation-sections",
-        routerLink: ["/administration/evaluation-sections"],
+        label: "administration.evaluators",
+        routerLink: ["/administration/evaluators"],
       },
     ]);
   }
 
-  private async getEvaluationSectionsList() {
-    this.evaluationSectionsList =
-      await this.evaluationSectionsService.getEvaluationSectionsList();
+  private async getEvaluatorsList() {
+    this.evaluatorsList = await this.evaluatorsService.getEvaluatorsList();
 
-    console.log(this.evaluationSectionsList);
+    console.log(this.evaluatorsList);
   }
 
   private async getOrganizationsList() {
     this.organizationsList =
-      await this.evaluationSectionsService.getOrganizationsList();
+      await this.evaluatorsService.getOrganizationsList();
   }
 
   private async getSectionsList(orgGuid: string) {
-    this.sectionsList = await this.evaluationSectionsService.getSectionsList(
-      orgGuid
-    );
+    this.sectionsList = await this.evaluatorsService.getSectionsList(orgGuid);
   }
 
-  private async getServersList(
-    unitGuid: string
-  ): Promise<Array<IEvaluatorServer>> {
-    const response = await this.evaluationSectionsService.getServersList(
-      unitGuid
-    );
+  private async getRolesList(unitGuid: string): Promise<Array<IEvaluatorRole>> {
+    const response = await this.evaluatorsService.getRolesList(unitGuid);
 
     if (response.length == 0) {
       this.messageService.add({
@@ -349,24 +347,42 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async addToServersList(unitGuid: string) {
-    await this.getServersList(unitGuid).then((response) => {
+  private async addToRolesList(unitGuid: string) {
+    await this.getRolesList(unitGuid).then((response) => {
       if (response) {
-        this.serversList = this.serversList.concat(response);
+        this.rolesList = this.rolesList.concat(response);
       }
     });
   }
 
-  private async removeFromServerList(unitGuid: string) {
-    await this.getServersList(unitGuid).then((response) => {
+  private async removeFromRolesList(unitGuid: string) {
+    await this.getRolesList(unitGuid).then((response) => {
       if (response) {
         response.forEach((target) => {
-          const targetServer = this.serversList.find(
-            (server) => server == target
-          );
-          this.serversList.splice(this.serversList.indexOf(targetServer), 1);
+          const targetRole = this.rolesList.find((role) => role == target);
+          this.rolesList.splice(this.rolesList.indexOf(targetRole), 1);
         });
       }
+    });
+  }
+
+  private async prepareEvaluatorsTable() {
+    await this.getOrganizationsList();
+
+    this.evaluatorsList.forEach((evaluator) => {
+      this.evaluatorsService
+        .getSectionsList(evaluator.organizationGuid)
+        .then(
+          (response) => (this.sectionsList = this.sectionsList.concat(response))
+        );
+
+      evaluator.sectionsGuid.forEach((sectionGuid) => {
+        this.evaluatorsService
+          .getRolesList(sectionGuid)
+          .then(
+            (response) => (this.rolesList = this.rolesList.concat(response))
+          );
+      });
     });
   }
 

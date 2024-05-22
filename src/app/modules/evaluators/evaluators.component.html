@@ -29,7 +29,7 @@
                 >
                   <div class="col-3">
                     <label for="searchOrganization">{{
-                      "evaluation-section.organization" | translate
+                      "evaluator.organization" | translate
                     }}</label>
                     <input
                       type="text"
@@ -40,7 +40,7 @@
                   </div>
                   <div class="col-3">
                     <label for="searchSection">{{
-                      "evaluation-section.section" | translate
+                      "evaluator.section" | translate
                     }}</label>
                     <input
                       type="text"
@@ -50,13 +50,13 @@
                     />
                   </div>
                   <div class="col-3">
-                    <label for="searchServer">{{
-                      "evaluation-section.server" | translate
+                    <label for="searchRole">{{
+                      "evaluator.role" | translate
                     }}</label>
                     <input
                       type="text"
                       class="form-control"
-                      formControlName="searchServer"
+                      formControlName="searchRole"
                       pInputText
                     />
                   </div>
@@ -77,38 +77,41 @@
           <div class="row">
             <div class="col-12">
 
-              <div *ngIf="evaluationSectionsList.length == 0">
+              <div *ngIf="evaluatorsList.length == 0">
                 <p class="text-center">Sem resultados.</p>
               </div>
 
               <p-table
-                *ngIf="evaluationSectionsList.length > 0"
-                [value]="evaluationSectionsList"
+                *ngIf="evaluatorsList.length > 0"
+                [value]="evaluatorsList"
                 responsiveLayout="stack"
                 class="data-column"
               >
                 <ng-template pTemplate="header">
                   <tr>
                     <th>
-                      {{ "evaluation-section.organization" | translate }}
+                      {{ "evaluator.organization" | translate }}
                     </th>
-                    <th>{{ "evaluation-section.sections" | translate }}</th>
-                    <th>{{ "evaluation-section.servers" | translate }}</th>
+                    <th>{{ "evaluator.sections" | translate }}</th>
+                    <th>{{ "evaluator.roles" | translate }}</th>
 
                     <th></th>
                   </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-evaluationSection>
+                <ng-template pTemplate="body" let-evaluator>
                   <tr>
-                    <td>{{ evaluationSection.organizationGuid }}</td>
-                    <td>{{ evaluationSection.sectionsGuid }}</td>
-                    <td>{{ evaluationSection.serversGuid ?? "Todos" }}</td>
+                    <td>{{ getOrganizationName(evaluator.organizationGuid) }}</td>
+                    <!-- <td>{{ evaluator.organizationGuid }}</td> -->
+                    <td>{{ getSectionNames(evaluator.sectionsGuid) | td_trunc }}</td>
+                    <!-- <td>{{ evaluator.sectionsGuid | td_trunc }}</td> -->
+                    <td>{{ getRoleNames(evaluator.rolesGuid) | td_trunc }}</td>
+                    <!-- <td>{{ evaluator.rolesGuid | td_trunc }}</td> -->
                     <td class="column-actions">
                       <button
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        (click)="showEditEvaluator(evaluationSection)"
+                        (click)="showEditEvaluator(evaluator)"
                       >
                         <i class="pi pi-pencil"></i>
                       </button>
@@ -116,7 +119,7 @@
                         pButton
                         class="ui-button btn-icon"
                         type="button"
-                        (click)="deleteEvaluator(evaluationSection)"
+                        (click)="deleteEvaluator(evaluator)"
                       >
                         <i class="pi pi-trash"></i>
                       </button>
@@ -139,7 +142,7 @@
             >
               <div class="col-6">
                 <label for="organizationGuid">{{
-                  "evaluation-section.organization" | translate
+                  "evaluator.organization" | translate
                 }}</label>
                 <p-dropdown
                   [options]="organizationsList"
@@ -159,7 +162,7 @@
               </div>
               <div class="col-6">
                 <label for="sectionsGuid">{{
-                  "evaluation-section.section" | translate
+                  "evaluator.section" | translate
                 }}</label>
                 <p-multiSelect
                   [options]="sectionsList"
@@ -179,14 +182,13 @@
                 ></tt-input-message>
               </div>
               <div class="col-6">
-                <label for="serversGuid">{{
-                  "evaluation-section.server" | translate
+                <label for="rolesGuid">{{
+                  "evaluator.role" | translate
                 }}</label>
                 <p-multiSelect
-                  [options]="serversList"
+                  [options]="rolesList"
                   optionLabel="name"
-                  optionValue="guid"
-                  formControlName="serversGuid"
+                  formControlName="rolesGuid"
                   display="chip"
                   showClear="true"
                   styleClass="d-flex form-control"
@@ -215,7 +217,7 @@
     </div>
   </div>
   <p-confirmDialog
-    [header]="'evaluation-section.delete' | translate"
+    [header]="'evaluator.delete' | translate"
     icon="pi pi-exclamation-triangle"
     key="deleteEvaluationSection"
   >
