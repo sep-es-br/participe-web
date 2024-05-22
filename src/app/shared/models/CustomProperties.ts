@@ -10,5 +10,6 @@ export class customProperties {
     cardFontColor?:string;
     cardFontColorHover?:string;
     cardBorderColor?:string;
+    cardLoginColor?:string;
   }
   
