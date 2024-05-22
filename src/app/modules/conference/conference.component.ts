@@ -228,7 +228,6 @@ export class ConferenceComponent implements OnInit {
         toAdd: false,
         toDelete: false
       });
-      console.log(this.participationImages)
     }
     if (this.conference.fileFooter !== undefined && this.conference.fileFooter !== null) {
       this.footerImages.push({
@@ -236,7 +235,6 @@ export class ConferenceComponent implements OnInit {
         toAdd: false,
         toDelete: false
       });
-      console.log(this.footerImages)
     }
     if (this.conference.backgroundImages !== undefined && this.conference.backgroundImages !== null) {
       this.conference.backgroundImages.forEach(image => {
