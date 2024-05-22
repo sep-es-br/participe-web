@@ -90,7 +90,7 @@ export class AppMenuComponent implements OnInit {
               {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
               {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
               {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
-              {label: 'administration.evaluation-sections', icon: faPortrait, routerLink: ['/administration/evaluation-sections']},
+              {label: 'administration.evaluators', icon: faPortrait, routerLink: ['/administration/evaluators']},
               {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
             ]
           });
@@ -102,7 +102,7 @@ export class AppMenuComponent implements OnInit {
                 {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
                 {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
                 {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
-                {label: 'administration.evaluation-sections', icon: faPortrait, routerLink: ['/administration/evaluation-sections']},
+                {label: 'administration.evaluators', icon: faPortrait, routerLink: ['/administration/evaluators']},
                 {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
             ]
           });
