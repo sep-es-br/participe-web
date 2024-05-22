@@ -172,7 +172,7 @@
                         </translations>
                     </concept_node>
                     <concept_node>
-                        <name>evaluation-sections</name>
+                        <name>evaluators</name>
                         <definition_loaded>false</definition_loaded>
                         <description></description>
                         <comment></comment>
@@ -488,7 +488,7 @@
                         </children>
                     </folder_node>
                     <folder_node>
-                        <name>evaluation-section</name>                     
+                        <name>evaluator</name>                     
                         <children>
                             <folder_node>
                                 <name>confirm</name>
@@ -654,7 +654,7 @@
                                 </translations>
                             </concept_node>
                             <concept_node>
-                                <name>server</name>
+                                <name>role</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description></description>
                                 <comment></comment>
@@ -671,7 +671,7 @@
                                 </translations>
                             </concept_node>
                             <concept_node>
-                                <name>servers</name>
+                                <name>roles</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description></description>
                                 <comment></comment>

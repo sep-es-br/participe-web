@@ -9,7 +9,7 @@
 		"plan": "Plan",
 		"presential-meeting": "Meetings",
 		"structure": "Structure",
-		"evaluation-sections": "Evaluation Sections"
+		"evaluators": "Evaluators"
 	},
 	"all": "All",
 	"begin": "Begin",
@@ -316,23 +316,23 @@
     "field-must-contain-only-letters": "The field must contain only letters"
 	},
 	"error": "Error",
-	"evaluation-section": {
+	"evaluator": {
 		"confirm": {
 			"delete": "Are you sure you want to delete {{name}}?"
 		},
-		"delete": "Delete Evaluation Section",
+		"delete": "Delete Evaluator",
 		"edit": "Edit Evaluator",
 		"error": {
-			"saving": "Error saving evaluation section"
+			"saving": "Error saving evaluator"
 		},
-		"inserted": "New Evaluation Section {{name}} inserted",
+		"inserted": "New evaluator {{name}} inserted",
 		"new": "New Evaluator",
 		"organization": "Organization",
 		"section": "Section",
 		"sections": "Sections",
-		"server": "Server",
-		"servers": "Servers",
-		"updated": "Evaluation Section {{name}} updated"
+		"role": "Role",
+		"roles": "Roles",
+		"updated": "Evaluator {{name}} updated"
 		
 	},
 	"exists": {
