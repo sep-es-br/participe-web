@@ -35,6 +35,6 @@ export class EvaluatorCreateFormModel implements IEvaluatorCreateForm {
   }
 
   private treatRolesGuid(formRolesGuid: Array<IEvaluatorRole>): Array<string> {
-    return formRolesGuid.map((role) => `${role.guid}:${role.lotacao}`)
+    return formRolesGuid.map((role) => role.guid ? `${role.guid}:${role.lotacao}` : 'all')
   }
 }
