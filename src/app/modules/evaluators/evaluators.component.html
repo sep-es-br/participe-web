@@ -83,6 +83,7 @@
               <p-table
                 *ngIf="evaluatorsList.length > 0"
                 [value]="evaluatorsList"
+                [loading]="loading"
                 responsiveLayout="stack"
                 class="data-column"
               >
@@ -170,6 +171,7 @@
                   formControlName="sectionsGuid"
                   display="chip"
                   showClear="true"
+                  showToggleAll="false"
                   (onChange)="sectionsChanged($event)"
                   (onClear)="sectionsCleared()"
                   styleClass="d-flex form-control"
@@ -187,10 +189,12 @@
                 <p-multiSelect
                   [options]="rolesList"
                   optionLabel="name"
+                  [optionDisabled]="disableOptionsIfAllSelected()"
                   formControlName="rolesGuid"
                   display="chip"
-                  showClear="true"
+                  showClear="false"
                   showToggleAll="false"
+                  (onChange)="patchValueIfAllSelected($event)"
                   styleClass="d-flex form-control"
                   class="ng-dirty ng-invalid"
                 ></p-multiSelect>
