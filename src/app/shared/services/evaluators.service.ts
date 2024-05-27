@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "@environments/environment";
 
-import { IEvaluator } from "../interface/IEvaluator";
+import { IEvaluator, IEvaluatorNames } from "../interface/IEvaluator";
 import {
   IEvaluatorOrganization,
   IEvaluatorSection,
@@ -19,6 +19,12 @@ export class EvaluatorsService {
   private _url = `${environment.apiEndpoint}/evaluators`;
 
   private headers: HttpHeaders = Common.buildHeaders();
+
+  private _rolesGuidNullValue: IEvaluatorRole = {
+    guid: null,
+    name: "Todos",
+    lotacao: null,
+  };
 
   constructor(private _http: HttpClient) {}
 
@@ -80,5 +86,19 @@ export class EvaluatorsService {
         headers: this.headers,
       })
       .toPromise();
+  }
+
+  public getNamesFromGuidLists(
+    body: IEvaluatorNames
+  ): Promise<{ [key: string]: string }> {
+    return this._http
+      .post<{ [key: string]: string }>(`${this._url}/names`, body, {
+        headers: this.headers,
+      })
+      .toPromise();
+  }
+
+  public get rolesGuidNullValue(): IEvaluatorRole {
+    return this._rolesGuidNullValue;
   }
 }
