@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { TranslateService } from "@ngx-translate/core";
@@ -68,9 +64,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   }
 
   public showCreateEvaluator() {
-    this.sectionsList = [];
-    this.rolesList = [];
-
     this.editEvaluatorSection = false;
     this.showForm = true;
 
@@ -78,13 +71,24 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     this.formHeaderText = "evaluator.new";
   }
 
-  public showEditEvaluator(data: IEvaluator) {
+  public async showEditEvaluator(data: IEvaluator) {
     this.editEvaluatorSection = true;
     this.showForm = true;
 
-    console.log(data);
+    this.initEditEvaluatorsForm(data);
 
-    // this.initEditEvaluatorsForm(data);
+    await this.getSectionsList(data.organizationGuid);
+
+    await data.sectionsGuid.forEach((sectionGuid) =>
+      this.addToRolesList(sectionGuid).then(() =>
+        data.rolesGuid
+          ? this.evaluatorsForm
+              .get("rolesGuid")
+              .patchValue(this.prepareRolesGuidFormControl(data.rolesGuid))
+          : this.patchRolesGuidFormControlWithNullValue()
+      )
+    );
+
     this.formHeaderText = "evaluator.edit";
   }
 
@@ -128,7 +132,26 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
 
   public sectionsCleared() {
     this.rolesList = [];
-    this.evaluatorsForm.get("rolesGuid").setValue(null);
+    this.evaluatorsForm.get("rolesGuid").setValue([]);
+  }
+
+  public disableOptionsIfAllSelected(): string {
+    const rolesGuidControlValue = this.evaluatorsForm.get("rolesGuid").value;
+
+    if (
+      rolesGuidControlValue.length > 0 &&
+      rolesGuidControlValue[0].name == "Todos"
+    ) {
+      return "name";
+    } else {
+      return "";
+    }
+  }
+
+  public patchValueIfAllSelected(event: MultiSelectChangeEvent) {
+    if (event.value.length > 0 && event.itemValue.name == "Todos") {
+      this.patchRolesGuidFormControlWithNullValue();
+    }
   }
 
   public searchEvaluators() {
@@ -139,6 +162,8 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     this.showForm = false;
     this.editEvaluatorSection = false;
     this.evaluatorsForm = null;
+    this.sectionsList = [];
+    this.rolesList = [];
   }
 
   public getOrganizationName(orgGuid: string): string {
@@ -150,7 +175,9 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   }
 
   public getRoleNames(rolesGuid: Array<string>): Array<string> {
-    return rolesGuid.map((role) => this.namesMapObject[role]);
+    return rolesGuid
+      ? rolesGuid.map((role) => this.namesMapObject[role])
+      : ["Todos"];
   }
 
   public async saveEvaluatorsForm(form: FormGroup) {
@@ -172,13 +199,11 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
 
     const reqBody = new EvaluatorCreateFormModel(form.value);
 
-    console.log(reqBody);
-
-    // if (this.editEvaluatorSection && this.evaluationSectionId) {
-    //   await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
-    // } else {
-    //   await this.postEvaluatorsForm(reqBody);
-    // }
+    if (this.editEvaluatorSection && this.evaluationSectionId) {
+      await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
+    } else {
+      await this.postEvaluatorsForm(reqBody);
+    }
   }
 
   private async postEvaluatorsForm(reqBody: EvaluatorCreateFormModel) {
@@ -189,7 +214,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
         severity: "success",
         summary: this.translateService.instant("success"),
         detail: this.translateService.instant("evaluator.inserted", {
-          name: result.organizationGuid,
+          name: this.namesMapObject[result.organizationGuid],
         }),
       });
     } catch (error) {
@@ -216,7 +241,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
         severity: "success",
         summary: this.translateService.instant("success"),
         detail: this.translateService.instant("evaluator.updated", {
-          name: result.organizationGuid,
+          name: this.namesMapObject[result.organizationGuid],
         }),
       });
     } catch (error) {
@@ -249,6 +274,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
         // detail: this.translateService.instant("evaluator.warn.algumacoisa"), // Possíveis erros ao deletar a setor avaliador
       });
     } finally {
+      this.cancelForm();
       await this.getEvaluatorsList();
     }
   }
@@ -269,39 +295,18 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // private async initEditEvaluatorsForm(data: IEvaluator) {
-  //   this.evaluationSectionId = data.id;
+  private async initEditEvaluatorsForm(data: IEvaluator) {
+    this.evaluationSectionId = data.id;
 
-  //   const sectionsGuidFormControl = data.sectionsGuid.includes(",")
-  //     ? data.sectionsGuid.split(",")
-  //     : data.sectionsGuid.split(" ");
-
-  //   const serversGuidFormControl = !data.serversGuid
-  //     ? ""
-  //     : data.serversGuid.includes(",")
-  //     ? data.serversGuid.split(",")
-  //     : data.serversGuid.split(" ");
-
-  //   this.evaluatorsForm = new FormGroup({
-  //     organizationGuid: new FormControl(
-  //       data.organizationGuid,
-  //       Validators.required
-  //     ),
-  //     sectionsGuid: new FormControl(
-  //       sectionsGuidFormControl,
-  //       Validators.required
-  //     ),
-  //     serversGuid: new FormControl(serversGuidFormControl),
-  //   });
-
-  //   await this.getSectionsList(data.organizationGuid);
-
-  //   data.sectionsGuid
-  //     .split(",")
-  //     .forEach((server) => this.addToServersList(server));
-
-  //   // this.serversList = await this.getServersList(data.sectionsGuid);
-  // }
+    this.evaluatorsForm = new FormGroup({
+      organizationGuid: new FormControl(
+        data.organizationGuid,
+        Validators.required
+      ),
+      sectionsGuid: new FormControl(data.sectionsGuid, Validators.required),
+      rolesGuid: new FormControl(data.rolesGuid ?? []),
+    });
+  }
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
@@ -318,8 +323,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.evaluatorsList = response;
       this.prepareEvaluatorsTable();
     });
-
-    // console.log(this.evaluatorsList);
   }
 
   private async getOrganizationsList() {
@@ -350,11 +353,11 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   private async addToRolesList(unitGuid: string) {
     await this.getRolesList(unitGuid).then((response) => {
       if (response) {
-        this.rolesList.push(this.getRolesGuidNullValue());
+        this.rolesList.push(this.evaluatorsService.rolesGuidNullValue);
         this.rolesList = this.rolesList.concat(response);
-        this.evaluatorsForm
-          .get("rolesGuid")
-          .patchValue([this.getRolesGuidNullValue()]);
+        // if (!this.editEvaluatorSection) {
+        //   this.patchRolesGuidFormControlWithNullValue();
+        // }
       }
     });
   }
@@ -370,14 +373,16 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
           const targetRole = this.rolesList.find((role) => role == target);
           this.rolesList.splice(this.rolesList.indexOf(targetRole), 1);
         });
-        this.evaluatorsForm
-          .get("rolesGuid")
-          .patchValue([this.getRolesGuidNullValue()]);
+        // if (!this.editEvaluatorSection) {
+        //   this.patchRolesGuidFormControlWithNullValue();
+        // }
       }
     });
   }
 
   private async prepareEvaluatorsTable() {
+    this.loading = true;
+
     const organizationsGuidList = this.evaluatorsList.map(
       (evaluator) => evaluator.organizationGuid
     );
@@ -387,7 +392,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       .reduce((acc, cur) => acc.concat(cur));
 
     const rolesGuidList = this.evaluatorsList
-      .map((evaluator) => evaluator.rolesGuid)
+      .map((evaluator) => evaluator.rolesGuid ?? [])
       .reduce((acc, cur) => acc.concat(cur));
 
     const reqBody = {
@@ -398,11 +403,22 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
 
     await this.evaluatorsService
       .getNamesFromGuidLists(reqBody)
-      .then((response) => (this.namesMapObject = response));
+      .then((response) => {
+        this.namesMapObject = response;
+        this.loading = false;
+      });
   }
 
-  private getRolesGuidNullValue(): IEvaluatorRole {
-    return this.evaluatorsService.rolesGuidNullValue;
+  private prepareRolesGuidFormControl(
+    rolesGuid: Array<string>
+  ): Array<IEvaluatorRole> {
+    return this.rolesList.filter((role) => rolesGuid.includes(role.guid));
+  }
+
+  private patchRolesGuidFormControlWithNullValue() {
+    this.evaluatorsForm
+      .get("rolesGuid")
+      .patchValue([this.evaluatorsService.rolesGuidNullValue]);
   }
 
   ngOnDestroy(): void {
