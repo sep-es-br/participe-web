@@ -76,7 +76,6 @@
           </ng-container>
           <div class="row">
             <div class="col-12">
-
               <div *ngIf="evaluatorsList.length == 0">
                 <p class="text-center">Sem resultados.</p>
               </div>
@@ -94,18 +93,18 @@
                     </th>
                     <th>{{ "evaluator.sections" | translate }}</th>
                     <th>{{ "evaluator.roles" | translate }}</th>
-
                     <th></th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-evaluator>
                   <tr>
-                    <td>{{ getOrganizationName(evaluator.organizationGuid) }}</td>
-                    <!-- <td>{{ evaluator.organizationGuid }}</td> -->
-                    <td>{{ getSectionNames(evaluator.sectionsGuid) | td_trunc }}</td>
-                    <!-- <td>{{ evaluator.sectionsGuid | td_trunc }}</td> -->
+                    <td>
+                      {{ getOrganizationName(evaluator.organizationGuid) }}
+                    </td>
+                    <td>
+                      {{ getSectionNames(evaluator.sectionsGuid) | td_trunc }}
+                    </td>
                     <td>{{ getRoleNames(evaluator.rolesGuid) | td_trunc }}</td>
-                    <!-- <td>{{ evaluator.rolesGuid | td_trunc }}</td> -->
                     <td class="column-actions">
                       <button
                         pButton
@@ -191,6 +190,7 @@
                   formControlName="rolesGuid"
                   display="chip"
                   showClear="true"
+                  showToggleAll="false"
                   styleClass="d-flex form-control"
                   class="ng-dirty ng-invalid"
                 ></p-multiSelect>
