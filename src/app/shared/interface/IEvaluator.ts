@@ -6,3 +6,9 @@ export interface IEvaluator {
 }
 
 export interface IEvaluatorCreateForm extends Omit<IEvaluator, 'id'> {}
+
+export interface IEvaluatorNames {
+  organizationsGuidList: Array<string>;
+  sectionsGuidList: Array<string>;
+  rolesGuidList: Array<string>;
+}
