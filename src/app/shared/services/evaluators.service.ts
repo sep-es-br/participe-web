@@ -2,15 +2,17 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "@environments/environment";
 
+import Common from "../util/Common";
+
+import { EvaluatorCreateFormModel } from "../models/EvaluatorModel";
 import { IEvaluator, IEvaluatorNames } from "../interface/IEvaluator";
 import {
   IEvaluatorOrganization,
   IEvaluatorSection,
   IEvaluatorRole,
 } from "../interface/IEvaluatorData";
-
-import Common from "../util/Common";
-import { EvaluatorCreateFormModel } from "../models/EvaluatorModel";
+import { IPagination } from "../interface/IPagination";
+import { IResultPaginated } from "../interface/IResultPaginated";
 
 @Injectable({
   providedIn: "root",
@@ -28,10 +30,16 @@ export class EvaluatorsService {
 
   constructor(private _http: HttpClient) {}
 
-  public getEvaluatorsList(): Promise<Array<IEvaluator>> {
+  public getEvaluatorsList(pageable: IPagination): Promise<IResultPaginated<IEvaluator>> {
+    const params = {
+      page: pageable.pageNumber,
+      size: pageable.pageSize
+    }
+
     return this._http
-      .get<Array<IEvaluator>>(this._url, {
+      .get<IResultPaginated<IEvaluator>>(this._url, {
         headers: this.headers,
+        params: params
       })
       .toPromise();
   }
