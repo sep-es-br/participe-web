@@ -31,7 +31,7 @@ export class EvaluatorCreateFormModel implements IEvaluatorCreateForm {
   }) {
     this.organizationGuid = formValue.organizationGuid;
     this.sectionsGuid = formValue.sectionsGuid;
-    this.rolesGuid = this.treatRolesGuid(formValue.rolesGuid);
+    this.rolesGuid = formValue.rolesGuid.length > 0 ? this.treatRolesGuid(formValue.rolesGuid) : ['all'];
   }
 
   private treatRolesGuid(formRolesGuid: Array<IEvaluatorRole>): Array<string> {
