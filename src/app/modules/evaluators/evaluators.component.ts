@@ -4,6 +4,10 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 
 import { ConfirmationService, MessageService } from "primeng/api";
+import { DropdownChangeEvent } from "primeng/dropdown";
+import { MultiSelectChangeEvent } from "primeng/multiselect";
+import { TableLazyLoadEvent } from "primeng/table";
+import { PaginatorState } from "primeng/paginator";
 
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
@@ -13,9 +17,8 @@ import {
   IEvaluatorSection,
   IEvaluatorRole,
 } from "@app/shared/interface/IEvaluatorData";
-import { DropdownChangeEvent } from "primeng/dropdown";
-import { MultiSelectChangeEvent } from "primeng/multiselect";
 import { EvaluatorCreateFormModel } from "@app/shared/models/EvaluatorModel";
+import { IPagination } from "@app/shared/interface/IPagination";
 
 @Component({
   selector: "app-evaluators",
@@ -24,25 +27,39 @@ import { EvaluatorCreateFormModel } from "@app/shared/models/EvaluatorModel";
   styleUrl: "./evaluators.component.scss",
 })
 export class EvaluatorsComponent implements OnInit, OnDestroy {
-  loading = false;
+  public loading: boolean = false;
 
-  search = false;
-  showForm = false;
+  public search: boolean = false;
+  public showForm: boolean = false;
 
-  evaluatorsForm: FormGroup;
-  formHeaderText: string = "";
-  evaluationSectionId: number;
-  editEvaluatorSection: boolean = false;
+  public evaluatorsForm: FormGroup;
+  public formHeaderText: string = "";
+  private evaluationSectionId: number;
+  public editEvaluatorSection: boolean = false;
 
-  searchForm: FormGroup;
+  public searchForm: FormGroup;
 
-  evaluatorsList: Array<IEvaluator> = [];
+  public evaluatorsList: Array<IEvaluator> = [];
 
-  organizationsList: Array<IEvaluatorOrganization> = [];
-  sectionsList: Array<IEvaluatorSection> = [];
-  rolesList: Array<IEvaluatorRole> = [];
+  public rowsPerPageOptions: Array<number> = [10, 25];
+  public totalRecords: number = 0;
 
-  namesMapObject: { [key: string]: string } = {};
+  public pageState: PaginatorState = {
+    first: 0,
+    rows: this.rowsPerPageOptions[0],
+  };
+
+  public organizationsList: Array<IEvaluatorOrganization> = [];
+  public sectionsList: Array<IEvaluatorSection> = [];
+  public rolesList: Array<IEvaluatorRole> = [];
+
+  private namesMapObject: { [key: string]: string } = {};
+
+  public pageReportTemplateTranslateParams = {
+    first: 0,
+    last: 0,
+    totalRecords: 0,
+  };
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -50,12 +67,21 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private evaluatorsService: EvaluatorsService
-  ) {}
+  ) {
+      this.updatePageReportTemplateTranslateParams();
+  }
 
-  async ngOnInit() {
+  public async ngOnInit() {
     this.buildBreadcrumb();
     await this.getEvaluatorsList();
     await this.getOrganizationsList();
+  }
+
+  public async lazyLoadEvaluatorsList(event: TableLazyLoadEvent) {
+    this.pageState.first = event.first;
+    this.pageState.rows = event.rows;
+
+    await this.getEvaluatorsList(this.pageState);
   }
 
   public showSearchForm() {
@@ -95,7 +121,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public async deleteEvaluator(data: IEvaluator) {
     this.confirmationService.confirm({
       message: this.translateService.instant("evaluator.confirm.delete", {
-        name: data.organizationGuid,
+        name: this.namesMapObject[data.organizationGuid],
       }),
       key: "deleteEvaluationSection",
       acceptLabel: this.translateService.instant("yes"),
@@ -213,9 +239,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("evaluator.inserted", {
-          name: this.namesMapObject[result.organizationGuid],
-        }),
+        detail: this.translateService.instant("evaluator.inserted"),
       });
     } catch (error) {
       console.error(error);
@@ -271,7 +295,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("warn"),
-        // detail: this.translateService.instant("evaluator.warn.algumacoisa"), // Possíveis erros ao deletar a setor avaliador
+        // detail: this.translateService.instant("evaluator.warn.remove"), // Possíveis erros ao deletar o avaliado (Não implementado)
       });
     } finally {
       this.cancelForm();
@@ -279,11 +303,12 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Controles bloqueados por enquanto, método ainda não implementado
   private initSearchForm() {
     this.searchForm = new FormGroup({
-      searchOrganization: new FormControl(""),
-      searchSection: new FormControl(""),
-      searchRole: new FormControl(""),
+      searchOrganization: new FormControl({value: "", disabled: true}),
+      searchSection: new FormControl({value: "", disabled: true}),
+      searchRole: new FormControl({value: "", disabled: true}),
     });
   }
 
@@ -318,11 +343,20 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  private async getEvaluatorsList() {
-    await this.evaluatorsService.getEvaluatorsList().then((response) => {
-      this.evaluatorsList = response;
-      this.prepareEvaluatorsTable();
-    });
+  private async getEvaluatorsList(pageState?: PaginatorState) {
+    const pageable: IPagination = {
+      pageNumber: pageState ? pageState.first / pageState.rows : 0,
+      pageSize: pageState ? pageState.rows : 10,
+    };
+
+    await this.evaluatorsService
+      .getEvaluatorsList(pageable)
+      .then((response) => {
+        this.evaluatorsList = response.content;
+        this.totalRecords = response.totalElements;
+        this.updatePageReportTemplateTranslateParams();
+        this.prepareEvaluatorsTable();
+      });
   }
 
   private async getOrganizationsList() {
@@ -340,9 +374,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     if (response.length == 0) {
       this.messageService.add({
         severity: "warn",
-        // summary: this.translateService.instant("error"),
         summary: "Atenção!",
-        // detail: this.translateService.instant("erro.invalid.data"),
         detail: "A unidade não possui papéis atrelados á ela.",
       });
     } else {
@@ -355,9 +387,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       if (response) {
         this.rolesList.push(this.evaluatorsService.rolesGuidNullValue);
         this.rolesList = this.rolesList.concat(response);
-        // if (!this.editEvaluatorSection) {
-        //   this.patchRolesGuidFormControlWithNullValue();
-        // }
       }
     });
   }
@@ -373,9 +402,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
           const targetRole = this.rolesList.find((role) => role == target);
           this.rolesList.splice(this.rolesList.indexOf(targetRole), 1);
         });
-        // if (!this.editEvaluatorSection) {
-        //   this.patchRolesGuidFormControlWithNullValue();
-        // }
       }
     });
   }
@@ -419,6 +445,14 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     this.evaluatorsForm
       .get("rolesGuid")
       .patchValue([this.evaluatorsService.rolesGuidNullValue]);
+  }
+
+  private updatePageReportTemplateTranslateParams() {
+    this.pageReportTemplateTranslateParams = {
+      first: this.pageState.first + 1,
+      last: (this.pageState.first + this.evaluatorsList.length),
+      totalRecords: this.totalRecords,
+    };
   }
 
   ngOnDestroy(): void {
