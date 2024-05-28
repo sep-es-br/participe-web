@@ -68,7 +68,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private evaluatorsService: EvaluatorsService
   ) {
-      this.updatePageReportTemplateTranslateParams();
+    this.updatePageReportTemplateTranslateParams();
   }
 
   public async ngOnInit() {
@@ -106,11 +106,9 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     await this.getSectionsList(data.organizationGuid);
 
     await data.sectionsGuid.forEach((sectionGuid) =>
-      this.addToRolesList(sectionGuid).then(() =>
+      this.addToRolesList(sectionGuid).finally(() =>
         data.rolesGuid
-          ? this.evaluatorsForm
-              .get("rolesGuid")
-              .patchValue(this.prepareRolesGuidFormControl(data.rolesGuid))
+          ? this.prepareRolesGuidFormControl(data.rolesGuid)
           : this.patchRolesGuidFormControlWithNullValue()
       )
     );
@@ -306,9 +304,9 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   // Controles bloqueados por enquanto, método ainda não implementado
   private initSearchForm() {
     this.searchForm = new FormGroup({
-      searchOrganization: new FormControl({value: "", disabled: true}),
-      searchSection: new FormControl({value: "", disabled: true}),
-      searchRole: new FormControl({value: "", disabled: true}),
+      searchOrganization: new FormControl({ value: "", disabled: true }),
+      searchSection: new FormControl({ value: "", disabled: true }),
+      searchRole: new FormControl({ value: "", disabled: true }),
     });
   }
 
@@ -383,21 +381,24 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   }
 
   private async addToRolesList(unitGuid: string) {
-    await this.getRolesList(unitGuid).then((response) => {
-      if (response) {
-        this.rolesList.push(this.evaluatorsService.rolesGuidNullValue);
-        this.rolesList = this.rolesList.concat(response);
-      }
-    });
+    await this.getRolesList(unitGuid)
+      .then((response) => {
+        if (response) {
+          this.rolesList = this.rolesList.concat(response);
+        }
+      })
+      .finally(() => {
+        if (
+          !this.rolesList.includes(this.evaluatorsService.rolesGuidNullValue)
+        ) {
+          this.rolesList.unshift(this.evaluatorsService.rolesGuidNullValue);
+        }
+      });
   }
 
   private async removeFromRolesList(unitGuid: string) {
     await this.getRolesList(unitGuid).then((response) => {
       if (response) {
-        this.rolesList.splice(
-          this.rolesList.findIndex((role) => role.name == "Todos"),
-          1
-        );
         response.forEach((target) => {
           const targetRole = this.rolesList.find((role) => role == target);
           this.rolesList.splice(this.rolesList.indexOf(targetRole), 1);
@@ -435,10 +436,11 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private prepareRolesGuidFormControl(
-    rolesGuid: Array<string>
-  ): Array<IEvaluatorRole> {
-    return this.rolesList.filter((role) => rolesGuid.includes(role.guid));
+  private prepareRolesGuidFormControl(rolesGuid: Array<string>) {
+    const rolesGuidControlValue = this.rolesList.filter((role) =>
+      rolesGuid.includes(role.guid)
+    );
+    this.evaluatorsForm.get("rolesGuid").patchValue(rolesGuidControlValue);
   }
 
   private patchRolesGuidFormControlWithNullValue() {
@@ -450,7 +452,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   private updatePageReportTemplateTranslateParams() {
     this.pageReportTemplateTranslateParams = {
       first: this.pageState.first + 1,
-      last: (this.pageState.first + this.evaluatorsList.length),
+      last: this.pageState.first + this.evaluatorsList.length,
       totalRecords: this.totalRecords,
     };
   }
