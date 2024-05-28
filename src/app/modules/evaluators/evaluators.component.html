@@ -65,7 +65,7 @@
                       pButton
                       class=""
                       [icon]="loadingIcon('pi pi-search')"
-                      [disabled]="loading"
+                      [disabled]="true"
                       type="submit"
                       [label]="'search' | translate"
                     ></button>
@@ -77,13 +77,28 @@
           <div class="row">
             <div class="col-12">
               <div *ngIf="evaluatorsList.length == 0">
-                <p class="text-center">Sem resultados.</p>
+                <p class="text-center">
+                  {{ "attendance.noResult" | translate }}
+                </p>
               </div>
 
               <p-table
                 *ngIf="evaluatorsList.length > 0"
                 [value]="evaluatorsList"
+                lazy="true"
                 [loading]="loading"
+                paginator="true"
+                paginatorPosition="both"
+                [first]="pageState.first"
+                [rows]="pageState.rows"
+                [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="rowsPerPageOptions"
+                showCurrentPageReport="true"
+                [currentPageReportTemplate]="
+                  'page.pageReportTemplate'
+                    | translate : pageReportTemplateTranslateParams
+                "
+                (onLazyLoad)="lazyLoadEvaluatorsList($event)"
                 responsiveLayout="stack"
                 class="data-column"
               >
