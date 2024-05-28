@@ -4406,6 +4406,28 @@
                     </translation>
                 </translations>
             </concept_node>
+            <folder_node>
+                <name>page</name>
+                <children>
+                    <concept_node>
+                        <name>pageReportTemplate</name>
+                        <definition_loaded>false</definition_loaded>
+                        <description></description>
+                        <comment></comment>
+                        <default_text></default_text>
+                        <translations>
+                            <translation>
+                                <language>en-US</language>
+                                <approved>false</approved>
+                            </translation>
+                            <translation>
+                                <language>pt-BR</language>
+                                <approved>false</approved>
+                            </translation>
+                        </translations>
+                    </concept_node>
+                </children>
+            </folder_node>
             <concept_node>
                 <name>pending</name>
                 <definition_loaded>false</definition_loaded>

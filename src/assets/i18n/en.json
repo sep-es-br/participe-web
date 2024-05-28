@@ -325,7 +325,7 @@
 		"error": {
 			"saving": "Error saving evaluator"
 		},
-		"inserted": "New evaluator {{name}} inserted",
+		"inserted": "New evaluator inserted",
 		"new": "New Evaluator",
 		"organization": "Organization",
 		"section": "Section",
@@ -449,6 +449,9 @@
 	"new-a": "New",
 	"no": "No",
 	"of": "of",
+	"page": {
+		"pageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} items"
+	},
 	"pending": "Pending",
 	"placeholder": {
 		"select": "Select"

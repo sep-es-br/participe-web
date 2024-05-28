@@ -365,7 +365,7 @@
 		"error": {
 			"saving": "Erro ao salvar o avaliador"
 		},
-		"inserted": "Novo Avaliador {{name}} inserido",
+		"inserted": "Novo Avaliador inserido",
 		"new": "Novo Avaliador",
 		"organization": "Órgão",
 		"section": "Setor",
@@ -488,6 +488,9 @@
 	"new-a": "Novo (a)",
 	"no": "Não",
 	"of": "de",
+	"page": {
+		"pageReportTemplate": "Exibindo {{first}} a {{last}} de {{totalRecords}} itens"
+	},
 	"pending": "Pendente",
 	"placeholder": {
 		"select": "Selecione"
