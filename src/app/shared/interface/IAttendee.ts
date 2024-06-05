@@ -12,6 +12,8 @@ export interface IAttendee {
   regionalizable?: string;
   checkedIn: boolean;
   checkedInDate?: string;
+  preRegistered?: boolean;
+  preRegisteredDate?: string;
   checkingIn?: boolean;
   authName?: List<string>;
 }

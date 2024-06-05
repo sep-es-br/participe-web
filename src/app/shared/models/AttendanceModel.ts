@@ -34,6 +34,7 @@ export class AttendanceModel {
 
   idMeeting: number;
   totalAttendees: number;
+  totalPreRegistered: number;
   listAttendees: IAttendee[] = [];
 
   nameSearch: string;
@@ -56,6 +57,7 @@ export class AttendanceModel {
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
+  selectedFilterBy = 'pres';
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
 
@@ -232,6 +234,7 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+    await this.setActionBar();
     this.isSearching = false;
     
   }
@@ -358,13 +361,17 @@ export class AttendanceModel {
       ]);
     }
 
+    await this.searchByName();
     await this.setActionBar();
     // await this.searchByName();
     this.showSelectMeeting = false;
   }
 
   async setActionBar() {
-    await this.updateTotalAttendees();
+
+    this.totalAttendees = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.checkedIn).length : 0
+    this.totalPreRegistered = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.preRegistered).length : 0
+
     this.actionbarSrv.setItems([
       {
         position: 'LEFT',
@@ -373,10 +380,16 @@ export class AttendanceModel {
       },
       {
         position: 'RIGHT',
-        handle: () => this.updateTotalAttendees(),
+        handle: () => {},
         icon: 'user-solid.svg',
         label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
       },
+      {
+        position: 'RIGHT',
+        handle: () => {},
+        icon: 'preregister_phone.svg',
+        label: `${this.totalPreRegistered} Pré-credenciados`
+      }
     ]);
   }
 
@@ -448,6 +461,7 @@ export class AttendanceModel {
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
+        filter: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
       },
     };
@@ -472,7 +486,7 @@ export class AttendanceModel {
   }
 
   getListOfLettersForLoading(): string[] {
-    const lastInListLetter = this.listAttendees.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
+    const lastInListLetter = this.listAttendees?.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
     const indexLastLetter = this.alphabet.indexOf(lastInListLetter.toUpperCase());
     return this.alphabet.split('').splice(indexLastLetter, this.pageSize);
   }

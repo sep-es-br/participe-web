@@ -6,11 +6,11 @@ Projeto para integração entre serviços.
 
 As tecnologias utilizadas atualmente neste projeto estão listadas na tabela abaixo.
 
-| Tecnologia | Versão |
-|---|---|
-| Node | 10.16.3 |
-| Angular | 8.2.12 |
-| PrimeNG | 1.0 |
+| Tecnologia | Versão  |
+|------------|---------|
+| Node       | 18.20.2 |
+| Angular    | 17.3.1  |
+| PrimeNG    | 17.13.0 |
 
 ## 2 Desenvolvimento
 
