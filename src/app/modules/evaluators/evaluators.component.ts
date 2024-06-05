@@ -293,7 +293,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("warn"),
-        // detail: this.translateService.instant("evaluator.warn.remove"), // Possíveis erros ao deletar o avaliado (Não implementado)
+        detail: this.translateService.instant("Erro ao excluir o avaliador"),
       });
     } finally {
       this.cancelForm();
