@@ -350,7 +350,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     await this.evaluatorsService
       .getEvaluatorsList(pageable)
       .then((response) => {
-        this.evaluatorsList = response.content;
+        this.evaluatorsList = response.content ?? [];
         this.totalRecords = response.totalElements;
         this.updatePageReportTemplateTranslateParams();
         this.prepareEvaluatorsTable();
@@ -410,17 +410,17 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   private async prepareEvaluatorsTable() {
     this.loading = true;
 
-    const organizationsGuidList = this.evaluatorsList.map(
+    const organizationsGuidList = this.evaluatorsList.length > 0 ? this.evaluatorsList.map(
       (evaluator) => evaluator.organizationGuid
-    );
+    ) : [];
 
-    const sectionsGuidList = this.evaluatorsList
+    const sectionsGuidList = this.evaluatorsList.length > 0 ? this.evaluatorsList
       .map((evaluator) => evaluator.sectionsGuid)
-      .reduce((acc, cur) => acc.concat(cur));
+      .reduce((acc, cur) => acc.concat(cur)) : [];
 
-    const rolesGuidList = this.evaluatorsList
+    const rolesGuidList = this.evaluatorsList.length > 0 ? this.evaluatorsList
       .map((evaluator) => evaluator.rolesGuid ?? [])
-      .reduce((acc, cur) => acc.concat(cur));
+      .reduce((acc, cur) => acc.concat(cur)) : [];
 
     const reqBody = {
       organizationsGuidList: organizationsGuidList,
