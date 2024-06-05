@@ -1,0 +1,18 @@
+.column-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  * + * {
+    margin-left: 10px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  margin-top: 14px;
+
+  * + * {
+    margin-left: 14px;
+  }
+}

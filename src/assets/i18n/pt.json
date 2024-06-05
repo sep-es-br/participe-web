@@ -4,6 +4,7 @@
 		"conference": "Consulta",
 		"conference-name": "Consulta: {{name}}",
 		"domain": "Domínio",
+		"evaluators": "Avaliadores",
 		"label": "Administração",
 		"moderation": "Moderação",
 		"plan": "Plano",
@@ -366,6 +367,24 @@
 		"field-must-contain-only-letters": "O campo deve conter apenas letras"
 	},
 	"error": "Erro",
+	"evaluator": {
+		"confirm": {
+			"delete": "Deseja realmente deletar {{name}}?"
+		},
+		"delete": "Excluir Avaliador",
+		"edit": "Editar Avaliador",
+		"error": {
+			"saving": "Erro ao salvar o avaliador"
+		},
+		"inserted": "Novo Avaliador inserido",
+		"new": "Novo Avaliador",
+		"organization": "Órgão",
+		"section": "Setor",
+		"sections": "Setores",
+		"role": "Papel",
+		"roles": "Papéis",
+		"updated": "Avaliador {{name}} atualizado"
+	},
 	"exists": {
 		"name": "Esse nome já existe"
 	},
@@ -480,6 +499,9 @@
 	"new-a": "Novo (a)",
 	"no": "Não",
 	"of": "de",
+	"page": {
+		"pageReportTemplate": "Exibindo {{first}} a {{last}} de {{totalRecords}} itens"
+	},
 	"pending": "Pendente",
 	"placeholder": {
 		"select": "Selecione"

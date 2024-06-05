@@ -27,6 +27,7 @@ import { PlanModule } from './modules/plan/plan.module';
 import { StructureModule } from './modules/structure/structure.module';
 import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/control-panel-dashboard.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { EvaluatorsModule } from './modules/evaluators/evaluators.module';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     CoreModule,
     StructureModule,
     CitizenModule,
+    EvaluatorsModule,
     ModerationModule,
     ControlPanelDashboardModule,
     SweetAlert2Module.forRoot(),
