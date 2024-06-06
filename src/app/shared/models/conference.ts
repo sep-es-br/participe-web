@@ -34,6 +34,7 @@ export class Conference {
   showStatistics: Boolean;
   showCalendar: Boolean;
   showStatisticsPanel: Boolean;
+  showProposalsPanel: Boolean;
   showExternalLinks: Boolean;
   segmentation: boolean;
   targetedByItems: number[];
