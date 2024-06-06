@@ -270,6 +270,7 @@ export class ConferenceComponent implements OnInit {
       showStatistics: true,
       showCalendar: true,
       showStatisticsPanel: true,
+      showProposalsPanel: true,
       showExternalLinks: true,
       beginDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
@@ -383,6 +384,7 @@ export class ConferenceComponent implements OnInit {
     this.conferenceForm.controls.defaultServerConference.setValue(this.conference.defaultServerConference);
     this.conferenceForm.controls.showStatistics.setValue(this.conference.showStatistics);
     this.conferenceForm.controls.showStatisticsPanel.setValue(this.conference.showStatisticsPanel);
+    this.conferenceForm.controls.showProposalsPanel.setValue(this.conference.showProposalsPanel)
     this.conferenceForm.controls.showCalendar.setValue(this.conference.showCalendar);
     this.conferenceForm.controls.showExternalLinks.setValue(this.conference.showExternalLinks);
     this.conferenceForm.controls.beginDate.setValue(this.getDate(this.conference.beginDate));
