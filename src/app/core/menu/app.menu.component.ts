@@ -10,6 +10,7 @@ import {
   faCrown,
   faEdit,
   faMapMarkedAlt,
+  faPortrait,
   faSitemap,
   faTachometerAlt,
   faUserCheck,
@@ -92,18 +93,20 @@ export class AppMenuComponent implements OnInit {
               {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
               {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
               {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
+              {label: 'administration.evaluators', icon: faPortrait, routerLink: ['/administration/evaluators']},
               {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
             ]
           });
-      } else {
-        this.model.push(
-          {
-            label: 'administration.label', icon: faCog, routerLink: ['/administration/dashboard'], items: [
-              {label: 'administration.domain', icon: faMapMarkedAlt, routerLink: ['/administration/domains']},
-              {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
-              {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
-              {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
-              {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
+        } else {
+          this.model.push(
+            {
+              label: 'administration.label', icon: faCog, routerLink: ['/administration/dashboard'], items: [
+                {label: 'administration.domain', icon: faMapMarkedAlt, routerLink: ['/administration/domains']},
+                {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
+                {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
+                {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
+                {label: 'administration.evaluators', icon: faPortrait, routerLink: ['/administration/evaluators']},
+                {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
             ]
           });
       }

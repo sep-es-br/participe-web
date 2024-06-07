@@ -28,6 +28,7 @@ import { StructureModule } from './modules/structure/structure.module';
 import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/control-panel-dashboard.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ProposalEvaluationModule } from './modules/proposal-evaluation/proposal-evaluation.module';
+import { EvaluatorsModule } from './modules/evaluators/evaluators.module';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ProposalEvaluationModule } from './modules/proposal-evaluation/proposal
     CoreModule,
     StructureModule,
     CitizenModule,
+    EvaluatorsModule,
     ModerationModule,
     ProposalEvaluationModule,
     ControlPanelDashboardModule,

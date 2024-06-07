@@ -4,6 +4,7 @@
 		"conference": "Consulta",
 		"conference-name": "Consulta: {{name}}",
 		"domain": "Domínio",
+		"evaluators": "Avaliadores",
 		"label": "Administração",
 		"moderation": "Moderação",
 		"plan": "Plano",
@@ -116,6 +117,7 @@
 		"showStatistics": "Mostrar estatística",
 		"showCalendar": "Mostrar calendário",
 		"showStatisticsPanel": "Mostrar painel de estatística",
+		"showProposalsPanel": "Mostrar painel de propostas",
 		"showExternalLinks": "Mostrar links externos",
 		"stepUpdated": "Passo alterado",
 		"externalLinkUpdated": "Link externo alterado",
@@ -142,6 +144,8 @@
 			"endDateOutOfRange": "A data de término da conferência deve ser posterior à data de abertura"
 		},
 		"image": "Imagem",
+		"footer-image": "Imagem de Rodapé",
+		"header-image": "Imagem de Cabeçalho",
 		"in-progress": "Consulta em andamento, não pode ser excluída!",
 		"inserted": "Consulta {{name}} inserida",
 		"locality-citizen": "Tipo de localidade do cidadão",
@@ -237,11 +241,12 @@
 				"accent": "Destaque",
 				"card": "Caixa",
 				"accentCard": "Caixa em destaque",
-				"textCard": "Texto do Card",
+				"textCard": "Texto da caixa",
 				"textAccentCard": "Texto em caixa destacada",
 				"borderCard": "Borda da caixa",
 				"solid": "Cor Sólida",
-				"gradient": "Gradiente"
+				"gradient": "Gradiente",
+				"cardLogin": "Caixa do login"
 			},
 			"preview": {
 				"titleSection": "Pré visualização",
@@ -254,7 +259,8 @@
 				"textCard": "Assim será apresentado o texto sobre a caixa",
 				"textAccentCard": "Assim será apresentado o texto sobre a caixa em destaque.",
 				"card":"Caixa",
-				"cardAccent":"Caixa em destaque"
+				"cardAccent":"Caixa em destaque",
+				"cardLogin": "Caixa do login"
 			}
 		},
 		"actions": {
@@ -362,6 +368,24 @@
 		"field-must-contain-only-letters": "O campo deve conter apenas letras"
 	},
 	"error": "Erro",
+	"evaluator": {
+		"confirm": {
+			"delete": "Deseja realmente deletar {{name}}?"
+		},
+		"delete": "Excluir Avaliador",
+		"edit": "Editar Avaliador",
+		"error": {
+			"saving": "Erro ao salvar o avaliador"
+		},
+		"inserted": "Novo Avaliador inserido",
+		"new": "Novo Avaliador",
+		"organization": "Órgão",
+		"section": "Setor",
+		"sections": "Setores",
+		"role": "Papel",
+		"roles": "Papéis",
+		"updated": "Avaliador {{name}} atualizado"
+	},
 	"exists": {
 		"name": "Esse nome já existe"
 	},
@@ -476,6 +500,9 @@
 	"new-a": "Novo (a)",
 	"no": "Não",
 	"of": "de",
+	"page": {
+		"pageReportTemplate": "Exibindo {{first}} a {{last}} de {{totalRecords}} itens"
+	},
 	"pending": "Pendente",
 	"placeholder": {
 		"select": "Selecione"
