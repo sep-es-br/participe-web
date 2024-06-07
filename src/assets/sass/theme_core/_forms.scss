@@ -124,14 +124,14 @@ body {
 
             .ui-radiobutton-icon {
                 background: transparent;
-                width: $radiobuttonWidth / 2;
-                height: $radiobuttonHeight / 2;
+                width: calc($radiobuttonWidth / 2);
+                height: calc($radiobuttonHeight / 2);
                 display: inline-block;
                 position: absolute;
                 left: 50%;
                 top: 50%;
-                margin-left: -1 * $radiobuttonWidth / 4;
-                margin-top: -1 * $radiobuttonWidth / 4;
+                margin-left:calc( -1 * $radiobuttonWidth / 4);
+                margin-top: calc( -1 * $radiobuttonWidth / 4);
                 @include transition(background-color $transitionDuration);
                 @include border-radius(50%);
 
@@ -227,7 +227,7 @@ body {
 
         &.ui-autocomplete-multiple {
             .ui-autocomplete-multiple-container {
-                padding: $inputPadding / 2 $inputPadding;
+                padding: calc($inputPadding / 2 ) $inputPadding;
 
                 &:not(.ui-state-disabled):hover {
                     border-color: $inputHoverBorderColor;
@@ -239,7 +239,7 @@ body {
 
                 .ui-autocomplete-input-token {
                     margin: 0;
-                    padding: $inputPadding / 2 0;
+                    padding: calc($inputPadding / 2) 0;
                     color: $textColor;
 
                     input {
@@ -252,7 +252,7 @@ body {
 
                 .ui-autocomplete-token {
                     font-size: $fontSize;
-                    padding: $inputPadding / 2 $inputPadding;
+                    padding: calc($inputPadding / 2) $inputPadding;
                     margin: $chipsItemMargin;
                     background: $highlightBgColor;
                     color: $highlightColorText;
@@ -316,7 +316,7 @@ body {
 
     .ui-chips {
         > ul.ui-inputtext {
-            padding: $inputPadding / 2 $inputPadding;
+            padding: calc($inputPadding / 2) $inputPadding;
             display: inline-block;
 
             &:not(.ui-state-disabled):hover {
@@ -328,7 +328,7 @@ body {
             }
 
             .ui-chips-input-token {
-                padding: $inputPadding / 2 0;
+                padding: calc($inputPadding / 2) 0;
 
                 input {
                     font-family: $fontFamily;
@@ -349,7 +349,7 @@ body {
 
             .ui-chips-token {
                 font-size: $fontSize;
-                padding: $inputPadding / 2 $inputPadding;
+                padding: calc($inputPadding / 2) $inputPadding;
                 margin: $chipsItemMargin;
                 background: $highlightBgColor;
                 color: $highlightColorText;
@@ -820,7 +820,7 @@ body {
 
             .ui-slider-handle {
                 top: 50%;
-                margin-top: -1 * $sliderHandleHeight / 2;
+                margin-top: calc(-1 * $sliderHandleHeight / 2);
             }
         }
 
@@ -829,7 +829,7 @@ body {
 
             .ui-slider-handle {
                 left: 50%;
-                margin-left: -1 * $sliderHandleWidth / 2;
+                margin-left: calc(-1 * $sliderHandleWidth / 2);
             }
         }
 
@@ -1147,8 +1147,8 @@ body {
                     position: absolute;
                     top: 50%;
                     left: 50%;
-                    margin-left: -1 * $checkboxWidth / 2;
-                    margin-top: -1 * $checkboxHeight / 2;
+                    margin-left: calc(-1 * $checkboxWidth / 2);
+                    margin-top: calc(-1 * $checkboxHeight / 2);
                 }
             }
 
@@ -1159,8 +1159,8 @@ body {
                     position: absolute;
                     top: 50%;
                     left: 50%;
-                    margin-left: -1 * $radiobuttonWidth / 2;
-                    margin-top: -1 * $radiobuttonHeight / 2;
+                    margin-left: calc(-1 * $radiobuttonWidth / 2);
+                    margin-top: calc(-1 * $radiobuttonHeight / 2);
                 }
             }
         }

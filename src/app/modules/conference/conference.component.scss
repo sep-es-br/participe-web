@@ -50,14 +50,15 @@ form {
   display: inline-block;
 }
 
-.server-name, .switch-default-conference, .switch-show-statistics, .switch-show-calendar, .switch-show-statistics-panel, .switch-show-external-links{
+.server-name, .switch-show-statistics, .switch-show-calendar, .switch-show-statistics-panel, .switch-show-proposals-panel, .switch-show-external-links{
   margin-top: 1em;
 }
 
 ::ng-deep .switch-default-conference , 
 ::ng-deep .switch-show-statistics, 
 ::ng-deep .switch-show-calendar, 
-::ng-deep .switch-show-statistics-panel, 
+::ng-deep .switch-show-statistics-panel,
+::ng-deep .switch-show-proposals-panel, 
 ::ng-deep .switch-show-external-links  {
   display: flex;
   align-items: center;
@@ -91,6 +92,9 @@ form {
       left: -6px !important;
     }
   }
+}
+.p-accordion-header-text{
+  color: #FFFFFF !important;
 }
 
 ::ng-deep .segmentation-accordion {
@@ -165,7 +169,7 @@ form {
 }
 
 ::ng-deep .accordion-citizen-container {
-  padding: 0 !important;
+  padding-top : 0 !important;
 }
 
 ::ng-deep .accordion-citizen-portal {
@@ -243,9 +247,6 @@ form {
       }
     }
   }
-  textarea {
-    height: auto !important;
-  }
 
   .steps-table-container {
     margin-top: 2em;
@@ -258,10 +259,10 @@ form {
           width: 25%;
         }
         th.col-text {
-          width: 55%;
+          width: 50%;
         }
         th.col-action {
-          width: 10%;
+          width: 15%;
         }
       }
       .ui-table-tbody tr {
@@ -289,7 +290,7 @@ form {
   .form-external-links-content {
     .button-plus-external-link {
       margin-bottom: 4px;
-      align-self: flex-end;
+      align-self: center;
     }
     .external-links-form-title {
       margin-top: 1em;
@@ -422,3 +423,28 @@ form {
     text-align: left !important;
   }
 }
+.p-element.p-inputwrapper,
+.p-dropdown.p-component,
+.p-element.p-inputwrapper > div,
+.p-dropdown{
+  width: 100% !important;
+  display: block;
+}
+
+
+  .col-step {
+    width: 8%;
+  }
+  .col-title {
+    width: 25%;
+  }
+  .col-text {
+    width: 55%;
+  }
+  .col-action {
+    text-align: center;
+    width: 12%;
+    button{
+      margin: auto .5rem;
+    }
+  }

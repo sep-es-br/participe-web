@@ -18,7 +18,7 @@
     .icons-container {
       display: flex;
       img  {
-        width: 30px;
+        width: 40px;
         margin-right: 5px;
       }
     }
@@ -99,6 +99,14 @@
   tr.citizen-inactive td {
     color: #ef233c;
   }
+  p-autoComplete ul {
+    width: 100%;
+  }
+  
+  ul.p-autocomplete-multiple-container {
+    width: 100%;
+  }
 }
+
 
 

@@ -4,6 +4,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { ITableCol } from './../interface/ITableCol';
 import { getValueCol } from './../util/Get-value-col.util';
 import { BaseService } from './base.service';
+import { Paginator, PaginatorState } from 'primeng/paginator';
 
 export abstract class BasePageList<T> {
 
@@ -11,6 +12,7 @@ export abstract class BasePageList<T> {
   search?: any;
   data: T[];
   page: number = 0;
+  first: number = 0;
   totalRecords: number = 0;
   pageSize: number = 10;
   sort: string = '';
@@ -18,22 +20,26 @@ export abstract class BasePageList<T> {
   service: BaseService<T>;
   mapElementHandle: any;
 
+  pageState: PaginatorState = {
+    first: 0,
+    page: 0,
+    rows: 10,
+  }
+
   protected constructor(
     @Inject(BaseService) service: BaseService<T>
   ) {
     this.service = service;
   }
 
-  async loadData(event?: LazyLoadEvent) {
-    if (event) {
-      this.page = event.first > 0 ? (event.first / this.pageSize) : 0;
-      if (event.sortField) {
-        this.sort = `${event.sortField},${event.sortOrder === 1 ? 'asc' : 'desc'}`;
-      }
+  async loadData( paginator?: PaginatorState) {
+    if(paginator){
+      this.pageState = paginator
     }
+    
     const response = await this.service.GetAllPaginated({
-      page: this.page,
-      pageSize: this.pageSize,
+      page: this.pageState.page,
+      pageSize: this.pageState.rows,
       sort: this.sort,
       search: Object.keys(this.search).reduce((a, key) => {
         const value = this.search[key];
@@ -48,7 +54,6 @@ export abstract class BasePageList<T> {
     if (typeof (this.mapElementHandle) === 'function' && _.size(this.data) > 0) {
       this.data.map(this.mapElementHandle);
     }
-
   }
 
   toggleSearch() {
@@ -70,11 +75,13 @@ export abstract class BasePageList<T> {
   }
 
   get getCurrentTotalOfRecords() {
-    // let total = this.pageSize * (this.page + 1);
-    // if (total > this.totalRecords) {
-    //   const remainingRecods = this.totalRecords - total;
-    //   total = total - remainingRecods;
-    // }
-    return this.pageSize * (this.page + 1);
+    let total = this.pageState.rows * (this.pageState.page + 1);
+    if (total > this.totalRecords) {
+      const remainingRecods = total - this.totalRecords;
+      total = total - remainingRecods;
+    }
+
+    
+    return total;
   }
 }

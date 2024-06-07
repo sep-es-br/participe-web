@@ -17,6 +17,7 @@ import {CitizenComponent} from './modules/citizen/citizen.component';
 import {ControlPanelDashboardComponent} from './modules/control-panel-dashboard/control-panel-dashboard.component';
 import {ConferenceListComponent} from './modules/conference/conference-list/conference-list.component';
 import { MeetPanelComponent } from './modules/conference/meeting/meet-panel/meet-panel.component';
+import { EvaluatorsComponent } from './modules/evaluators/evaluators.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -31,6 +32,7 @@ export const routes: Routes = [
   {path: 'administration/conferences/conference', component: ConferenceComponent},
   {path: 'administration/conferences/:id/meeting', component: MeetingComponent},
   {path: 'administration/conferences/:id/meeting/:idm/panel', component: MeetPanelComponent},
+  {path: 'administration/evaluators', component: EvaluatorsComponent},
   {path: 'administration/citizen', component: CitizenComponent},
   {path: 'moderation/search', component: ModerationComponent},
   {path: 'moderation/moderate/:id/:conferenceId', component: ModerateComponent},
@@ -40,9 +42,9 @@ export const routes: Routes = [
   }
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {
-  useHash: true,
-  scrollPositionRestoration: 'enabled',
-  onSameUrlNavigation: 'reload'
+export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes, {
+    useHash: true,
+    scrollPositionRestoration: 'enabled',
+    onSameUrlNavigation: 'reload'
 });
 

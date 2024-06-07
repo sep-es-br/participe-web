@@ -13,7 +13,7 @@ import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.serv
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { ConferenceService } from '../services/conference.service';
 import { MeetingService } from '../services/meeting.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../util/CustomValidators';
 import { Subscription } from 'rxjs';
 import { CitizenSenderModel } from './CitizenSenderModel';
@@ -34,6 +34,7 @@ export class AttendanceModel {
 
   idMeeting: number;
   totalAttendees: number;
+  totalPreRegistered: number;
   listAttendees: IAttendee[] = [];
 
   nameSearch: string;
@@ -56,12 +57,14 @@ export class AttendanceModel {
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
+  selectedFilterBy = 'pres';
   citizenAutentications: CitizenAuthenticationModel[] = [];
+  authName:string[]
 
   selectedCounty: Locality;
   localities: Locality[];
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   localityLabel: string;
   optionsLocalities: SelectItem[];
   authTypeEnum: string[] = Object.values(AuthTypeEnum);
@@ -76,7 +79,7 @@ export class AttendanceModel {
   protected meetingSrv: MeetingService;
   protected translate: TranslateService;
   protected messageSrv: MessageService;
-  protected formBuilder: FormBuilder;
+  protected formBuilder: UntypedFormBuilder;
   protected citizenSrv: CitizenService;
   protected localitySrv: LocalityService;
 
@@ -90,7 +93,7 @@ export class AttendanceModel {
     this.meetingSrv = injector.get(MeetingService);
     this.translate = injector.get(TranslateService);
     this.messageSrv = injector.get(MessageService);
-    this.formBuilder = injector.get(FormBuilder);
+    this.formBuilder = injector.get(UntypedFormBuilder);
     this.citizenSrv = injector.get(CitizenService);
     this.localitySrv = injector.get(LocalityService);
 
@@ -153,6 +156,7 @@ export class AttendanceModel {
         phone.setValue(data.telephone);
         this.selectedAttende.password = data.password;
         this.citizenAutentications = data.autentication || [];
+        this.authName = data.authName || [];
       }
     } catch (error) {
       this.messageSrv.add({
@@ -230,7 +234,9 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+    await this.setActionBar();
     this.isSearching = false;
+    
   }
 
   async loadNextPageRegister() {
@@ -354,12 +360,18 @@ export class AttendanceModel {
         },
       ]);
     }
+
+    await this.searchByName();
     await this.setActionBar();
+    // await this.searchByName();
     this.showSelectMeeting = false;
   }
 
   async setActionBar() {
-    await this.updateTotalAttendees();
+
+    this.totalAttendees = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.checkedIn).length : 0
+    this.totalPreRegistered = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.preRegistered).length : 0
+
     this.actionbarSrv.setItems([
       {
         position: 'LEFT',
@@ -368,10 +380,16 @@ export class AttendanceModel {
       },
       {
         position: 'RIGHT',
-        handle: () => this.updateTotalAttendees(),
+        handle: () => {},
         icon: 'user-solid.svg',
         label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
       },
+      {
+        position: 'RIGHT',
+        handle: () => {},
+        icon: 'preregister_phone.svg',
+        label: `${this.totalPreRegistered} Pré-credenciados`
+      }
     ]);
   }
 
@@ -443,6 +461,7 @@ export class AttendanceModel {
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
+        filter: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
       },
     };
@@ -467,7 +486,7 @@ export class AttendanceModel {
   }
 
   getListOfLettersForLoading(): string[] {
-    const lastInListLetter = this.listAttendees.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
+    const lastInListLetter = this.listAttendees?.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
     const indexLastLetter = this.alphabet.indexOf(lastInListLetter.toUpperCase());
     return this.alphabet.split('').splice(indexLastLetter, this.pageSize);
   }

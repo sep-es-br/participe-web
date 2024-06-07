@@ -1,8 +1,8 @@
 <app-template>
-  <div class="p-grid ui-fluid">
-    <div class="p-col-12 p-lg-12">
-      <div class="p-col-12 p-lg-12 search-small-container">
-        <div class="p-col-6 p-lg-6 search-itens">
+  <div class="row ui-fluid">
+    <div class="col-12 col-lg-12">
+      <div class="col-12 col-lg-12 search-small-container">
+        <div class="col-6 col-lg-6 search-itens">
           <div *ngIf="!search">
             <a class="search" (click)="changeSmallFilter('Pending')"
               [ngClass]="{'filter-active': filter.status === 'Pending'}">{{ 'moderation.filters.pending'| translate }}</a> |
@@ -12,57 +12,70 @@
               [ngClass]="{'filter-active': filter.status === 'Removed'}">{{ 'moderation.filters.trash'| translate }}</a>
           </div>
         </div>
-        <div class="p-col-6 p-lg-6 search-right">
+        <div class="col-6 col-lg-6 search-right">
           <a class="search"
            (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
         </div>
       </div>
-      <div class="p-col-12 p-md-12" *ngIf="search">
-        <div class="p-grid ui-fluid search-complete">
-          <div class="p-col-12 p-md-3 form-group">
+      <div class="col-12 col-md-12" *ngIf="search">
+        <div class="row ui-fluid search-complete">
+          <div class="col-md-3 col-12 col-md-3 form-group">
             <label class="form-label">{{ 'moderation.filters.status' | translate }}</label>
-            <p-dropdown [options]="statusOptions" [(ngModel)]="filter.status">
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="statusOptions" [(ngModel)]="filter.status">
             </p-dropdown>
           </div>
-          <div class="p-col-12 p-md-3 form-group">
+          <div class="col-12 col-md-3 form-group">
             <label>{{ 'moderation.filters.from' | translate }}</label>
-            <p-dropdown [options]="fromOptions" [(ngModel)]="filter.from"></p-dropdown>
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="fromOptions" [(ngModel)]="filter.from"></p-dropdown>
           </div>
-          <div class="p-col-12 p-md-3 form-group" *ngIf="regionalization">
+          <div class="col-12 col-md-3 form-group" *ngIf="regionalization">
             <label>{{ labelMicroregion }}</label>
-            <p-dropdown [options]="microregion" [(ngModel)]="filter.localityId"></p-dropdown>
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="microregion" [(ngModel)]="filter.localityId"></p-dropdown>
           </div>
-          <div class="p-col-12 p-md-3 form-group">
+          <div class="col-12 col-md-3 form-group">
             <label>{{ labelPlanItem }}</label>
-            <p-dropdown [options]="planItem" [(ngModel)]="filter.planItemId"></p-dropdown>
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="planItem" [(ngModel)]="filter.planItemId"></p-dropdown>
           </div>
-          <div class="p-col-12 p-md-3 form-group">
+          <div class="col-12 col-md-3 form-group">
             <label>{{ 'moderation.filters.text' | translate }}</label>
-            <input pInputText [(ngModel)]="filter.text"/>
+            <input pInputText class="form-control" [(ngModel)]="filter.text"/>
           </div>
-          <div class="p-col-12 p-md-3 form-group">
+          <div class="col-12 col-md-3 form-group">
             <label>{{ 'moderation.filters.startAt' | translate }}</label>
-            <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeDate('initialDate',$event)"
+            <p-calendar [styleClass]="'w-100'" [inputStyleClass]="'form-control'" dateFormat="dd/mm/yy" (onSelect)="changeDate('initialDate',$event)"
                         [locale]="calendarTranslate">
             </p-calendar>
           </div>
-          <div class="p-col-12 p-md-3 form-group">
+          <div class="col-12 col-md-3 form-group">
             <label>{{ 'moderation.filters.endAt' | translate }}</label>
-            <p-calendar dateFormat="dd/mm/yy" (onSelect)="changeDate('endDate',$event)" [locale]="calendarTranslate">
+            <p-calendar [styleClass]="'w-100'" [inputStyleClass]="'form-control'" dateFormat="dd/mm/yy" (onSelect)="changeDate('endDate',$event)" [locale]="calendarTranslate">
             </p-calendar>
           </div>
-          <div class="p-col-12 p-md-3 p-col-align-end">
-            <button pButton [icon]="getIcon('pi pi-search')" [disabled]="loading" (click)="searchHandle();"
+          <div class="col-12 col-md-3 mt-auto">
+            <button pButton [icon]="getIcon('pi pi-search')" class="me-2" [disabled]="loading" (click)="searchHandle();"
                     [label]="'search' | translate"></button>
+            <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
+                    (click)="this.filter = {
+                      planItemId: null,
+                      localityId: null,
+                      status: 'Pending',
+                      from: null,
+                      text: '',
+                      initialDate: null,
+                      endDate: null,
+                    };searchHandle();"></button>
           </div>
         </div>
       </div>
       <div class="card card-w-title moderation-item" *ngIf="conferenceComments?.length === 0">
         {{ 'moderation.label.empty_comments' | translate }}
       </div>
+      <div class="row my-2" *ngIf="conferenceComments.length > 0">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="pageState.first" [rows]="pageState.rows" [totalRecords]="paginatorTotalRecords" [rowsPerPageOptions]="[15, 35, 50]"></p-paginator>
+      </div>
       <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
-        <div class="p-grid ui-fluid">
-          <div class="p-col-12 p-md-6">
+        <div class="row ui-fluid">
+          <div class="col-12 col-md-6">
             <div class="row">
               <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span>
               <span
@@ -71,42 +84,51 @@
                 {{ comment.moderatorName }} | {{ timesAgo(comment?.moderateTime) }}
               </span>
             </div>
-            <div class="row description">
+            <div class="description">
               {{ comment.text }}
             </div>
-            <div class="row info">
+            <div class="info">
               {{ comment.citizenName }} |
               {{ 'moderation.label.' + comment?.from.toLowerCase() | translate }} |
               {{ timesAgo(comment?.time) }} |
               {{ comment.localityName }}
             </div>
           </div>
-          <div class="p-col-12 p-md-3">
-            <div class="row info">{{ comment.structureItemName }}</div>
+          <div class="col-12 col-md-3">
+            <div class="info">{{ comment.structureItemName }}</div>
             <div>{{ comment.planItemName }}</div>
           </div>
-          <div class="p-col-12 p-md-2 p-col-align-center options">
-            <p-radioButton [name]="'optionModeration_' + comment.commentId"
-                           (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
-                           value="Proposal" [label]="'moderation.label.proposal' | translate">
-            </p-radioButton>
-            <p-radioButton [name]="'optionModeration_' + comment.commentId"
-                           (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
-                           value="Comment" [label]="'moderation.label.comment'| translate ">
-            </p-radioButton>
+          <div class="col-12 col-md-2 align-middle ">
+            <div class="col-12">
+              <p-radioButton [name]="'optionModeration_' + comment.commentId"
+                             (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
+                             value="Proposal" [label]="'moderation.label.proposal' | translate">
+              </p-radioButton>
+            </div>
+            <div class="col-12">
+              <p-radioButton [name]="'optionModeration_' + comment.commentId"
+                             (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
+                             value="Comment" [label]="'moderation.label.comment'| translate ">
+              </p-radioButton>
+            </div>
           </div>
-          <div class="p-col-12 p-md-1 p-col-align-center actions">
-            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate"
-                    [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
-              <img src="assets/layout/images/icons/internet.svg" alt=""/>
-            </button>
-            <button pButton class="ui-button-primary ui-button-icon-only" [disabled]="comment.disableModerate" icon=""
-                    [pTooltip]="'moderation.label.btnModerate' | translate"
-                    (click)="moderate(comment)">
-              <img src="assets/layout/images/icons/king.svg" alt=""/>
-            </button>
+          <div class="col-12 col-md-1 align-content-center actions">
+            <!-- <div class="row actions"> -->
+              <button pButton class="btn align-content-center btn-sm btn-primary" [disabled]="comment.disableModerate"
+                      [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">
+                <img src="assets/layout/images/icons/internet.svg" alt=""/>
+              </button>
+              <button pButton class="btn align-content-center btn-sm btn-primary" [disabled]="comment.disableModerate" icon=""
+                      [pTooltip]="'moderation.label.btnModerate' | translate"
+                      (click)="moderate(comment)">
+                <img src="assets/layout/images/icons/king.svg" alt=""/>
+              </button>
+            <!-- </div> -->
           </div>
         </div>
+      </div>
+      <div class="row my-2" *ngIf="conferenceComments.length > 0">
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="pageState.first" [rows]="pageState.rows" [totalRecords]="paginatorTotalRecords" [rowsPerPageOptions]="[15, 35, 50]"></p-paginator>
       </div>
     </div>
   </div>

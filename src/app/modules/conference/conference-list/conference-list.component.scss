@@ -18,6 +18,7 @@ body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {
   }
 }
 
+
 form {
   width: 100%;
 }
@@ -73,9 +74,9 @@ form {
   display: inline-block;
 }
 
-.server-name, .switch-default-conference {
-  margin-top: 1em;
-}
+// .server-name, .switch-default-conference {
+//   margin-top: 1em;
+// }
 
 
 
@@ -103,4 +104,8 @@ form {
   .end-date {
     padding-left: 0.5em !important;
   }
+}
+
+.dropdown-toggle::after {
+  display: none;
 }

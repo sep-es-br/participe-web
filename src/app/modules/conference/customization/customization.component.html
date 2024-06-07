@@ -1,0 +1,131 @@
+<div class="row">
+    <div class="col-md-8">
+        <h3 class="fw-bolder text-center">{{"conference.cssTab.config" | translate}}</h3>
+        <form [formGroup]="customStylesheet"   *ngIf="dataForm">
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                <td style="width: 30%;">
+                    <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.background" | translate}}</label>
+                </td>
+                <td>
+                    <div>
+                        <p-radioButton class="mr-2 me-2" id="typeBackground1" (click)="getBackgroundInput('color')"    [value]="'color'"      [label]='"conference.cssTab.labels.solid" | translate' formControlName="typeBackgroundColor"></p-radioButton>
+                        <p-radioButton class="mr-2 me-2" id="typeBackground2" (click)="getBackgroundInput('gradient')" [value]="'gradient'"   [label]='"conference.cssTab.labels.gradient" | translate'  formControlName="typeBackgroundColor"></p-radioButton>
+                        <div  *ngIf="typeColorInput == 'color' ; else gradientPicker" class="mt-2" >
+                            <input type="color"  class="form-control form-control-color" name="background" formControlName="background" (onChange)="changeColorBackground()"  />
+                        </div>
+                        <ng-template #gradientPicker>
+                            <div *ngIf="formLoaded === true">
+                                <app-gradient (BackgroudDefined)="updateBackground($event)" [formLoaded]="formLoaded" [initialBackground]="backgroundColor" ></app-gradient>
+                            </div>
+                        </ng-template>                             
+                    </div>
+                </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.text" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="fontColor"   />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.border" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="borderColor"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.accent" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="accentColor"   />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.card" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="cardColor"   />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.accentCard" | translate}}</label>
+                    </td>
+                    <td>
+                       <input type="color"  class="form-control form-control-color" formControlName="cardColorHover"   />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.textCard" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="cardFontColor"   />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.textAccentCard" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="cardFontColorHover"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.borderCard" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="cardBorderColor"   />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.cardLogin" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="cardLoginColor"   />
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </form>
+      </div>
+      <div class="col-md-4 bg-dark-subtle p-3">
+        <h3 class="fw-bolder text-center">{{"conference.cssTab.preview.titleSection" | translate}}</h3>
+        <div class="container p-3" [ngStyle]="{'background': backgroundColor,'color':colorText}">
+            <label>{{"conference.cssTab.preview.background" | translate}}</label>
+            <div class="col-md-4">
+                <div class="text-center m-2" [ngStyle]="{'border': '0.3rem solid '+borderColor ,'border-radius':'25px'}" >{{"conference.cssTab.preview.border" | translate}}</div>
+                <div class="text-center m-2 p-2 shadow" [ngStyle]="{'background-color': colorAccent,'border-radius':'25px'}" >{{"conference.cssTab.preview.accent" | translate}}</div>
+            </div>
+            <div class="col-md-12">
+                <h1>{{"conference.cssTab.preview.titles" | translate}}</h1>
+                <h6>{{"conference.cssTab.preview.subtitles" | translate}}</h6>
+                <p>{{"conference.cssTab.preview.text" | translate}}</p>
+            </div>
+            <div class="row m-auto">
+                <div class="col  card shadow " [ngStyle]="{'border': '0.5rem solid '+borderColorCard, 'background-color': colorCard }">
+                    <h6 class="text-center">{{"conference.cssTab.preview.card" | translate}}</h6>
+                    <p [ngStyle]="{'color': colorTextCard }">{{"conference.cssTab.preview.textCard" | translate}}</p>
+                </div>
+                <div class="col mx-1 card shadow " [ngStyle]="{'border': '0.5rem solid '+borderColorCard, 'background-color': colorAccentCard }">
+                    <h6 class="text-center">{{"conference.cssTab.preview.cardAccent" | translate}}</h6>
+                    <p [ngStyle]="{'color': colorFontAccent }">{{"conference.cssTab.preview.textAccentCard" | translate}}</p>
+                </div>
+                <div class="col card shadow " [ngStyle]="{'background-color': colorCardLogin }">
+                    <h6 class="text-center">{{"conference.cssTab.preview.cardLogin" | translate}}</h6>
+                </div>
+            </div>
+
+        </div>
+      </div>
+    </div>

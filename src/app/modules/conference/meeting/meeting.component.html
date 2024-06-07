@@ -1,51 +1,51 @@
 <app-template>
-  <div class="p-grid ui-fluid">
-    <div class="p-col-12 p-md-12">
+  <div class="row ui-fluid">
+    <div class="col-12 col-md-12">
       <section *ngIf="!edit">
         <section>
-          <div class="p-grid ui-fluid actions">
-            <div class="ui-g-5 ui-md-2 ui-lg-2">
+          <div class="row ui-fluid actions">
+            <div class="col-5 col-md-2 col-lg-2">
               <button pButton type="button" class="button-new" [label]="'new'|translate" icon="pi pi-plus"
                       (click)="handleCreateOrEdit()">
               </button>
             </div>
-            <div class="ui-g-2 ui-md-8 ui-lg-9"></div>
-            <div class="ui-g-5 ui-md-2 ui-lg-1 search">
+            <div class="col-2 col-md-8 col-lg-9"></div>
+            <div class="col-5 col-md-2 col-lg-1 search">
               <a class="search" (click)="toggleSearch()">{{ (search ? 'hide' : 'search') |translate }}</a>
             </div>
           </div>
         </section>
         <div class="search-form card card-w-title" *ngIf="search">
           <form [formGroup]="searchForm" (submit)="loadMeetings(searchForm.value)">
-            <div class="p-grid ui-fluid">
-              <div class="ui-g-12 ui-md-6 ui-lg-3">
+            <div class="row ui-fluid">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label for="nameSearch">{{'conference.meeting.name'|translate}}</label>
-                <input id="nameSearch" pInputText formControlName="name">
+                <input class="form-control" id="nameSearch" pInputText formControlName="name">
               </div>
-              <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label for="beginDate">{{'date.start'|translate}}</label>
                 <p-calendar dateFormat="dd/mm/yy" [showSeconds]="false" [showTime]="true"
-                            formControlName="beginDate"
+                            formControlName="beginDate"  [styleClass]="'w-100'" [inputStyleClass]="'d-flex w-100 form-control '"
                             [locale]="calendarTranslate">
                 </p-calendar>
               </div>
-              <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label for="endDate">{{'date.end'|translate}}</label>
-                <p-calendar dateFormat="dd/mm/yy" [showSeconds]="false" [showTime]="true" formControlName="endDate"
+                <p-calendar dateFormat="dd/mm/yy" [styleClass]="'w-100'" [inputStyleClass]="'d-flex w-100 form-control '" [showSeconds]="false" [showTime]="true" formControlName="endDate"
                             [locale]="calendarTranslate">
                 </p-calendar>
               </div>
-              <div class="ui-g-12 ui-md-6 ui-lg-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <label for="plan">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</label>
-                <p-multiSelect [options]="localities" formControlName="localities"
-                               [defaultLabel]="'placeholder.select'|translate" class="ng-dirty ng-invalid">
+                <p-multiSelect [styleClass]="'d-flex form-control p-0'" [options]="localities" formControlName="localities"
+                               [placeholder]="'placeholder.select'|translate" class="ng-dirty ng-invalid">
                 </p-multiSelect>
               </div>
 
-              <div class="ui-g-12 ui-md-3 ui-lg-3 p-col-align-end">
+              <div class="col-12 col-md-3 col-lg-3 col-align-end">
                 <button pButton icon="pi pi-search" type="submit" [label]="'search'|translate"></button>
               </div>
-              <div class="ui-g-12 ui-md-4 ui-lg-3 p-col-align-end">
+              <div class="col-12 col-md-4 col-lg-3 col-align-end">
                 <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
                         (click)="clearSearch()"></button>
               </div>
@@ -109,11 +109,11 @@
         </section>
       </section>
       <section class="card card-w-title" *ngIf="edit">
-        <section class="p-col-12 p-md-8">
-          <div class="p-col-12 p-md-12" style="height: 60px;">{{ 'conference.meeting.title' | translate }}</div>
+        <section class="col-12 col-md-8">
+          <div class="col-12 col-md-12" style="height: 60px;">{{ 'conference.meeting.title' | translate }}</div>
           <form [formGroup]="form" (submit)="save(form.value)" *ngIf="form">
-            <div class="p-col-9">
-              <span class="p-col-3" *ngFor="let type of optionsTypesMeeting">
+            <div class="col-9">
+              <span class="col-3 form-check" *ngFor="let type of optionsTypesMeeting">
                 <p-radioButton [disabled]="typeMeetingAlreadySet" [id]="type.value" name="type"
                                 [value]="type.value"
                                 formControlName="type"
@@ -121,51 +121,51 @@
                 <label [for]="type.value" class="label-type-meeting">{{type.label}}</label>
               </span>
             </div>
-            <div class="p-col-12 p-md-12">
+            <div class="col-12 col-md-12">
               <label for="name">{{'conference.meeting.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input pInputText class="form-control form-control-input"  formControlName="name">
               <tt-input-message [form]="form" field="name"></tt-input-message>
             </div>
-            <div class="p-col-8 inline">
-              <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-12 row">
+              <div class="col-12 col-md-6">
                 <label for="beginDate">{{'conference.meeting.beginDate'|translate}}</label>
-                <p-calendar *ngIf="calendarTranslate" dateFormat="dd/mm/yy" (onSelect)="changeBeginDate($event)"
+                <p-calendar  [styleClass]="'w-100'" [inputStyleClass]="'d-flex w-100 form-control '" *ngIf="calendarTranslate" dateFormat="dd/mm/yy" (onSelect)="changeBeginDate($event)"
                             formControlName="beginDate" [showSeconds]="false" [showTime]="true"
                             [locale]="calendarTranslate">
                 </p-calendar>
                 <tt-input-message [form]="form" field="beginDate"></tt-input-message>
               </div>
-              <div class="p-col-12 p-md-6">
+              <div class="col-12 col-md-6">
                 <label for="endDate">{{'conference.meeting.endDate'|translate}}</label>
-                <p-calendar *ngIf="calendarTranslate" dateFormat="dd/mm/yy" [showTime]="true" [minDate]="minDate"
+                <p-calendar *ngIf="calendarTranslate"  [styleClass]="'w-100'" [inputStyleClass]="'d-flex w-100 form-control '" dateFormat="dd/mm/yy" [showTime]="true" [minDate]="minDate"
                             formControlName="endDate" [showSeconds]="false" [locale]="calendarTranslate">
                 </p-calendar>
                 <tt-input-message [form]="form" field="endDate"></tt-input-message>
               </div>
             </div>
-            <div class="p-col-12 p-md-12" *ngIf="validTypeDifferentFromVirtual()">
+            <div class="col-12 col-md-12" *ngIf="validTypeDifferentFromVirtual()">
               <div style="padding-bottom:5px;">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</div>
               <p-listbox styleClass="pListCustom" [options]="localities" formControlName="localityPlace"
                          checkbox="checkbox" filter="filter">
               </p-listbox>
             </div>
-            <div class="p-col-12 p-md-12" *ngIf="validTypeDifferentFromVirtual()">
+            <div class="col-12 col-md-12" *ngIf="validTypeDifferentFromVirtual()">
               <label for="address">{{'conference.meeting.address'|translate}}</label>
-              <input pInputText formControlName="address">
+              <input pInputText class="form-control" formControlName="address">
               <tt-input-message [form]="form" field="address"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-12" *ngIf="validTypeDifferentFromVirtual()">
+            <div class="col-12 col-md-12" *ngIf="validTypeDifferentFromVirtual()">
               <label for="place">{{'conference.meeting.place'|translate}}</label>
-              <input pInputText formControlName="place">
+              <input pInputText class="form-control" formControlName="place">
               <tt-input-message [form]="form" field="place"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-12">
+            <div class="col-12 col-md-12">
               <div style="padding-bottom:5px;">{{ 'conference.meeting.localityCovers' | translate }}</div>
               <p-listbox styleClass="pListCustom" [options]="localitiesCover" formControlName="localityCovers"
                          checkbox="checkbox" filter="filter" multiple="multiple">
               </p-listbox>
             </div>
-            <div class="p-col-12 p-md-12" *ngIf="planItems.length > 0">
+            <div class="col-12 col-md-12" *ngIf="planItems.length > 0">
               <div style="padding-bottom:5px;">{{ 'conference.meeting.segmentation' | translate }}</div>
               <p-listbox styleClass="pListCustom" [options]="planItems" formControlName="segmentations"
                          checkbox="checkbox" filter="filter" multiple="multiple">
@@ -176,19 +176,19 @@
                               styleClass="tabStyleClass">
                 <form [formGroup]="formChannels" *ngIf="formChannels" (submit)="handleAddChannel()">
                   <tt-input-message [form]="formChannels" field="containsChannel"></tt-input-message>
-                  <div class="p-grid ui-fluid">
-                    <div class="ui-g-12 ui-md-5 flex-1">
+                  <div class="row ui-fluid">
+                    <div class="col-12 col-md-5 flex-1">
                       <label for="name"> {{ 'conference.meeting.name' | translate }}</label>
-                      <input id="name" pInputText formControlName="name">
+                      <input id="name" class="form-control" pInputText formControlName="name">
                       <tt-input-message [form]="formChannels" field="name"></tt-input-message>
                     </div>
-                    <div class="ui-g-12 ui-md-5 flex-1">
+                    <div class="col-12 col-md-5 flex-1">
                       <label for="url"> {{ 'conference.meeting.url' | translate }}</label>
-                      <input id="url" pInputText formControlName="url">
+                      <input id="url" class="form-control" pInputText formControlName="url">
                       <tt-input-message [form]="formChannels" field="url"></tt-input-message>
                     </div>
-                    <div class="ui-g-12 ui-md-1 p-col-align-end flex-0">
-                      <button pButton type="submit" icon="pi pi-plus"></button>
+                    <div class="col-12 col-md-1 d-flex flex-0">
+                      <button pButton type="submit" class="mt-auto" icon="pi pi-plus"></button>
                     </div>
                   </div>
                 </form>
@@ -246,8 +246,8 @@
             </p-accordion>
 
             <div class="attendance-list-mode" *ngIf="validTypeDifferentFromVirtual()">
-              <div class="p-col-12">{{ 'conference.meeting.attendanceList' | translate }}</div>
-              <span class="p-col-3" *ngFor="let mode of optionsAttendanceListModes">
+              <div class="col-12">{{ 'conference.meeting.attendanceList' | translate }}</div>
+              <span class="col-3" *ngFor="let mode of optionsAttendanceListModes">
                 <p-radioButton [disabled]="false" [id]="mode.value" name="attendanceListMode"
                                 [value]="mode.value"
                                 formControlName="attendanceListMode"></p-radioButton>
@@ -261,12 +261,12 @@
                               styleClass="tabStyleClass">
                 <form [formGroup]="searchFormReceptionists"
                       (submit)="handleSearchReceptionists(searchFormReceptionists.value)">
-                  <div class="p-grid ui-fluid">
-                    <div class="ui-g-12 ui-md-10">
+                  <div class="row ui-fluid">
+                    <div class="col-12 col-md-10">
                       <label for="mail"> {{ 'conference.meeting.mail' | translate }}</label>
                       <input id="mail" pInputText formControlName="mail">
                     </div>
-                    <div class="ui-g-12 ui-md-2 p-col-align-end">
+                    <div class="col-12 col-md-2 col-align-end">
                       <button pButton type="submit" icon="pi pi-search"
                               [label]="'search'|translate"></button>
                     </div>
@@ -328,7 +328,7 @@
                 </p-table>
               </p-accordionTab>
             </p-accordion>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit" [label]="'save'|translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel'|translate" (click)="cancel()"></button>

@@ -14,8 +14,8 @@
       margin: 0 10px;
     }
 
-    .county.ui-float-label {
-      .ui-inputtext,
+    .county.p-float-label {
+      .p-inputtext,
       label {
         padding-left: 15px;
       }
@@ -88,7 +88,7 @@
       flex-wrap: wrap;
 
       img {
-        width: 20px;
+        width: 40px;
         margin-right: 5px;
 
         &:last-of-type {
@@ -147,10 +147,14 @@
     cursor: auto !important;
   }
 
+  .p-dropdown.p-component.p-inputwrapper, .p-autocomplete.p-component.p-inputwrapper {
+    width: 100%;
+  }
+
   .top-bar {
-    > {
-      margin: 0 15px;
-    }
+   
+    margin: 0 15px;
+   
 
     input.ng-valid.ng-touched.ng-dirty:focus,
     p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
@@ -187,4 +191,11 @@
       padding-left: 15px;
     }
   }
+}
+
+.preregister-icon {
+  height: 100%;
+  width: 20px;
+  margin-left: 8%;
+  margin-right: 5%;
 }

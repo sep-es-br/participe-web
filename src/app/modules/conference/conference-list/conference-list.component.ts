@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 
 import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
 import {Conference} from '@app/shared/models/conference';
@@ -19,7 +19,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ConferenceListComponent implements OnInit {
 
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   conferences: Conference[] = [];
   conference: Conference;
@@ -28,14 +28,14 @@ export class ConferenceListComponent implements OnInit {
   months: SelectItem[] = [];
   years: SelectItem[] = [];
 
-  searchModeratorsForm: FormGroup;
+  searchModeratorsForm: UntypedFormGroup;
 
   search = false;
   edit = false;
   localityCitizenSelected = false;
   minDate: Date = new Date();
   showTargetedByItems = false;
-  conferenceResearchForm: FormGroup;
+  conferenceResearchForm: UntypedFormGroup;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -43,7 +43,7 @@ export class ConferenceListComponent implements OnInit {
     private conferenceService: ConferenceService,
     private planService: PlanService,
     private localityService: LocalityService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private datePipe: DatePipe,
     private messageService: MessageService,
     private translate: TranslateService,

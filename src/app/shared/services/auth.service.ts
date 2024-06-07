@@ -6,10 +6,11 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
-import * as jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { StoreKeys } from '../constants';
 import { IPerson } from '../interface/IPerson';
 import { ISocialLoginResult } from './../interface/ISocialLoginResult';
+import { List } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -17,6 +18,9 @@ export class AuthService {
   providers: IAuthenticationProvider[] = [
     { tag: 'participe', icon: 'assets/layout/images/icons/participe.svg', label: 'Participe' },
     { tag: 'acessocidadao', icon: 'assets/layout/images/icons/acessocidadao.svg', label: 'Acesso Cidadão' },
+    { tag: 'google', icon: 'assets/layout/images/icons/google.svg', label: 'Google' },
+    { tag: 'facebook', icon: 'assets/layout/images/icons/facebook.svg', label: 'Facebook' },
+    { tag: 'twitter', icon: 'assets/layout/images/icons/twitter.svg', label: 'Twitter' }
   ];
 
   constructor(

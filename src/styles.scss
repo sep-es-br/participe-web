@@ -1,5 +1,26 @@
-@import '~@fortawesome/fontawesome-free/css/all.css';
-@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+$inputSwitchWidth: 2rem;
+$inputSwitchHeight: 1.25rem;
+$inputSwitchBorderRadius: 30px;
+$inputSwitchHandleWidth: 0.75rem;
+$inputSwitchHandleHeight: 0.75rem;
+$inputSwitchHandleBorderRadius: 50%;
+$inputSwitchSliderPadding: .25rem;
+
+.p-inputswitch {
+  width: 2.5rem;
+  height: 1.25rem !important;
+}
+
+.p-inputswitch .p-inputswitch-slider:before {
+  
+  width: 1rem !important;
+  height: 1rem !important;
+  left:0rem !important;
+  margin-top: -0.5rem !important;
+}
 
 body {
   padding: 0;
@@ -12,24 +33,28 @@ button:focus {
 
 input.ng-invalid.ng-touched,
 p-dropdown.ng-invalid.ng-touched > div,
+p-multiSelect.ng-invalid.ng-touched > div,
 p-autoComplete.ng-invalid.ng-touched > span > input {
   border: 1.3px solid #f44336 !important;
 }
 
 input.ng-invalid.ng-touched:focus,
 p-dropdown.ng-invalid.ng-touched:focus > div,
+p-multiSelect.ng-invalid.ng-touched:focus > div,
 p-autoComplete.ng-invalid.ng-touched:focus > span > input {
   box-shadow: 0 1px 0 0 #f47f6a !important;
 }
 
 input.ng-valid.ng-touched.ng-dirty,
 p-dropdown.ng-valid.ng-touched.ng-dirty > div,
+p-multiSelect.ng-valid.ng-touched.ng-dirty > div,
 p-autoComplete.ng-valid.ng-touched.ng-dirty > span > input {
   border: 1.3px solid #549c3d !important;
 }
 
 input.ng-valid.ng-touched.ng-dirty:focus,
 p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
+p-multiSelect.ng-valid.ng-touched.ng-dirty:focus > div,
 p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
   box-shadow: 0 1px 0 0 #6d9c5f !important;
 }
@@ -48,7 +73,18 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
     border-left: 1px solid #e0e0e0 !important;
     border-right: 1px solid #e0e0e0 !important;
   }
+}
 
+.data-column table {
+  border-bottom: 1px solid #e0e0e0 !important;
+  th:last-child{
+    width: 20% !important;
+  }
+  td {
+    border: 0 !important;
+    border-left: 1px solid #e0e0e0 !important;
+    border-right: 1px solid #e0e0e0 !important;
+  }
 }
 
 .language-container {
@@ -68,17 +104,9 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
     }
   }
 }
-
-form {
-  label {
-    margin-bottom: 5px;
-    margin-left: 1px;
-    float: left;
-  }
-  .label-parent {
-    font-weight: 500;
-    margin-right: 5px;
-  }
+.p-accordion-tab-active
+a.p-accordion-header-link{
+  color: #e0e0e0 !important;
 }
 
 .search-form form .ui-fluid {
@@ -88,11 +116,6 @@ form {
 
 .form-actions {
   display: inline-flex;
-  button,
-  p-splitButton {
-    margin-right: 10px;
-  }
-
 }
 
 .form-group {
@@ -121,12 +144,15 @@ div.search {
   .action-item {
     display: flex;
     align-items: center;
+    margin-left: 15px;
     > * {
       margin: 3px;
     }
   }
 
   .actions-right {
+    display: flex;
+    flex-direction: row;
     color: silver;
     font-weight: 700;
     font-size: 13px;
@@ -267,4 +293,70 @@ span.icon{
   .xs-w-100 {
     width: 100%;
   }
+}
+
+.text-justify{
+  text-align: justify !important;
+}
+
+.p-dropdown-items, 
+.p-multiselect-items,
+.p-autocomplete-items,
+.p-element.p-dropdown-label.p-placeholder, 
+.p-tieredmenu-root-list{
+  padding: 0;
+}
+
+ul.p-autocomplete-multiple-container{
+  padding: 0 !important;
+}
+
+.p-dialog{
+  width: 60% !important;
+  max-height: 95% !important;
+  z-index: 1000 !important;
+  overflow: auto !important;
+  .p-dialog-content{
+    overflow: unset !important;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+  .p-dialog{
+    width: 95% !important;
+  }
+  
+}
+
+.p-dialog-content{
+  overflow: unset !important;
+}
+
+.img-icon{
+  width: 25px;
+  height: 25px;
+}	
+
+.btn-icon{
+  padding: 0.5rem 0.75rem;
+  img{
+    width: 21px;
+    height: 21px;
+  }
+  i{
+    font-size: 20px;
+  }
+}
+
+.p-column-title{
+  font-weight: 700;
+  display: none;
+}
+
+@media screen and (max-width: 640px){
+  .p-column-title{
+    display: block;
+  }
+  
 }

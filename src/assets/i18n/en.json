@@ -8,7 +8,8 @@
 		"moderation": "Moderation",
 		"plan": "Plan",
 		"presential-meeting": "Meetings",
-		"structure": "Structure"
+		"structure": "Structure",
+		"evaluators": "Evaluators"
 	},
 	"all": "All",
 	"begin": "Begin",
@@ -93,6 +94,8 @@
 		"preOpening": "Pre Opening",
 		"postClosure": "Post Closure",
 		"open": "Open",
+		"closed": "Closed",
+		"evaluation": "Evaluation",
 		"text": "Text",
 		"label": "Label",
 		"howWork": "How it works",
@@ -133,6 +136,8 @@
       "endDateOutOfRange": "Conference closure date must be after opening date"
     },
     "image": "Image",
+	"footer-image": "Footer image",
+	"header-image": "Header Image",
     "in-progress": "Conference in progress, cannot be deleted!",
     "inserted": "Inserted conference {{name}} ",
     "locality-citizen": "Type of citizen locality",
@@ -315,6 +320,25 @@
     "field-must-contain-only-letters": "The field must contain only letters"
 	},
 	"error": "Error",
+	"evaluator": {
+		"confirm": {
+			"delete": "Are you sure you want to delete {{name}}?"
+		},
+		"delete": "Delete Evaluator",
+		"edit": "Edit Evaluator",
+		"error": {
+			"saving": "Error saving evaluator"
+		},
+		"inserted": "New evaluator inserted",
+		"new": "New Evaluator",
+		"organization": "Organization",
+		"section": "Section",
+		"sections": "Sections",
+		"role": "Role",
+		"roles": "Roles",
+		"updated": "Evaluator {{name}} updated"
+		
+	},
 	"exists": {
 		"name": "This name already exists"
 	},
@@ -429,6 +453,9 @@
 	"new-a": "New",
 	"no": "No",
 	"of": "of",
+	"page": {
+		"pageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} items"
+	},
 	"pending": "Pending",
 	"placeholder": {
 		"select": "Select"

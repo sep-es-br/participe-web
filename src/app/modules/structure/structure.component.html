@@ -1,9 +1,9 @@
 <app-template>
-  <div class="p-grid ui-fluid">
-    <div class="p-col-12 p-lg-12">
+  <div class="row ui-fluid">
+    <div class="col-12 col-lg-12">
       <div class="card card-w-title">
         <section *ngIf="!showStructureForm && !showStructureItemForm">
-          <div class="p-grid ui-fluid actions">
+          <div class="row ui-fluid actions">
             <div class="ui-g-5 ui-md-2 ui-lg-2">
               <button pButton type="button" class="button-new" [label]="'new'|translate" (click)="showCreateStructure()" icon="pi pi-plus">
               </button>
@@ -15,13 +15,15 @@
           </div>
           <div class="search-form" *ngIf="search">
             <form [formGroup]="searchForm" (submit)="searchStructures(searchForm.value)">
-              <div class="p-grid ui-fluid">
-                <div class="ui-g-12 ui-md-6">
-                  <label for="query">{{'structure.name'|translate}}</label>
-                  <input id="search-input" pInputText formControlName="query">
+              <div class="row">
+                <div class="col-12 col-md-7">
+                  <!-- <div class="form-floating "> -->
+                    <label class="form-label" for="query">{{'structure.name'|translate}}</label>
+                    <input class="form-control" placeholder=""  id="search-input"  formControlName="query">
+                  <!-- </div> -->
                 </div>
-                <div class="ui-g-12 ui-md-3">
-                  <button pButton [icon]="loadingIcon('pi pi-search')" [disabled]="loading" type="submit" [label]="'search'|translate"></button>
+                <div class="col-12 col-md-3  align-content-end">
+                  <button pButton [icon]="loadingIcon('pi pi-search')" class="btn btn-primary"  [disabled]="loading" type="submit" [label]="'search'|translate"></button>
                 </div>
               </div>
             </form>
@@ -40,15 +42,17 @@
                   <span style="vertical-align: middle">{{rowData.name}}</span>
                 </td>
                 <td class="column-actions">
-                  <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                  <button pButton class="ui-button btn-icon"
                     [disabled]="disableBtnAdd(rowNode)" type="button" style="margin-right: 2px;"
                     (click)="showCreateStructureItem(rowNode)">
-                    <img src="assets/layout/images/icons/triangule_plus.png"  alt=""/>
+                    <img class="img-fluid" src="assets/layout/images/icons/triangule_plus.svg"  alt=""/>
                   </button>
-                  <button pButton icon="pi pi-pencil" type="button" style="margin-right: 2px;"
-                    (click)="showEdit(rowNode)"></button>
-                  <button pButton icon="pi pi-trash" type="button" [disabled]="disableBtnDelete(rowNode)"
-                    (click)="delete(rowNode)"></button>
+                  <button pButton class="ui-button btn-icon" type="button" style="margin-right: 2px;" (click)="showEdit(rowNode)">
+                    <i class="pi pi-pencil"></i>
+                  </button>
+                  <button pButton class="ui-button btn-icon" type="button" [disabled]="disableBtnDelete(rowNode)" (click)="delete(rowNode)">
+                    <i class="pi pi-trash"></i>
+                  </button>
                 </td>
               </tr>
             </ng-template>
@@ -57,24 +61,28 @@
 
         <!-- Structure Form -->
 
-        <section class="p-grid ui-fluid" *ngIf="showStructureForm">
+        <section class="row ui-fluid" *ngIf="showStructureForm">
           <form [formGroup]="structureForm" (submit)="saveStructure(structureForm.value)">
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <span *ngIf="edit">{{'update' | translate }}</span>
               <span *ngIf="!edit">{{'new' | translate }}</span>
                {{'administration.structure'|translate}}
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'structure.name'|translate}}</label>
-              <input pInputText (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
+              <input pInputText class="form-control" (input)="onInput($event)" (blur)="onBlur($event)" formControlName="name">
               <tt-input-message [form]="structureForm" field="name"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6 input-switch">
-              <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
-              <p-inputSwitch id="input-switch-logo" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+            <div class="col-12 col-md-6  input-switch">
+              <!-- <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
+                <label class="form-check-label" for="flexSwitchCheckDefault">{{'structure.regionalization'|translate}}</label>
+              </div> -->
+              <p-inputSwitch id="input-switch-logo" class="" [styleClass]="''" formControlName="regionalization" [disabled]="structure.hasLocalityWithItem && structureForm.value.regionalization">
               </p-inputSwitch>
+             <label for="input-switch-locality">{{'structure.regionalization'|translate}}</label>
             </div>
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" [disabled]="disableBtnSave" type="submit"
                   [label]="'save'|translate"></button>
@@ -87,56 +95,56 @@
 
         <!-- Structure Item Form -->
 
-        <section class="p-grid ui-fluid" *ngIf="showStructureItemForm">
+        <section class="row ui-fluid" *ngIf="showStructureItemForm">
           <form [formGroup]="structureItemForm" (submit)="saveStructureItem(structureItemForm.value)">
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               {{ structureItemBreadcrumb }} >
               <span *ngIf="edit">{{'update' | translate }}</span>
               <span *ngIf="!edit">{{'new' | translate }}</span>
                {{'structure.item.item'|translate}}
             </div>
 
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <label for="name">{{'structure.item.name'|translate}}</label>
-              <input pInputText formControlName="name">
+              <input class="form-control" pInputText formControlName="name">
               <tt-input-message [form]="structureItemForm" field="name"></tt-input-message>
             </div>
-            <div class="p-col-12 p-md-6 input-switch">
+            <div class="col-12 col-md-6 input-switch">
               <label for="input-switch-logo">{{'structure.logo'|translate}}</label>
               <p-inputSwitch id="input-switch-logo" formControlName="logo">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6 input-switch">
+            <div class="col-12 col-md-6 input-switch">
               <label for="input-switch-locality">{{'structure.locality'|translate}}</label>
               <p-inputSwitch id="input-switch-locality" formControlName="locality" [disabled]="!structure?.regionalization">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6 input-switch">
+            <div class="col-12 col-md-6 input-switch">
               <label for="input-switch-votes">{{'structure.votes'|translate}}</label>
               <p-inputSwitch id="input-switch-votes" formControlName="votes">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6 input-switch">
+            <div class="col-12 col-md-6 input-switch">
               <label for="input-switch-comments">{{'structure.comments'|translate}}</label>
               <p-inputSwitch id="input-switch-comments" formControlName="comments">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6 input-switch">
+            <div class="col-12 col-md-6 input-switch">
               <label for="input-switch-title">{{'structure.title'|translate}}</label>
               <p-inputSwitch id="input-switch-title"  [(ngModel)]="tileChecked" [ngModelOptions]="{standalone: true}">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6" *ngIf="tileChecked">
+            <div class="col-12 col-md-6" *ngIf="tileChecked">
               <input pInputText formControlName="title">
               <tt-input-message [form]="structureItemForm" field="title"></tt-input-message>
             </div>
 
-            <div class="p-col-12 p-md-6 input-switch">
+            <div class="col-12 col-md-6 input-switch">
               <label for="input-switch-subtitle">{{'structure.subTitle'|translate}}</label>
               <p-inputSwitch id="input-switch-subtitle" [(ngModel)]="subtitleChecked" [ngModelOptions]="{standalone: true}">
               </p-inputSwitch>
             </div>
-            <div class="p-col-12 p-md-6" *ngIf="subtitleChecked">
+            <div class="col-12 col-md-6" *ngIf="subtitleChecked">
               <input pInputText formControlName="subtitle">
               <tt-input-message [form]="structureItemForm" field="subtitle"></tt-input-message>
             </div>
@@ -146,12 +154,12 @@
               <p-inputSwitch id="input-switch-link" [(ngModel)]="linkChecked" [ngModelOptions]="{standalone: true}">
               </p-inputSwitch>
             </div>
-            <div class="col-12 p-md-6" *ngIf="linkChecked">
+            <div class="col-12 col-md-6" *ngIf="linkChecked">
               <input pInputText formControlName="link">
               <tt-input-message [form]="structureItemForm" field="link"></tt-input-message>
             </div>
 
-            <div class="p-col-12 p-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-actions">
                 <button pButton icon="pi pi-check" type="submit"
                   [label]="'save'|translate"></button>

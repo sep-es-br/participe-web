@@ -1,9 +1,9 @@
 import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
 import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
-import {faTimes} from '@fortawesome/free-solid-svg-icons';
+import {faQrcode, faTimes} from '@fortawesome/free-solid-svg-icons';
 
 import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
 import {Locality} from '@app/shared/models/locality';
@@ -20,18 +20,28 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   iconChecked = faCheckCircle;
   iconCircle = faCircle;
   iconRemove = faTimes;
+  // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
     {label: 'name', value: 'name'},
     {label: 'attendance.arrival', value: 'checkedInDate'},
   ];
   resultSearchCounty: Locality[];
+
+  optionsFilterBy: SelectItem[] = [
+    {label: 'Presentes', value: 'pres'},
+    {label: 'Pré-credenciados', value: 'prereg'},
+    {label: 'Pré-credenciados e Presentes', value: 'prereg_pres'},
+    {label: 'Pré-credenciados e Ausentes', value: 'prereg_notpres'},
+    {label: 'Presentes não Pré-credenciados', value: 'notprereg_pres'},
+  ]
+
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
 
   constructor(
     protected messageSrv: MessageService,
     public localitySrv: LocalityService,
-    protected formBuilder: FormBuilder,
+    protected formBuilder: UntypedFormBuilder,
     public authSrv: AuthService,
     @Inject(Injector) injector: Injector
   ) {
