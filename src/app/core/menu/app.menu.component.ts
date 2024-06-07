@@ -3,6 +3,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AppTemplateComponent} from '../template/app.template.component';
 
 import {
+  faClipboardCheck,
   faClipboardList,
   faCog,
   faComments,
@@ -58,7 +59,9 @@ export class AppMenuComponent implements OnInit {
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
               {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
             ]
-          });
+          },
+          {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+        );
       }
     }
 

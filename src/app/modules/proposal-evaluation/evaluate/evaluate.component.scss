@@ -1,0 +1,30 @@
+.test {
+    border: 1px solid black;
+}
+
+button.entity-badge {
+    border: none;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+    margin-right: 0.7rem;
+    padding: 0 2rem;
+    color: white;
+    font-size: 0.75rem;
+}
+
+.evaluated {
+    background-color: #00c853;
+}
+
+.not-evaluated {
+    background-color: #ef8533;
+}
+
+label {
+    font-weight: bold;
+
+    &+p{
+        margin-left: 1.5rem;
+        text-align: justify;
+    }
+}

@@ -17,6 +17,8 @@ import {CitizenComponent} from './modules/citizen/citizen.component';
 import {ControlPanelDashboardComponent} from './modules/control-panel-dashboard/control-panel-dashboard.component';
 import {ConferenceListComponent} from './modules/conference/conference-list/conference-list.component';
 import { MeetPanelComponent } from './modules/conference/meeting/meet-panel/meet-panel.component';
+import { ProposalEvaluationComponent } from './modules/proposal-evaluation/proposal-evaluation.component';
+import { EvaluateComponent } from './modules/proposal-evaluation/evaluate/evaluate.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -37,7 +39,9 @@ export const routes: Routes = [
   {
     path: 'attendance',
     loadChildren: async () => (await import('./modules/attendance/attendance.module')).AttendanceModule
-  }
+  },
+  {path: "proposal-evaluation", component: ProposalEvaluationComponent},
+  {path: "proposal-evaluation/:proposalId", component: EvaluateComponent},
 ];
 
 export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(routes, {
