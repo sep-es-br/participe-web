@@ -57,7 +57,7 @@
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">Proposta Incluída na próxima LOA</label>
+              <label class="form-label">{{ 'propeval.loaIncluded' | translate }}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="loaIncludedOptions"
@@ -65,7 +65,7 @@
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">Texto</label>
+              <label class="form-label">{{ 'propeval.description' | translate }}</label>
               <input pInputText class="form-control" formControlName="commentText" />
             </div>
             <div class="col-3 mt-auto">
@@ -157,6 +157,6 @@
 
 <ng-template #noResults>
   <div class="col-12 d-flex justify-content-center">
-    <span>Nenhum resultado encontrado.</span>
+    <span>{{ 'propeval.noResult' | translate }}</span>
   </div>
 </ng-template>

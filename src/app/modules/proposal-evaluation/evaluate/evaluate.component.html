@@ -1,30 +1,49 @@
 <app-template>
-  <div class="row" *ngIf="this.editProposalEvaluation">
+  <div class="row" *ngIf="this.readOnlyProposalEvaluation">
     <div class="col-12 d-flex flex-row justify-content-end">
-      <button pButton text="true" severity="secondary" icon="pi pi-pencil" class="mx-2" type="button" (click)="switchEdit()"></button>
-      <button pButton text="true" severity="secondary" icon="pi pi-trash" class="mx-2" type="button" (click)="delete()"></button>
+      <button
+        pButton
+        text="true"
+        severity="secondary"
+        icon="pi pi-pencil"
+        class="mx-2"
+        type="button"
+        (click)="switchEdit()"
+      ></button>
+
+      <button
+        pButton
+        text="true"
+        severity="secondary"
+        icon="pi pi-trash"
+        class="mx-2"
+        type="button"
+        (click)="delete()"
+      ></button>
     </div>
   </div>
 
   <div class="row">
-    <!-- <div class="col-12 d-inline-flex align-content-center flex-wrap">
-          <button
-            class="entity-badge pe-none"
-            [ngClass]="{
-              evaluated: formStatus == 'Avaliado',
-              'not-evaluated': formStatus == 'Não Avaliado'
-            }"
-            *ngFor="let entity of formEntities"
-          >
-            {{ entity }}
-          </button>
-        </div> -->
-  </div>
-  <div class="row">
     <div class="col-4">
-      <label>Em avaliação por</label>
-      <!-- <p>{{ formEntities[0] }}</p> -->
-      <p>PLACEHOLDER</p>
+      <label>{{
+        (readOnlyProposalEvaluation
+          ? "propeval.evaluated_by"
+          : "propeval.under_evaluation_by"
+        ) | translate
+      }}</label>
+      <div class="evaluator-div">
+        <button
+          class="org-badge pe-none"
+          [ngClass]="{
+            evaluated: proposal.evaluationStatus,
+            'not-evaluated': !proposal.evaluationStatus
+          }"
+        >
+          {{ getOrgName(1) }}
+        </button>
+        <span>{{ getOrgName(0) }}</span>
+      </div>
+
       <br />
       <label>{{ domainConfigNames["planItemAreaTypeName"] }}</label>
       <p>{{ proposal.planItemAreaName }}</p>
@@ -39,15 +58,18 @@
   </div>
   <div class="row">
     <div class="col-8">
-      <label>Proposta</label>
+      <label>{{ "propeval.description" | translate }}</label>
       <p>{{ proposal.description }}</p>
     </div>
   </div>
 
-  <form [formGroup]="proposalEvaluationForm" *ngIf="!loading && !this.editProposalEvaluation">
+  <form
+    [formGroup]="proposalEvaluationForm"
+    *ngIf="!loading && !this.readOnlyProposalEvaluation"
+  >
     <div class="row">
       <div class="col-8">
-        <label>Será incluída na LOA do próximo ano?</label>
+        <label>{{ "propeval.loaIncluded_question" | translate }}</label>
         <div class="col-3 d-flex justify-content-between">
           <div class="d-inline-flex align-items-center">
             <p-radioButton
@@ -55,17 +77,21 @@
               [value]="true"
               formControlName="includedInNextYearLOA"
               (onClick)="loaChanged($event)"
-              ></p-radioButton>
-              <label for="loaIncludedTrue" class="ms-2">Sim</label>
-            </div>
-            <div class="d-inline-flex align-items-center">
-              <p-radioButton
+            ></p-radioButton>
+            <label for="loaIncludedTrue" class="ms-2">{{
+              "yes" | translate
+            }}</label>
+          </div>
+          <div class="d-inline-flex align-items-center">
+            <p-radioButton
               inputId="loaIncludedFalse"
               [value]="false"
               formControlName="includedInNextYearLOA"
               (onClick)="loaChanged($event)"
             ></p-radioButton>
-            <label for="loaIncludedFalse" class="ms-2">Nâo</label>
+            <label for="loaIncludedFalse" class="ms-2">{{
+              "no" | translate
+            }}</label>
           </div>
         </div>
       </div>
@@ -75,7 +101,9 @@
       <div class="col-8">
         <ng-container *ngIf="formLoaIncluded != null && formLoaIncluded">
           <div class="col-12 d-flex flex-column">
-            <label for="budgetUnit">Unidade Orçamentária</label>
+            <label for="budgetUnit">{{
+              "propeval.budgetUnit" | translate
+            }}</label>
             <p-dropdown
               [options]="budgetUnitOptions"
               filter="true"
@@ -92,7 +120,9 @@
           <br />
 
           <div class="col-12 d-flex flex-column">
-            <label for="budgetAction">Ação Orçamentária</label>
+            <label for="budgetAction">{{
+              "propeval.budgetAction" | translate
+            }}</label>
             <p-multiSelect
               [options]="budgetActionOptions"
               display="chip"
@@ -112,8 +142,15 @@
           <br />
 
           <div class="col-12 d-flex flex-column">
-            <label for="budgetPlan">Plano Orçamentário</label>
-            <input type="text" pInputText formControlName="budgetPlan" class="ng-dirty ng-invalid form-control">
+            <label for="budgetPlan">{{
+              "propeval.budgetPlan" | translate
+            }}</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="budgetPlan"
+              class="ng-dirty ng-invalid form-control"
+            />
             <tt-input-message
               [form]="proposalEvaluationForm"
               field="budgetPlan"
@@ -123,8 +160,7 @@
           <br />
         </ng-container>
         <ng-container *ngIf="formLoaIncluded != null && !formLoaIncluded">
-          <label for="">Motivo da não inclusão?</label>
-
+          <label for="reason">{{ "propeval.reason" | translate }}?</label>
           <div class="col-12 d-flex flex-column">
             <ng-container *ngFor="let reason of reasonOptions">
               <div class="d-inline-flex align-items-center">
@@ -133,7 +169,9 @@
                   [value]="reason"
                   formControlName="reason"
                 ></p-radioButton>
-                <label for="reason" name="reason" class="ms-2">{{ reason }}</label>
+                <label for="reason" name="reason" class="ms-2">{{
+                  reason
+                }}</label>
               </div>
             </ng-container>
             <tt-input-message
@@ -147,47 +185,65 @@
 
     <div class="row">
       <div class="col-8">
-        <button pButton icon="pi pi-check" [label]="'save' | translate" class="mx-2" type="submit" (click)="saveProposalEvaluation(proposalEvaluationForm)"></button>
-        <button pButton icon="pi pi-ban" [label]="'cancel' | translate" class="mx-2" type="button" (click)="cancel()"></button>
+        <button
+          pButton
+          icon="pi pi-check"
+          [label]="'save' | translate"
+          class="mx-2"
+          type="submit"
+          (click)="saveProposalEvaluation(proposalEvaluationForm)"
+        ></button>
+
+        <button
+          pButton
+          icon="pi pi-ban"
+          [label]="'cancel' | translate"
+          class="mx-2"
+          type="button"
+          (click)="cancel()"
+        ></button>
       </div>
     </div>
   </form>
 
-  <form [formGroup]="proposalEvaluationForm" *ngIf="!loading && this.editProposalEvaluation">
+  <form
+    [formGroup]="proposalEvaluationForm"
+    *ngIf="!loading && this.readOnlyProposalEvaluation"
+  >
     <div class="row">
       <div class="col-8">
-        <label>Será incluída na LOA do próximo ano?</label>
-        <p>{{ formLoaIncluded }}</p>
+        <label>{{ "propeval.loaIncluded" | translate }}</label>
+        <p>{{ (formLoaIncluded ? "yes" : "no") | translate }}</p>
       </div>
     </div>
 
     <ng-container *ngIf="formLoaIncluded">
       <div class="row">
         <div class="col-8">
-          <label>Unidade Orçamentária</label>
+          <label>{{ "propeval.budgetUnit" | translate }}</label>
           <p>{{ formBudgetUnit }}</p>
         </div>
       </div>
-  
+
       <div class="row">
         <div class="col-8">
-          <label>Ação Orçamentária</label>
+          <label>{{ "propeval.budgetAction" | translate }}</label>
           <p>{{ formBudgetAction }}</p>
         </div>
       </div>
-  
+
       <div class="row">
         <div class="col-8">
-          <label>Plano Orçamentário</label>
+          <label>{{ "propeval.budgetPlan" | translate }}</label>
           <p>{{ formBudgetPlan }}</p>
         </div>
       </div>
     </ng-container>
-    
+
     <ng-container *ngIf="!formLoaIncluded">
       <div class="row">
         <div class="col-8">
-          <label>Motivo da não inclusão</label>
+          <label>{{ "propeval.reason" | translate }}</label>
           <p>{{ formReason }}</p>
         </div>
       </div>
@@ -195,15 +251,14 @@
 
     <div class="row">
       <div class="col-8">
-        <label>Avaliador</label>
-        <p> PLACEHOLDER </p>
+        <label>{{ "propeval.evaluator" | translate }}</label>
+        <p>{{ proposal.evaluatorName }}</p>
       </div>
     </div>
-
   </form>
 
   <p-confirmDialog
-    [header]="'proposal_evaluation.delete' | translate"
+    [header]="'propeval.delete' | translate"
     icon="pi pi-exclamation-triangle"
     key="deleteProposalEvaluation"
   >

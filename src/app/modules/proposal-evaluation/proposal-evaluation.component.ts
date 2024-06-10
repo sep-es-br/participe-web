@@ -1,15 +1,21 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+
+import { MessageService, SelectItem } from "primeng/api";
+import { TranslateService } from "@ngx-translate/core";
+import { PaginatorState } from "primeng/paginator";
+
 import { ActionBarService } from "@app/core/actionbar/app.actionbar.actions.service";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
-import { StoreKeys } from "@app/shared/constants";
-import { IProposal } from "@app/shared/interface/IProposal";
-import { Conference } from "@app/shared/models/conference";
-import { ConferenceService } from "@app/shared/services/conference.service";
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
-import { HelperUtils } from "@app/shared/util/HelpersUtil";
-import { MessageService, SelectItem } from "primeng/api";
-import { PaginatorState } from "primeng/paginator";
+import { ConferenceService } from "@app/shared/services/conference.service";
+import { EvaluatorsService } from "@app/shared/services/evaluators.service";
+
+import { IProposal } from "@app/shared/interface/IProposal";
+
+import { Conference } from "@app/shared/models/conference";
+
+import { StoreKeys } from "@app/shared/constants";
 
 @Component({
   selector: "app-proposal-evaluation",
@@ -21,6 +27,7 @@ export class ProposalEvaluationComponent implements OnInit {
   public loading: boolean = false;
 
   public domainConfigNames: Object = {};
+  public orgGuidNameMapObj: {[key: string]: string} = {};
 
   public conferences: Conference[];
   public conferenceSelect: Conference = new Conference();
@@ -51,16 +58,18 @@ export class ProposalEvaluationComponent implements OnInit {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private actionBarService: ActionBarService,
+    private translateService: TranslateService,
     private messageService: MessageService,
     private conferenceService: ConferenceService,
-    private proposalEvaluationService: ProposalEvaluationService
-  ) // private evaluatorsService: EvaluatorsService
+    private proposalEvaluationService: ProposalEvaluationService,
+    private evaluatorsService: EvaluatorsService
+  )
   {}
 
   public async ngOnInit() {
     await this.loadConferences();
     this.initSearchForm();
-    // await this.checkIsPersonEvaluator();
+    await this.checkIsPersonEvaluator();
     await this.populateSearchFilterOptions();
     await this.listProposalEvaluationsByConference(
       this.pageState.page,
@@ -80,7 +89,7 @@ export class ProposalEvaluationComponent implements OnInit {
     this.conferenceSelect = conference;
     sessionStorage.setItem("selectedConference", JSON.stringify(conference));
     this.buildBreadcrumb();
-    // await this.testFetchProposals();
+    await this.listProposalEvaluationsByConference(0, 10);
     this.showSelectConference = false;
   }
 
@@ -88,10 +97,6 @@ export class ProposalEvaluationComponent implements OnInit {
     this.search = !this.search;
     sessionStorage.setItem("searchState", this.search ? "show" : "hide");
   }
-
-  // public getIcon(icon?: string) {
-  //   return HelperUtils.loadingIcon(icon, this.loading);
-  // }
 
   public clearSearchForm() {
     for (const key in this.proposalEvaluationSearchForm.controls) {
@@ -145,23 +150,19 @@ export class ProposalEvaluationComponent implements OnInit {
   private async checkIsPersonEvaluator() {
     const personId = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))['id']
 
-    console.log(personId)
-
     try {
       this.loading = true
-      await this.proposalEvaluationService.checkIsPersonEvaluator(personId)
+      await this.proposalEvaluationService.checkIsPersonEvaluator(personId).then(
+        (response) => sessionStorage.setItem("evaluatorOrgGuid", response)
+      )
     } catch (error) {
       console.error(error);
       this.messageService.add({
         severity: "error",
-        // summary: this.translateService.instant("error"),
-        summary: "Erro",
-        // detail: this.translateService.instant("evaluator.error.saving"),
+        summary: this.translateService.instant("error"),
         detail: error.error.message,
         id: "personEvaluator403"
       });
-      // setTimeout(() => window.location.href = '/login', 2000);
-      // window.location.href = '/login'
     } finally {
       this.loading = false
     }
@@ -260,15 +261,18 @@ export class ProposalEvaluationComponent implements OnInit {
       });
   }
 
-  // Aguardando aprovação pull request PART-106
-  // private async getOrganizationOptions() {
-  //   await this.evaluatorsService.getOrganizationsList().then(
-  //     (response) => {
-  //       this.organizationOptions = response.map(organization => {return {label: organization.name, value: organization.guid}})
-  //       this.organizationOptions.unshift({ label: "Todos", value: null })
-  //     }
-  //   )
-  // }
+  private async getOrganizationOptions() {
+    await this.evaluatorsService.getOrganizationsList().then(
+      (response) => {
+        response.forEach((organization) => {
+          this.orgGuidNameMapObj[organization.guid] = organization.name
+        })
+        this.proposalEvaluationService.orgGuidNameMapObj = this.orgGuidNameMapObj;
+        this.organizationOptions = response.map(organization => {return {label: organization.name, value: organization.guid}})
+        this.organizationOptions.unshift({ label: "Todos", value: null })
+      }
+    )
+  }
 
   private async populateSearchFilterOptions() {
     this.getEvaluationStatusOptions();
@@ -276,7 +280,7 @@ export class ProposalEvaluationComponent implements OnInit {
     await this.getLocalityOptions();
     await this.getPlanItemOptions();
     await this.getPlanItemAreaOptions();
-    // await this.getOrganizationOptions();
+    await this.getOrganizationOptions();
   }
 
   private buildBreadcrumb() {

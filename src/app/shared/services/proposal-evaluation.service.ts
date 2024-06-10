@@ -36,7 +36,17 @@ export class ProposalEvaluationService {
 
   private headers = Common.buildHeaders();
 
+  private _orgGuidNameMapObj: { [key: string]: string } = {};
+
   constructor(private _http: HttpClient) {}
+
+  public get orgGuidNameMapObj(): { [key: string]: string } {
+    return this._orgGuidNameMapObj;
+  }
+
+  public set orgGuidNameMapObj(value: {[key: string]: string}) {
+    this._orgGuidNameMapObj = value
+  }
 
   public getEvaluationStatusOptions(): Array<SelectItem> {
     return this.evaluationStatusOptions;
@@ -61,20 +71,6 @@ export class ProposalEvaluationService {
   public getDomainConfiguration(conferenceId: number): Promise<any> {
     return this._http.get<any>(`${this._optionsUrl}/configuration?conferenceId=${conferenceId}`, {headers: this.headers}).toPromise();
   }
-
-  // private getEntityOptions(): SelectItem[] {
-  //   // chamada http
-  //   return [
-  //     { label: "10101 - SVC", value: 1 },
-  //     { label: "10102 - SCM", value: 2 },
-  //     { label: "10103 - SECONT", value: 3 },
-  //     { label: "10104 - SECOM", value: 4 },
-  //     { label: "10109 - RTV-ES", value: 5 },
-  //     { label: "10904 - FECC", value: 6 },
-  //     { label: "16101 - PGE", value: 7 },
-  //   ];
-  // }
-
 
   // NÃO FUNCIONA erro 401
   // Entender auth melhor
@@ -133,8 +129,8 @@ export class ProposalEvaluationService {
     ];
   }
 
-  public checkIsPersonEvaluator(personId: number): Promise<any> {
-    return this._http.get(`${this._url}/is-evaluator/${personId}`, {headers: this.headers}).toPromise();
+  public checkIsPersonEvaluator(personId: number): Promise<string> {
+    return this._http.get(`${this._url}/is-evaluator/${personId}`, {headers: this.headers, responseType: 'text'}).toPromise();
   }
 
   public listProposalEvaluationsByConference(

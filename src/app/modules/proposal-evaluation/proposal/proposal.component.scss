@@ -1,52 +1,55 @@
-.test {
-    border: 1px solid black;
-  }
-  
-  .status-microrregion {
-    span.status-text {
-      font-weight: 700;
-      margin-right: 5px;
-      font-size: 1rem;
-  
-      &.evaluated {
-        color: #00c853;
-      }
-  
-      &.not-evaluated {
-        color: #ef8533;
-      }
+.evalStatus-locality {
+  span.evalStatus-text {
+    font-weight: 700;
+    margin-right: 5px;
+    font-size: 1rem;
+
+    &.evaluated {
+      color: #00c853;
     }
-  
-    span.divider,
-    span.microrregion-text {
-      color: #9a9a9a;
-      margin-left: 0.5rem;
+
+    &.not-evaluated {
+      color: #ef8533;
     }
   }
-  
-  .description-text p {
-    text-align: justify;
+
+  span.divider,
+  span.locality-text {
+    color: #9a9a9a;
+    margin-left: 0.5rem;
   }
-  
-  .themearea-budgetcategory {
-    span.divider {
-      color: #9a9a9a;
-      margin: auto 0.75rem;
-    }
-  
-    span.themearea-text,
-    span.budgetcategory-text {
-      color: #9a9a9a;
-    }
+}
+
+.description-text p {
+  text-align: justify;
+}
+
+.planItemArea-planItem {
+  span.divider {
+    color: #9a9a9a;
+    margin: auto 0.75rem;
   }
-  
-  button.entity-badge {
-    border: none;
-    border-radius: 2px;
-    margin-bottom: 0.5rem;
-    margin-right: 0.7rem;
-    padding: 0 2rem;
-    color: white;
+
+  span.planItemArea-text,
+  span.planItem-text {
+    color: #9a9a9a;
+  }
+}
+
+button.org-badge {
+  border: none;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  margin-right: 0.7rem;
+  padding: 0 2rem;
+  color: white;
+  font-size: 0.75rem;
+
+  &.evaluated {
     background-color: #00c853;
-    font-size: 0.75rem;
   }
+
+  &.not-evaluated {
+    background-color: #ef8533;
+  }
+}

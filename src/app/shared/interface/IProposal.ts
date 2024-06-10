@@ -5,7 +5,8 @@ export interface IProposal {
     planItemName: string;
     planItemAreaName: string;
     description: string;
-    evaluatorsNamesList: Array<string>;
+    evaluatorOrgsNameList: Array<string>;
+    evaluatorName?: string;
 }
 
 export interface IProposalEvaluation {
@@ -16,11 +17,13 @@ export interface IProposalEvaluation {
     budgetUnitName?: string;
     budgetActionId?: string;
     budgetActionName?: string;
-    budgetPlanId?: string;
-    budgetPlanName?: string;
+    budgetPlan?: string;
+    representing: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
-export interface IProposalEvaluationCreateForm extends Omit<IProposalEvaluation, 'id'> {
+export interface IProposalEvaluationCreateForm extends Omit<IProposalEvaluation, 'id' | 'createdAt' | 'updatedAt'> {
     personId: number;
     proposalId: number;
 }
