@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 
 import { IProposal } from "@app/shared/interface/IProposal";
+import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
 
 @Component({
@@ -16,22 +17,23 @@ export class ProposalComponent {
   @Input("proposalData") proposal: IProposal;
   
   public domainConfigNames: Object = {};
-  public orgGuidNameMapObj: { [key: string]: string };
+
+  public organizationsGuidNameMapObject: {[key: string]: string} = {};
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private proposalEvaluationService: ProposalEvaluationService
+    private evaluatorsService: EvaluatorsService
   ) {
     this.domainConfigNames = JSON.parse(
       sessionStorage.getItem("domainConfigNames")
     );
 
-    this.orgGuidNameMapObj = this.proposalEvaluationService.orgGuidNameMapObj
+    this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
   }
 
   public getOrgName(orgGuid: string): string {
-    return this.orgGuidNameMapObj[orgGuid].split("-")[1].trim();
+    return this.organizationsGuidNameMapObject[orgGuid].split("-")[1].trim();
   }
 
   public evaluateProposal(proposal: IProposal) {

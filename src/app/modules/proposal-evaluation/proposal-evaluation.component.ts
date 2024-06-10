@@ -63,8 +63,9 @@ export class ProposalEvaluationComponent implements OnInit {
     private conferenceService: ConferenceService,
     private proposalEvaluationService: ProposalEvaluationService,
     private evaluatorsService: EvaluatorsService
-  )
-  {}
+  ) {
+    this.organizationOptions = this.evaluatorsService.organizationsListSelectItem;
+  }
 
   public async ngOnInit() {
     await this.loadConferences();
@@ -261,26 +262,12 @@ export class ProposalEvaluationComponent implements OnInit {
       });
   }
 
-  private async getOrganizationOptions() {
-    await this.evaluatorsService.getOrganizationsList().then(
-      (response) => {
-        response.forEach((organization) => {
-          this.orgGuidNameMapObj[organization.guid] = organization.name
-        })
-        this.proposalEvaluationService.orgGuidNameMapObj = this.orgGuidNameMapObj;
-        this.organizationOptions = response.map(organization => {return {label: organization.name, value: organization.guid}})
-        this.organizationOptions.unshift({ label: "Todos", value: null })
-      }
-    )
-  }
-
   private async populateSearchFilterOptions() {
     this.getEvaluationStatusOptions();
     this.getLoaIncludedOptions();
     await this.getLocalityOptions();
     await this.getPlanItemOptions();
     await this.getPlanItemAreaOptions();
-    await this.getOrganizationOptions();
   }
 
   private buildBreadcrumb() {

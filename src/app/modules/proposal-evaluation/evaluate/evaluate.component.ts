@@ -16,6 +16,7 @@ import {
 } from "@app/shared/models/ProposalEvaluationModel";
 
 import { StoreKeys } from "@app/shared/constants";
+import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
 @Component({
   selector: "app-evaluate",
@@ -38,7 +39,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public readOnlyProposalEvaluation: boolean = false;
 
   public domainConfigNames: Object = {};
-  public orgGuidNameMapObj: {[key: string]: string} = {};
+  public organizationsGuidNameMapObject: { [key: string]: string } = {};
 
   public budgetUnitOptions: Array<string> = [];
   public budgetActionOptions: Array<string> = [];
@@ -51,6 +52,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private evaluatorsService: EvaluatorsService,
     private proposalEvaluationService: ProposalEvaluationService
   ) {
     this.proposalId = Number(this.route.snapshot.params["proposalId"]);
@@ -65,7 +67,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       sessionStorage.getItem("domainConfigNames")
     );
 
-    this.orgGuidNameMapObj = this.proposalEvaluationService.orgGuidNameMapObj;
+    this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
   }
 
   public async ngOnInit() {
@@ -80,8 +82,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   // }
 
   public getOrgName(index: number): string {
-    const guid = this.readOnlyProposalEvaluation ? this.proposal.evaluatorOrgsNameList[0] : this.evaluatorOrgGuid
-    return this.orgGuidNameMapObj[guid].split("-")[index].trim();
+    const guid = this.readOnlyProposalEvaluation
+      ? this.proposal.evaluatorOrgsNameList[0]
+      : this.evaluatorOrgGuid;
+    return this.organizationsGuidNameMapObject[guid].split("-")[index].trim();
   }
 
   public get formLoaIncluded(): boolean {
@@ -93,21 +97,15 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formBudgetUnit(): string {
-    return (
-      this.proposalEvaluationForm.get("budgetUnit").value
-    );
+    return this.proposalEvaluationForm.get("budgetUnit").value;
   }
 
   public get formBudgetAction(): string {
-    return (
-      this.proposalEvaluationForm.get("budgetAction").value
-    );
+    return this.proposalEvaluationForm.get("budgetAction").value;
   }
 
   public get formBudgetPlan(): string {
-    return (
-      this.proposalEvaluationForm.get("budgetPlan").value
-    );
+    return this.proposalEvaluationForm.get("budgetPlan").value;
   }
 
   public get formReason(): string {
@@ -116,7 +114,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public switchEdit() {
     this.readOnlyProposalEvaluation = false;
-    this.editProposalEvaluation = true
+    this.editProposalEvaluation = true;
   }
 
   public async delete() {
@@ -151,7 +149,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(form.value);
+    // console.log(form.value);
 
     const reqBody = new ProposalEvaluationCreateFormModel(form.value);
     reqBody.personId = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))[
@@ -160,10 +158,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     reqBody.proposalId = this.proposalId;
     reqBody.representing = this.evaluatorOrgGuid;
 
-    console.log(reqBody);
-
-    // LÓGICA ERRADA
-    // switchMode() LIBERA FORMULARIO, MAS SE editPropEval = false CHAMA METODO POST!!!
+    // console.log(reqBody);
 
     if (this.editProposalEvaluation) {
       await this.putProposalEvaluation(this.evaluationId, reqBody);
@@ -196,8 +191,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         proposalEvaluationData.includedInNextYearLOA,
         Validators.required
       ),
-      budgetUnit: new FormControl(proposalEvaluationData.budgetUnitControlValue),
-      budgetAction: new FormControl(proposalEvaluationData.budgetActionControlValue),
+      budgetUnit: new FormControl(
+        proposalEvaluationData.budgetUnitControlValue
+      ),
+      budgetAction: new FormControl(
+        proposalEvaluationData.budgetActionControlValue
+      ),
       budgetPlan: new FormControl(proposalEvaluationData.budgetPlan),
       reason: new FormControl(proposalEvaluationData.reason),
     });
@@ -226,13 +225,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       await this.proposalEvaluationService
         .getProposalEvaluationData(this.proposalId)
         .then((response) => {
-          // console.log(this.readOnlyProposalEvaluation)
-
-          
           const proposalEvaluationModel = new ProposalEvaluationModel(response);
-          // console.log(response)
-          // console.log(proposalEvaluationModel)
-          this.evaluationId = proposalEvaluationModel.id
+          this.evaluationId = proposalEvaluationModel.id;
           this.readOnlyProposalEvaluation
             ? this.initEditProposalForm(proposalEvaluationModel)
             : this.initCreateProposalForm();
@@ -263,7 +257,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetActionControl.clearValidators();
 
       budgetPlanControl.patchValue(null);
-      budgetPlanControl.clearValidators();
+      // budgetPlanControl.clearValidators();
 
       reasonControl.addValidators(Validators.required);
     } else {
@@ -275,7 +269,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.maxLength(3),
       ]);
-      budgetPlanControl.addValidators(Validators.required);
+      // budgetPlanControl.addValidators(Validators.required);
     }
 
     budgetUnitControl.updateValueAndValidity();
@@ -304,7 +298,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         detail: this.translateService.instant("propeval.error.saving"),
       });
     } finally {
-      this.cancel();
+      setTimeout(() => this.cancel(), 3000)
     }
   }
 
@@ -331,16 +325,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         detail: this.translateService.instant("propeval.error.saving"),
       });
     } finally {
-      this.cancel();
+      setTimeout(() => this.cancel(), 3000)
     }
   }
 
   private async deleteProposalEvaluation(id: number) {
     try {
       const result =
-        await this.proposalEvaluationService.deleteProposalEvaluation(
-          id
-        );
+        await this.proposalEvaluationService.deleteProposalEvaluation(id);
 
       this.messageService.add({
         severity: "success",
@@ -355,7 +347,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         detail: this.translateService.instant("erro.removing"),
       });
     } finally {
-      this.cancel();
+      setTimeout(() => this.cancel(), 3000);
     }
   }
 

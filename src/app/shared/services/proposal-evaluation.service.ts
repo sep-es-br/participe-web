@@ -36,17 +36,7 @@ export class ProposalEvaluationService {
 
   private headers = Common.buildHeaders();
 
-  private _orgGuidNameMapObj: { [key: string]: string } = {};
-
   constructor(private _http: HttpClient) {}
-
-  public get orgGuidNameMapObj(): { [key: string]: string } {
-    return this._orgGuidNameMapObj;
-  }
-
-  public set orgGuidNameMapObj(value: {[key: string]: string}) {
-    this._orgGuidNameMapObj = value
-  }
 
   public getEvaluationStatusOptions(): Array<SelectItem> {
     return this.evaluationStatusOptions;
