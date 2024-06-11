@@ -44,28 +44,6 @@ export class AppMenuComponent implements OnInit {
       this.model.push({label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search']});
     }
 
-    if (person.roles.includes('Recepcionist') && person.roles.includes('Administrator')) {
-      if (window.location.href.endsWith('#/attendance')) {
-        this.model.push(
-          {
-            label: 'attendance.label', icon: faUserCheck, items: [
-              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
-            ]
-          });
-      } else {
-        this.model.push(
-          {
-            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
-              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
-            ]
-          },
-          {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
-        );
-      }
-    }
-
     if (person.roles.includes('Recepcionist') && !person.roles.includes('Administrator')) {
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
@@ -85,6 +63,27 @@ export class AppMenuComponent implements OnInit {
     }
 
     if (person.roles.includes('Administrator')) {
+      if (window.location.href.endsWith('#/attendance')) {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, items: [
+              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
+              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+            ]
+          },
+          {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+          );
+      } else {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
+              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
+              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+            ]
+          },
+          {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+        );
+      }
       if (window.location.href.endsWith('#/administration/dashboard')) {
         this.model.push(
           {
