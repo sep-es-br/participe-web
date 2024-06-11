@@ -31,6 +31,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public proposal: IProposal;
   public evaluatorOrgGuid: string;
 
+  public isEvaluationOpen: boolean = JSON.parse(sessionStorage.getItem('isEvaluationOpen'));
+
   private evaluationId: number;
 
   public proposalEvaluationForm: FormGroup;

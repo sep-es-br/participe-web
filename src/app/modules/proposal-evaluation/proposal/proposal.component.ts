@@ -18,6 +18,8 @@ export class ProposalComponent {
   
   public domainConfigNames: Object = {};
 
+  public isEvaluationOpen: boolean = JSON.parse(sessionStorage.getItem('isEvaluationOpen'));
+
   public organizationsGuidNameMapObject: {[key: string]: string} = {};
 
   constructor(

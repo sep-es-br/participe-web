@@ -1,6 +1,6 @@
 <app-template>
-  <div class="row" *ngIf="this.readOnlyProposalEvaluation">
-    <div class="col-12 d-flex flex-row justify-content-end">
+  <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen">
+    <div class="col-12 d-flex flex-row justify-content-end" >
       <button
         pButton
         text="true"

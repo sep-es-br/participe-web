@@ -16,6 +16,7 @@ import { IProposal } from "@app/shared/interface/IProposal";
 import { Conference } from "@app/shared/models/conference";
 
 import { StoreKeys } from "@app/shared/constants";
+import { ModerationService } from "@app/shared/services/moderation.service";
 
 @Component({
   selector: "app-proposal-evaluation",
@@ -27,13 +28,13 @@ export class ProposalEvaluationComponent implements OnInit {
   public loading: boolean = false;
 
   public domainConfigNames: Object = {};
-  public orgGuidNameMapObj: {[key: string]: string} = {};
 
   public conferences: Conference[];
   public conferenceSelect: Conference = new Conference();
   public showSelectConference: boolean = false;
 
   public search: boolean = false;
+  public isEvaluationOpen: boolean = false;
   public proposalEvaluationSearchForm: FormGroup;
 
   public evaluationStatusOptions: SelectItem[] = [];
@@ -62,6 +63,7 @@ export class ProposalEvaluationComponent implements OnInit {
     private messageService: MessageService,
     private conferenceService: ConferenceService,
     private proposalEvaluationService: ProposalEvaluationService,
+    private moderationSrv: ModerationService,
     private evaluatorsService: EvaluatorsService
   ) {
     this.organizationOptions = this.evaluatorsService.organizationsListSelectItem;
@@ -89,6 +91,10 @@ export class ProposalEvaluationComponent implements OnInit {
   public async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     sessionStorage.setItem("selectedConference", JSON.stringify(conference));
+    sessionStorage.setItem("isEvaluationOpen", JSON.stringify(false));
+    if(this.conferenceSelect.evaluationConfiguration && this.conferenceSelect.evaluationConfiguration.evaluationDisplayStatus == "OPEN"){
+      sessionStorage.setItem("isEvaluationOpen", JSON.stringify(true));
+    }
     this.buildBreadcrumb();
     await this.listProposalEvaluationsByConference(0, 10);
     this.showSelectConference = false;
@@ -119,13 +125,29 @@ export class ProposalEvaluationComponent implements OnInit {
   }
 
   private async loadConferences() {
-    await this.conferenceService
-      .listAll()
+    await this.moderationSrv.getConferencesActive(false)
       .then((data) => {
         this.conferences = data;
-        this.conferenceSelect =
-          JSON.parse(sessionStorage.getItem("selectedConference")) ??
-          this.conferences[0];
+        sessionStorage.setItem("isEvaluationOpen", JSON.stringify(false));
+        if (sessionStorage.getItem("selectedConference") === null) {
+          if (data.length > 0) {
+            if(data.filter((conf) => conf.evaluationConfiguration?.evaluationDisplayStatus == "OPEN").length > 0){
+              this.conferenceSelect = data.filter((conf) => conf.evaluationConfiguration?.evaluationDisplayStatus == "OPEN")[0];
+              sessionStorage.setItem("isEvaluationOpen", JSON.stringify(true));
+            }else if (data.filter((conf) => conf.isActive).length === 0) {
+              this.conferenceSelect = data[0];
+            } else {
+              this.conferenceSelect = data.filter((conf) => conf.isActive)[0];
+            }
+          }
+        } else {
+          this.conferenceSelect = JSON.parse(
+            sessionStorage.getItem("selectedConference")
+          );
+          if(this.conferenceSelect.evaluationConfiguration && this.conferenceSelect.evaluationConfiguration.evaluationDisplayStatus == "OPEN"){
+            sessionStorage.setItem("isEvaluationOpen", JSON.stringify(true));
+          }
+        }
       })
       .then(() => {
         this.buildBreadcrumb();
