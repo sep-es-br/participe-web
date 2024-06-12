@@ -1,4 +1,6 @@
 import {
+  IBudgetAction,
+  IBudgetUnit,
   IProposalEvaluation,
   IProposalEvaluationCreateForm,
 } from "../interface/IProposal";
@@ -38,15 +40,15 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
     return this._id;
   }
 
-  public get budgetUnitControlValue(): string | null {
+  public get budgetUnitControlValue(): IBudgetUnit | null {
     if (!this.budgetUnitId || !this.budgetUnitName) {
       return null;
     }
 
-    return this.budgetUnitId + " - " + this.budgetUnitName;
+    return { budgetUnitId: this.budgetUnitId, budgetUnitName: this.budgetUnitName }
   }
 
-  public get budgetActionControlValue(): Array<string> | null {
+  public get budgetActionControlValue(): Array<IBudgetAction> | null {
     if (!this.budgetActionId || !this.budgetActionName) {
       return null;
     }
@@ -54,11 +56,11 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
     const budgetActionIdList = this.budgetActionId.split(";");
     const budgetActionNameList = this.budgetActionName.split(";");
 
-    let budgetActionControlValueArray = [];
+    let budgetActionControlValueArray: Array<IBudgetAction> = [];
 
     for (let i = 0; i < budgetActionIdList.length; i++) {
-      const value = budgetActionIdList[i] + " - " + budgetActionNameList[i];
-      budgetActionControlValueArray.push(value);
+      const budgetAction: IBudgetAction = { budgetActionId: budgetActionIdList[i], budgetActionName: budgetActionNameList[i] }
+      budgetActionControlValueArray.push(budgetAction);
     }
 
     return budgetActionControlValueArray;
@@ -93,29 +95,19 @@ export class ProposalEvaluationCreateFormModel
     this.representing = formValue.representing;
   }
 
-  private getBudgetUnitId(value: string): string | null {
-    const budgetUnitId = value != null ? value.split("-")[0] : null;
-    return budgetUnitId;
+  private getBudgetUnitId(value: IBudgetUnit): string {
+    return value.budgetUnitId;
   }
 
-  private getBudgetUnitName(value: string): string | null {
-    const budgetUnitName = value != null ? value.split("-")[1] : null;
-    return budgetUnitName;
+  private getBudgetUnitName(value: IBudgetUnit): string {
+    return value.budgetUnitName;
   }
 
-  private getBudgetActionId(value: Array<string>): string | null {
-    const budgetActionId =
-      value != null
-        ? value.map((entry) => entry.split("-")[0]).join(";")
-        : null;
-    return budgetActionId;
+  private getBudgetActionId(value: Array<IBudgetAction>): string {
+    return value.map((item) => item.budgetActionId).join(";");
   }
 
-  private getBudgetActionName(value: Array<string>): string | null {
-    const budgetActionName =
-      value != null
-        ? value.map((entry) => entry.split("-")[1]).join(";")
-        : null;
-    return budgetActionName;
+  private getBudgetActionName(value: Array<IBudgetAction>): string {
+    return value.map((item) => item.budgetActionName).join(";");
   }
 }

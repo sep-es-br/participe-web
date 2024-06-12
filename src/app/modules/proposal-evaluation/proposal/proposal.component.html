@@ -8,7 +8,7 @@
               evaluated: proposal.evaluationStatus,
               'not-evaluated': !proposal.evaluationStatus
             }"
-            >{{ (proposal.evaluationStatus ? 'propeval.evaluatedStatus_true' : 'propeval.evaluatedStatus_false') | translate }}</span
+            >{{ (proposal.evaluationStatus ? 'propeval.evaluationStatus_true' : 'propeval.evaluationStatus_false') | translate }}</span
           >
           <span class="divider">|</span>
           <span class="locality-text ms-4">{{ proposal.localityName }}</span>
@@ -18,14 +18,14 @@
         </div>
   
         <div class="planItemArea-planItem">
-          <span>{{ domainConfigNames['planItemAreaTypeName'] }}: </span>
+          <span>{{  domainConfigNamesObj['planItemAreaTypeName'] }}: </span>
           <span class="planItemArea-text">{{ proposal.planItemAreaName}}</span>
           <span class="divider">></span>
-          <span>{{ domainConfigNames['planItemTypeName'] }}: </span>
+          <span>{{ domainConfigNamesObj['planItemTypeName'] }}: </span>
           <span class="planItem-text">{{ proposal.planItemName }}</span>
         </div>
       </div>
-      <!-- Botão fixo na direita, badges de orgaos sem wrap -->
+
       <div class="col-6 d-flex justify-content-around align-items-center">
         <div class="col-9 d-inline-flex align-content-center flex-wrap">
           <button class="org-badge evaluated pe-none" *ngFor="let orgGuid of proposal.evaluatorOrgsNameList">

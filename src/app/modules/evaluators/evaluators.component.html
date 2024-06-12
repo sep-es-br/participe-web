@@ -62,10 +62,9 @@
                   </div>
                   <div class="col-3 d-inline-flex justify-content-center">
                     <button
-                      pButton
-                      class=""
-                      [icon]="loadingIcon('pi pi-search')"
                       [disabled]="true"
+                      pButton
+                      icon="pi pi-search"
                       type="submit"
                       [label]="'search' | translate"
                     ></button>
@@ -180,6 +179,7 @@
                   "evaluator.section" | translate
                 }}</label>
                 <p-multiSelect
+                  [disabled]="loading"
                   [options]="sectionsList"
                   optionLabel="name"
                   optionValue="guid"
@@ -202,6 +202,7 @@
                   "evaluator.role" | translate
                 }}</label>
                 <p-multiSelect
+                  [disabled]="loading"
                   [options]="rolesList"
                   optionLabel="name"
                   [optionDisabled]="disableOptionsIfAllSelected()"
@@ -216,12 +217,14 @@
               </div>
               <div class="col-12 form-actions">
                 <button
+                  [disabled]="loading"
                   pButton
                   icon="pi pi-check"
                   type="submit"
                   [label]="'save' | translate"
                 ></button>
                 <button
+                  [disabled]="loading"
                   pButton
                   icon="pi pi-ban"
                   type="button"

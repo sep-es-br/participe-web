@@ -154,14 +154,6 @@ export class EvaluatorsService {
     this.organizationsList = value;
   }
 
-  private populateOrganizationsSelectItemArray(
-    value: Array<IEvaluatorOrganization>
-  ): void {
-    this.organizationsListSelectItem = value.map((item) => {
-      return { label: item.name, value: item.guid };
-    });
-  }
-
   private populateOrganizationsGuidNameMapObject(
     value: Array<IEvaluatorOrganization>
   ): void {
@@ -174,11 +166,19 @@ export class EvaluatorsService {
     this.organizationsGuidNameMapObject = tempObject;
   }
 
+  private populateOrganizationsSelectItemArray(
+    value: Array<IEvaluatorOrganization>
+  ): void {
+    this.organizationsListSelectItem = value.map((item) => {
+      return { label: item.name, value: item.guid };
+    });
+  }
+
   private async prepareOrganizationData(): Promise<void> {
     await this.getOrganizationsList().then((response) => {
       this.populateOrganizationsList(response);
-      this.populateOrganizationsSelectItemArray(response);
       this.populateOrganizationsGuidNameMapObject(response);
+      this.populateOrganizationsSelectItemArray(response);
     });
   }
 }
