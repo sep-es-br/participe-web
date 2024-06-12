@@ -5,6 +5,8 @@ import { environment } from "@environments/environment";
 
 import { SelectItem } from "primeng/api";
 
+import { TranslateService } from "@ngx-translate/core";
+
 import Common from "../util/Common";
 import * as qs from 'qs';
 
@@ -21,15 +23,15 @@ import { ProposalEvaluationCreateFormModel } from "../models/ProposalEvaluationM
 })
 export class ProposalEvaluationService {
   private evaluationStatusOptions: SelectItem[] = [
-    { label: "Todos", value: null},
-    { label: "Avaliado", value: true },
-    { label: "Não Avaliado", value: false },
+    { label: this.translateService.instant("all"), value: null},
+    { label: this.translateService.instant("propeval.evaluationStatus_true"), value: true },
+    { label: this.translateService.instant("propeval.evaluationStatus_false"), value: false },
   ];
   
   private loaIncludedOptions: SelectItem[] = [
-    { label: "Todos", value: null},
-    { label: "Sim", value: true },
-    { label: "Não", value: false },
+    { label: this.translateService.instant("all"), value: null},
+    { label: this.translateService.instant("yes"), value: true },
+    { label: this.translateService.instant("no"), value: false },
   ];
 
   private reasonOptions: Array<string> = [
@@ -69,7 +71,7 @@ export class ProposalEvaluationService {
 
   private headers = Common.buildHeaders();
 
-  constructor(private _http: HttpClient) {
+  constructor(private _http: HttpClient, private translateService: TranslateService) {
     if(this.budgetOptions.length == 0){
       this.populateBudgetOptions();
     }

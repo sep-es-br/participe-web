@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { SelectItem } from "primeng/api";
 import { PaginatorState } from "primeng/paginator";
 
+import { TranslateService } from "@ngx-translate/core";
 import { ActionBarService } from "@app/core/actionbar/app.actionbar.actions.service";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { ModerationService } from "@app/shared/services/moderation.service";
@@ -59,6 +60,7 @@ export class ProposalEvaluationComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private actionBarService: ActionBarService,
     private moderationSrv: ModerationService,
+    private translateService: TranslateService,
     private proposalEvaluationService: ProposalEvaluationService,
     private evaluatorsService: EvaluatorsService,
     private router: Router
@@ -249,7 +251,7 @@ export class ProposalEvaluationComponent implements OnInit {
         this.localityOptions = response.map((locality) => {
           return { label: locality.localityName, value: locality.localityId };
         });
-        this.localityOptions.unshift({ label: "Todos", value: null });
+        this.localityOptions.unshift({ label: this.translateService.instant("all"), value: null });
       });
   }
 
@@ -260,7 +262,7 @@ export class ProposalEvaluationComponent implements OnInit {
         this.planItemOptions = response.map((planItem) => {
           return { label: planItem.name, value: planItem.id };
         });
-        this.planItemOptions.unshift({ label: "Todos", value: null });
+        this.planItemOptions.unshift({ label: this.translateService.instant("all"), value: null });
       });
   }
 
@@ -271,7 +273,7 @@ export class ProposalEvaluationComponent implements OnInit {
         this.planItemAreaOptions = response.map((planItemArea) => {
           return { label: planItemArea.name, value: planItemArea.id };
         });
-        this.planItemAreaOptions.unshift({ label: "Todos", value: null });
+        this.planItemAreaOptions.unshift({ label: this.translateService.instant("all"), value: null });
       });
   }
 

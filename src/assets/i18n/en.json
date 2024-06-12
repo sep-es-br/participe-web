@@ -504,6 +504,7 @@
 	"propeval": {
 		"budgetAction": "Budget Action",
 		"budgetPlan": "Budget Plan",
+		"budgetPlan_nullValue": "No budget plan provided",
 		"budgetUnit": "Budget Unit",
 		"confirm": {
 			"delete": "Are you sure you want to delete evaluation?"

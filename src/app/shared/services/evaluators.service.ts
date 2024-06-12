@@ -4,6 +4,8 @@ import { environment } from "@environments/environment";
 
 import { SelectItem } from "primeng/api";
 
+import { TranslateService } from "@ngx-translate/core";
+
 import Common from "../util/Common";
 
 import { EvaluatorCreateFormModel } from "../models/EvaluatorModel";
@@ -26,7 +28,7 @@ export class EvaluatorsService {
 
   private _rolesGuidNullValue: IEvaluatorRole = {
     guid: null,
-    name: "Todos",
+    name: this.translateService.instant("all"),
     lotacao: null,
   };
 
@@ -60,7 +62,7 @@ export class EvaluatorsService {
     this._organizationsGuidNameMapObject = value;
   }
 
-  constructor(private _http: HttpClient) {
+  constructor(private _http: HttpClient, private translateService: TranslateService) {
     if(Object.entries(this.organizationsGuidNameMapObject).length == 0){
       this.prepareOrganizationData();
     }

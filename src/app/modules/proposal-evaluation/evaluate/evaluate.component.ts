@@ -115,7 +115,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formBudgetPlan(): string {
-    return this.proposalEvaluationForm.get("budgetPlan").value ?? 'Nenhum plano orçamentário fornecido';
+    return this.proposalEvaluationForm.get("budgetPlan").value ?? (this.translateService.instant('propeval.budgetPlan_nullValue'));
   }
 
   public get formReason(): string {

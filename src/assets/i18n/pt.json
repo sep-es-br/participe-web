@@ -552,6 +552,7 @@
 	"propeval": {
 		"budgetAction": "Ação Orçamentária",
 		"budgetPlan": "Plano Orçamentário",
+		"budgetPlan_nullValue": "Nenhum plano orçamentário fornecido",
 		"budgetUnit": "Unidade Orçamentária",
 		"confirm": {
 			"delete": "Deseja realmente deletar a avaliação?"

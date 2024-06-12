@@ -5,3 +5,8 @@ a span a {
 a span a:hover {
     background-color: var(--color);
 }
+
+a.childitem-norouterlink {
+    padding-top: 0.25rem;
+    padding-bottom: 0.45rem;
+}
