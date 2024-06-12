@@ -73,6 +73,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit() {
+    this.initCreateProposalForm();
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
   }

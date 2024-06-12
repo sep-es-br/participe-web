@@ -113,6 +113,7 @@
               [options]="budgetUnitOptions"
               (onChange)="budgetUnitChanged($event)"
               filter="true"
+              filterBy="budgetUnitId,budgetUnitName"
               formControlName="budgetUnit"
               styleClass="d-flex form-control"
               class="ng-dirty ng-invalid"
@@ -140,6 +141,8 @@
             <p-multiSelect
               [disabled]="loading"
               [options]="budgetActionOptions"
+              filter="true"
+              filterBy="budgetActionId,budgetActionName"
               showClear="true"
               showToggleAll="false"
               [selectionLimit]="3"

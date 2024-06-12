@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 import { environment } from "@environments/environment";
@@ -100,11 +100,11 @@ export class ProposalEvaluationService {
   }
 
   public getBudgetUnitList(): Array<IBudgetUnit> {
-    return this.budgetOptions.map((item) => {return { budgetUnitId: item.budgetUnitId, budgetUnitName: item.budgetUnitName}});
+    return this.budgetOptions.map((item) => {return { budgetUnitId: item.budgetUnitId, budgetUnitName: item.budgetUnitName}}).sort((a,b) => Number(a.budgetUnitId) - Number(b.budgetUnitId));
   }
 
   public getBudgetActionListByBudgetUnitId(budgetUnitId: string): Array<IBudgetAction> {
-    return this.budgetOptions.find((item) => item.budgetUnitId == budgetUnitId).budgetActions
+    return this.budgetOptions.find((item) => item.budgetUnitId == budgetUnitId).budgetActions.sort((a,b) => Number(a.budgetActionId) - Number(b.budgetActionId));
   }
 
   public getDomainConfiguration(conferenceId: number): Promise<any> {
