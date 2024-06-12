@@ -1,8 +1,6 @@
 import { AuthService } from '@app/shared/services/auth.service';
 import {Component, Renderer2} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { ToastCloseEvent } from 'primeng/toast';
-
 @Component({
   selector: 'app-template',
   templateUrl: './app.template.component.html',
@@ -157,11 +155,5 @@ export class AppTemplateComponent {
 
   isHorizontal() {
     return this.layoutMode === 'horizontal';
-  }
-
-  toastDismissed(event: ToastCloseEvent){
-    if(event.message.id == 'personEvaluator403'){
-      window.location.href = '/login';
-    }
   }
 }

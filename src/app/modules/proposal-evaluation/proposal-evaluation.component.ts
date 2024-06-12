@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
 
-import { MessageService, SelectItem } from "primeng/api";
-import { TranslateService } from "@ngx-translate/core";
+import { SelectItem } from "primeng/api";
 import { PaginatorState } from "primeng/paginator";
 
 import { ActionBarService } from "@app/core/actionbar/app.actionbar.actions.service";
@@ -58,23 +58,27 @@ export class ProposalEvaluationComponent implements OnInit {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private actionBarService: ActionBarService,
-    private translateService: TranslateService,
-    private messageService: MessageService,
     private moderationSrv: ModerationService,
     private proposalEvaluationService: ProposalEvaluationService,
-    private evaluatorsService: EvaluatorsService
+    private evaluatorsService: EvaluatorsService,
+    private router: Router
   ) {}
 
   public async ngOnInit() {
     await this.loadConferences();
     this.initSearchForm();
     await this.checkIsPersonEvaluator();
-    await this.listProposalEvaluationsByConference(
-     this.pageState.page,
-     this.pageState.rows
-    );
 
-    await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
+    if(sessionStorage.getItem("evaluatorOrgGuid")) {
+      await this.listProposalEvaluationsByConference(
+        this.pageState.page,
+        this.pageState.rows
+       );
+   
+       await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
+    } else {
+      setTimeout(() => this.router.navigate([""]), 3000)
+    }
   }
 
   public async pageChange(event: PaginatorState) {
@@ -173,16 +177,10 @@ export class ProposalEvaluationComponent implements OnInit {
       )
     } catch (error) {
       console.error(error);
-      this.messageService.add({
-        severity: "error",
-        summary: this.translateService.instant("error"),
-        detail: error.error.message,
-        id: "personEvaluator403"
-      });
+      sessionStorage.removeItem("evaluatorOrgGuid");
     } finally {
       this.loading = false
     }
-    
   }
 
   private async listProposalEvaluationsByConference(
