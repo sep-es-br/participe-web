@@ -9,9 +9,10 @@ import Common from "../util/Common";
 import * as qs from 'qs';
 
 import { IResultPaginated } from "../interface/IResultPaginated";
-import { IProposal, IProposalEvaluation } from "../interface/IProposal";
+import { IBudgetAction, IBudgetOptions, IBudgetUnit, IProposal, IProposalEvaluation } from "../interface/IProposal";
 import { ILocalityConferenceItem } from "../interface/ILocalityConferenceItem";
 import { IResultPlanItemByConference } from "../interface/IResultPlanItemByConference";
+
 import { ProposalEvaluationCreateFormModel } from "../models/ProposalEvaluationModel";
 
 
@@ -31,12 +32,48 @@ export class ProposalEvaluationService {
     { label: "Não", value: false },
   ];
 
+  private reasonOptions: Array<string> = [
+    "Entrega já realizada",
+    "Conclusão prevista no ano vigente",
+    "Restrições legais",
+    "Restrições ambientais",
+    "Restrições técnicas",
+    "Restrições orçamentárias",
+    "Não é competência estadual",
+    "Não foi considerada prioridade estratégica para a microrregião",
+    "Demanda não específica",
+  ];
+
+  private _domainConfigurationNamesMapObject: Object = {};
+
+  public get domainConfigNamesObj(): Object {
+    return this._domainConfigurationNamesMapObject;
+  }
+
+  public set domainConfigNamesObj(value: Object) {
+    this._domainConfigurationNamesMapObject = value;
+  }
+
+  private _budgetOptions: Array<IBudgetOptions> = []
+
+  public get budgetOptions(): Array<IBudgetOptions> {
+    return this._budgetOptions;
+  }
+
+  private set budgetOptions(value: Array<IBudgetOptions>) {
+    this._budgetOptions = value;
+  }
+
   private _url = `${environment.apiEndpoint}/proposal-evaluation`;
   private _optionsUrl = `${this._url}/options`
 
   private headers = Common.buildHeaders();
 
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) {
+    if(this.budgetOptions.length == 0){
+      this.populateBudgetOptions();
+    }
+  }
 
   public getEvaluationStatusOptions(): Array<SelectItem> {
     return this.evaluationStatusOptions;
@@ -58,65 +95,20 @@ export class ProposalEvaluationService {
     return this._http.get<Array<IResultPlanItemByConference>>(`${this._optionsUrl}/planItem?conferenceId=${conferenceId}`, {headers: this.headers}).toPromise();
   }
 
+  public getReasonOptions(): Array<string> {
+    return this.reasonOptions;
+  }
+
+  public getBudgetUnitList(): Array<IBudgetUnit> {
+    return this.budgetOptions.map((item) => {return { budgetUnitId: item.budgetUnitId, budgetUnitName: item.budgetUnitName}});
+  }
+
+  public getBudgetActionListByBudgetUnitId(budgetUnitId: string): Array<IBudgetAction> {
+    return this.budgetOptions.find((item) => item.budgetUnitId == budgetUnitId).budgetActions
+  }
+
   public getDomainConfiguration(conferenceId: number): Promise<any> {
     return this._http.get<any>(`${this._optionsUrl}/configuration?conferenceId=${conferenceId}`, {headers: this.headers}).toPromise();
-  }
-
-  // NÃO FUNCIONA erro 401
-  // Entender auth melhor
-  // public testFetchBudgetConfig() {
-  //   const url = "http://10.243.135.33/pentaho/plugin/cda/api/doQuery?path=/public/dashboard/orcamento/dash_unidade.cda&dataAccessId=qUnidade";
-  //   const headers = new HttpHeaders({
-  //     Authorization: 'Basic YXJ0dXIuZmFyaWE6NTE0MjYzQHVG'
-  //   });
-
-  //   return this._http.get(url, {headers: headers}).toPromise();
-  // }
-
-  public populateBudgetUnitOptions() {
-    return [
-      "10101 - SVC",
-      "10102 - SCM",
-      "10103 - SECONT",
-      "10104 - SECOM",
-      "10109 - RTV-ES",
-      "10904 - FECC",
-      "16101 - PGE",
-    ];
-  }
-
-  public populateBudgetActionOptions() {
-    return [
-      "1051 - Construção, Ampliação e Modernização da Rede de Serviços de Saúde do Estado",
-      "2619 - Seleção e Premiação de Projetos Culturais",
-      "2971 - Selecção e Premiação de Projetos de Patrimônio",
-      "8683 - Desenvolvimento Integrado e Esporte e Cultura nas Escolas",
-      "8657 - Expansão, Qualificação e Desenvolvimento da Oferta de Cursos Técnicos de Nível Médio",
-    ];
-  }
-
-  public populateBudgetPlanOptions() {
-    return [
-      "1051 - Construção, Ampliação e Modernização da Rede de Serviços de Saúde do Estado",
-      "2619 - Seleção e Premiação de Projetos Culturais",
-      "2971 - Selecção e Premiação de Projetos de Patrimônio",
-      "8683 - Desenvolvimento Integrado e Esporte e Cultura nas Escolas",
-      "8657 - Expansão, Qualificação e Desenvolvimento da Oferta de Cursos Técnicos de Nível Médio",
-    ];
-  }
-
-  public populateReasonOptions() {
-    return [
-      "Entrega já realizada",
-      "Conclusão prevista no ano vigente",
-      "Restrições legais",
-      "Restrições ambientais",
-      "Restrições técnicas",
-      "Restrições orçamentárias",
-      "Não é competência estadual",
-      "Não foi considerada prioridade estratégica para a microrregião",
-      "Demanda não específica",
-    ];
   }
 
   public checkIsPersonEvaluator(personId: number): Promise<string> {
@@ -160,4 +152,15 @@ export class ProposalEvaluationService {
   public deleteProposalEvaluation(id: number): Promise<string> {
     return this._http.delete(`${this._url}/${id}`, {headers: this.headers, responseType: 'text'}).toPromise();
   }
+
+  private fetchBudgetOptions(): Promise<Array<IBudgetOptions>> {
+    return this._http.get<Array<IBudgetOptions>>(`${this._optionsUrl}/budgetOptions`, {headers: this.headers}).toPromise();
+  }
+
+  private async populateBudgetOptions(): Promise<void> {
+    await this.fetchBudgetOptions().then(
+      (response) => this.budgetOptions = response
+    );
+  }
+
 }

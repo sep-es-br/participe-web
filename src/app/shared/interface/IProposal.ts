@@ -27,3 +27,15 @@ export interface IProposalEvaluationCreateForm extends Omit<IProposalEvaluation,
     personId: number;
     proposalId: number;
 }
+
+export interface IBudgetOptions {
+    budgetUnitId: string;
+    budgetUnitName: string;
+    budgetActions: Array<IBudgetAction>;
+}
+
+export interface IBudgetUnit extends Pick<IBudgetOptions, 'budgetUnitId' | 'budgetUnitName'> {}
+export interface IBudgetAction {
+    budgetActionId: string;
+    budgetActionName: string;
+}

@@ -374,8 +374,10 @@
 		},
 		"delete": "Excluir Avaliador",
 		"edit": "Editar Avaliador",
+		"emptyRoles": "A unidade não possui papéis atrelados á ela",
 		"error": {
-			"saving": "Erro ao salvar o avaliador"
+			"saving": "Erro ao salvar o avaliador",
+			"fetchData": "Erro ao buscar {{name}}"
 		},
 		"inserted": "Novo Avaliador inserido",
 		"new": "Novo Avaliador",
@@ -562,8 +564,9 @@
 			"fetchData": "Erro ao buscar as informações da proposta"
 		},
 		"evaluated_by": "Órgão Avaliador",
-		"evaluatedStatus_false": "Não Avaliada",
-		"evaluatedStatus_true": "Avaliada",
+		"evaluationStatus_false": "Não Avaliada",
+		"evaluationStatus_true": "Avaliada",
+		"evaluationStatus": "Situação",
 		"evaluator": "Avaliador",
 		"inserted": "Nova avaliação de proposta inserida",
 		"loaIncluded": "Inclusa na LOA do próximo ano",

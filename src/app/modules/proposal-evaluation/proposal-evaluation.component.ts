@@ -7,8 +7,8 @@ import { PaginatorState } from "primeng/paginator";
 
 import { ActionBarService } from "@app/core/actionbar/app.actionbar.actions.service";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
+import { ModerationService } from "@app/shared/services/moderation.service";
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
-import { ConferenceService } from "@app/shared/services/conference.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
 import { IProposal } from "@app/shared/interface/IProposal";
@@ -16,7 +16,6 @@ import { IProposal } from "@app/shared/interface/IProposal";
 import { Conference } from "@app/shared/models/conference";
 
 import { StoreKeys } from "@app/shared/constants";
-import { ModerationService } from "@app/shared/services/moderation.service";
 
 @Component({
   selector: "app-proposal-evaluation",
@@ -27,7 +26,7 @@ import { ModerationService } from "@app/shared/services/moderation.service";
 export class ProposalEvaluationComponent implements OnInit {
   public loading: boolean = false;
 
-  public domainConfigNames: Object = {};
+  public domainConfigNamesObj: Object = {};
 
   public conferences: Conference[];
   public conferenceSelect: Conference = new Conference();
@@ -61,23 +60,21 @@ export class ProposalEvaluationComponent implements OnInit {
     private actionBarService: ActionBarService,
     private translateService: TranslateService,
     private messageService: MessageService,
-    private conferenceService: ConferenceService,
-    private proposalEvaluationService: ProposalEvaluationService,
     private moderationSrv: ModerationService,
+    private proposalEvaluationService: ProposalEvaluationService,
     private evaluatorsService: EvaluatorsService
-  ) {
-    this.organizationOptions = this.evaluatorsService.organizationsListSelectItem;
-  }
+  ) {}
 
   public async ngOnInit() {
     await this.loadConferences();
     this.initSearchForm();
     await this.checkIsPersonEvaluator();
-    await this.populateSearchFilterOptions();
     await this.listProposalEvaluationsByConference(
-      this.pageState.page,
-      this.pageState.rows
+     this.pageState.page,
+     this.pageState.rows
     );
+
+    await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
   }
 
   public async pageChange(event: PaginatorState) {
@@ -97,6 +94,7 @@ export class ProposalEvaluationComponent implements OnInit {
     }
     this.buildBreadcrumb();
     await this.listProposalEvaluationsByConference(0, 10);
+    await this.getDomainConfiguration();
     this.showSelectConference = false;
   }
 
@@ -161,13 +159,8 @@ export class ProposalEvaluationComponent implements OnInit {
   private async getDomainConfiguration() {
     await this.proposalEvaluationService
       .getDomainConfiguration(this.conferenceSelect.id)
-      .then((response) => (this.domainConfigNames = response))
-      .finally(() =>
-        sessionStorage.setItem(
-          "domainConfigNames",
-          JSON.stringify(this.domainConfigNames)
-        )
-      );
+      .then((response) => (this.proposalEvaluationService.domainConfigNamesObj = response))
+      .finally(() => this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj)
   }
 
   private async checkIsPersonEvaluator() {

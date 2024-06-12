@@ -13,7 +13,7 @@
         <div class="col-12">
           <div class="row">
             <div class="col-3">
-              <label class="form-label">Situação</label>
+              <label class="form-label">{{ 'propeval.evaluationStatus' | translate }}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="evaluationStatusOptions"
@@ -21,26 +21,29 @@
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">{{ domainConfigNames['localityTypeName']}}</label>
+              <label class="form-label">{{ domainConfigNamesObj['localityTypeName']}}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="localityOptions"
+                filter="true"
                 formControlName="localityId"
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">{{ domainConfigNames['planItemAreaTypeName']}}</label>
+              <label class="form-label">{{ domainConfigNamesObj['planItemAreaTypeName']}}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="planItemAreaOptions"
+                filter="true"
                 formControlName="planItemAreaId"
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">{{ domainConfigNames['planItemTypeName']}}</label>
+              <label class="form-label">{{ domainConfigNamesObj['planItemTypeName']}}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="planItemOptions"
+                filter="true"
                 formControlName="planItemId"
               ></p-dropdown>
             </div>
@@ -49,10 +52,11 @@
         <div class="col-12">
           <div class="row">
             <div class="col-3">
-              <label class="form-label">Órgão</label>
+              <label class="form-label">{{ 'evaluator.organization' | translate }}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="organizationOptions"
+                filter="true"
                 formControlName="organizationGuid"
               ></p-dropdown>
             </div>
@@ -103,7 +107,7 @@
 
     <ng-container *ngIf="proposalList; else noResults">
       <div *ngFor="let proposal of proposalList">
-        <app-proposal [proposalData]="proposal"></app-proposal>
+        <app-proposal [proposalData]="proposal" [domainConfigNamesObj]="domainConfigNamesObj"></app-proposal>
       </div>
     </ng-container>
     

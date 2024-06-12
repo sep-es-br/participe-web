@@ -4,11 +4,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { ConfirmationService, MessageService } from "primeng/api";
 import { RadioButtonClickEvent } from "primeng/radiobutton";
+import { DropdownChangeEvent } from "primeng/dropdown";
 import { TranslateService } from "@ngx-translate/core";
 
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
+import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
-import { IProposal } from "@app/shared/interface/IProposal";
+import { IBudgetAction, IBudgetUnit, IProposal } from "@app/shared/interface/IProposal";
 
 import {
   ProposalEvaluationModel,
@@ -16,7 +18,6 @@ import {
 } from "@app/shared/models/ProposalEvaluationModel";
 
 import { StoreKeys } from "@app/shared/constants";
-import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
 @Component({
   selector: "app-evaluate",
@@ -31,7 +32,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public proposal: IProposal;
   public evaluatorOrgGuid: string;
 
-  public isEvaluationOpen: boolean = JSON.parse(sessionStorage.getItem('isEvaluationOpen'));
+  public isEvaluationOpen: boolean = false;
 
   private evaluationId: number;
 
@@ -40,12 +41,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public editProposalEvaluation: boolean = false;
   public readOnlyProposalEvaluation: boolean = false;
 
-  public domainConfigNames: Object = {};
+  public domainConfigNamesObj: Object = {};
   public organizationsGuidNameMapObject: { [key: string]: string } = {};
 
-  public budgetUnitOptions: Array<string> = [];
-  public budgetActionOptions: Array<string> = [];
-  public budgetPlanOptions: Array<string> = [];
+  public budgetUnitOptions: Array<IBudgetUnit> = [];
+  public budgetActionOptions: Array<IBudgetAction> = [];
   public reasonOptions: Array<string> = [];
 
   constructor(
@@ -57,6 +57,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     private evaluatorsService: EvaluatorsService,
     private proposalEvaluationService: ProposalEvaluationService
   ) {
+    this.isEvaluationOpen = JSON.parse(sessionStorage.getItem('isEvaluationOpen'));
+
     this.proposalId = Number(this.route.snapshot.params["proposalId"]);
 
     this.evaluatorOrgGuid = String(sessionStorage.getItem("evaluatorOrgGuid"));
@@ -65,23 +67,15 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
     this.readOnlyProposalEvaluation = this.proposal.evaluationStatus;
 
-    this.domainConfigNames = JSON.parse(
-      sessionStorage.getItem("domainConfigNames")
-    );
+    this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj;
 
     this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
   }
 
   public async ngOnInit() {
     await this.getProposalEvaluationData();
-    // await this.testFetchBudgetConfig();
+    this.populateOptionsLists();
   }
-
-  // public async testFetchBudgetConfig() {
-  //   await this.proposalEvaluationService.testFetchBudgetConfig().then(
-  //     response => console.log(response)
-  //   )
-  // }
 
   public getOrgName(index: number): string {
     const guid = this.readOnlyProposalEvaluation
@@ -98,16 +92,29 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.patchProposalEvaluationFormValue(event.value);
   }
 
-  public get formBudgetUnit(): string {
+  public get formBudgetUnit(): IBudgetUnit {
     return this.proposalEvaluationForm.get("budgetUnit").value;
   }
 
-  public get formBudgetAction(): string {
+  public budgetUnitChanged(event: DropdownChangeEvent): void {
+    this.budgetActionOptions = this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(event.value.budgetUnitId)
+    this.proposalEvaluationForm.get('budgetAction').patchValue(null);
+  }
+
+  public formatBudgetUnit(value: IBudgetUnit): string {
+    return `${value.budgetUnitId} - ${value.budgetUnitName}`;
+  }
+
+  public get formBudgetAction(): Array<IBudgetAction> {
     return this.proposalEvaluationForm.get("budgetAction").value;
   }
 
+  public formatBudgetAction(value: IBudgetAction): string {
+    return `${value.budgetActionId} - ${value.budgetActionName}`;
+  }
+
   public get formBudgetPlan(): string {
-    return this.proposalEvaluationForm.get("budgetPlan").value;
+    return this.proposalEvaluationForm.get("budgetPlan").value ?? 'Nenhum plano orçamentário fornecido';
   }
 
   public get formReason(): string {
@@ -151,16 +158,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // console.log(form.value);
-
     const reqBody = new ProposalEvaluationCreateFormModel(form.value);
     reqBody.personId = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))[
       "id"
     ];
     reqBody.proposalId = this.proposalId;
     reqBody.representing = this.evaluatorOrgGuid;
-
-    // console.log(reqBody);
 
     if (this.editProposalEvaluation) {
       await this.putProposalEvaluation(this.evaluationId, reqBody);
@@ -175,52 +178,37 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private initCreateProposalForm() {
     this.proposalEvaluationForm = new FormGroup({
-      includedInNextYearLOA: new FormControl(null, Validators.required),
-      budgetUnit: new FormControl(null),
-      budgetAction: new FormControl(null),
-      budgetPlan: new FormControl(null),
-      reason: new FormControl(null),
+      includedInNextYearLOA: new FormControl<boolean>(null, Validators.required),
+      budgetUnit: new FormControl<IBudgetUnit>(null),
+      budgetAction: new FormControl<Array<IBudgetAction>>(null),
+      budgetPlan: new FormControl<string>(null),
+      reason: new FormControl<string>(null),
     });
-
-    this.populateOptionsLists();
   }
 
   private initEditProposalForm(
     proposalEvaluationData: ProposalEvaluationModel
   ) {
+    if(proposalEvaluationData.includedInNextYearLOA) {
+      this.budgetActionOptions = this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(proposalEvaluationData.budgetUnitId);
+    }
+
     this.proposalEvaluationForm = new FormGroup({
-      includedInNextYearLOA: new FormControl(
+      includedInNextYearLOA: new FormControl<boolean>(
         proposalEvaluationData.includedInNextYearLOA,
         Validators.required
       ),
-      budgetUnit: new FormControl(
+      budgetUnit: new FormControl<IBudgetUnit>(
         proposalEvaluationData.budgetUnitControlValue
       ),
-      budgetAction: new FormControl(
+      budgetAction: new FormControl<Array<IBudgetAction>>(
         proposalEvaluationData.budgetActionControlValue
       ),
-      budgetPlan: new FormControl(proposalEvaluationData.budgetPlan),
-      reason: new FormControl(proposalEvaluationData.reason),
+      budgetPlan: new FormControl<string>(proposalEvaluationData.budgetPlan),
+      reason: new FormControl<string>(proposalEvaluationData.reason),
     });
-
-    this.populateOptionsLists();
   }
 
-  private populateOptionsLists() {
-    this.budgetUnitOptions =
-      this.proposalEvaluationService.populateBudgetUnitOptions();
-    this.budgetActionOptions =
-      this.proposalEvaluationService.populateBudgetActionOptions();
-    this.budgetPlanOptions =
-      this.proposalEvaluationService.populateBudgetPlanOptions();
-    this.reasonOptions = this.proposalEvaluationService.populateReasonOptions();
-  }
-
-  /*
-          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    NÃO CONSTRÓI budgetUnitName E budgetActionName 
-          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  */
   private async getProposalEvaluationData() {
     try {
       this.loading = true;
@@ -259,7 +247,6 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetActionControl.clearValidators();
 
       budgetPlanControl.patchValue(null);
-      // budgetPlanControl.clearValidators();
 
       reasonControl.addValidators(Validators.required);
     } else {
@@ -271,7 +258,6 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.maxLength(3),
       ]);
-      // budgetPlanControl.addValidators(Validators.required);
     }
 
     budgetUnitControl.updateValueAndValidity();
@@ -280,12 +266,18 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     reasonControl.updateValueAndValidity();
   }
 
+  private populateOptionsLists() {
+    this.budgetUnitOptions = this.proposalEvaluationService.getBudgetUnitList();
+    this.reasonOptions = this.proposalEvaluationService.getReasonOptions();
+  }
+
   private async postProposalEvaluation(
     reqBody: ProposalEvaluationCreateFormModel
   ) {
     try {
-      const result =
-        await this.proposalEvaluationService.postProposalEvaluation(reqBody);
+      this.loading = true;
+
+      await this.proposalEvaluationService.postProposalEvaluation(reqBody);
 
       this.messageService.add({
         severity: "success",
@@ -309,7 +301,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     reqBody: ProposalEvaluationCreateFormModel
   ) {
     try {
-      const result = await this.proposalEvaluationService.putProposalEvaluation(
+      this.loading = true;
+
+      await this.proposalEvaluationService.putProposalEvaluation(
         id,
         reqBody
       );
@@ -333,8 +327,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private async deleteProposalEvaluation(id: number) {
     try {
-      const result =
-        await this.proposalEvaluationService.deleteProposalEvaluation(id);
+      this.loading = true;
+
+      await this.proposalEvaluationService.deleteProposalEvaluation(id);
 
       this.messageService.add({
         severity: "success",

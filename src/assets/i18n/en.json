@@ -326,8 +326,10 @@
 		},
 		"delete": "Delete Evaluator",
 		"edit": "Edit Evaluator",
+		"emptyRoles": "Unit does not have roles contained in it",
 		"error": {
-			"saving": "Error saving evaluator"
+			"saving": "Error saving evaluator",
+			"fetchData": "Error fetching {{name}}"
 		},
 		"inserted": "New evaluator inserted",
 		"new": "New Evaluator",
@@ -337,7 +339,6 @@
 		"role": "Role",
 		"roles": "Roles",
 		"updated": "Evaluator {{name}} updated"
-		
 	},
 	"exists": {
 		"name": "This name already exists"
@@ -515,8 +516,9 @@
 			"fetchData": "Error fetching proposal data"
 		},
 		"evaluated_by": "Evaluator Organization",
-		"evaluatedStatus_false": "Not Evaluated",
-		"evaluatedStatus_true": "Evaluated",
+		"evaluationStatus_false": "Not Evaluated",
+		"evaluationStatus_true": "Evaluated",
+		"evaluationStatus": "Status",
 		"evaluator": "Evaluator",
 		"inserted": "New proposal evaluation inserted",
 		"loaIncluded": "Included in next year's LOA",

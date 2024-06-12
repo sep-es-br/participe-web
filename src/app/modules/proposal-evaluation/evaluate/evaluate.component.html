@@ -2,6 +2,7 @@
   <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen">
     <div class="col-12 d-flex flex-row justify-content-end" >
       <button
+        [disabled]="loading"
         pButton
         text="true"
         severity="secondary"
@@ -12,6 +13,7 @@
       ></button>
 
       <button
+        [disabled]="loading"
         pButton
         text="true"
         severity="secondary"
@@ -45,14 +47,14 @@
       </div>
 
       <br />
-      <label>{{ domainConfigNames["planItemAreaTypeName"] }}</label>
+      <label>{{ domainConfigNamesObj["planItemAreaTypeName"] }}</label>
       <p>{{ proposal.planItemAreaName }}</p>
     </div>
     <div class="col-4">
-      <label>{{ domainConfigNames["localityTypeName"] }}</label>
+      <label>{{ domainConfigNamesObj["localityTypeName"] }}</label>
       <p>{{ proposal.localityName }}</p>
       <br />
-      <label>{{ domainConfigNames["planItemTypeName"] }}</label>
+      <label>{{ domainConfigNamesObj["planItemTypeName"] }}</label>
       <p>{{ proposal.planItemName }}</p>
     </div>
   </div>
@@ -65,7 +67,7 @@
 
   <form
     [formGroup]="proposalEvaluationForm"
-    *ngIf="!loading && !this.readOnlyProposalEvaluation"
+    *ngIf="!this.readOnlyProposalEvaluation"
   >
     <div class="row">
       <div class="col-8">
@@ -73,6 +75,7 @@
         <div class="col-3 d-flex justify-content-between">
           <div class="d-inline-flex align-items-center">
             <p-radioButton
+              [disabled]="loading"
               inputId="loaIncludedTrue"
               [value]="true"
               formControlName="includedInNextYearLOA"
@@ -84,6 +87,7 @@
           </div>
           <div class="d-inline-flex align-items-center">
             <p-radioButton
+              [disabled]="loading"
               inputId="loaIncludedFalse"
               [value]="false"
               formControlName="includedInNextYearLOA"
@@ -98,19 +102,29 @@
     </div>
 
     <div class="row">
-      <div class="col-8">
+      <div class="col-9">
         <ng-container *ngIf="formLoaIncluded != null && formLoaIncluded">
           <div class="col-12 d-flex flex-column">
             <label for="budgetUnit">{{
               "propeval.budgetUnit" | translate
             }}</label>
             <p-dropdown
+              [disabled]="loading"
               [options]="budgetUnitOptions"
+              (onChange)="budgetUnitChanged($event)"
               filter="true"
               formControlName="budgetUnit"
               styleClass="d-flex form-control"
               class="ng-dirty ng-invalid"
-            ></p-dropdown>
+            >
+              <ng-template pTemplate="selectedItem">
+                <span>{{ formatBudgetUnit(formBudgetUnit) }}</span>
+              </ng-template>
+
+              <ng-template let-item pTemplate="item">
+                <span>{{ formatBudgetUnit(item) }}</span>
+              </ng-template>
+            </p-dropdown>
             <tt-input-message
               [form]="proposalEvaluationForm"
               field="budgetUnit"
@@ -124,15 +138,26 @@
               "propeval.budgetAction" | translate
             }}</label>
             <p-multiSelect
+              [disabled]="loading"
               [options]="budgetActionOptions"
-              display="chip"
               showClear="true"
               showToggleAll="false"
               [selectionLimit]="3"
               formControlName="budgetAction"
               styleClass="d-flex form-control"
               class="ng-dirty ng-invalid"
-            ></p-multiSelect>
+            >
+              <ng-template let-value pTemplate="selectedItems">
+                <div *ngFor="let option of value">
+                  <span>{{ formatBudgetAction(option) }}</span>
+                </div>
+              </ng-template>
+
+              <ng-template let-item pTemplate="item">
+                <span>{{ formatBudgetAction(item) }}</span>
+              </ng-template>
+            </p-multiSelect>
+            <span class="fw-bold">{{ (formBudgetAction?.length ?? 0).toString() + '/3' }}</span>
             <tt-input-message
               [form]="proposalEvaluationForm"
               field="budgetAction"
@@ -146,6 +171,7 @@
               "propeval.budgetPlan" | translate
             }}</label>
             <input
+              [disabled]="loading"
               type="text"
               pInputText
               formControlName="budgetPlan"
@@ -165,6 +191,7 @@
             <ng-container *ngFor="let reason of reasonOptions">
               <div class="d-inline-flex align-items-center">
                 <p-radioButton
+                  [disabled]="loading"
                   inputId="reason"
                   [value]="reason"
                   formControlName="reason"
@@ -186,6 +213,7 @@
     <div class="row">
       <div class="col-8">
         <button
+          [disabled]="loading"
           pButton
           icon="pi pi-check"
           [label]="'save' | translate"
@@ -195,6 +223,7 @@
         ></button>
 
         <button
+          [disabled]="loading"
           pButton
           icon="pi pi-ban"
           [label]="'cancel' | translate"
@@ -208,7 +237,7 @@
 
   <form
     [formGroup]="proposalEvaluationForm"
-    *ngIf="!loading && this.readOnlyProposalEvaluation"
+    *ngIf="this.readOnlyProposalEvaluation"
   >
     <div class="row">
       <div class="col-8">
@@ -221,14 +250,14 @@
       <div class="row">
         <div class="col-8">
           <label>{{ "propeval.budgetUnit" | translate }}</label>
-          <p>{{ formBudgetUnit }}</p>
+          <p>{{ formatBudgetUnit(formBudgetUnit) }}</p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-8">
           <label>{{ "propeval.budgetAction" | translate }}</label>
-          <p>{{ formBudgetAction }}</p>
+          <p *ngFor="let budgetAction of formBudgetAction" class="budgetActionParagraphEl">{{ formatBudgetAction(budgetAction) }}</p>
         </div>
       </div>
 
