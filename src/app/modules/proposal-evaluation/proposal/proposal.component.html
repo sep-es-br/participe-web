@@ -1,0 +1,46 @@
+<div class="card card-w-title mb-3">
+    <div class="row">
+      <div class="col-6">
+        <div class="evalStatus-locality">
+          <span
+            class="evalStatus-text"
+            [ngClass]="{
+              evaluated: proposal.evaluationStatus,
+              'not-evaluated': !proposal.evaluationStatus
+            }"
+            >{{ (proposal.evaluationStatus ? 'proposal_evaluation.evaluationStatus_true' : 'proposal_evaluation.evaluationStatus_false') | translate }}</span
+          >
+          <span class="divider">|</span>
+          <span class="locality-text ms-4">{{ proposal.localityName }}</span>
+        </div>
+        <div class="description-text my-2">
+          <p>{{ proposal.description }}</p>
+        </div>
+  
+        <div class="planItemArea-planItem">
+          <span>{{  domainConfigNamesObj['planItemAreaTypeName'] }}: </span>
+          <span class="planItemArea-text">{{ proposal.planItemAreaName}}</span>
+          <span class="divider">></span>
+          <span>{{ domainConfigNamesObj['planItemTypeName'] }}: </span>
+          <span class="planItem-text">{{ proposal.planItemName }}</span>
+        </div>
+      </div>
+
+      <div class="col-6 d-flex justify-content-around align-items-center">
+        <div class="col-9 d-inline-flex align-content-center flex-wrap">
+          <button class="org-badge evaluated pe-none" *ngFor="let orgGuid of proposal.evaluatorOrgsNameList">
+            {{ getOrgName(orgGuid) }}
+          </button>
+        </div>
+  
+        <div *ngIf="isEvaluationOpen || proposal.evaluationStatus">
+          <button
+            pButton
+            icon="fa-solid fa-clipboard-check fa-lg"
+            class="py-1 px-2"
+            (click)="evaluateProposal(proposal)"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>

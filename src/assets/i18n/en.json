@@ -4,12 +4,12 @@
 		"conference": "Conference",
 		"conference-name": "Conference: {{name}}",
 		"domain": "Domain",
+		"evaluators": "Evaluators",
 		"label": "Administration",
 		"moderation": "Moderation",
 		"plan": "Plan",
 		"presential-meeting": "Meetings",
-		"structure": "Structure",
-		"evaluators": "Evaluators"
+		"structure": "Structure"
 	},
 	"all": "All",
 	"begin": "Begin",
@@ -326,8 +326,10 @@
 		},
 		"delete": "Delete Evaluator",
 		"edit": "Edit Evaluator",
+		"emptyRoles": "Unit does not have roles contained in it",
 		"error": {
-			"saving": "Error saving evaluator"
+			"saving": "Error saving evaluator",
+			"fetchData": "Error fetching {{name}}"
 		},
 		"inserted": "New evaluator inserted",
 		"new": "New Evaluator",
@@ -337,7 +339,6 @@
 		"role": "Role",
 		"roles": "Roles",
 		"updated": "Evaluator {{name}} updated"
-		
 	},
 	"exists": {
 		"name": "This name already exists"
@@ -419,6 +420,10 @@
 		},
 		"moderate": {
 			"about": "About",
+			"confirmDeleteCommentWithPropEval": {
+				"header": "The comment has an evaluation!",
+				"body": "Changing the comment's status to {{status}} will remove the evaluation. Are you sure you want to proceed?"
+			},
 			"moveText": "Move text",
 			"placeholder": {
 				"moveFilter": ""
@@ -498,6 +503,36 @@
 		"warn": {
 			"contain-conference": "Plan cannot be deleted, because it is linked to a conference"
 		}
+	},
+	"proposal_evaluation": {
+		"budgetAction": "Budget Action",
+		"budgetPlan": "Budget Plan",
+		"budgetPlan_nullValue": "No budget plan provided",
+		"budgetUnit": "Budget Unit",
+		"confirm": {
+			"delete": "Are you sure you want to delete evaluation?"
+		},
+		"delete": "Delete Proposal Evaluation",
+		"description": "Proposal Text",
+		"edit": "Edit Proposal Evaluation",
+		"error": {
+			"saving": "Error saving proposal evaluation",
+			"fetchData": "Error fetching proposal data"
+		},
+		"evaluated_by": "Evaluator Organization",
+		"evaluationStatus_false": "Not Evaluated",
+		"evaluationStatus_true": "Evaluated",
+		"evaluationStatus": "Status",
+		"evaluator": "Evaluator",
+		"inserted": "New proposal evaluation inserted",
+		"loaIncluded": "Included in next year's LOA",
+		"loaIncluded_question": "Will be included in next year's LOA?",
+		"new": "New Proposal Evaluation",
+		"noResult": "No results found",
+		"reason": "Reason of exclusion",
+		"title": "Proposal Evaluation",
+		"under_evaluation_by": "Under evaluation by",
+		"updated": "Proposal Evaluation updated"
 	},
 	"published": "Published",
 	"register": {
@@ -584,4 +619,3 @@
 	"years": "Years",
 	"yes": "Yes"
 }
-

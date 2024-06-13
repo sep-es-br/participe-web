@@ -1,0 +1,175 @@
+<app-template>
+  <div class="d-flex justify-content-between">
+    <div class="col-12 text-end">
+      <a class="search" (click)="toggleSearch()">{{
+        (search ? "hide" : "search") | translate
+      }}</a>
+    </div>
+  </div>
+
+  <div *ngIf="search">
+    <div class="row mt-2">
+      <form [formGroup]="proposalEvaluationSearchForm">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-3">
+              <label class="form-label">{{ 'proposal_evaluation.evaluationStatus' | translate }}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="evaluationStatusOptions"
+                formControlName="evaluationStatus"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ domainConfigNamesObj['localityTypeName']}}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="localityOptions"
+                filter="true"
+                formControlName="localityId"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ domainConfigNamesObj['planItemAreaTypeName']}}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="planItemAreaOptions"
+                filter="true"
+                formControlName="planItemAreaId"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ domainConfigNamesObj['planItemTypeName']}}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="planItemOptions"
+                filter="true"
+                formControlName="planItemId"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-3">
+              <label class="form-label">{{ 'evaluator.organization' | translate }}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="organizationOptions"
+                filter="true"
+                formControlName="organizationGuid"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ 'proposal_evaluation.loaIncluded' | translate }}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="loaIncludedOptions"
+                formControlName="loaIncluded"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ 'proposal_evaluation.description' | translate }}</label>
+              <input pInputText class="form-control" formControlName="commentText" />
+            </div>
+            <div class="col-3 mt-auto">
+              <button
+                pButton
+                icon="pi pi-search"
+                [disabled]="loading"
+                class="me-2"
+                [label]="'search' | translate"
+                (click)="searchHandle()"
+              ></button>
+              <button 
+                pButton 
+                icon="pi pi-ban" 
+                [disabled]="loading"
+                [label]="'clean.search'|translate"
+                (click)="clearSearchForm();searchHandle();"
+                ></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="paginator-proposal-list">
+    <p-paginator
+      [first]="pageState.first"
+      [rows]="pageState.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="pageChange($event)"
+      styleClass="my-2"
+    ></p-paginator>
+
+    <ng-container *ngIf="proposalList; else noResults">
+      <div *ngFor="let proposal of proposalList">
+        <app-proposal [proposalData]="proposal" [domainConfigNamesObj]="domainConfigNamesObj"></app-proposal>
+      </div>
+    </ng-container>
+
+    <p-paginator
+      [first]="pageState.first"
+      [rows]="pageState.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="pageChange($event)"
+      styleClass="my-2"
+    ></p-paginator>
+    
+  </div>
+
+  <ng-container
+    *ngIf="showSelectConference"
+    [ngTemplateOutlet]="changeConference"
+  ></ng-container>
+</app-template>
+
+<ng-template #changeConference>
+  <p-dialog
+    class=""
+    modal="true"
+    [draggable]="false"
+    [style]="{ width: '500px' }"
+    [closable]="false"
+    [header]="'moderation.label.select_conference' | translate"
+    [visible]="showSelectConference"
+  >
+    <div
+      class="conferences-item-select-modal"
+      *ngFor="let conference of conferences"
+      (click)="selectOtherConference(conference)"
+    >
+      <h4>{{ conference.name }}</h4>
+      <small>{{ conference.description }}</small>
+      <div class="date-container">
+        <div class="date">
+          <i class="pi pi-calendar"></i>
+          {{ conference.beginDate }}
+        </div>
+        <div class="date">
+          <i class="pi pi-calendar"></i>
+          {{ conference.endDate }}
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="action-modal">
+        <button
+          pButton
+          label="Fechar"
+          (click)="showSelectConference = false"
+        ></button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</ng-template>
+
+<ng-template #noResults>
+  <div class="col-12 d-flex justify-content-center">
+    <span>{{ 'proposal_evaluation.noResult' | translate }}</span>
+  </div>
+</ng-template>
