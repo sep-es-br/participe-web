@@ -110,6 +110,15 @@
         <app-proposal [proposalData]="proposal" [domainConfigNamesObj]="domainConfigNamesObj"></app-proposal>
       </div>
     </ng-container>
+
+    <p-paginator
+      [first]="pageState.first"
+      [rows]="pageState.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="pageChange($event)"
+      styleClass="my-2"
+    ></p-paginator>
     
   </div>
 

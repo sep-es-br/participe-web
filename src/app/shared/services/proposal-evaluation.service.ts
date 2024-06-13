@@ -11,7 +11,7 @@ import Common from "../util/Common";
 import * as qs from 'qs';
 
 import { IResultPaginated } from "../interface/IResultPaginated";
-import { IBudgetAction, IBudgetOptions, IBudgetUnit, IProposal, IProposalEvaluation } from "../interface/IProposal";
+import { IBudgetAction, IBudgetOptions, IBudgetUnit, IProposal, IProposalEvaluation, IProposalEvaluationSearchFilter } from "../interface/IProposal";
 import { ILocalityConferenceItem } from "../interface/ILocalityConferenceItem";
 import { IResultPlanItemByConference } from "../interface/IResultPlanItemByConference";
 
@@ -121,7 +121,7 @@ export class ProposalEvaluationService {
     conferenceId: number,
     pageNumber: number,
     pageSize: number,
-    searchFilter?: any
+    searchFilter?: IProposalEvaluationSearchFilter
   ): Promise<IResultPaginated<IProposal>> {
     const params = {
       conferenceId: conferenceId,

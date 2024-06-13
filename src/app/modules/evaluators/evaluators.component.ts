@@ -5,7 +5,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import * as _ from "lodash";
 
-import { ConfirmationService, MessageService } from "primeng/api";
+import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
 import { DropdownChangeEvent } from "primeng/dropdown";
 import { MultiSelectChangeEvent } from "primeng/multiselect";
 import { TableLazyLoadEvent } from "primeng/table";
@@ -16,6 +16,7 @@ import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 import {
   IEvaluator,
   IEvaluatorNamesRequest,
+  IEvaluatorSearchFilter,
 } from "@app/shared/interface/IEvaluator";
 import {
   IEvaluatorOrganization,
@@ -43,7 +44,8 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   private evaluationSectionId: number;
   public editEvaluatorSection: boolean = false;
 
-  public searchForm: FormGroup;
+  public evaluatorsSearchForm: FormGroup;
+  private evaluatorsSearchFilter: IEvaluatorSearchFilter;
 
   public evaluatorsList: Array<IEvaluator> = [];
 
@@ -63,6 +65,10 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public sectionsGuidNameMapObject: { [key: string]: string } = {};
   public rolesGuidNameMapObject: { [key: string]: string } = {};
 
+  public organizationsOptions: Array<SelectItem> = [];
+  public sectionsOptions: Array<SelectItem> = [];
+  public rolesOptions: Array<SelectItem> = [];
+
   public pageReportTemplateTranslateParams = {
     first: 0,
     last: 0,
@@ -77,6 +83,8 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     private evaluatorsService: EvaluatorsService
   ) {
     this.updatePageReportTemplateTranslateParams();
+
+    this.evaluatorsSearchFilter = JSON.parse(sessionStorage.getItem("evaluatorsSearchFilter"))
   }
 
   public async ngOnInit() {
@@ -94,6 +102,27 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public showSearchForm() {
     this.search = !this.search;
     this.initSearchForm();
+    this.populateSearchOptions();
+  }
+
+  public async searchHandle() {
+    sessionStorage.setItem(
+      "evaluatorsSearchFilter",
+      JSON.stringify(this.evaluatorsSearchForm.value)
+    );
+
+    const initPageState = {
+      first: 0,
+      rows: 10
+    }
+
+    await this.getEvaluatorsList(initPageState, this.evaluatorsSearchForm.value)
+  }
+
+  public clearSearchForm() {
+    for (const key in this.evaluatorsSearchForm.controls) {
+      this.evaluatorsSearchForm.controls[key].patchValue(null);
+    }
   }
 
   public showCreateEvaluator() {
@@ -138,10 +167,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public loadingIcon(icon = "pi pi-check") {
-    return this.loading ? "pi pi-spin pi-spinner" : icon;
-  }
-
   public async organizationChanged(event: DropdownChangeEvent) {
     await this.getSectionsList(event.value);
   }
@@ -183,10 +208,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     if (event.value.length > 0 && event.itemValue.name == "Todos") {
       this.patchRolesGuidFormControlWithNullValue();
     }
-  }
-
-  public searchEvaluators() {
-    console.log(this.searchForm.value);
   }
 
   public cancelForm() {
@@ -319,13 +340,18 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Controles bloqueados por enquanto, método ainda não implementado
   private initSearchForm() {
-    this.searchForm = new FormGroup({
-      searchOrganization: new FormControl({ value: "", disabled: true }),
-      searchSection: new FormControl({ value: "", disabled: true }),
-      searchRole: new FormControl({ value: "", disabled: true }),
+    this.evaluatorsSearchForm = new FormGroup({
+      searchOrganization: new FormControl(this.evaluatorsSearchFilter?.searchOrganization ?? ""),
+      searchSection: new FormControl(this.evaluatorsSearchFilter?.searchSection ?? ""),
+      searchRole: new FormControl(this.evaluatorsSearchFilter?.searchRole ?? ""),
     });
+  }
+
+  private populateSearchOptions() {
+    _.forIn(this.organizationsGuidNameMapObject, (value, key) => this.organizationsOptions.push({label: value, value: key}));
+    _.forIn(this.sectionsGuidNameMapObject, (value, key) => this.sectionsOptions.push({label: value, value: key}));
+    _.forIn(this.rolesGuidNameMapObject, (value, key) => this.rolesOptions.push({label: value, value: key}));
   }
 
   private initCreateEvaluatorsForm() {
@@ -359,14 +385,14 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  private async getEvaluatorsList(pageState: PaginatorState) {
+  private async getEvaluatorsList(pageState: PaginatorState, searchFilter?: IEvaluatorSearchFilter) {
     const pageable: IPagination = {
       pageNumber: pageState.first / pageState.rows,
       pageSize: pageState.rows,
     };
 
     await this.evaluatorsService
-      .getEvaluatorsList(pageable)
+      .getEvaluatorsList(pageable, searchFilter)
       .then((response) => {
         this.evaluatorsList = response.content ?? [];
         this.totalRecords = response.totalElements;

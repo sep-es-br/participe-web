@@ -12,7 +12,7 @@ import { ModerationService } from "@app/shared/services/moderation.service";
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
-import { IProposal } from "@app/shared/interface/IProposal";
+import { IProposal, IProposalEvaluationSearchFilter } from "@app/shared/interface/IProposal";
 
 import { Conference } from "@app/shared/models/conference";
 
@@ -36,6 +36,7 @@ export class ProposalEvaluationComponent implements OnInit {
   public search: boolean = false;
   public isEvaluationOpen: boolean = false;
   public proposalEvaluationSearchForm: FormGroup;
+  private propEvalSearchFilter: IProposalEvaluationSearchFilter;
 
   public evaluationStatusOptions: SelectItem[] = [];
   public localityOptions: SelectItem[] = [];
@@ -64,7 +65,9 @@ export class ProposalEvaluationComponent implements OnInit {
     private proposalEvaluationService: ProposalEvaluationService,
     private evaluatorsService: EvaluatorsService,
     private router: Router
-  ) {}
+  ) {
+      this.propEvalSearchFilter = JSON.parse(sessionStorage.getItem("propEvalSearchFilter"));
+  }
 
   public async ngOnInit() {
     await this.loadConferences();
@@ -74,10 +77,16 @@ export class ProposalEvaluationComponent implements OnInit {
     if(sessionStorage.getItem("evaluatorOrgGuid")) {
       await this.listProposalEvaluationsByConference(
         this.pageState.page,
-        this.pageState.rows
-       );
+        this.pageState.rows,
+        this.propEvalSearchFilter
+      );
    
-       await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
+      await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
+
+      if(Object.values(this.propEvalSearchFilter).some((value) => !!value)) {
+        this.search = true
+      }
+
     } else {
       setTimeout(() => this.router.navigate([""]), 3000)
     }
@@ -188,7 +197,7 @@ export class ProposalEvaluationComponent implements OnInit {
   private async listProposalEvaluationsByConference(
     pageNumber: number,
     pageSize: number,
-    searchFilter?: any
+    searchFilter?: IProposalEvaluationSearchFilter
   ) {
 
     this.loading = true;
@@ -213,24 +222,20 @@ export class ProposalEvaluationComponent implements OnInit {
   }
 
   private initSearchForm() {
-    const propEvalSearchFilter = JSON.parse(
-      sessionStorage.getItem("propEvalSearchFilter")
-    );
-
     this.proposalEvaluationSearchForm = new FormGroup({
       evaluationStatus: new FormControl(
-        propEvalSearchFilter?.evaluationStatus ?? null
+        this.propEvalSearchFilter?.evaluationStatus ?? null
       ),
-      localityId: new FormControl(propEvalSearchFilter?.localityId ?? null),
+      localityId: new FormControl(this.propEvalSearchFilter?.localityId ?? null),
       planItemAreaId: new FormControl(
-        propEvalSearchFilter?.planItemAreaId ?? null
+        this.propEvalSearchFilter?.planItemAreaId ?? null
       ),
-      planItemId: new FormControl(propEvalSearchFilter?.planItemId ?? null),
+      planItemId: new FormControl(this.propEvalSearchFilter?.planItemId ?? null),
       organizationGuid: new FormControl(
-        propEvalSearchFilter?.organizationGuid ?? null
+        this.propEvalSearchFilter?.organizationGuid ?? null
       ),
-      loaIncluded: new FormControl(propEvalSearchFilter?.loaIncluded ?? null),
-      commentText: new FormControl(propEvalSearchFilter?.commentText ?? null),
+      loaIncluded: new FormControl(this.propEvalSearchFilter?.loaIncluded ?? null),
+      commentText: new FormControl(this.propEvalSearchFilter?.commentText ?? null),
     });
   }
 

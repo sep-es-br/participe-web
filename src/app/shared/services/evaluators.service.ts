@@ -7,9 +7,10 @@ import { SelectItem } from "primeng/api";
 import { TranslateService } from "@ngx-translate/core";
 
 import Common from "../util/Common";
+import * as qs from 'qs';
 
 import { EvaluatorCreateFormModel } from "../models/EvaluatorModel";
-import { IEvaluator, IEvaluatorNamesRequest, IEvaluatorNamesResponse } from "../interface/IEvaluator";
+import { IEvaluator, IEvaluatorNamesRequest, IEvaluatorNamesResponse, IEvaluatorSearchFilter } from "../interface/IEvaluator";
 import {
   IEvaluatorOrganization,
   IEvaluatorSection,
@@ -69,15 +70,18 @@ export class EvaluatorsService {
   }
 
   public getEvaluatorsList(
-    pageable: IPagination
+    pageable: IPagination,
+    searchFilter: IEvaluatorSearchFilter
   ): Promise<IResultPaginated<IEvaluator>> {
     const params = {
       page: pageable.pageNumber,
       size: pageable.pageSize,
     };
 
+    const urlWithFilters = this._url + "?" + qs.stringify(searchFilter)
+
     return this._http
-      .get<IResultPaginated<IEvaluator>>(this._url, {
+      .get<IResultPaginated<IEvaluator>>(urlWithFilters, {
         headers: this.headers,
         params: params,
       })

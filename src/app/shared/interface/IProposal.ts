@@ -28,6 +28,16 @@ export interface IProposalEvaluationCreateForm extends Omit<IProposalEvaluation,
     proposalId: number;
 }
 
+export interface IProposalEvaluationSearchFilter {
+    evaluationStatus: boolean;
+    localityId: number;
+    planItemAreaId: number;
+    planItemId: number;
+    organizationGuid: string;
+    loaIncluded: boolean;
+    commentText: string;
+}
+
 export interface IBudgetOptions {
     budgetUnitId: string;
     budgetUnitName: string;
