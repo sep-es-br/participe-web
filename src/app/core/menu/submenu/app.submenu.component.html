@@ -4,7 +4,7 @@
   || (isActive(i) && !template.isHorizontal()))}" [class]="child.badgeStyleClass"
       *ngIf="child.visible!==false">
 
-    <a *ngIf="!child.routerLink" class="childitem-norouterlink" (mouseenter)="onMouseEnter(i)">
+    <a *ngIf="!child.routerLink" style="padding-bottom: 0.40rem; padding-top: 0.25rem;" (mouseenter)="onMouseEnter(i)">
       <fa-icon [icon]="child.icon" style="margin-left: 0; margin-right: 0;"></fa-icon>
       <span class="layout-menuitem-text" style="padding-left: 0;
                                                 padding-right: 0;

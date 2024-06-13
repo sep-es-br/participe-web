@@ -420,6 +420,10 @@
 		},
 		"moderate": {
 			"about": "About",
+			"confirmDeleteCommentWithPropEval": {
+				"header": "The comment has an evaluation!",
+				"body": "Changing the comment's status to {{status}} will remove the evaluation. Are you sure you want to proceed?"
+			},
 			"moveText": "Move text",
 			"placeholder": {
 				"moveFilter": ""

@@ -468,6 +468,10 @@
 		},
 		"moderate": {
 			"about": "Sobre",
+			"confirmDeleteCommentWithPropEval": {
+				"header": "O comentário possui avaliação!",
+				"body": "Alterar o estado do comentário para {{status}} irá remover a avaliação. Tem certeza que quer prosseguir?"
+			},
 			"moveText": "Mover texto",
 			"placeholder": {
 				"moveFilter": ""

@@ -3,7 +3,7 @@ import { ModerationTreeViewItem } from '@app/shared/models/moderationTreeViewIte
 import { Conference } from '@app/shared/models/conference';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { ModerationService } from '@app/shared/services/moderation.service';
-import { MenuItem, MessageService, SelectItem, TreeNode } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, SelectItem, TreeNode } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,7 @@ import { ModerationComments } from '@app/shared/models/moderationComments';
 import { TranslateChangeService } from '@app/shared/services/translateChange.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { ProposalEvaluationService } from '@app/shared/services/proposal-evaluation.service';
 
 @Component({
   selector: 'app-moderate',
@@ -34,14 +35,17 @@ export class ModerateComponent implements OnInit {
   conference: Conference = new Conference();
   comment: ModerationComments = {} as ModerationComments;
   language: string;
+  isCommentEvaluated: boolean = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private translate: TranslateService,
     private translateChange: TranslateChangeService,
     private moderationSrv: ModerationService,
     private conferenceSrv: ConferenceService,
+    private proposalEvaluationService: ProposalEvaluationService,
     private activeRoute: ActivatedRoute,
     private route: Router,
   ) {
@@ -61,6 +65,7 @@ export class ModerateComponent implements OnInit {
       await this.loadComment();
       await this.loadConference();
       await this.loadRegionalizationConference();
+      await this.checkIsCommentEvaluated(this.commentId);
       if(this.regionalization){
         await this.loadLocalitiesOptions();
       }
@@ -100,6 +105,10 @@ export class ModerateComponent implements OnInit {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  private async checkIsCommentEvaluated(commentId: number) {
+    this.isCommentEvaluated = await this.proposalEvaluationService.checkIsCommentEvaluated(commentId);
   }
 
   mapTree(tree: ModerationTreeViewItem): TreeNode {
@@ -173,6 +182,25 @@ export class ModerateComponent implements OnInit {
   }
 
   async save(status: string) {
+    if(this.isCommentEvaluated && status != 'Published'){
+      const translateStatus = this.translate.instant(status.toLowerCase());
+
+      this.confirmationService.confirm({
+        message: this.translate.instant("moderation.moderate.confirmDeleteCommentWithPropEval.body", {status: translateStatus}),
+        key: "confirmDeleteCommentWithPropEval",
+        acceptLabel: this.translate.instant("yes"),
+        rejectLabel: this.translate.instant("no"),
+        accept: async () => {
+          await this._save(status, true);
+        },
+        reject: () => {},
+      });
+    } else {
+      this._save(status, false)
+    }
+  }
+
+  async _save(status: string, confirmDeletePropEval: boolean) {
     try {
       const sender: ModerateUpdate = new ModerateUpdate();
       const { commentId, type, planItemId, localityId, text } = this.comment;
@@ -182,6 +210,10 @@ export class ModerateComponent implements OnInit {
       sender.locality = localityId;
       sender.text = text;
       sender.status = status;
+
+      if(confirmDeletePropEval) {
+        await this.proposalEvaluationService.deleteProposalEvaluationByCommentId(commentId);
+      }
 
       await this.moderationSrv.update(sender);
 
