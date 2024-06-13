@@ -2,10 +2,15 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "@environments/environment";
 
+import { SelectItem } from "primeng/api";
+
+import { TranslateService } from "@ngx-translate/core";
+
 import Common from "../util/Common";
+import * as qs from 'qs';
 
 import { EvaluatorCreateFormModel } from "../models/EvaluatorModel";
-import { IEvaluator, IEvaluatorNames } from "../interface/IEvaluator";
+import { IEvaluator, IEvaluatorNamesRequest, IEvaluatorNamesResponse, IEvaluatorSearchFilter } from "../interface/IEvaluator";
 import {
   IEvaluatorOrganization,
   IEvaluatorSection,
@@ -24,22 +29,61 @@ export class EvaluatorsService {
 
   private _rolesGuidNullValue: IEvaluatorRole = {
     guid: null,
-    name: "Todos",
+    name: this.translateService.instant("all"),
     lotacao: null,
   };
 
-  constructor(private _http: HttpClient) {}
+  private _organizationsList: Array<IEvaluatorOrganization> = [];
 
-  public getEvaluatorsList(pageable: IPagination): Promise<IResultPaginated<IEvaluator>> {
+  public get organizationsList(): Array<IEvaluatorOrganization> {
+    return this._organizationsList;
+  }
+
+  private set organizationsList(value: Array<IEvaluatorOrganization>) {
+    this._organizationsList = value;
+  }
+
+  private _organizationsListSelectItem: Array<SelectItem> = [];
+
+  public get organizationsListSelectItem(): Array<SelectItem> {
+    return this._organizationsListSelectItem;
+  }
+
+  private set organizationsListSelectItem(value: Array<SelectItem>) {
+    this._organizationsListSelectItem = value;
+  }
+
+  private _organizationsGuidNameMapObject: { [key: string]: string } = {};
+
+  public get organizationsGuidNameMapObject(): { [key: string]: string } {
+    return this._organizationsGuidNameMapObject;
+  }
+
+  private set organizationsGuidNameMapObject(value: { [key: string]: string }) {
+    this._organizationsGuidNameMapObject = value;
+  }
+
+  constructor(private _http: HttpClient, private translateService: TranslateService) {
+    if(Object.entries(this.organizationsGuidNameMapObject).length == 0){
+      this.prepareOrganizationData();
+    }
+  }
+
+  public getEvaluatorsList(
+    pageable: IPagination,
+    searchFilter: IEvaluatorSearchFilter
+  ): Promise<IResultPaginated<IEvaluator>> {
     const params = {
       page: pageable.pageNumber,
-      size: pageable.pageSize
-    }
+      size: pageable.pageSize,
+    };
+
+    const urlWithFilters = this._url + "?" + qs.stringify(searchFilter)
 
     return this._http
-      .get<IResultPaginated<IEvaluator>>(this._url, {
+      .get<IResultPaginated<IEvaluator>>(urlWithFilters, {
         headers: this.headers,
-        params: params
+        params: params,
       })
       .toPromise();
   }
@@ -72,7 +116,7 @@ export class EvaluatorsService {
       .toPromise();
   }
 
-  public getOrganizationsList(): Promise<Array<IEvaluatorOrganization>> {
+  private getOrganizationsList(): Promise<Array<IEvaluatorOrganization>> {
     return this._http
       .get<Array<IEvaluatorOrganization>>(`${this._url}/organizations`, {
         headers: this.headers,
@@ -97,10 +141,10 @@ export class EvaluatorsService {
   }
 
   public getNamesFromGuidLists(
-    body: IEvaluatorNames
-  ): Promise<{ [key: string]: string }> {
+    body: IEvaluatorNamesRequest
+  ): Promise<IEvaluatorNamesResponse> {
     return this._http
-      .post<{ [key: string]: string }>(`${this._url}/names`, body, {
+      .post<IEvaluatorNamesResponse>(`${this._url}/names`, body, {
         headers: this.headers,
       })
       .toPromise();
@@ -108,5 +152,39 @@ export class EvaluatorsService {
 
   public get rolesGuidNullValue(): IEvaluatorRole {
     return this._rolesGuidNullValue;
+  }
+
+  private populateOrganizationsList(
+    value: Array<IEvaluatorOrganization>
+  ): void {
+    this.organizationsList = value;
+  }
+
+  private populateOrganizationsGuidNameMapObject(
+    value: Array<IEvaluatorOrganization>
+  ): void {
+    let tempObject = {};
+
+    value.forEach((item) => {
+      tempObject[item.guid] = item.name;
+    });
+
+    this.organizationsGuidNameMapObject = tempObject;
+  }
+
+  private populateOrganizationsSelectItemArray(
+    value: Array<IEvaluatorOrganization>
+  ): void {
+    this.organizationsListSelectItem = value.map((item) => {
+      return { label: item.name, value: item.guid };
+    });
+  }
+
+  private async prepareOrganizationData(): Promise<void> {
+    await this.getOrganizationsList().then((response) => {
+      this.populateOrganizationsList(response);
+      this.populateOrganizationsGuidNameMapObject(response);
+      this.populateOrganizationsSelectItemArray(response);
+    });
   }
 }

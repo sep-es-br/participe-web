@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { TranslateService } from "@ngx-translate/core";
 
-import { ConfirmationService, MessageService } from "primeng/api";
+import * as _ from "lodash";
+
+import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
 import { DropdownChangeEvent } from "primeng/dropdown";
 import { MultiSelectChangeEvent } from "primeng/multiselect";
 import { TableLazyLoadEvent } from "primeng/table";
@@ -11,14 +13,19 @@ import { PaginatorState } from "primeng/paginator";
 
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
-import { IEvaluator } from "@app/shared/interface/IEvaluator";
+import {
+  IEvaluator,
+  IEvaluatorNamesRequest,
+  IEvaluatorSearchFilter,
+} from "@app/shared/interface/IEvaluator";
 import {
   IEvaluatorOrganization,
   IEvaluatorSection,
   IEvaluatorRole,
 } from "@app/shared/interface/IEvaluatorData";
-import { EvaluatorCreateFormModel } from "@app/shared/models/EvaluatorModel";
 import { IPagination } from "@app/shared/interface/IPagination";
+
+import { EvaluatorCreateFormModel } from "@app/shared/models/EvaluatorModel";
 
 @Component({
   selector: "app-evaluators",
@@ -37,7 +44,8 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   private evaluationSectionId: number;
   public editEvaluatorSection: boolean = false;
 
-  public searchForm: FormGroup;
+  public evaluatorsSearchForm: FormGroup;
+  private evaluatorsSearchFilter: IEvaluatorSearchFilter;
 
   public evaluatorsList: Array<IEvaluator> = [];
 
@@ -53,7 +61,13 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public sectionsList: Array<IEvaluatorSection> = [];
   public rolesList: Array<IEvaluatorRole> = [];
 
-  private namesMapObject: { [key: string]: string } = {};
+  public organizationsGuidNameMapObject: { [key: string]: string } = {};
+  public sectionsGuidNameMapObject: { [key: string]: string } = {};
+  public rolesGuidNameMapObject: { [key: string]: string } = {};
+
+  public organizationsOptions: Array<SelectItem> = [];
+  public sectionsOptions: Array<SelectItem> = [];
+  public rolesOptions: Array<SelectItem> = [];
 
   public pageReportTemplateTranslateParams = {
     first: 0,
@@ -69,12 +83,13 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     private evaluatorsService: EvaluatorsService
   ) {
     this.updatePageReportTemplateTranslateParams();
+
+    this.evaluatorsSearchFilter = JSON.parse(sessionStorage.getItem("evaluatorsSearchFilter"))
   }
 
   public async ngOnInit() {
     this.buildBreadcrumb();
-    await this.getEvaluatorsList();
-    await this.getOrganizationsList();
+    await this.lazyLoadEvaluatorsList(this.pageState);
   }
 
   public async lazyLoadEvaluatorsList(event: TableLazyLoadEvent) {
@@ -87,6 +102,27 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public showSearchForm() {
     this.search = !this.search;
     this.initSearchForm();
+    this.populateSearchOptions();
+  }
+
+  public async searchHandle() {
+    sessionStorage.setItem(
+      "evaluatorsSearchFilter",
+      JSON.stringify(this.evaluatorsSearchForm.value)
+    );
+
+    const initPageState = {
+      first: 0,
+      rows: 10
+    }
+
+    await this.getEvaluatorsList(initPageState, this.evaluatorsSearchForm.value)
+  }
+
+  public clearSearchForm() {
+    for (const key in this.evaluatorsSearchForm.controls) {
+      this.evaluatorsSearchForm.controls[key].patchValue(null);
+    }
   }
 
   public showCreateEvaluator() {
@@ -119,7 +155,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public async deleteEvaluator(data: IEvaluator) {
     this.confirmationService.confirm({
       message: this.translateService.instant("evaluator.confirm.delete", {
-        name: this.namesMapObject[data.organizationGuid],
+        name: this.organizationsGuidNameMapObject[data.organizationGuid],
       }),
       key: "deleteEvaluationSection",
       acceptLabel: this.translateService.instant("yes"),
@@ -129,10 +165,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       },
       reject: () => {},
     });
-  }
-
-  public loadingIcon(icon = "pi pi-check") {
-    return this.loading ? "pi pi-spin pi-spinner" : icon;
   }
 
   public async organizationChanged(event: DropdownChangeEvent) {
@@ -178,10 +210,6 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public searchEvaluators() {
-    console.log(this.searchForm.value);
-  }
-
   public cancelForm() {
     this.showForm = false;
     this.editEvaluatorSection = false;
@@ -191,16 +219,18 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   }
 
   public getOrganizationName(orgGuid: string): string {
-    return this.namesMapObject[orgGuid];
+    return this.organizationsGuidNameMapObject[orgGuid];
   }
 
   public getSectionNames(sectionsGuid: Array<string>): Array<string> {
-    return sectionsGuid.map((section) => this.namesMapObject[section]);
+    return sectionsGuid.map(
+      (sectionGuid) => this.sectionsGuidNameMapObject[sectionGuid]
+    );
   }
 
   public getRoleNames(rolesGuid: Array<string>): Array<string> {
     return rolesGuid
-      ? rolesGuid.map((role) => this.namesMapObject[role])
+      ? rolesGuid.map((roleGuid) => this.rolesGuidNameMapObject[roleGuid])
       : ["Todos"];
   }
 
@@ -232,7 +262,9 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
 
   private async postEvaluatorsForm(reqBody: EvaluatorCreateFormModel) {
     try {
-      const result = await this.evaluatorsService.postEvaluator(reqBody);
+      this.loading = true;
+
+      await this.evaluatorsService.postEvaluator(reqBody);
 
       this.messageService.add({
         severity: "success",
@@ -247,8 +279,9 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
         detail: this.translateService.instant("evaluator.error.saving"),
       });
     } finally {
+      this.loading = false;
       this.cancelForm();
-      await this.getEvaluatorsList();
+      await this.getEvaluatorsList(this.pageState);
     }
   }
 
@@ -257,13 +290,15 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     reqBody: EvaluatorCreateFormModel
   ) {
     try {
-      const result = await this.evaluatorsService.putEvaluator(id, reqBody);
+      this.loading = true;
+
+      await this.evaluatorsService.putEvaluator(id, reqBody);
 
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
         detail: this.translateService.instant("evaluator.updated", {
-          name: this.namesMapObject[result.organizationGuid],
+          name: this.organizationsGuidNameMapObject[reqBody.organizationGuid],
         }),
       });
     } catch (error) {
@@ -274,14 +309,17 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
         detail: this.translateService.instant("evaluator.error.saving"),
       });
     } finally {
+      this.loading = false;
       this.cancelForm();
-      await this.getEvaluatorsList();
+      await this.getEvaluatorsList(this.pageState);
     }
   }
 
   private async deleteEvaluationSection(id: number) {
     try {
-      const result = await this.evaluatorsService.deleteEvaluator(id);
+      this.loading = true;
+
+      await this.evaluatorsService.deleteEvaluator(id);
 
       this.messageService.add({
         severity: "success",
@@ -293,21 +331,27 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("warn"),
-        detail: this.translateService.instant("Erro ao excluir o avaliador"),
+        detail: this.translateService.instant("erro.removing"),
       });
     } finally {
+      this.loading = false;
       this.cancelForm();
-      await this.getEvaluatorsList();
+      await this.getEvaluatorsList(this.pageState);
     }
   }
 
-  // Controles bloqueados por enquanto, método ainda não implementado
   private initSearchForm() {
-    this.searchForm = new FormGroup({
-      searchOrganization: new FormControl({ value: "", disabled: true }),
-      searchSection: new FormControl({ value: "", disabled: true }),
-      searchRole: new FormControl({ value: "", disabled: true }),
+    this.evaluatorsSearchForm = new FormGroup({
+      searchOrganization: new FormControl(this.evaluatorsSearchFilter?.searchOrganization ?? ""),
+      searchSection: new FormControl(this.evaluatorsSearchFilter?.searchSection ?? ""),
+      searchRole: new FormControl(this.evaluatorsSearchFilter?.searchRole ?? ""),
     });
+  }
+
+  private populateSearchOptions() {
+    _.forIn(this.organizationsGuidNameMapObject, (value, key) => this.organizationsOptions.push({label: value, value: key}));
+    _.forIn(this.sectionsGuidNameMapObject, (value, key) => this.sectionsOptions.push({label: value, value: key}));
+    _.forIn(this.rolesGuidNameMapObject, (value, key) => this.rolesOptions.push({label: value, value: key}));
   }
 
   private initCreateEvaluatorsForm() {
@@ -341,14 +385,14 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  private async getEvaluatorsList(pageState?: PaginatorState) {
+  private async getEvaluatorsList(pageState: PaginatorState, searchFilter?: IEvaluatorSearchFilter) {
     const pageable: IPagination = {
-      pageNumber: pageState ? pageState.first / pageState.rows : 0,
-      pageSize: pageState ? pageState.rows : 10,
+      pageNumber: pageState.first / pageState.rows,
+      pageSize: pageState.rows,
     };
 
     await this.evaluatorsService
-      .getEvaluatorsList(pageable)
+      .getEvaluatorsList(pageable, searchFilter)
       .then((response) => {
         this.evaluatorsList = response.content ?? [];
         this.totalRecords = response.totalElements;
@@ -357,26 +401,51 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private async getOrganizationsList() {
-    this.organizationsList =
-      await this.evaluatorsService.getOrganizationsList();
-  }
-
   private async getSectionsList(orgGuid: string) {
-    this.sectionsList = await this.evaluatorsService.getSectionsList(orgGuid);
+    try {
+      this.loading = true;
+      this.sectionsList = await this.evaluatorsService.getSectionsList(orgGuid);
+    } catch (error) {
+      console.error(error)
+      this.messageService.add({
+        severity: "warn",
+        summary: this.translateService.instant("warn"),
+        detail: this.translateService.instant("evaluator.error.fetchData", 
+          { name: this.translateService.instant('evaluator.sections') }
+        ),
+      });
+    } finally {
+      this.loading = false;
+    }
+
   }
 
   private async getRolesList(unitGuid: string): Promise<Array<IEvaluatorRole>> {
-    const response = await this.evaluatorsService.getRolesList(unitGuid);
+    try {
+      this.loading = true;
 
-    if (response.length == 0) {
+      const response = await this.evaluatorsService.getRolesList(unitGuid);
+
+      if (response.length == 0) {
+        this.messageService.add({
+          severity: "warn",
+          summary: this.translateService.instant("attention"),
+          detail: this.translateService.instant("evaluator.emptyRoles"),
+        });
+      } else {
+        return response;
+      }
+    } catch (error) {
+      console.error(error)
       this.messageService.add({
         severity: "warn",
-        summary: "Atenção!",
-        detail: "A unidade não possui papéis atrelados á ela.",
+        summary: this.translateService.instant("warn"),
+        detail: this.translateService.instant("evaluator.error.fetchData", 
+          { name: this.translateService.instant('evaluator.roles') }
+        ),
       });
-    } else {
-      return response;
+    } finally {
+      this.loading = false
     }
   }
 
@@ -410,19 +479,33 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   private async prepareEvaluatorsTable() {
     this.loading = true;
 
-    const organizationsGuidList = this.evaluatorsList.length > 0 ? this.evaluatorsList.map(
-      (evaluator) => evaluator.organizationGuid
-    ) : [];
+    const organizationsGuidList =
+      this.evaluatorsList.length > 0
+        ? this.evaluatorsList.map((evaluator) => evaluator.organizationGuid)
+        : [];
 
-    const sectionsGuidList = this.evaluatorsList.length > 0 ? this.evaluatorsList
-      .map((evaluator) => evaluator.sectionsGuid)
-      .reduce((acc, cur) => acc.concat(cur)) : [];
+    const sectionsGuidList =
+      this.evaluatorsList.length > 0
+        ? this.evaluatorsList
+            .map((evaluator) => evaluator.sectionsGuid)
+            .reduce((acc, cur) => acc.concat(cur))
+            .filter((guid) => !_.has(this.sectionsGuidNameMapObject, guid))
+        : [];
 
-    const rolesGuidList = this.evaluatorsList.length > 0 ? this.evaluatorsList
-      .map((evaluator) => evaluator.rolesGuid ?? [])
-      .reduce((acc, cur) => acc.concat(cur)) : [];
+    const rolesGuidList =
+      this.evaluatorsList.length > 0
+        ? this.evaluatorsList
+            .map((evaluator) => evaluator.rolesGuid ?? [])
+            .reduce((acc, cur) => acc.concat(cur))
+            .filter((guid) => !_.has(this.rolesGuidNameMapObject, guid))
+        : [];
 
-    const reqBody = {
+    if (sectionsGuidList.length == 0 && rolesGuidList.length == 0) {
+      this.loading = false;
+      return;
+    }
+
+    const reqBody: IEvaluatorNamesRequest = {
       organizationsGuidList: organizationsGuidList,
       sectionsGuidList: sectionsGuidList,
       rolesGuidList: rolesGuidList,
@@ -431,9 +514,17 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     await this.evaluatorsService
       .getNamesFromGuidLists(reqBody)
       .then((response) => {
-        this.namesMapObject = response;
+        _.merge(this.sectionsGuidNameMapObject, response.sectionsGuidNameMap);
+        _.merge(this.rolesGuidNameMapObject, response.rolesGuidNameMap);
+
         this.loading = false;
-      });
+      })
+      .finally(
+        () => {
+          this.organizationsList = this.evaluatorsService.organizationsList
+          this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject
+        }
+      );  
   }
 
   private prepareRolesGuidFormControl(rolesGuid: Array<string>) {

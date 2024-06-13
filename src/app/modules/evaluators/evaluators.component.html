@@ -6,6 +6,7 @@
           <div class="row">
             <div class="col-5">
               <button
+                [disabled]="loading"
                 pButton
                 type="button"
                 class="button-new"
@@ -16,14 +17,14 @@
             </div>
             <div class="col-2"></div>
             <div class="col-5 d-flex justify-content-end align-items-center">
-              <a class="pointer" (click)="showSearchForm()">{{
+              <a *ngIf="!loading" class="pointer" (click)="showSearchForm()">{{
                 (search ? "hide" : "search") | translate
               }}</a>
             </div>
           </div>
           <ng-container *ngIf="search">
             <div class="row my-3">
-              <form [formGroup]="searchForm" (submit)="searchEvaluators()">
+              <form [formGroup]="evaluatorsSearchForm">
                 <div
                   class="d-flex flex-row justify-content-between align-items-end"
                 >
@@ -31,45 +32,55 @@
                     <label for="searchOrganization">{{
                       "evaluator.organization" | translate
                     }}</label>
-                    <input
-                      type="text"
-                      class="form-control"
+                    <p-dropdown
+                      [disabled]="loading"
+                      [options]="organizationsOptions"
+                      filter="true"
                       formControlName="searchOrganization"
-                      pInputText
-                    />
+                      styleClass="d-flex form-control"
+                    ></p-dropdown>
                   </div>
                   <div class="col-3">
                     <label for="searchSection">{{
                       "evaluator.section" | translate
                     }}</label>
-                    <input
-                      type="text"
-                      class="form-control"
+                    <p-dropdown
+                      [disabled]="loading"
+                      [options]="sectionsOptions"
+                      filter="true"
                       formControlName="searchSection"
-                      pInputText
-                    />
+                      styleClass="d-flex form-control"
+                    ></p-dropdown>
                   </div>
                   <div class="col-3">
                     <label for="searchRole">{{
                       "evaluator.role" | translate
                     }}</label>
-                    <input
-                      type="text"
-                      class="form-control"
+                    <p-dropdown
+                      [disabled]="loading"
+                      [options]="rolesOptions"
+                      filter="true"
                       formControlName="searchRole"
-                      pInputText
-                    />
+                      styleClass="d-flex form-control"
+                    ></p-dropdown>
                   </div>
-                  <div class="col-3 d-inline-flex justify-content-center">
-                    <button
-                      pButton
-                      class=""
-                      [icon]="loadingIcon('pi pi-search')"
-                      [disabled]="true"
-                      type="submit"
-                      [label]="'search' | translate"
-                    ></button>
-                  </div>
+                    <div class="col-3 mt-auto">
+                      <button
+                        [disabled]="loading"
+                        pButton
+                        icon="pi pi-search"
+                        class="me-2"
+                        [label]="'search' | translate"
+                        (click)="searchHandle()"
+                      ></button>
+                      <button 
+                        [disabled]="loading"
+                        pButton 
+                        icon="pi pi-ban" 
+                        [label]="'clean.search'|translate"
+                        (click)="clearSearchForm();searchHandle();"
+                        ></button>
+                    </div>
                 </div>
               </form>
             </div>
@@ -180,6 +191,7 @@
                   "evaluator.section" | translate
                 }}</label>
                 <p-multiSelect
+                  [disabled]="loading"
                   [options]="sectionsList"
                   optionLabel="name"
                   optionValue="guid"
@@ -202,6 +214,7 @@
                   "evaluator.role" | translate
                 }}</label>
                 <p-multiSelect
+                  [disabled]="loading"
                   [options]="rolesList"
                   optionLabel="name"
                   [optionDisabled]="disableOptionsIfAllSelected()"
@@ -216,12 +229,14 @@
               </div>
               <div class="col-12 form-actions">
                 <button
+                  [disabled]="loading"
                   pButton
                   icon="pi pi-check"
                   type="submit"
                   [label]="'save' | translate"
                 ></button>
                 <button
+                  [disabled]="loading"
                   pButton
                   icon="pi pi-ban"
                   type="button"
