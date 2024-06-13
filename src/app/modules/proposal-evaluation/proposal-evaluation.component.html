@@ -13,7 +13,7 @@
         <div class="col-12">
           <div class="row">
             <div class="col-3">
-              <label class="form-label">{{ 'propeval.evaluationStatus' | translate }}</label>
+              <label class="form-label">{{ 'proposal_evaluation.evaluationStatus' | translate }}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="evaluationStatusOptions"
@@ -61,7 +61,7 @@
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">{{ 'propeval.loaIncluded' | translate }}</label>
+              <label class="form-label">{{ 'proposal_evaluation.loaIncluded' | translate }}</label>
               <p-dropdown
                 styleClass="d-flex form-control"
                 [options]="loaIncludedOptions"
@@ -69,7 +69,7 @@
               ></p-dropdown>
             </div>
             <div class="col-3">
-              <label class="form-label">{{ 'propeval.description' | translate }}</label>
+              <label class="form-label">{{ 'proposal_evaluation.description' | translate }}</label>
               <input pInputText class="form-control" formControlName="commentText" />
             </div>
             <div class="col-3 mt-auto">
@@ -170,6 +170,6 @@
 
 <ng-template #noResults>
   <div class="col-12 d-flex justify-content-center">
-    <span>{{ 'propeval.noResult' | translate }}</span>
+    <span>{{ 'proposal_evaluation.noResult' | translate }}</span>
   </div>
 </ng-template>

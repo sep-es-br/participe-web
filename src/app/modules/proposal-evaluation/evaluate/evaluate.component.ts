@@ -115,7 +115,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formBudgetPlan(): string {
-    return this.proposalEvaluationForm.get("budgetPlan").value ?? (this.translateService.instant('propeval.budgetPlan_nullValue'));
+    return this.proposalEvaluationForm.get("budgetPlan").value ?? (this.translateService.instant('proposal_evaluation.budgetPlan_nullValue'));
   }
 
   public get formReason(): string {
@@ -129,7 +129,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public async delete() {
     this.confirmationService.confirm({
-      message: this.translateService.instant("propeval.confirm.delete", {
+      message: this.translateService.instant("proposal_evaluation.confirm.delete", {
         name: this.proposal.description,
       }),
       key: "deleteProposalEvaluation",
@@ -227,7 +227,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant("propeval.error.fetchData"),
+        detail: this.translateService.instant("proposal_evaluation.error.fetchData"),
       });
     } finally {
       this.loading = false;
@@ -283,14 +283,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("propeval.inserted"),
+        detail: this.translateService.instant("proposal_evaluation.inserted"),
       });
     } catch (error) {
       console.error(error);
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant("propeval.error.saving"),
+        detail: this.translateService.instant("proposal_evaluation.error.saving"),
       });
     } finally {
       setTimeout(() => this.cancel(), 3000)
@@ -312,14 +312,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
-        detail: this.translateService.instant("propeval.updated"),
+        detail: this.translateService.instant("proposal_evaluation.updated"),
       });
     } catch (error) {
       console.error(error);
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant("propeval.error.saving"),
+        detail: this.translateService.instant("proposal_evaluation.error.saving"),
       });
     } finally {
       setTimeout(() => this.cancel(), 3000)

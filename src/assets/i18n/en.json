@@ -504,8 +504,7 @@
 			"contain-conference": "Plan cannot be deleted, because it is linked to a conference"
 		}
 	},
-	"proposal_evaluation": "Proposal Evaluation",
-	"propeval": {
+	"proposal_evaluation": {
 		"budgetAction": "Budget Action",
 		"budgetPlan": "Budget Plan",
 		"budgetPlan_nullValue": "No budget plan provided",
@@ -531,6 +530,7 @@
 		"new": "New Proposal Evaluation",
 		"noResult": "No results found",
 		"reason": "Reason of exclusion",
+		"title": "Proposal Evaluation",
 		"under_evaluation_by": "Under evaluation by",
 		"updated": "Proposal Evaluation updated"
 	},

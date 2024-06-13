@@ -24,8 +24,8 @@ import { ProposalEvaluationCreateFormModel } from "../models/ProposalEvaluationM
 export class ProposalEvaluationService {
   private evaluationStatusOptions: SelectItem[] = [
     { label: this.translateService.instant("all"), value: null},
-    { label: this.translateService.instant("propeval.evaluationStatus_true"), value: true },
-    { label: this.translateService.instant("propeval.evaluationStatus_false"), value: false },
+    { label: this.translateService.instant("proposal_evaluation.evaluationStatus_true"), value: true },
+    { label: this.translateService.instant("proposal_evaluation.evaluationStatus_false"), value: false },
   ];
   
   private loaIncludedOptions: SelectItem[] = [

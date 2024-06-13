@@ -8,7 +8,7 @@
               evaluated: proposal.evaluationStatus,
               'not-evaluated': !proposal.evaluationStatus
             }"
-            >{{ (proposal.evaluationStatus ? 'propeval.evaluationStatus_true' : 'propeval.evaluationStatus_false') | translate }}</span
+            >{{ (proposal.evaluationStatus ? 'proposal_evaluation.evaluationStatus_true' : 'proposal_evaluation.evaluationStatus_false') | translate }}</span
           >
           <span class="divider">|</span>
           <span class="locality-text ms-4">{{ proposal.localityName }}</span>

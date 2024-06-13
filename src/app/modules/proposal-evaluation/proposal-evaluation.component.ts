@@ -292,7 +292,7 @@ export class ProposalEvaluationComponent implements OnInit {
 
   private buildBreadcrumb() {
     this.breadcrumbService.setItems([
-      { label: "proposal_evaluation" },
+      { label: "proposal_evaluation.title" },
       {
         label: this.conferenceSelect.name,
         routerLink: ["/proposal-evaluation"],

@@ -552,8 +552,7 @@
 			"contain-conference": "Plano não pode ser excluído, pois está vinculado a uma consulta"
 		}
 	},
-	"proposal_evaluation": "Avaliação de Propostas",
-	"propeval": {
+	"proposal_evaluation": {
 		"budgetAction": "Ação Orçamentária",
 		"budgetPlan": "Plano Orçamentário",
 		"budgetPlan_nullValue": "Nenhum plano orçamentário fornecido",
@@ -579,6 +578,7 @@
 		"new": "Nova Avaliação de Proposta",
 		"noResult": "Nenhum resultado encontrado",
 		"reason": "Motivo da não inclusão",
+		"title": "Avaliação de Proposta",
 		"under_evaluation_by": "Em avaliação por",
 		"updated": "Avaliação de Proposta atualizada"
 	},

@@ -4942,25 +4942,8 @@
                     </folder_node>
                 </children>
             </folder_node>
-            <concept_node>
-               <name>proposal_evaluation</name>
-                <definition_loaded>false</definition_loaded>
-                <description></description>
-                <comment></comment>
-                <default_text></default_text>
-                <translations>
-                    <translation>
-                        <language>en-US</language>
-                        <approved>false</approved>
-                    </translation>
-                    <translation>
-                        <language>pt-BR</language>
-                        <approved>false</approved>
-                    </translation>
-                </translations>
-            </concept_node>
             <folder_node>
-                <name>propeval</name>
+                <name>proposal_evaluation</name>
                 <children>
                     <concept_node>
                         <name>budgetAction</name>
@@ -5313,6 +5296,23 @@
                     </concept_node>
                     <concept_node>
                         <name>reason</name>
+                        <definition_loaded>false</definition_loaded>
+                        <description></description>
+                        <comment></comment>
+                        <default_text></default_text>
+                        <translations>
+                            <translation>
+                                <language>en-US</language>
+                                <approved>false</approved>
+                            </translation>
+                            <translation>
+                                <language>pt-BR</language>
+                                <approved>false</approved>
+                            </translation>
+                        </translations>
+                    </concept_node>
+                    <concept_node>
+                        <name>title</name>
                         <definition_loaded>false</definition_loaded>
                         <description></description>
                         <comment></comment>

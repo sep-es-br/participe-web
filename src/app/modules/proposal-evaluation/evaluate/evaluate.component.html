@@ -29,8 +29,8 @@
     <div class="col-4">
       <label>{{
         (readOnlyProposalEvaluation
-          ? "propeval.evaluated_by"
-          : "propeval.under_evaluation_by"
+          ? "proposal_evaluation.evaluated_by"
+          : "proposal_evaluation.under_evaluation_by"
         ) | translate
       }}</label>
       <div class="evaluator-div">
@@ -60,7 +60,7 @@
   </div>
   <div class="row">
     <div class="col-8">
-      <label>{{ "propeval.description" | translate }}</label>
+      <label>{{ "proposal_evaluation.description" | translate }}</label>
       <p>{{ proposal.description }}</p>
     </div>
   </div>
@@ -71,7 +71,7 @@
   >
     <div class="row">
       <div class="col-8">
-        <label>{{ "propeval.loaIncluded_question" | translate }}</label>
+        <label>{{ "proposal_evaluation.loaIncluded_question" | translate }}</label>
         <div class="col-3 d-flex justify-content-between">
           <div class="d-inline-flex align-items-center">
             <p-radioButton
@@ -106,7 +106,7 @@
         <ng-container *ngIf="formLoaIncluded != null && formLoaIncluded">
           <div class="col-12 d-flex flex-column">
             <label for="budgetUnit">{{
-              "propeval.budgetUnit" | translate
+              "proposal_evaluation.budgetUnit" | translate
             }}</label>
             <p-dropdown
               [disabled]="loading"
@@ -136,7 +136,7 @@
 
           <div class="col-12 d-flex flex-column">
             <label for="budgetAction">{{
-              "propeval.budgetAction" | translate
+              "proposal_evaluation.budgetAction" | translate
             }}</label>
             <p-multiSelect
               [disabled]="loading"
@@ -171,7 +171,7 @@
 
           <div class="col-12 d-flex flex-column">
             <label for="budgetPlan">{{
-              "propeval.budgetPlan" | translate
+              "proposal_evaluation.budgetPlan" | translate
             }}</label>
             <input
               [disabled]="loading"
@@ -189,7 +189,7 @@
           <br />
         </ng-container>
         <ng-container *ngIf="formLoaIncluded != null && !formLoaIncluded">
-          <label for="reason">{{ "propeval.reason" | translate }}?</label>
+          <label for="reason">{{ "proposal_evaluation.reason" | translate }}?</label>
           <div class="col-12 d-flex flex-column">
             <ng-container *ngFor="let reason of reasonOptions">
               <div class="d-inline-flex align-items-center">
@@ -244,7 +244,7 @@
   >
     <div class="row">
       <div class="col-8">
-        <label>{{ "propeval.loaIncluded" | translate }}</label>
+        <label>{{ "proposal_evaluation.loaIncluded" | translate }}</label>
         <p>{{ (formLoaIncluded ? "yes" : "no") | translate }}</p>
       </div>
     </div>
@@ -252,21 +252,21 @@
     <ng-container *ngIf="formLoaIncluded">
       <div class="row">
         <div class="col-8">
-          <label>{{ "propeval.budgetUnit" | translate }}</label>
+          <label>{{ "proposal_evaluation.budgetUnit" | translate }}</label>
           <p>{{ formatBudgetUnit(formBudgetUnit) }}</p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-8">
-          <label>{{ "propeval.budgetAction" | translate }}</label>
+          <label>{{ "proposal_evaluation.budgetAction" | translate }}</label>
           <p *ngFor="let budgetAction of formBudgetAction" class="budgetActionParagraphEl">{{ formatBudgetAction(budgetAction) }}</p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-8">
-          <label>{{ "propeval.budgetPlan" | translate }}</label>
+          <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
           <p>{{ formBudgetPlan }}</p>
         </div>
       </div>
@@ -275,7 +275,7 @@
     <ng-container *ngIf="!formLoaIncluded">
       <div class="row">
         <div class="col-8">
-          <label>{{ "propeval.reason" | translate }}</label>
+          <label>{{ "proposal_evaluation.reason" | translate }}</label>
           <p>{{ formReason }}</p>
         </div>
       </div>
@@ -283,14 +283,14 @@
 
     <div class="row">
       <div class="col-8">
-        <label>{{ "propeval.evaluator" | translate }}</label>
+        <label>{{ "proposal_evaluation.evaluator" | translate }}</label>
         <p>{{ proposal.evaluatorName }}</p>
       </div>
     </div>
   </form>
 
   <p-confirmDialog
-    [header]="'propeval.delete' | translate"
+    [header]="'proposal_evaluation.delete' | translate"
     icon="pi pi-exclamation-triangle"
     key="deleteProposalEvaluation"
   >

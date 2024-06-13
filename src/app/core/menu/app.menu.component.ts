@@ -71,7 +71,7 @@ export class AppMenuComponent implements OnInit {
               {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
             ]
           },
-          {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+          {label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
           );
       } else {
         this.model.push(
@@ -81,7 +81,7 @@ export class AppMenuComponent implements OnInit {
               {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
             ]
           },
-          {label: 'proposal_evaluation', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+          {label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
         );
       }
       if (window.location.href.endsWith('#/administration/dashboard')) {
