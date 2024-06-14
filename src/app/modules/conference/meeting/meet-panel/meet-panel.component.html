@@ -1,4 +1,4 @@
-<div class="full-page">
+<div *ngIf="!loading" class="full-page">
 
   <div class="conf-header row">
     <div class="col-4 header-slot">
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="col-4 header-slot">
-      <img class="conf-logo-img" src="assets/layout/images/logo_24-27.png">
+      <img *ngIf="header" class="conf-logo-img print-visible" [src]="header" alt="">
     </div>
     <div class="col-4 header-slot">
       <div class="row">
@@ -47,7 +47,7 @@
         <div class="row">
           <div class="meet-card-number col-12"
             [style.color]="mpColor"
-            [style.text-shadow]="'#00a198 0px 0px ' + mpShadow + 'vh'">{{meetingParticipants}}</div>
+            [style.text-shadow]="textShadow + ' 0px 0px ' + mpShadow + 'vh'">{{meetingParticipants}}</div>
           <div class="meet-card-title col-12">PARTICIPANTES</div>
         </div>
       </div>
@@ -55,7 +55,7 @@
         <div class="row">
           <div class="meet-card-number col-12"
             [style.color]="mcColor"
-            [style.text-shadow]="'#00a198 0px 0px ' + mcShadow + 'vh'">{{meetingComments}}</div>
+            [style.text-shadow]="textShadow + ' 0px 0px ' + mcShadow + 'vh'">{{meetingComments}}</div>
           <div class="meet-card-title col-12">PROPOSTAS</div>
         </div>
       </div>
@@ -65,7 +65,7 @@
         <div class="row">
           <div class="meet-card-number col-12"
             [style.color]="mhColor"
-            [style.text-shadow]="'#00a198 0px 0px ' + mhShadow + 'vh'">{{meetingHighlights}}</div>
+            [style.text-shadow]="textShadow + ' 0px 0px ' + mhShadow + 'vh'">{{meetingHighlights}}</div>
           <div class="meet-card-title col-12">DESTAQUES</div>
         </div>
       </div>
@@ -73,7 +73,7 @@
         <div class="row">
           <div class="meet-card-number col-12"
             [style.color]="mlColor"
-            [style.text-shadow]="'#00a198 0px 0px ' + mlShadow + 'vh'">{{meetingLocalities}}</div>
+            [style.text-shadow]="textShadow + ' 0px 0px ' + mlShadow + 'vh'">{{meetingLocalities}}</div>
           <div class="meet-card-title col-12">MUNICÍPIOS</div>
         </div>
       </div>
