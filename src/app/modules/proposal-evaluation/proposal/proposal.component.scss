@@ -1,0 +1,55 @@
+.evalStatus-locality {
+  span.evalStatus-text {
+    font-weight: 700;
+    margin-right: 5px;
+    font-size: 1rem;
+
+    &.evaluated {
+      color: #00c853;
+    }
+
+    &.not-evaluated {
+      color: #ef8533;
+    }
+  }
+
+  span.divider,
+  span.locality-text {
+    color: #9a9a9a;
+    margin-left: 0.5rem;
+  }
+}
+
+.description-text p {
+  text-align: justify;
+}
+
+.planItemArea-planItem {
+  span.divider {
+    color: #9a9a9a;
+    margin: auto 0.75rem;
+  }
+
+  span.planItemArea-text,
+  span.planItem-text {
+    color: #9a9a9a;
+  }
+}
+
+button.org-badge {
+  border: none;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  margin-right: 0.7rem;
+  padding: 0 2rem;
+  color: white;
+  font-size: 0.75rem;
+
+  &.evaluated {
+    background-color: #00c853;
+  }
+
+  &.not-evaluated {
+    background-color: #ef8533;
+  }
+}

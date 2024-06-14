@@ -374,8 +374,10 @@
 		},
 		"delete": "Excluir Avaliador",
 		"edit": "Editar Avaliador",
+		"emptyRoles": "A unidade não possui papéis atrelados á ela",
 		"error": {
-			"saving": "Erro ao salvar o avaliador"
+			"saving": "Erro ao salvar o avaliador",
+			"fetchData": "Erro ao buscar {{name}}"
 		},
 		"inserted": "Novo Avaliador inserido",
 		"new": "Novo Avaliador",
@@ -466,6 +468,10 @@
 		},
 		"moderate": {
 			"about": "Sobre",
+			"confirmDeleteCommentWithPropEval": {
+				"header": "O comentário possui avaliação!",
+				"body": "Alterar o estado do comentário para {{status}} irá remover a avaliação. Tem certeza que quer prosseguir?"
+			},
 			"moveText": "Mover texto",
 			"placeholder": {
 				"moveFilter": ""
@@ -545,6 +551,36 @@
 		"warn": {
 			"contain-conference": "Plano não pode ser excluído, pois está vinculado a uma consulta"
 		}
+	},
+	"proposal_evaluation": {
+		"budgetAction": "Ação Orçamentária",
+		"budgetPlan": "Plano Orçamentário",
+		"budgetPlan_nullValue": "Nenhum plano orçamentário fornecido",
+		"budgetUnit": "Unidade Orçamentária",
+		"confirm": {
+			"delete": "Deseja realmente deletar a avaliação?"
+		},
+		"delete": "Excluir Avaliação de Proposta",
+		"description": "Texto da Proposta",
+		"edit": "Editar Avaliação de Proposta",
+		"error": {
+			"saving": "Erro ao salvar a avaliação de proposta",
+			"fetchData": "Erro ao buscar as informações da proposta"
+		},
+		"evaluated_by": "Órgão Avaliador",
+		"evaluationStatus_false": "Não Avaliada",
+		"evaluationStatus_true": "Avaliada",
+		"evaluationStatus": "Situação",
+		"evaluator": "Avaliador",
+		"inserted": "Nova avaliação de proposta inserida",
+		"loaIncluded": "Inclusa na LOA do próximo ano",
+		"loaIncluded_question": "Será incluída na LOA do próximo ano?",
+		"new": "Nova Avaliação de Proposta",
+		"noResult": "Nenhum resultado encontrado",
+		"reason": "Motivo da não inclusão",
+		"title": "Avaliação de Proposta",
+		"under_evaluation_by": "Em avaliação por",
+		"updated": "Avaliação de Proposta atualizada"
 	},
 	"published": "Publicado",
 	"qrcode": {
