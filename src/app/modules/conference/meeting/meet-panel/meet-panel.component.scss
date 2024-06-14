@@ -1,35 +1,34 @@
 .full-page {
   width: 100vw;
   height: 100vh;
-  color: var(--font-color);
+  color: white;
 }
 
 .conf-header {
   height: 16vh;
   width: 100vw;
   margin: 0!important;
-  background-color: var(--background)!important;
+  background-color: #030437ff!important;
 }
 
 .header-slot {
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 .conf-logo-img {
-  max-height: 75px;
-
+  max-width: 30vw;
+  max-height: 15vh;
 }
 
 .general-card {
-  background-color: var(--card-color);
+  background-color: #153961;
   display: flex;
   width: 9.5vw;
   height: 9vh;
-  color: var(--card-font-color);
+  color: #ffffffab;
   margin: 2vw;
-  border-top: 1vh solid var(--accent-color);
+  border-top: 1vh solid #00a198;
   padding-bottom: 0;
   justify-content: center;
 }
@@ -47,15 +46,15 @@
   font-weight: bold;
   text-align: center;
   padding-top: 0;
-  margin-top: -1vh;
+  margin-top: -0.5vh;
 }
 
 .meet-container {
-  background-color: var(--background)!important;
+  background-color: #030437ff!important;
   height: 84vh;
   width: 100vw;
   margin: 0!important;
-  border-top: 1vh solid var(--accent-color);
+  border-top: 1vh solid #153961;
 }
 
 .meet-title {
@@ -78,13 +77,13 @@
 }
 
 .meet-card {
-  background-color: var(--card-color);
+  background-color: white;
   display: flex;
   width: 28vw;
   height: 28vh;
-  color:  var(--card-font-color);
+  color: #153961;
   margin: 3vh 4vw 0 4vw;
-  border-top: 2vh solid var(--accent-color);
+  border-top: 2vh solid #00a198;
   padding-bottom: 0;
   justify-content: center;
 }
@@ -92,7 +91,7 @@
 .meet-card-number {
   font-size: 12vh;
   font-weight: bold;
-  color:  var(--card-font-color)!important;
+//  color: #153961;
   text-align: center;
   padding-bottom: 0;
   padding-top: 2vh;
@@ -104,10 +103,10 @@
 .meet-card-title {
   font-size: 4vh;
   font-weight: bold;
-  color:  var(--card-font-color);
+  color: #153761;
   text-align: center;
   padding-top: 0;
-  margin-top: -5vh;
+  margin-top: -1vh;
 }
 
 .loader-wrapper {
