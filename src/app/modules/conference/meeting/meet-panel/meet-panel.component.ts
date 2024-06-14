@@ -10,8 +10,6 @@ import { MeetingService } from '@app/shared/services/meeting.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '@environments/environment';
-import { ColorService } from '@app/shared/services/color.service';
-import { ParticipationService } from '@app/shared/services/participation.service';
 
 @Component({
   selector: 'app-meet-panel',
@@ -24,17 +22,13 @@ export class MeetPanelComponent implements OnInit {
     private meetingSrv: MeetingService,
     private conferenceSrv: ConferenceService,
     private activeRoute: ActivatedRoute,
-    private dashboardSrv: ControlPanelDashboardService,
-    private route: ActivatedRoute,
-    private participationSrv: ParticipationService,
-    private colorService: ColorService
+    private dashboardSrv: ControlPanelDashboardService
     ) {
   }
 
   subs: Subscription[] = [];
   meeting: Meeting;
   refreshTime: number = environment.meetingPanelRefreshTimeMs;
-  header: String;
   conference: Conference;
   meetingSubtitle: String = "";
   timer: any;
@@ -50,7 +44,6 @@ export class MeetPanelComponent implements OnInit {
   meetingLocalities: number = 0;
 
   // Transitions
-  textShadow: string;
   transitionTimeMs: number = 300;
   transitionShadow: number = 3;
   transitionColor: String = '#00a198';
@@ -66,30 +59,14 @@ export class MeetPanelComponent implements OnInit {
   mlColor: String = this.meetNumberColor;
   mlShadow: number = this.noShadow;
 
-  loading: boolean = false;
 
-  async ngOnInit() {
-    try{
-      this.loading = true
-      await this.colorService.setPrimaryColor(this.route.snapshot.params['id'])
-      await this.loadParticipationHeader()
-    }catch(error){
-      console.error(error)
-    }finally{
-      this.loading = false
-    }
-    this.textShadow = this.colorService.getCssVariableValue('--accent-color')
+  ngOnInit() {
     this.subs.push(this.activeRoute.params.pipe(take(1)).subscribe(async ({id, idm}) => {
       this.meeting = await this.meetingSrv.getMeetingById(+idm);
       this.meetingSubtitle = this.composeSubtitle();
       this.conference = await this.conferenceSrv.getById(+id);
       this.timer = window.setInterval(this.loadValues, this.refreshTime, this);
     }));
-  }
-
-  async loadParticipationHeader() {
-    const data = await this.participationSrv.getHeader(this.route.snapshot.params['id']);
-    this.header = data["image"];
   }
 
   composeSubtitle(): String {
