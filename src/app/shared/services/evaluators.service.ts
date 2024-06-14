@@ -23,15 +23,7 @@ import { IResultPaginated } from "../interface/IResultPaginated";
   providedIn: "root",
 })
 export class EvaluatorsService {
-  private _url = `${environment.apiEndpoint}/evaluators`;
-
-  private headers: HttpHeaders = Common.buildHeaders();
-
-  private _rolesGuidNullValue: IEvaluatorRole = {
-    guid: null,
-    name: this.translateService.instant("all"),
-    lotacao: null,
-  };
+  private _rolesGuidNullValue: IEvaluatorRole;
 
   private _organizationsList: Array<IEvaluatorOrganization> = [];
 
@@ -63,10 +55,29 @@ export class EvaluatorsService {
     this._organizationsGuidNameMapObject = value;
   }
 
+  private _url = `${environment.apiEndpoint}/evaluators`;
+
+  private headers: HttpHeaders = Common.buildHeaders();
+
   constructor(private _http: HttpClient, private translateService: TranslateService) {
     if(Object.entries(this.organizationsGuidNameMapObject).length == 0){
       this.prepareOrganizationData();
     }
+
+    this.translateService.getTranslation(this.translateService.currentLang ?? this.translateService.defaultLang).subscribe(
+      (translationsJSON) => {  
+        this._rolesGuidNullValue = {
+          guid: null,
+          name: translationsJSON["all"],
+          lotacao: null,
+        };
+      })
+
+    this.translateService.onLangChange.subscribe(
+      (value) => {
+        this._rolesGuidNullValue.name = value.translations['all']
+      }
+    )
   }
 
   public getEvaluatorsList(
