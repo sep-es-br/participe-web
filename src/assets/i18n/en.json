@@ -516,8 +516,9 @@
 		"description": "Proposal Text",
 		"edit": "Edit Proposal Evaluation",
 		"error": {
-			"saving": "Error saving proposal evaluation",
-			"fetchData": "Error fetching proposal data"
+			"fetchData": "Error fetching proposal data",
+			"identicalForm": "There were no changes to the proposal evaluation",
+			"saving": "Error saving proposal evaluation"
 		},
 		"evaluated_by": "Evaluator Organization",
 		"evaluationStatus_false": "Not Evaluated",

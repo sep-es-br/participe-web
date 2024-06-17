@@ -39,7 +39,7 @@ export class ProposalComponent {
   public evaluateProposal(proposal: IProposal) {
     sessionStorage.setItem("proposalData", JSON.stringify(proposal));
 
-    this.router.navigate([`${proposal.id}`], {
+    this.router.navigate([`${proposal.commentId}`], {
       relativeTo: this.route,
     });
   }
