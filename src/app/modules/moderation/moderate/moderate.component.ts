@@ -14,6 +14,7 @@ import { TranslateChangeService } from '@app/shared/services/translateChange.ser
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { ProposalEvaluationService } from '@app/shared/services/proposal-evaluation.service';
+import { ProposalEvaluationCreateFormModel } from '@app/shared/models/ProposalEvaluationModel';
 
 @Component({
   selector: 'app-moderate',

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -24,7 +24,7 @@ import { StoreKeys } from "@app/shared/constants";
   templateUrl: "./proposal-evaluation.component.html",
   styleUrl: "./proposal-evaluation.component.scss",
 })
-export class ProposalEvaluationComponent implements OnInit {
+export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   public loading: boolean = false;
 
   public domainConfigNamesObj: Object = {};
@@ -71,25 +71,35 @@ export class ProposalEvaluationComponent implements OnInit {
 
   public async ngOnInit() {
     await this.loadConferences();
-    this.initSearchForm();
     await this.checkIsPersonEvaluator();
-
+    
     if(sessionStorage.getItem("evaluatorOrgGuid")) {
       await this.listProposalEvaluationsByConference(
         this.pageState.page,
         this.pageState.rows,
         this.propEvalSearchFilter
       );
-   
+        
       await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
 
-      if(Object.values(this.propEvalSearchFilter).some((value) => !!value)) {
-        this.search = true
-      }
-
+      if(this.propEvalSearchFilter && Object.values(this.propEvalSearchFilter).some((value) => !!value)) {
+          this.search = true
+        }
+          
+      this.initSearchForm();
+    
     } else {
       setTimeout(() => this.router.navigate([""]), 3000)
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.translateService.onLangChange.subscribe(
+      (langConfig) => {
+        this.search = false;
+        this.translateSearchFormOptions(langConfig.translations['all']);
+      }
+    )
   }
 
   public async pageChange(event: PaginatorState) {
@@ -310,5 +320,26 @@ export class ProposalEvaluationComponent implements OnInit {
         icon: "change.svg",
       },
     ]);
+  }
+
+  private translateSearchFormOptions(translation: string) {
+    this.evaluationStatusOptions[0].label = translation;
+    this.localityOptions[0].label = translation;
+    this.planItemAreaOptions[0].label = translation;
+    this.planItemOptions[0].label = translation;
+    this.loaIncludedOptions[0].label = translation;
+
+    this.getEvaluationStatusOptions();
+    this.getLoaIncludedOptions();
+
+    const propEvalSearchFormControls = this.proposalEvaluationSearchForm.controls
+
+    for (const key in propEvalSearchFormControls) {
+      if(propEvalSearchFormControls[key].value == null){
+        propEvalSearchFormControls[key].patchValue(null)
+        propEvalSearchFormControls[key].updateValueAndValidity();
+      }
+    }
+
   }
 }

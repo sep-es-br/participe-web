@@ -15,8 +15,6 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
   public budgetActionName?: string;
   public budgetPlan?: string;
   public representing: string;
-  public createdAt: string;
-  public updatedAt: string;
 
   constructor(proposalEvaluation: IProposalEvaluation) {
     this._id = proposalEvaluation.id;
@@ -30,10 +28,7 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
     } else {
       this.reason = proposalEvaluation.reason;
     }
-
     this.representing = proposalEvaluation.representing;
-    this.createdAt = proposalEvaluation.createdAt;
-    this.updatedAt = proposalEvaluation.updatedAt;
   }
 
   public get id(): number {
@@ -81,7 +76,7 @@ export class ProposalEvaluationCreateFormModel
   public budgetPlan?: string;
   public representing: string;
 
-  constructor(formValue: any) {
+  constructor(formValue: any, personId: number, proposalId: number, representing: string) {
     this.includedInNextYearLOA = formValue.includedInNextYearLOA;
     if (formValue.includedInNextYearLOA) {
       this.budgetUnitId = this.getBudgetUnitId(formValue.budgetUnit);
@@ -92,7 +87,9 @@ export class ProposalEvaluationCreateFormModel
     } else {
       this.reason = formValue.reason;
     }
-    this.representing = formValue.representing;
+    this.personId = personId;
+    this.proposalId = proposalId;
+    this.representing = representing;
   }
 
   private getBudgetUnitId(value: IBudgetUnit): string {

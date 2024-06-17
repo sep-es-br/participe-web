@@ -37,6 +37,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   private evaluationId: number;
 
   public proposalEvaluationForm: FormGroup;
+  private proposalEvaluationFormInitialState: ProposalEvaluationModel;
 
   public editProposalEvaluation: boolean = false;
   public readOnlyProposalEvaluation: boolean = false;
@@ -128,6 +129,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public async delete() {
+    console.log(this.proposalId)
+
     this.confirmationService.confirm({
       message: this.translateService.instant("proposal_evaluation.confirm.delete", {
         name: this.proposal.description,
@@ -136,7 +139,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       acceptLabel: this.translateService.instant("yes"),
       rejectLabel: this.translateService.instant("no"),
       accept: async () => {
-        await this.deleteProposalEvaluation(this.evaluationId);
+        await this.deleteProposalEvaluation(this.proposalId);
       },
       reject: () => {},
     });
@@ -159,12 +162,22 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const reqBody = new ProposalEvaluationCreateFormModel(form.value);
-    reqBody.personId = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))[
-      "id"
-    ];
-    reqBody.proposalId = this.proposalId;
-    reqBody.representing = this.evaluatorOrgGuid;
+    const reqBody = new ProposalEvaluationCreateFormModel(
+      form.value,
+      JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
+      this.proposalId,
+      this.evaluatorOrgGuid
+    );
+
+    if(!this.checkFormChanged(reqBody)) {
+      this.messageService.add({
+        severity: "warn",
+        summary: this.translateService.instant("attention"),
+        detail: this.translateService.instant("proposal_evaluation.error.identicalForm"),
+      });
+
+      return;
+    }
 
     if (this.editProposalEvaluation) {
       await this.putProposalEvaluation(this.evaluationId, reqBody);
@@ -216,10 +229,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       await this.proposalEvaluationService
         .getProposalEvaluationData(this.proposalId)
         .then((response) => {
-          const proposalEvaluationModel = new ProposalEvaluationModel(response);
-          this.evaluationId = proposalEvaluationModel.id;
+          this.proposalEvaluationFormInitialState = new ProposalEvaluationModel(response);
+
+          this.evaluationId = this.proposalEvaluationFormInitialState.id;
           this.readOnlyProposalEvaluation
-            ? this.initEditProposalForm(proposalEvaluationModel)
+            ? this.initEditProposalForm(this.proposalEvaluationFormInitialState)
             : this.initCreateProposalForm();
         });
     } catch (error) {
@@ -270,6 +284,33 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   private populateOptionsLists() {
     this.budgetUnitOptions = this.proposalEvaluationService.getBudgetUnitList();
     this.reasonOptions = this.proposalEvaluationService.getReasonOptions();
+  }
+
+  private checkFormChanged(currentState: ProposalEvaluationCreateFormModel): boolean {
+    const keysArray = ["includedInNextYearLOA", "budgetUnitId", "budgetUnitName", "budgetActionId", "budgetActionName", "budgetPlan", "reason"];
+
+    return !keysArray.every((key) => {
+
+      switch (key) {
+        case 'budgetActionId':
+          const currentStateBudgetActionId = currentState[key].includes(";") ? currentState[key].split(";") : [currentState[key]];
+          const initialStateBudgetActionId = this.proposalEvaluationFormInitialState[key].includes(";") ? this.proposalEvaluationFormInitialState[key].split(";") : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetActionId.every((id) => initialStateBudgetActionId.includes(id));
+        
+        case 'budgetActionName':
+          const currentStateBudgetActionName = currentState[key].includes(";") ? currentState[key].split(";") : [currentState[key]];
+          const initialStateBudgetActionName = this.proposalEvaluationFormInitialState[key].includes(";") ? this.proposalEvaluationFormInitialState[key].split(";") : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetActionName.every((name) => initialStateBudgetActionName.includes(name));
+
+        case 'budgetPlan':
+          const currentStateBudgetPlan = currentState[key] == null ? '' : currentState[key]
+          const initialStateBudgetPlan = this.proposalEvaluationFormInitialState[key] == undefined ? '' : this.proposalEvaluationFormInitialState[key]
+          return currentStateBudgetPlan == initialStateBudgetPlan
+        
+        default:
+          return currentState[key] == this.proposalEvaluationFormInitialState[key]
+      }
+    });
   }
 
   private async postProposalEvaluation(
@@ -327,10 +368,18 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   private async deleteProposalEvaluation(id: number) {
+
+    const emptyReqBody = new ProposalEvaluationCreateFormModel(
+      {},
+      JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
+      id,
+      this.evaluatorOrgGuid
+    )
+
     try {
       this.loading = true;
 
-      await this.proposalEvaluationService.deleteProposalEvaluation(id);
+      await this.proposalEvaluationService.deleteProposalEvaluation(id, emptyReqBody);
 
       this.messageService.add({
         severity: "success",

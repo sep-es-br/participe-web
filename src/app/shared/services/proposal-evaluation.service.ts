@@ -22,17 +22,9 @@ import { ProposalEvaluationCreateFormModel } from "../models/ProposalEvaluationM
   providedIn: "root",
 })
 export class ProposalEvaluationService {
-  private evaluationStatusOptions: SelectItem[] = [
-    { label: this.translateService.instant("all"), value: null},
-    { label: this.translateService.instant("proposal_evaluation.evaluationStatus_true"), value: true },
-    { label: this.translateService.instant("proposal_evaluation.evaluationStatus_false"), value: false },
-  ];
+  private evaluationStatusOptions: SelectItem[] = [];
   
-  private loaIncludedOptions: SelectItem[] = [
-    { label: this.translateService.instant("all"), value: null},
-    { label: this.translateService.instant("yes"), value: true },
-    { label: this.translateService.instant("no"), value: false },
-  ];
+  private loaIncludedOptions: SelectItem[] = [];
 
   private reasonOptions: Array<string> = [
     "Entrega já realizada",
@@ -75,6 +67,38 @@ export class ProposalEvaluationService {
     if(this.budgetOptions.length == 0){
       this.populateBudgetOptions();
     }
+
+    this.translateService.getTranslation(this.translateService.currentLang ?? this.translateService.defaultLang).subscribe(
+      (translationsJSON) => {  
+        this.evaluationStatusOptions = [
+          { label: translationsJSON['all'], value: null},
+          { label: translationsJSON["proposal_evaluation"]["evaluationStatus_true"], value: true },
+          { label: translationsJSON["proposal_evaluation"]["evaluationStatus_false"], value: false },
+        ];
+
+        this.loaIncludedOptions = [
+          { label: translationsJSON["all"], value: null},
+          { label: translationsJSON["yes"], value: true },
+          { label: translationsJSON["no"], value: false },
+        ];
+      }
+    )
+
+    this.translateService.onLangChange.subscribe(
+      (langConfig) => {
+        this.evaluationStatusOptions = [
+          { label: langConfig.translations['all'], value: null},
+          { label: langConfig.translations["proposal_evaluation"]["evaluationStatus_true"], value: true },
+          { label: langConfig.translations["proposal_evaluation"]["evaluationStatus_false"], value: false },
+        ];
+
+        this.loaIncludedOptions = [
+          { label: langConfig.translations["all"], value: null},
+          { label: langConfig.translations["yes"], value: true },
+          { label: langConfig.translations["no"], value: false },
+        ];
+      }
+    )
   }
 
   public getEvaluationStatusOptions(): Array<SelectItem> {
@@ -151,8 +175,8 @@ export class ProposalEvaluationService {
     return this._http.put<IProposalEvaluation>(`${this._url}/${id}`, body, {headers: this.headers}).toPromise();
   }
 
-  public deleteProposalEvaluation(id: number): Promise<string> {
-    return this._http.delete(`${this._url}/${id}`, {headers: this.headers, responseType: 'text'}).toPromise();
+  public deleteProposalEvaluation(proposalId: number, body?: ProposalEvaluationCreateFormModel): Promise<string> {
+    return this._http.post(`${this._url}/${proposalId}`, body, {headers: this.headers, responseType: 'text'}).toPromise();
   }
 
   public deleteProposalEvaluationByCommentId(commentId: number): Promise<string> {
