@@ -179,10 +179,6 @@ export class ProposalEvaluationService {
     return this._http.post(`${this._url}/${proposalId}`, body, {headers: this.headers, responseType: 'text'}).toPromise();
   }
 
-  public deleteProposalEvaluationByCommentId(commentId: number): Promise<string> {
-    return this._http.delete(`${this._url}/deleteByCommentId/${commentId}`, {headers: this.headers, responseType: 'text'}).toPromise();
-  }
-
   private fetchBudgetOptions(): Promise<Array<IBudgetOptions>> {
     return this._http.get<Array<IBudgetOptions>>(`${this._optionsUrl}/budgetOptions`, {headers: this.headers}).toPromise();
   }

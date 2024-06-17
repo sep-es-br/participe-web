@@ -213,7 +213,7 @@ export class ModerateComponent implements OnInit {
       sender.status = status;
 
       if(confirmDeletePropEval) {
-        await this.proposalEvaluationService.deleteProposalEvaluationByCommentId(commentId);
+        await this.proposalEvaluationService.deleteProposalEvaluation(commentId)
       }
 
       await this.moderationSrv.update(sender);

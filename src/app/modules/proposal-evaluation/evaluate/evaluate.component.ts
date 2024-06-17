@@ -179,6 +179,16 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if(!this.checkFormChanged(reqBody)) {
+      this.messageService.add({
+        severity: "warn",
+        summary: this.translateService.instant("attention"),
+        detail: this.translateService.instant("proposal_evaluation.error.identicalForm"),
+      });
+
+      return;
+    }
+
     if (this.editProposalEvaluation) {
       await this.putProposalEvaluation(this.evaluationId, reqBody);
     } else {
