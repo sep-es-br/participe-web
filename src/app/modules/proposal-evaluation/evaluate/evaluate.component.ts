@@ -6,6 +6,8 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { RadioButtonClickEvent } from "primeng/radiobutton";
 import { DropdownChangeEvent } from "primeng/dropdown";
 import { TranslateService } from "@ngx-translate/core";
+import { ModalService } from '@app/core/modal/modal.service';
+import { ModalData } from '@app/shared/interface/IModalData';
 
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
@@ -18,6 +20,7 @@ import {
 } from "@app/shared/models/ProposalEvaluationModel";
 
 import { StoreKeys } from "@app/shared/constants";
+import { IEvaluatorOrganization } from "@app/shared/interface/IEvaluatorData";
 
 @Component({
   selector: "app-evaluate",
@@ -28,6 +31,8 @@ import { StoreKeys } from "@app/shared/constants";
 export class EvaluateComponent implements OnInit, OnDestroy {
   public loading: boolean = false;
 
+  public modalData: ModalData;
+
   private proposalId: number;
   public proposal: IProposal;
   public evaluatorOrgGuid: string;
@@ -35,6 +40,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public isEvaluationOpen: boolean = false;
 
   private evaluationId: number;
+
+  public orgName: boolean = true;
+  public orgNamedropDownSelect: string;
 
   public proposalEvaluationForm: FormGroup;
   private proposalEvaluationFormInitialState: ProposalEvaluationModel;
@@ -44,10 +52,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public domainConfigNamesObj: Object = {};
   public organizationsGuidNameMapObject: { [key: string]: string } = {};
+  public showSelectConference: boolean;
 
   public budgetUnitOptions: Array<IBudgetUnit> = [];
   public budgetActionOptions: Array<IBudgetAction> = [];
   public reasonOptions: Array<string> = [];
+
+  public optionsData:Array<string>;
+  public selectedOrg:any;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +68,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private evaluatorsService: EvaluatorsService,
+    public modalService: ModalService,
     private proposalEvaluationService: ProposalEvaluationService
   ) {
     this.isEvaluationOpen = JSON.parse(sessionStorage.getItem('isEvaluationOpen'));
@@ -71,18 +84,73 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj;
 
     this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
+
+    this.modalData = new ModalData("TESTE", {confirm: "Confirmar"}, true);
   }
 
   public async ngOnInit() {
     this.initCreateProposalForm();
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
+    this.modalOpen();
   }
 
-  public getOrgName(index: number): string {
+  public onDropdownChange(event: any): void{
+    this.orgNamedropDownSelect = event.value;
+  }
+
+  public confirmedModal(){
+    this.modalService.close('teste');
+    const stringModalGuidNameList = sessionStorage.getItem("modalGuidNameList")
+    const orgname = this.orgNamedropDownSelect
+    const modalGuidNameList = JSON.parse(stringModalGuidNameList)
+
+    const guidNameList = modalGuidNameList.map((guid) => this.organizationsGuidNameMapObject[guid.guid].split("-")[1].trim())
+
+    this.evaluatorOrgGuid = guidNameList.find(item => item === orgname)
+  }
+
+  public modalOpen(){
+    if(!this.readOnlyProposalEvaluation){
+      const guid = this.evaluatorOrgGuid.split(",");
+      if(guid.length > 0) {
+        this.modalService.open('teste');
+        this.optionsData = this.getOrgNameModal();
+        this.orgName = false;
+      }
+    }
+  }
+
+  public getOrgNameModal(): string[]{
+    const guid = this.evaluatorOrgGuid.split(",");
+    const organizationsList = this.evaluatorsService.organizationsList
+
+    const listGuidsPerson: Set<string> = new Set(guid)
+
+    const guidNameList = organizationsList.filter(item => listGuidsPerson.has(item.guid))
+
+    const lista1JSON = JSON.stringify(guidNameList);
+    
+    sessionStorage.setItem("modalGuidNameList", lista1JSON);
+
+    const guids = guid.map((guid) => this.organizationsGuidNameMapObject[guid].split("-")[1].trim()) 
+    this.orgNamedropDownSelect = this.selectedOrg = guids[0];
+
+    return guids
+  }
+
+  public getOrgName(index: number): string[] | string {
     const guid = this.readOnlyProposalEvaluation
       ? this.proposal.evaluatorOrgsNameList[0]
       : this.evaluatorOrgGuid;
+    if(!this.readOnlyProposalEvaluation){
+      const guidList = guid.split(",")
+      if(this.orgName){
+        return guidList.map((guid) => this.organizationsGuidNameMapObject[guid].split("-")[index].trim())
+      }else{
+        return "-"
+      }
+    }
     return this.organizationsGuidNameMapObject[guid].split("-")[index].trim();
   }
 
