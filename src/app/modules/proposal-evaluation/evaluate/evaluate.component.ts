@@ -41,8 +41,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private evaluationId: number;
 
-  public orgName: boolean = true;
+  public orgNameList: boolean = true;
+  public orgHasPreference: boolean;
   public orgNamedropDownSelect: string;
+  public orgName: string;
+  public orgNameTag: string;
+
 
   public proposalEvaluationForm: FormGroup;
   private proposalEvaluationFormInitialState: ProposalEvaluationModel;
@@ -93,6 +97,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
     this.modalOpen();
+    this.getOrgName();
   }
 
   public onDropdownChange(event: any): void{
@@ -101,22 +106,35 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public confirmedModal(){
     this.modalService.close('teste');
-    const stringModalGuidNameList = sessionStorage.getItem("modalGuidNameList")
+    const modalGuidNameList = JSON.parse(sessionStorage.getItem("modalGuidNameList"))
     const orgname = this.orgNamedropDownSelect
-    const modalGuidNameList = JSON.parse(stringModalGuidNameList)
 
-    const guidNameList = modalGuidNameList.map((guid) => this.organizationsGuidNameMapObject[guid.guid].split("-")[1].trim())
+    const guidName = modalGuidNameList.find(item => item.name === orgname);
 
-    this.evaluatorOrgGuid = guidNameList.find(item => item === orgname)
+    this.orgNameTag = guidName.name.split("-")[1].trim()
+    this.orgName = guidName.name.split("-")[0].trim()
+
+    if(!this.orgHasPreference){
+      sessionStorage.removeItem("orgHasPreference")
+    }else{
+      sessionStorage.setItem("orgPreference", guidName.guid)
+    }
+    this.evaluatorOrgGuid = guidName.guid
   }
 
   public modalOpen(){
     if(!this.readOnlyProposalEvaluation){
       const guid = this.evaluatorOrgGuid.split(",");
-      if(guid.length > 0) {
-        this.modalService.open('teste');
-        this.optionsData = this.getOrgNameModal();
-        this.orgName = false;
+      if(guid.length > 1) {
+        if(!sessionStorage.getItem("orgHasPreference")){
+          sessionStorage.setItem("orgHasPreference", JSON.stringify(true))
+          this.orgHasPreference = true;
+          this.modalService.open('teste');
+          this.optionsData = this.getOrgNameModal();
+          this.orgNameList = false;
+        }else{
+          this.evaluatorOrgGuid = sessionStorage.getItem("orgPreference")
+        }
       }
     }
   }
@@ -133,25 +151,29 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     
     sessionStorage.setItem("modalGuidNameList", lista1JSON);
 
-    const guids = guid.map((guid) => this.organizationsGuidNameMapObject[guid].split("-")[1].trim()) 
+    const guids = guid.map((guid) => this.organizationsGuidNameMapObject[guid].trim()) 
     this.orgNamedropDownSelect = this.selectedOrg = guids[0];
 
     return guids
   }
 
-  public getOrgName(index: number): string[] | string {
+  public getOrgName(): void {
     const guid = this.readOnlyProposalEvaluation
       ? this.proposal.evaluatorOrgsNameList[0]
       : this.evaluatorOrgGuid;
     if(!this.readOnlyProposalEvaluation){
-      const guidList = guid.split(",")
-      if(this.orgName){
-        return guidList.map((guid) => this.organizationsGuidNameMapObject[guid].split("-")[index].trim())
-      }else{
-        return "-"
+      if(this.orgNameList){
+        this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
+        this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
+      }else if(sessionStorage.getItem("orgHasPreference")){
+        const guid = JSON.parse(sessionStorage.getItem("orgPreference"))
+        this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
+        this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
       }
+    }else{
+     this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim();
+     this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim();
     }
-    return this.organizationsGuidNameMapObject[guid].split("-")[index].trim();
   }
 
   public get formLoaIncluded(): boolean {

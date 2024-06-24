@@ -1,10 +1,14 @@
 <app-template>
   <app-modal id="teste" [modalData]="modalData" (confirmed)="confirmedModal()">
-      <p-dropdown 
-        [options]="optionsData"
-        [(ngModel)]="selectedOrg" 
-        (onChange)="onDropdownChange($event)"
-       ></p-dropdown>
+    <div class="row">
+      <p-dropdown class="dropdown-modal"
+          [options]="optionsData"
+          [(ngModel)]="selectedOrg" 
+          (onChange)="onDropdownChange($event)"
+         ></p-dropdown>
+         <p-inputSwitch class="input-switch-modal" [(ngModel)]="orgHasPreference">
+        </p-inputSwitch>
+    </div>  
   </app-modal>
   <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen">
     <div class="col-12 d-flex flex-row justify-content-end" >
@@ -48,9 +52,9 @@
             'not-evaluated': !proposal.evaluationStatus
           }"
         >
-          {{ getOrgName(1) }}
+          {{ orgNameTag }}
         </button>
-        <span>{{ getOrgName(0) }}</span>
+        <span>{{ orgName }}</span>
       </div>
 
       <br />
