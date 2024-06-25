@@ -19,6 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '@app/shared/services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
+import { IPerson } from '@app/shared/interface/IPerson';
 
 @Component({
   selector: 'app-menu',
@@ -29,22 +30,24 @@ export class AppMenuComponent implements OnInit {
   @Input() reset: boolean;
 
   model: any[];
+  person: IPerson;
 
   constructor(public template: AppTemplateComponent, private userAuth: AuthService, private translateSrv: TranslateService) {
+    
   }
 
-  ngOnInit() {
-    const person = this.userAuth.getUserInfo;
+  async ngOnInit() {
+    this.person = this.userAuth.getUserInfo;
     this.model = [];
 
-    if (person.roles.includes('Moderator') || person.roles.includes('Administrator')) {
+    if (this.person.roles.includes('Moderator') || this.person.roles.includes('Administrator')) {
       this.model.push(
         {label: this.translateSrv.instant('control-panel'), icon: faTachometerAlt, routerLink: ['/home']}
       );
       this.model.push({label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search']});
     }
 
-    if (person.roles.includes('Recepcionist') && !person.roles.includes('Administrator')) {
+    if (this.person.roles.includes('Recepcionist') && !this.person.roles.includes('Administrator')) {
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
           {
@@ -62,7 +65,7 @@ export class AppMenuComponent implements OnInit {
       }
     }
 
-    if (person.roles.includes('Administrator')) {
+    if (this.person.roles.includes('Administrator')) {
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
           {
@@ -70,8 +73,7 @@ export class AppMenuComponent implements OnInit {
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
               {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
             ]
-          },
-          {label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+          }
           );
       } else {
         this.model.push(
@@ -80,10 +82,10 @@ export class AppMenuComponent implements OnInit {
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
               {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
             ]
-          },
-          {label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']}
+          }
         );
       }
+      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
       if (window.location.href.endsWith('#/administration/dashboard')) {
         this.model.push(
           {
@@ -109,6 +111,8 @@ export class AppMenuComponent implements OnInit {
             ]
           });
       }
+    }else{
+      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
     }
   }
 }

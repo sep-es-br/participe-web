@@ -69,12 +69,14 @@ export class HomeComponent implements OnInit {
         ]);
         this.router.navigate(['/attendance']);
       } else {
-        alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-        this.authSrv.signOut();
+          this.router.navigate(['/proposal-evaluation']);
+        // alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
+        // this.authSrv.signOut();
       }
     } else {
-      alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-      this.authSrv.signOut();
+        this.router.navigate(['/proposal-evaluation']);
+      // alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
+      // this.authSrv.signOut();
     }
   }
 

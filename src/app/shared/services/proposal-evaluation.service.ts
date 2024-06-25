@@ -16,6 +16,7 @@ import { ILocalityConferenceItem } from "../interface/ILocalityConferenceItem";
 import { IResultPlanItemByConference } from "../interface/IResultPlanItemByConference";
 
 import { ProposalEvaluationCreateFormModel } from "../models/ProposalEvaluationModel";
+import { Conference } from "../models/conference";
 
 
 @Injectable({
@@ -134,6 +135,7 @@ export class ProposalEvaluationService {
   }
 
   public getDomainConfiguration(conferenceId: number): Promise<any> {
+    debugger
     return this._http.get<any>(`${this._optionsUrl}/configuration?conferenceId=${conferenceId}`, {headers: this.headers}).toPromise();
   }
 
@@ -185,6 +187,12 @@ export class ProposalEvaluationService {
 
   public checkIsCommentEvaluated(commentId: number): Promise<boolean> {
     return this._http.get<boolean>(`${this._url}/isCommentEvaluated?commentId=${commentId}`, {headers: this.headers}).toPromise();
+  }
+
+  getConferencesActive(isActive: boolean) {
+    return this._http.get<Conference[]>(`${this._url}/conferences?activeConferences=${isActive}`,
+      {headers: Common.buildHeaders()}
+    ).toPromise();
   }
 
   private async populateBudgetOptions(): Promise<void> {
