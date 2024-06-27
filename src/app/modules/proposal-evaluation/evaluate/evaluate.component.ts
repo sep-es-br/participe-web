@@ -41,7 +41,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private evaluationId: number;
 
-  public orgNameList: boolean = true;
+  public orgNameList: boolean = false;
+  public hasEvaluatorOrgGuid: boolean;
   public orgHasPreference: boolean;
   public orgNamedropDownSelect: string;
   public orgName: string;
@@ -65,6 +66,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public optionsData:Array<string>;
   public selectedOrg:any;
 
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -81,6 +84,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
     this.evaluatorOrgGuid = String(sessionStorage.getItem("evaluatorOrgGuid"));
 
+    if(sessionStorage.getItem("evaluatorOrgGuid")){
+      this.hasEvaluatorOrgGuid = true;
+    }
+
     this.proposal = JSON.parse(sessionStorage.getItem("proposalData"));
 
     this.readOnlyProposalEvaluation = this.proposal.evaluationStatus;
@@ -89,7 +96,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
     this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
 
-    this.modalData = new ModalData("TESTE", {confirm: "Confirmar"}, true);
+    this.modalData = new ModalData("Lista de Organizações", {confirm: "Confirmar", cancel: "Cancelar"}, true);
   }
 
   public async ngOnInit() {
@@ -97,7 +104,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
     this.modalOpen();
-    this.getOrgName();
+    this.getOrgName() 
   }
 
   public onDropdownChange(event: any): void{
@@ -105,7 +112,6 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public confirmedModal(){
-    this.modalService.close('teste');
     const modalGuidNameList = JSON.parse(sessionStorage.getItem("modalGuidNameList"))
     const orgname = this.orgNamedropDownSelect
 
@@ -114,9 +120,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.orgNameTag = guidName.name.split("-")[1].trim()
     this.orgName = guidName.name.split("-")[0].trim()
 
-    if(!this.orgHasPreference){
-      sessionStorage.removeItem("orgHasPreference")
-    }else{
+    if(this.orgHasPreference == true){
       sessionStorage.setItem("orgPreference", guidName.guid)
     }
     this.evaluatorOrgGuid = guidName.guid
@@ -126,12 +130,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     if(!this.readOnlyProposalEvaluation){
       const guid = this.evaluatorOrgGuid.split(",");
       if(guid.length > 1) {
-        if(!sessionStorage.getItem("orgHasPreference")){
-          sessionStorage.setItem("orgHasPreference", JSON.stringify(true))
+        if(!sessionStorage.getItem("orgPreference")){
           this.orgHasPreference = true;
-          this.modalService.open('teste');
+          this.modalService.open('modalEvaluate');
           this.optionsData = this.getOrgNameModal();
-          this.orgNameList = false;
+          this.orgNameList = true;
         }else{
           this.evaluatorOrgGuid = sessionStorage.getItem("orgPreference")
         }
@@ -150,29 +153,37 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     const lista1JSON = JSON.stringify(guidNameList);
     
     sessionStorage.setItem("modalGuidNameList", lista1JSON);
-
-    const guids = guid.map((guid) => this.organizationsGuidNameMapObject[guid].trim()) 
-    this.orgNamedropDownSelect = this.selectedOrg = guids[0];
+    let guids;
+    try{
+      guids = guid.map((guid) => this.organizationsGuidNameMapObject[guid].trim()) 
+      this.orgNamedropDownSelect = this.selectedOrg = guids[0];
+    }catch(error){
+      this.router.navigate(["proposal-evaluation"]);
+    }
 
     return guids
   }
 
   public getOrgName(): void {
-    const guid = this.readOnlyProposalEvaluation
-      ? this.proposal.evaluatorOrgsNameList[0]
-      : this.evaluatorOrgGuid;
-    if(!this.readOnlyProposalEvaluation){
-      if(this.orgNameList){
-        this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
-        this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
-      }else if(sessionStorage.getItem("orgHasPreference")){
-        const guid = JSON.parse(sessionStorage.getItem("orgPreference"))
-        this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
-        this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
+    try{
+      const guid = this.readOnlyProposalEvaluation
+        ? this.proposal.evaluatorOrgsNameList[0]
+        : this.evaluatorOrgGuid;
+      if(!this.readOnlyProposalEvaluation){
+        if(!this.orgNameList){
+          this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
+          this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
+        }else if(sessionStorage.getItem("orgPreference")){
+          const guid = JSON.parse(sessionStorage.getItem("orgPreference"))
+          this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
+          this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
+        }
+      }else{
+       this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim();
+       this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim();
       }
-    }else{
-     this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim();
-     this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim();
+    } catch (error) {
+      this.router.navigate(["proposal-evaluation"]);
     }
   }
 
@@ -219,8 +230,6 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public async delete() {
-    console.log(this.proposalId)
-
     this.confirmationService.confirm({
       message: this.translateService.instant("proposal_evaluation.confirm.delete", {
         name: this.proposal.description,
@@ -497,9 +506,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       setTimeout(() => this.cancel(), 3000);
     }
   }
-
+  
   ngOnDestroy(): void {
     sessionStorage.removeItem("proposalData");
-    sessionStorage.removeItem("evaluatorOrgGuid");
+    sessionStorage.removeItem("modalGuidNameList");
   }
 }

@@ -20,6 +20,7 @@ import {
 import {AuthService} from '@app/shared/services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
 import { IPerson } from '@app/shared/interface/IPerson';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -32,12 +33,18 @@ export class AppMenuComponent implements OnInit {
   model: any[];
   person: IPerson;
 
-  constructor(public template: AppTemplateComponent, private userAuth: AuthService, private translateSrv: TranslateService) {
-    
+  constructor(public template: AppTemplateComponent, private userAuth: AuthService, private translateSrv: TranslateService, private router: Router) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+    if(this.userAuth.getUserInfo){
+      this.updateMenu();
+    }
+  }
+
+  updateMenu(){
     this.person = this.userAuth.getUserInfo;
+
     this.model = [];
 
     if (this.person.roles.includes('Moderator') || this.person.roles.includes('Administrator')) {
@@ -45,6 +52,10 @@ export class AppMenuComponent implements OnInit {
         {label: this.translateSrv.instant('control-panel'), icon: faTachometerAlt, routerLink: ['/home']}
       );
       this.model.push({label: 'administration.moderation', icon: faCrown, routerLink: ['/moderation/search']});
+    }
+
+    if(sessionStorage.getItem("evaluatorOrgGuid") && !this.person.roles.includes('Administrator')){
+      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
     }
 
     if (this.person.roles.includes('Recepcionist') && !this.person.roles.includes('Administrator')) {
@@ -66,6 +77,7 @@ export class AppMenuComponent implements OnInit {
     }
 
     if (this.person.roles.includes('Administrator')) {
+      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
           {
@@ -85,7 +97,7 @@ export class AppMenuComponent implements OnInit {
           }
         );
       }
-      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
+      
       if (window.location.href.endsWith('#/administration/dashboard')) {
         this.model.push(
           {
@@ -111,8 +123,9 @@ export class AppMenuComponent implements OnInit {
             ]
           });
       }
-    }else{
-      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
+    }
+    if(this.model.length === 0){
+      this.router.navigate(['/login']);
     }
   }
 }

@@ -6,7 +6,7 @@
         </div>
         <ng-content></ng-content>
         <div *ngIf="modalData?.buttons" class="modal-footer mt-2 p-2 g-10">
-            <button type="button" *ngIf="modalData?.buttons.cancel" (click)="close()" class="btn btn-secondary">{{modalData.buttons.cancel}}</button>
+            <button type="button" (click)="close()" class="btn btn-secondary">{{modalData.buttons.cancel}}</button>
             <button type="button" class="btn btn-primary" (click)="confirm()">{{modalData.buttons.confirm}}</button>
         </div>
     </div>

@@ -1,16 +1,20 @@
 <app-template>
-  <app-modal id="teste" [modalData]="modalData" (confirmed)="confirmedModal()">
+  <app-modal id="modalEvaluate" [modalData]="modalData" (confirmed)="confirmedModal()" (closed)="cancel()">
     <div class="row">
       <p-dropdown class="dropdown-modal"
           [options]="optionsData"
           [(ngModel)]="selectedOrg" 
+          [styleClass] = "'w-100'"
           (onChange)="onDropdownChange($event)"
          ></p-dropdown>
-         <p-inputSwitch class="input-switch-modal" [(ngModel)]="orgHasPreference">
-        </p-inputSwitch>
+         <div class="p-2 field-switch">
+            <p-inputSwitch class="input-switch-modal" id="orgPreference" [(ngModel)]="orgHasPreference">
+            </p-inputSwitch>
+          <label for="orgPreference">Você deseja definir a organização selecionada como padrão?</label>
+         </div>
     </div>  
   </app-modal>
-  <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen">
+  <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen && hasEvaluatorOrgGuid">
     <div class="col-12 d-flex flex-row justify-content-end" >
       <button
         [disabled]="loading"
@@ -298,6 +302,16 @@
         <p>{{ proposal.evaluatorName }}</p>
       </div>
     </div>
+
+    <button
+          [disabled]="loading"
+          pButton
+          icon="pi pi-arrow-left"
+          [label]="'back' | translate"
+          class="mx-2"
+          type="button"
+          (click)="cancel()"
+        ></button>
   </form>
 
   <p-confirmDialog

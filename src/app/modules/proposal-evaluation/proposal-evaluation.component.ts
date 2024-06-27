@@ -15,9 +15,6 @@ import { IProposal, IProposalEvaluationSearchFilter } from "@app/shared/interfac
 
 import { Conference } from "@app/shared/models/conference";
 
-import { StoreKeys } from "@app/shared/constants";
-import { AuthService } from "@app/shared/services/auth.service";
-
 @Component({
   selector: "app-proposal-evaluation",
   standalone: false,
@@ -60,20 +57,20 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private actionBarService: ActionBarService,
-    private authSrv: AuthService,
     private translateService: TranslateService,
     private proposalEvaluationService: ProposalEvaluationService,
     private evaluatorsService: EvaluatorsService,
-    private location: Location
   ) {
       this.propEvalSearchFilter = JSON.parse(sessionStorage.getItem("propEvalSearchFilter"));
   }
 
   public async ngOnInit() {
-    await this.loadConferences();
-    await this.checkIsPersonEvaluator();
-    
-    if(sessionStorage.getItem("evaluatorOrgGuid")) {
+      this.setInfo()
+  }
+
+  public async setInfo(){
+      await this.loadConferences();
+        
       await this.listProposalEvaluationsByConference(
         this.pageState.page,
         this.pageState.rows,
@@ -87,17 +84,6 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         }
           
       this.initSearchForm();
-    
-    } else {
-      const personRoles = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))['roles']
-      if(personRoles.length != 0){
-        alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-        this.location.back();
-      }else{
-        alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-        this.authSrv.signOut();
-      }
-    }
   }
 
   public ngAfterViewInit(): void {
@@ -183,8 +169,8 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.buildBreadcrumb();
         this.configureActionBar();
       })
-      .finally(() => {
-        this.getDomainConfiguration();
+      .finally(async () => {
+        await this.getDomainConfiguration();
       });
   }
 
@@ -195,30 +181,13 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
       .finally(() => this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj)
   }
 
-  private async checkIsPersonEvaluator() {
-    const personId = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))['id']
-
-    try {
-      this.loading = true
-      await this.proposalEvaluationService.checkIsPersonEvaluator(personId).then(
-        (response) => sessionStorage.setItem("evaluatorOrgGuid", response)
-      )
-    } catch (error) {
-      console.error(error);
-      sessionStorage.removeItem("evaluatorOrgGuid");
-    } finally {
-      this.loading = false
-    }
-  }
-
   private async listProposalEvaluationsByConference(
     pageNumber: number,
     pageSize: number,
     searchFilter?: IProposalEvaluationSearchFilter
   ) {
 
-    this.loading = true;
-
+    this.loading = true
     await this.proposalEvaluationService
       .listProposalEvaluationsByConference(
         this.conferenceSelect.id,
