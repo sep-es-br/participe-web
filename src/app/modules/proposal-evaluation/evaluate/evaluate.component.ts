@@ -96,7 +96,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
     this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
 
-    this.modalData = new ModalData("Lista de Organizações", {confirm: "Confirmar", cancel: "Cancelar"}, true);
+    this.modalData = new ModalData(translateService.instant('proposal_evaluation.modalTitle'),
+     {confirm: translateService.instant('proposal_evaluation.modalConfirm'), cancel: translateService.instant('proposal_evaluation.modalCancel')}, true);
   }
 
   public async ngOnInit() {

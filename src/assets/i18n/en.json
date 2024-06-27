@@ -506,6 +506,10 @@
 		}
 	},
 	"proposal_evaluation": {
+		"modalConfirm": "confirm",
+		"modalCancel": "cancel",
+		"modalTitle": "List of organizations",
+		"orgPreference": "Do you wish to set the selected organization as default?",
 		"budgetAction": "Budget Action",
 		"budgetPlan": "Budget Plan",
 		"budgetPlan_nullValue": "No budget plan provided",
