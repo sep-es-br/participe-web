@@ -39,7 +39,7 @@ export class AuthService {
     this.document.location.href = AuthService.getUrlForSocialAuth('idsvr');
   }
 
-  async refresh() {
+  public async refresh() {
     try {
       const refreshToken = this.getRefreshToken();
       if (refreshToken) {

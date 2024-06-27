@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
+import {Location} from '@angular/common';
 
 import { SelectItem } from "primeng/api";
 import { PaginatorState } from "primeng/paginator";
@@ -8,15 +8,12 @@ import { PaginatorState } from "primeng/paginator";
 import { TranslateService } from "@ngx-translate/core";
 import { ActionBarService } from "@app/core/actionbar/app.actionbar.actions.service";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
-import { ModerationService } from "@app/shared/services/moderation.service";
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
 import { IProposal, IProposalEvaluationSearchFilter } from "@app/shared/interface/IProposal";
 
 import { Conference } from "@app/shared/models/conference";
-
-import { StoreKeys } from "@app/shared/constants";
 
 @Component({
   selector: "app-proposal-evaluation",
@@ -60,20 +57,20 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   constructor(
     private breadcrumbService: BreadcrumbService,
     private actionBarService: ActionBarService,
-    private moderationSrv: ModerationService,
     private translateService: TranslateService,
     private proposalEvaluationService: ProposalEvaluationService,
     private evaluatorsService: EvaluatorsService,
-    private router: Router
   ) {
       this.propEvalSearchFilter = JSON.parse(sessionStorage.getItem("propEvalSearchFilter"));
   }
 
   public async ngOnInit() {
-    await this.loadConferences();
-    await this.checkIsPersonEvaluator();
-    
-    if(sessionStorage.getItem("evaluatorOrgGuid")) {
+      this.setInfo()
+  }
+
+  public async setInfo(){
+      await this.loadConferences();
+        
       await this.listProposalEvaluationsByConference(
         this.pageState.page,
         this.pageState.rows,
@@ -87,10 +84,6 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         }
           
       this.initSearchForm();
-    
-    } else {
-      setTimeout(() => this.router.navigate([""]), 3000)
-    }
   }
 
   public ngAfterViewInit(): void {
@@ -148,7 +141,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   }
 
   private async loadConferences() {
-    await this.moderationSrv.getConferencesActive(false)
+    await this.proposalEvaluationService.getConferencesActive(false)
       .then((data) => {
         this.conferences = data;
         sessionStorage.setItem("isEvaluationOpen", JSON.stringify(false));
@@ -176,8 +169,8 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.buildBreadcrumb();
         this.configureActionBar();
       })
-      .finally(() => {
-        this.getDomainConfiguration();
+      .finally(async () => {
+        await this.getDomainConfiguration();
       });
   }
 
@@ -188,30 +181,13 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
       .finally(() => this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj)
   }
 
-  private async checkIsPersonEvaluator() {
-    const personId = JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))['id']
-
-    try {
-      this.loading = true
-      await this.proposalEvaluationService.checkIsPersonEvaluator(personId).then(
-        (response) => sessionStorage.setItem("evaluatorOrgGuid", response)
-      )
-    } catch (error) {
-      console.error(error);
-      sessionStorage.removeItem("evaluatorOrgGuid");
-    } finally {
-      this.loading = false
-    }
-  }
-
   private async listProposalEvaluationsByConference(
     pageNumber: number,
     pageSize: number,
     searchFilter?: IProposalEvaluationSearchFilter
   ) {
 
-    this.loading = true;
-
+    this.loading = true
     await this.proposalEvaluationService
       .listProposalEvaluationsByConference(
         this.conferenceSelect.id,
