@@ -386,6 +386,26 @@ export class ModerationComponent implements OnInit, OnDestroy {
     }
   }
 
+  async selectCommentDuplicated(item: ModerationComments) {
+    try {
+      await this.moderationSrv.update({
+        duplicated: item.duplicated,
+        id: item.commentId,
+      } as any);
+      this.messageService.add({
+        severity: "success",
+        summary: this.translate.instant("success"),
+        detail: this.translate.instant("moderation.label.saved_success"),
+      });
+    } catch (error) {
+      this.messageService.add({
+        severity: "error",
+        summary: this.translate.instant("error"),
+        detail: this.translate.instant("moderation.error.update_comment"),
+      });
+    }
+  }
+
   async moderate(comment: ModerationComments) {
     if (comment.moderatorId && !comment.moderated) {
       const person = this.userAuth.getUserInfo;

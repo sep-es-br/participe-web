@@ -75,7 +75,7 @@
       </div>
       <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
         <div class="row ui-fluid">
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-5">
             <div class="row">
               <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span>
               <span
@@ -98,7 +98,7 @@
             <div class="info">{{ comment.structureItemName }}</div>
             <div>{{ comment.planItemName }}</div>
           </div>
-          <div class="col-12 col-md-2 align-middle ">
+          <div class="col-12 col-md-1 align-middle ">
             <div class="col-12">
               <p-radioButton [name]="'optionModeration_' + comment.commentId"
                              (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
@@ -111,6 +111,13 @@
                              value="Comment" [label]="'moderation.label.comment'| translate ">
               </p-radioButton>
             </div>
+          </div>
+          <div class="col-12 col-md-2 align-content-center">
+          <div class="col-12 d-flex">
+            <div>{{'moderation.moderate.duplicated' | translate}}</div>
+            <p-inputSwitch class="input-switch-duplicated" [(ngModel)]="comment.duplicated" (onChange)="selectCommentDuplicated(comment)">
+            </p-inputSwitch>
+          </div>
           </div>
           <div class="col-12 col-md-1 align-content-center actions">
             <!-- <div class="row actions"> -->
