@@ -6,6 +6,7 @@ export interface ModerationComments {
   text: string;
   time: string;
   type: string;
+  duplicated: boolean;
   localityName: string;
   localityId: number;
   planItemId: number;

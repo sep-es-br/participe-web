@@ -467,6 +467,7 @@
 			"strategic_area": "Área Estratégica"
 		},
 		"moderate": {
+			"duplicated": "Duplicado",
 			"about": "Sobre",
 			"confirmDeleteCommentWithPropEval": {
 				"header": "O comentário possui avaliação!",
