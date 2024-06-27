@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { TranslateService } from "@ngx-translate/core";
@@ -33,7 +33,7 @@ import { EvaluatorCreateFormModel } from "@app/shared/models/EvaluatorModel";
   templateUrl: "./evaluators.component.html",
   styleUrl: "./evaluators.component.scss",
 })
-export class EvaluatorsComponent implements OnInit, OnDestroy {
+export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
   public loading: boolean = false;
 
   public search: boolean = false;
@@ -90,6 +90,21 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public async ngOnInit() {
     this.buildBreadcrumb();
     await this.lazyLoadEvaluatorsList(this.pageState);
+  }
+
+  ngAfterViewInit(): void {
+    this.translateService.onLangChange.subscribe(
+      (langConfig) => {
+        const rolesGuidControl = this.showForm ? this.evaluatorsForm.get("rolesGuid") : null;
+
+        if(rolesGuidControl){
+          if(rolesGuidControl.value.length == 1 && rolesGuidControl.value[0].guid == null){
+            rolesGuidControl.patchValue([this.evaluatorsService.rolesGuidNullValue])
+            rolesGuidControl.updateValueAndValidity();
+          }
+        }
+      }
+    )    
   }
 
   public async lazyLoadEvaluatorsList(event: TableLazyLoadEvent) {
@@ -196,7 +211,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
 
     if (
       rolesGuidControlValue.length > 0 &&
-      rolesGuidControlValue[0].name == "Todos"
+      rolesGuidControlValue[0].guid == null
     ) {
       return "name";
     } else {
@@ -205,7 +220,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   }
 
   public patchValueIfAllSelected(event: MultiSelectChangeEvent) {
-    if (event.value.length > 0 && event.itemValue.name == "Todos") {
+    if (event.value.length > 0 && event.itemValue.guid == null) {
       this.patchRolesGuidFormControlWithNullValue();
     }
   }
@@ -231,7 +246,7 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
   public getRoleNames(rolesGuid: Array<string>): Array<string> {
     return rolesGuid
       ? rolesGuid.map((roleGuid) => this.rolesGuidNameMapObject[roleGuid])
-      : ["Todos"];
+      : [this.translateService.instant("all")];
   }
 
   public async saveEvaluatorsForm(form: FormGroup) {
@@ -453,7 +468,12 @@ export class EvaluatorsComponent implements OnInit, OnDestroy {
     await this.getRolesList(unitGuid)
       .then((response) => {
         if (response) {
-          this.rolesList = this.rolesList.concat(response);
+          const rolesToAdd = response.filter((role) => { 
+            if(!this.rolesList.some((item) => item.guid == role.guid)){
+              return role
+            }
+          })
+          this.rolesList = this.rolesList.concat(rolesToAdd);
         }
       })
       .finally(() => {

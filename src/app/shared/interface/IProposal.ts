@@ -1,5 +1,5 @@
 export interface IProposal {
-    readonly id: number;
+    readonly commentId: number;
     evaluationStatus: boolean;
     localityName: string;
     planItemName: string;
@@ -19,8 +19,6 @@ export interface IProposalEvaluation {
     budgetActionName?: string;
     budgetPlan?: string;
     representing: string;
-    createdAt: string;
-    updatedAt: string;
 }
 
 export interface IProposalEvaluationCreateForm extends Omit<IProposalEvaluation, 'id' | 'createdAt' | 'updatedAt'> {

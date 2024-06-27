@@ -564,8 +564,9 @@
 		"description": "Texto da Proposta",
 		"edit": "Editar Avaliação de Proposta",
 		"error": {
-			"saving": "Erro ao salvar a avaliação de proposta",
-			"fetchData": "Erro ao buscar as informações da proposta"
+			"fetchData": "Erro ao buscar as informações da proposta",
+			"identicalForm": "Não houve alterações na avaliação de proposta",
+			"saving": "Erro ao salvar a avaliação de proposta"
 		},
 		"evaluated_by": "Órgão Avaliador",
 		"evaluationStatus_false": "Não Avaliada",

@@ -297,43 +297,16 @@
   </div>
 </ng-template>
 
-<p-dialog
-  modal="true"
-  [maximizable]="true"
-  [draggable]="false"
-  [(visible)]="showSelectMeeting"
->
-  <ng-template pTemplate="body">
-    <div class="row mb-3">
-      <div class="col-12 col-md-12 mb-3">
-        <label class="label">Consulta</label>
-        <p-dropdown
-          [options]="optionsConference"
-          [styleClass]="'d-flex form-control'"
-          (onChange)="handleChangeConference()"
-          [(ngModel)]="selectedConference"
-          optionLabel="name"
-        ></p-dropdown>
-      </div>
-      <div class="col-12 col-md-12 mb-auto">
-        <label class="label">Reunião</label>
-        <p-dropdown
-          [options]="optionsMeeting"
-          [styleClass]="'d-flex form-control'"
-          [virtualScroll]="true"
-          [(ngModel)]="selectedMeeting"
-          optionLabel="name"
-        ></p-dropdown>
-      </div>
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
+  <div class="label">{{ "administration.conference" | translate }}</div>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+  <div class="label">{{ "meeting" | translate }}</div>
+  <div class="form-group">
+    <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3 m-auto">
+    <div class="d-grid gap-2 mt-3">
+      <button pButton class="btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
     </div>
-  </ng-template>
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      class="change-button btn btn-lg btn-primary"
-      [label]="'change' | translate"
-      icon="fa-solid fa-arrow-right-arrow-left"
-      (click)="setCurrentMeeting()"
-    ></button>
-  </ng-template>
+  </div>
 </p-dialog>
