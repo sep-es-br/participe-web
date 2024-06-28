@@ -70,46 +70,7 @@ export class ProposalEvaluationService {
   constructor(private _http: HttpClient, private translateService: TranslateService, private authService: AuthService) {
 
     this.verifyToken();
-    
-    if(this.tokenAccess){
-     
-      if(this.budgetOptions.length == 0){
-        this.populateBudgetOptions();
-      }
-  
-      this.translateService.getTranslation(this.translateService.currentLang ?? this.translateService.defaultLang).subscribe(
-        (translationsJSON) => {  
-          this.evaluationStatusOptions = [
-            { label: translationsJSON['all'], value: null},
-            { label: translationsJSON["proposal_evaluation"]["evaluationStatus_true"], value: true },
-            { label: translationsJSON["proposal_evaluation"]["evaluationStatus_false"], value: false },
-          ];
-  
-          this.loaIncludedOptions = [
-            { label: translationsJSON["all"], value: null},
-            { label: translationsJSON["yes"], value: true },
-            { label: translationsJSON["no"], value: false },
-          ];
-        }
-      )
-  
-      this.translateService.onLangChange.subscribe(
-        (langConfig) => {
-          this.evaluationStatusOptions = [
-            { label: langConfig.translations['all'], value: null},
-            { label: langConfig.translations["proposal_evaluation"]["evaluationStatus_true"], value: true },
-            { label: langConfig.translations["proposal_evaluation"]["evaluationStatus_false"], value: false },
-          ];
-  
-          this.loaIncludedOptions = [
-            { label: langConfig.translations["all"], value: null},
-            { label: langConfig.translations["yes"], value: true },
-            { label: langConfig.translations["no"], value: false },
-          ];
-        }
-      )
-    }
-
+    this.budgetOptionsRefresh()
 
   }
 
@@ -212,11 +173,58 @@ export class ProposalEvaluationService {
     );
   }
 
+  public translateEvaluation(){
+    this.translateService.getTranslation(this.translateService.currentLang ?? this.translateService.defaultLang).subscribe(
+      (translationsJSON) => {  
+        this.evaluationStatusOptions = [
+          { label: translationsJSON['all'], value: null},
+          { label: translationsJSON["proposal_evaluation"]["evaluationStatus_true"], value: true },
+          { label: translationsJSON["proposal_evaluation"]["evaluationStatus_false"], value: false },
+        ];
+
+        this.loaIncludedOptions = [
+          { label: translationsJSON["all"], value: null},
+          { label: translationsJSON["yes"], value: true },
+          { label: translationsJSON["no"], value: false },
+        ];
+      }
+    )
+
+    this.translateService.onLangChange.subscribe(
+      (langConfig) => {
+        this.evaluationStatusOptions = [
+          { label: langConfig.translations['all'], value: null},
+          { label: langConfig.translations["proposal_evaluation"]["evaluationStatus_true"], value: true },
+          { label: langConfig.translations["proposal_evaluation"]["evaluationStatus_false"], value: false },
+        ];
+
+        this.loaIncludedOptions = [
+          { label: langConfig.translations["all"], value: null},
+          { label: langConfig.translations["yes"], value: true },
+          { label: langConfig.translations["no"], value: false },
+        ];
+      }
+    )
+  }
+
+  public budgetOptionsRefresh(){
+    if(this.tokenAccess){
+      if(this.budgetOptions.length == 0){
+          this.populateBudgetOptions();
+        }
+      this.translateEvaluation();
+    }else{
+      setTimeout(() => {
+        this.budgetOptionsRefresh();
+      }, 700);
+    }
+  }
+
   private async verifyToken(){
     await this.authService.refresh();
     if(this.authService.isAuthenticated()){
       this.tokenAccess = this.authService.getAccessToken();
     }
   }
-
 }
+
