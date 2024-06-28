@@ -5,4 +5,5 @@ export class ModerateUpdate {
   status?: string;
   text?: string;
   type?: string;
+  duplicated?: boolean;
 }

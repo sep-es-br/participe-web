@@ -15,7 +15,7 @@
       <a href="#" (click)="template.onTopbarItemClick($event,profile)">
         <div class="user-profile-info profile-link">
           <span class="user-profile-name">{{shortName}}</span>
-          <span class="user-profile-role">{{'roles.' + person.defaultRole|translate}}</span>
+          <span class="user-profile-role"> {{ person?.defaultRole ? ('roles.' + person.defaultRole | translate) : '' }}</span>
         </div>
         <img class="logo" src="assets/layout/images/avatar/avatar-default.png" alt="prestige-layout" />
       </a>
@@ -25,7 +25,7 @@
             <img class="logo" src="assets/layout/images/avatar/avatar-default.png" alt="prestige-layout" />
             <div class="profile-info">
               <span class="user-profile-name">{{ person?.name }}</span>
-              <span class="user-profile-role">{{'roles.' + person.defaultRole|translate}}</span>
+              <span class="user-profile-role"> {{ person?.defaultRole ? ('roles.' + person.defaultRole | translate) : '' }}</span>
               <div class="p-grid ui-fluid language-container">
                 <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('en')}" (click)="changeLanguage('en')">
                   <img src="assets/layout/images/icons/flag-usa.png"  alt=""/>

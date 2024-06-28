@@ -33,7 +33,7 @@
           </button>
         </div>
   
-        <div *ngIf="isEvaluationOpen || proposal.evaluationStatus">
+        <div *ngIf="(isEvaluationOpen && isEvaluatorOrgGuid) || proposal.evaluationStatus">
           <button
             pButton
             icon="fa-solid fa-clipboard-check fa-lg"

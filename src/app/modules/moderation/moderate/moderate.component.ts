@@ -204,13 +204,14 @@ export class ModerateComponent implements OnInit {
   async _save(status: string, confirmDeletePropEval: boolean) {
     try {
       const sender: ModerateUpdate = new ModerateUpdate();
-      const { commentId, type, planItemId, localityId, text } = this.comment;
+      const { commentId, type, planItemId, localityId, text, duplicated } = this.comment;
       sender.id = commentId;
       sender.type = type;
       sender.planItem = _.get(this.selectedStrategyArea, 'data', planItemId);
       sender.locality = localityId;
       sender.text = text;
       sender.status = status;
+      sender.duplicated = duplicated;
 
       if(confirmDeletePropEval) {
         await this.proposalEvaluationService.deleteProposalEvaluation(commentId)
