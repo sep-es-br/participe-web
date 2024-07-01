@@ -56,6 +56,7 @@
 		"tooltipLabelView": "Visualizar "
 	},
 	"cancel": "Cancelar",
+	"back": "Voltar",
 	"automatic": "Automático",
 	"manual": "Manual",
 	"change": "Trocar",
@@ -467,6 +468,7 @@
 			"strategic_area": "Área Estratégica"
 		},
 		"moderate": {
+			"duplicated": "Duplicado",
 			"about": "Sobre",
 			"confirmDeleteCommentWithPropEval": {
 				"header": "O comentário possui avaliação!",
@@ -553,6 +555,10 @@
 		}
 	},
 	"proposal_evaluation": {
+		"modalConfirm": "confirmar",
+		"modalCancel": "Cancelar",
+		"modalTitle": "Lista de organizaçoes",
+		"orgPreference": "Você deseja definir a organização selecionada como padrão?",
 		"budgetAction": "Ação Orçamentária",
 		"budgetPlan": "Plano Orçamentário",
 		"budgetPlan_nullValue": "Nenhum plano orçamentário fornecido",

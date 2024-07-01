@@ -10,6 +10,13 @@
         <textarea class="form-control" [maxlength]="200" rows="4" [(ngModel)]="comment.text"></textarea>
         <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/200</span>
       </div>
+      <div class="col-12 col-md-12">
+        <div class="d-flex">
+          <div>{{'moderation.moderate.duplicated' | translate}}</div>
+          <p-inputSwitch class="input-switch-duplicated" [(ngModel)]="comment.duplicated">
+          </p-inputSwitch>
+        </div>
+        </div>
       <div class="col-12 col-md-12 margin-item">
         <p-radioButton [(ngModel)]="comment.type" name="optionModeration" value="Proposal"
           [label]="'moderation.label.proposal' | translate">

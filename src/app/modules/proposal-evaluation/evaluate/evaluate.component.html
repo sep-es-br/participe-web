@@ -1,5 +1,20 @@
 <app-template>
-  <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen">
+  <app-modal id="modalEvaluate" [modalData]="modalData" (confirmed)="confirmedModal()" (closed)="cancel()">
+    <div class="row">
+      <p-dropdown class="dropdown-modal"
+          [options]="optionsData"
+          [(ngModel)]="selectedOrg" 
+          [styleClass] = "'w-100'"
+          (onChange)="onDropdownChange($event)"
+         ></p-dropdown>
+         <div class="p-2 field-switch">
+            <p-inputSwitch class="input-switch-modal" id="orgPreference" [(ngModel)]="orgHasPreference">
+            </p-inputSwitch>
+          <label for="orgPreference">{{ "proposal_evaluation.orgPreference" | translate }}</label>
+         </div>
+    </div>  
+  </app-modal>
+  <div class="row" *ngIf="this.readOnlyProposalEvaluation && isEvaluationOpen && hasEvaluatorOrgGuid">
     <div class="col-12 d-flex flex-row justify-content-end" >
       <button
         [disabled]="loading"
@@ -25,7 +40,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" >
     <div class="col-4">
       <label>{{
         (readOnlyProposalEvaluation
@@ -41,9 +56,9 @@
             'not-evaluated': !proposal.evaluationStatus
           }"
         >
-          {{ getOrgName(1) }}
+          {{ orgNameTag }}
         </button>
-        <span>{{ getOrgName(0) }}</span>
+        <span>{{ orgName }}</span>
       </div>
 
       <br />
@@ -287,6 +302,16 @@
         <p>{{ proposal.evaluatorName }}</p>
       </div>
     </div>
+
+    <button
+          [disabled]="loading"
+          pButton
+          icon="pi pi-arrow-left"
+          [label]="'back' | translate"
+          class="mx-2"
+          type="button"
+          (click)="cancel()"
+        ></button>
   </form>
 
   <p-confirmDialog

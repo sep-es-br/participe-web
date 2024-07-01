@@ -14,6 +14,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     private element: any;
     @Input() modalData:Partial<IModalData>;
     @Output() closed: EventEmitter<void> = new EventEmitter<void>();
+    @Output() confirmed: EventEmitter<void> = new EventEmitter<void>();
 
     dataModal;
 
@@ -60,5 +61,11 @@ export class ModalComponent implements OnInit, OnDestroy {
         this.element.style.display = 'none';
         document.body.classList.remove('app-modal-open');
         this.closed.emit();
+    }
+
+    confirm():void {
+        this.element.style.display = 'none';
+        document.body.classList.remove('app-modal-open');
+        this.confirmed.emit();
     }
 }

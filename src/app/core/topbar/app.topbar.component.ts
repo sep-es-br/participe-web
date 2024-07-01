@@ -25,7 +25,9 @@ export class AppTopBarComponent implements OnInit {
     try {
       return this.person.name.split(' ').filter((_, i) => i <= 1).join(' ');
     } catch (error) {
-      return this.person.name;
+      if(this.person?.name ){
+        return this.person.name;
+      }
     }
   }
 
