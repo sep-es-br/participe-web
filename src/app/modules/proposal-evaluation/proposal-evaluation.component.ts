@@ -93,6 +93,11 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.translateSearchFormOptions(langConfig.translations['all']);
       }
     )
+
+    setTimeout(() => {
+      this.getEvaluationStatusOptions();
+      this.getLoaIncludedOptions();
+    }, 700)
   }
 
   public async pageChange(event: PaginatorState) {
