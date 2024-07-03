@@ -4,7 +4,7 @@ import { ModerationComments } from "@app/shared/models/moderationComments";
 import { ModerationFilter } from "@app/shared/models/moderationFilter";
 import { ModerationService } from "@app/shared/services/moderation.service";
 import { HelperUtils } from "@app/shared/util/HelpersUtil";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
 import { TranslateService } from "@ngx-translate/core";
@@ -17,6 +17,7 @@ import { AuthService } from "@app/shared/services/auth.service";
 import { ConferenceService } from "@app/shared/services/conference.service";
 import { TypeofExpr } from "@angular/compiler";
 import { PaginatorState } from "primeng/paginator";
+import { Dropdown } from "primeng/dropdown";
 
 @Component({
   selector: "app-moderation",
@@ -32,7 +33,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   typeOptions: SelectItem[] = [];
   calendarTranslate: any = calendar;
   microregion: SelectItem[] = [];
-  planItem: SelectItem[] = [];
+  planItem: any[] = [];
   labelMicroregion: string;
   labelPlanItem: string;
   language: string;
@@ -277,15 +278,24 @@ export class ModerationComponent implements OnInit, OnDestroy {
         const data = await this.moderationSrv.getPlanItem(
           this.conferenceSelect.id
         );
-        this.planItem = _.map(
-          _.get(data, "planItems", []),
-          ({ planItemId, planItemName }) => ({
-            value: planItemId,
-            label: planItemName,
-          })
-        );
-        this.planItem.unshift({ value: null, label: "Todos" });
-        this.labelPlanItem = _.get(data, "structureItemName");
+        this.planItem = _.flatMap(_.get(data, "planItems", []), ({ planItemId, planItemName, planItemsChildren }) => {
+          const items = [
+            { value: planItemId, label: planItemName, styleClass: 'fw-bold'},
+            ..._.map(planItemsChildren, ({ planItemId: childItemId, planItemName: childItemName }) => ({
+              value: childItemId,
+              label: childItemName,
+              styleClass: ''
+            }))
+          ];
+          return items;
+        });
+        this.planItem.unshift({
+          value: null,
+          label: "Todos",
+          styleClass: 'fw-bold'
+        });
+        console.log(this.planItem)
+        this.labelPlanItem = `${_.get(data, "structureItemName", "")} / ${_.get(data, "structureItemChildrenName", "")}`;
       }
     } catch (error) {
       this.messageService.add({
