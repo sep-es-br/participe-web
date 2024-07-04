@@ -81,8 +81,8 @@ export class MeetingService extends BaseService<Meeting> {
     ).toPromise();
   }
 
-  getTotalAttendeesByMeeting(idMeeting: number): Promise<number> {
-    return this.http.get<number>(`${this.urlBase}/${idMeeting}/participants/total`).toPromise();
+  getTotalParticipantsInMeeting(idMeeting: number, query: IQueryOptions): Promise<{checkedIn: number, preRegistered: number}> {
+    return this.http.get<{checkedIn: number, preRegistered: number}>(`${this.urlBase}/${idMeeting}/total${PrepareHttpQuery(query)}`, {headers: Common.buildHeaders()}).toPromise();
   }
 
   generateLinkPreRegistration(idMeeting: number): Promise<any> {
