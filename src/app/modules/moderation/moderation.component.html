@@ -34,7 +34,16 @@
           </div>
           <div class="col-12 col-md-3 form-group">
             <label>{{ labelPlanItem }}</label>
-            <p-dropdown [styleClass]="'d-flex form-control'" [options]="planItem" [(ngModel)]="filter.planItemId"></p-dropdown>
+            <p-dropdown
+              [styleClass]="'d-flex form-control'" 
+              [options]="planItem" 
+              [(ngModel)]="filter.planItemId">
+              <ng-template let-option ng pTemplate="item">
+                <div [ngClass]="option.styleClass">
+                  {{ option.label }}
+                </div>
+              </ng-template>
+            </p-dropdown>
           </div>
           <div class="col-12 col-md-3 form-group">
             <label>{{ 'moderation.filters.text' | translate }}</label>
