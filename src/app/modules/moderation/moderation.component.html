@@ -38,12 +38,6 @@
               [styleClass]="'d-flex form-control'" 
               [options]="planItem" 
               [(ngModel)]="filter.planItemId">
-              <ng-template pTemplate="group" >
-                <div class="bg-danger" >
-                  +
-                </div>
-
-              </ng-template>
               <ng-template let-option ng pTemplate="item">
                 <div [ngClass]="option.styleClass">
                   {{ option.label }}

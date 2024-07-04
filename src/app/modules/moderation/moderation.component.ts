@@ -294,7 +294,6 @@ export class ModerationComponent implements OnInit, OnDestroy {
           label: "Todos",
           styleClass: 'fw-bold'
         });
-        console.log(this.planItem)
         this.labelPlanItem = `${_.get(data, "structureItemName", "")} / ${_.get(data, "structureItemChildrenName", "")}`;
       }
     } catch (error) {
@@ -313,14 +312,6 @@ export class ModerationComponent implements OnInit, OnDestroy {
   changeDate(field: string, event) {
     this.filter[field] = moment(event).format("DD/MM/yyyy");
   }
-
-  //  selectLocality(locality: SelectItem) {
-  //    this.filter.localityIds = [locality.value];
-  //  }
-
-  //  selectPlanItem(planItem: SelectItem) {
-  //    this.filter.planItemId = [planItem.value];
-  //  }
 
   async changeSmallFilter(status: string) {
     this.filter.status = status;
