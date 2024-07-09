@@ -231,26 +231,50 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   onCodeResult(resultString: string) {    
     this.qrResultString = resultString;
-    if(!isNaN(Number(resultString))){
+    const regex = /PersonId:(\d+)/;
+    const match = this.qrResultString.match(regex);
+    if(!isNaN(Number(resultString)) || Number(match[1])){
       this.closeQRCodeReader();
       this.modalService.close('QRCodeReader');
       this.loadingService.loading(true);
-      this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
-      .then((resp)=>{
-        this.modalSuceesPresence = true;
-        this.dataPresence = resp;
-        this.playSoundNotification('success');
+      
+      if (match && match[1]) {
+        const personId = match[1];
+        this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
+        .then((resp)=>{
+          this.modalSuceesPresence = true;
+          this.dataPresence = resp;
+          this.playSoundNotification('success');
+        })
+      .catch((err)=>{
+        this.playSoundNotification('error');
+        setTimeout(() => {
+          this.readQRCode();
+        }, 2700);
       })
-    .catch((err)=>{
-      this.playSoundNotification('error');
-      setTimeout(() => {
-        this.readQRCode();
-      }, 2700);
-    })
-    .finally(() => {
-        
-        this.loadingService.loading(false);
-      });
+      .finally(() => {
+          
+          this.loadingService.loading(false);
+        });
+      } else {
+        this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
+        .then((resp)=>{
+          this.modalSuceesPresence = true;
+          this.dataPresence = resp;
+          this.playSoundNotification('success');
+        })
+      .catch((err)=>{
+        this.playSoundNotification('error');
+        setTimeout(() => {
+          this.readQRCode();
+        }, 2700);
+      })
+      .finally(() => {
+          
+          this.loadingService.loading(false);
+        });
+      }
+      
     }
   }
 

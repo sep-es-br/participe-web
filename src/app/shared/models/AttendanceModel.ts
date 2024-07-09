@@ -33,7 +33,7 @@ export class AttendanceModel {
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   idMeeting: number;
-  totalAttendees: number;
+  totalCheckedIn: number;
   totalPreRegistered: number;
   listAttendees: IAttendee[] = [];
 
@@ -129,8 +129,13 @@ export class AttendanceModel {
     return this.citizenAutentications.length > 0 ? this.citizenAutentications.findIndex(c => c.loginName === 'Participe') !== -1 : false;
   }
 
-  async updateTotalAttendees() {
-    this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting);
+  async getTotalParticipants() {
+    await this.meetingSrv.getTotalParticipantsInMeeting(this.idMeeting, this.getQueryListAttendees()).then(
+      (response) => {
+        this.totalCheckedIn = response.checkedIn
+        this.totalPreRegistered = response.preRegistered
+      }
+    )
   }
 
   async selectAttendee(attendee: IAttendee) {
@@ -252,6 +257,8 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+
+    await this.setActionBar();
     this.isSearching = false;
   }
 
@@ -268,9 +275,10 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+
+    await this.setActionBar();
     this.isSearching = false;
   }
-
   handleChangeAuthType(value: AuthTypeEnum) {
     const { password: passwordControl, email: emailControl, cpf: cpfControl } = this.form.controls;
     if (this.valueChangeCPFSub) {
@@ -369,8 +377,7 @@ export class AttendanceModel {
 
   async setActionBar() {
 
-    this.totalAttendees = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.checkedIn).length : 0
-    this.totalPreRegistered = this.listAttendees?.length > 0 ? this.listAttendees.filter(p => p.preRegistered).length : 0
+    await this.getTotalParticipants();
 
     this.actionbarSrv.setItems([
       {
@@ -382,7 +389,7 @@ export class AttendanceModel {
         position: 'RIGHT',
         handle: () => {},
         icon: 'user-solid.svg',
-        label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
+        label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
       },
       {
         position: 'RIGHT',
