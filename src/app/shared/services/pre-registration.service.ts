@@ -25,4 +25,12 @@ export class PreRegistrationService extends BaseService<any> {
     return this.http.post<any>(`${this.urlBase}/check-in`,sender,{ headers: Common.buildHeaders() }).toPromise();
   }
 
+  accreditationCheckin(personId: number,meetingId: number){
+    const sender = {
+        personId: personId,
+        meetingId: meetingId
+    };
+    return this.http.post<any>(`${this.urlBase}/accreditation-check-in`,sender,{ headers: Common.buildHeaders() }).toPromise();
+  }
+
 }
