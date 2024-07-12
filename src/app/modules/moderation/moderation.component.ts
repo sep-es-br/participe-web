@@ -155,7 +155,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.actionBarSrv.setItems([
       {
         position: "RIGHT",
-        label: `${this.conferenceComments.length} Textos`,
+        label: `${this.paginatorTotalRecords} Textos`,
         icon: "comment.svg",
       },
       {
