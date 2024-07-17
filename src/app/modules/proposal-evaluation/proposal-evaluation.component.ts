@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import {Location} from '@angular/common';
+import { Location } from "@angular/common";
 
 import { SelectItem } from "primeng/api";
 import { PaginatorState } from "primeng/paginator";
@@ -11,7 +11,10 @@ import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
-import { IProposal, IProposalEvaluationSearchFilter } from "@app/shared/interface/IProposal";
+import {
+  IProposal,
+  IProposalEvaluationSearchFilter,
+} from "@app/shared/interface/IProposal";
 
 import { Conference } from "@app/shared/models/conference";
 
@@ -59,45 +62,50 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     private actionBarService: ActionBarService,
     private translateService: TranslateService,
     private proposalEvaluationService: ProposalEvaluationService,
-    private evaluatorsService: EvaluatorsService,
+    private evaluatorsService: EvaluatorsService
   ) {
-      this.propEvalSearchFilter = JSON.parse(sessionStorage.getItem("propEvalSearchFilter"));
+    this.propEvalSearchFilter = JSON.parse(
+      sessionStorage.getItem("propEvalSearchFilter")
+    );
+
+    this.getEvaluationStatusOptions();
+    this.getLoaIncludedOptions();
   }
 
   public async ngOnInit() {
-      this.setInfo()
+    this.setInfo();
   }
 
-  public async setInfo(){
-      await this.loadConferences();
-        
-      await this.listProposalEvaluationsByConference(
-        this.pageState.page,
-        this.pageState.rows,
-        this.propEvalSearchFilter
-      );
-        
-      await this.populateSearchFilterOptions().finally(() => this.organizationOptions = this.evaluatorsService.organizationsListSelectItem);
+  public async setInfo() {
+    await this.loadConferences();
 
-      if(this.propEvalSearchFilter && Object.values(this.propEvalSearchFilter).some((value) => !!value)) {
-          this.search = true
-        }
-          
-      this.initSearchForm();
+    await this.listProposalEvaluationsByConference(
+      this.pageState.page,
+      this.pageState.rows,
+      this.propEvalSearchFilter
+    );
+
+    await this.populateSearchFilterOptions().finally(
+      () =>
+        (this.organizationOptions =
+          this.evaluatorsService.organizationsListSelectItem)
+    );
+
+    if (
+      this.propEvalSearchFilter &&
+      Object.values(this.propEvalSearchFilter).some((value) => !!value)
+    ) {
+      this.search = true;
+    }
+
+    this.initSearchForm();
   }
 
   public ngAfterViewInit(): void {
-    this.translateService.onLangChange.subscribe(
-      (langConfig) => {
-        this.search = false;
-        this.translateSearchFormOptions(langConfig.translations['all']);
-      }
-    )
-
-    setTimeout(() => {
-      this.getEvaluationStatusOptions();
-      this.getLoaIncludedOptions();
-    }, 700)
+    this.translateService.onLangChange.subscribe((langConfig) => {
+      this.search = false;
+      this.translateSearchFormOptions(langConfig.translations["all"]);
+    });
   }
 
   public async pageChange(event: PaginatorState) {
@@ -112,7 +120,11 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     this.conferenceSelect = conference;
     sessionStorage.setItem("selectedConference", JSON.stringify(conference));
     sessionStorage.setItem("isEvaluationOpen", JSON.stringify(false));
-    if(this.conferenceSelect.evaluationConfiguration && this.conferenceSelect.evaluationConfiguration.evaluationDisplayStatus == "OPEN"){
+    if (
+      this.conferenceSelect.evaluationConfiguration &&
+      this.conferenceSelect.evaluationConfiguration.evaluationDisplayStatus ==
+        "OPEN"
+    ) {
       sessionStorage.setItem("isEvaluationOpen", JSON.stringify(true));
     }
     this.buildBreadcrumb();
@@ -146,16 +158,27 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   }
 
   private async loadConferences() {
-    await this.proposalEvaluationService.getConferencesActive(false)
+    await this.proposalEvaluationService
+      .getConferencesActive(false)
       .then((data) => {
         this.conferences = data;
         sessionStorage.setItem("isEvaluationOpen", JSON.stringify(false));
         if (sessionStorage.getItem("selectedConference") === null) {
           if (data.length > 0) {
-            if(data.filter((conf) => conf.evaluationConfiguration?.evaluationDisplayStatus == "OPEN").length > 0){
-              this.conferenceSelect = data.filter((conf) => conf.evaluationConfiguration?.evaluationDisplayStatus == "OPEN")[0];
+            if (
+              data.filter(
+                (conf) =>
+                  conf.evaluationConfiguration?.evaluationDisplayStatus ==
+                  "OPEN"
+              ).length > 0
+            ) {
+              this.conferenceSelect = data.filter(
+                (conf) =>
+                  conf.evaluationConfiguration?.evaluationDisplayStatus ==
+                  "OPEN"
+              )[0];
               sessionStorage.setItem("isEvaluationOpen", JSON.stringify(true));
-            }else if (data.filter((conf) => conf.isActive).length === 0) {
+            } else if (data.filter((conf) => conf.isActive).length === 0) {
               this.conferenceSelect = data[0];
             } else {
               this.conferenceSelect = data.filter((conf) => conf.isActive)[0];
@@ -165,7 +188,11 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
           this.conferenceSelect = JSON.parse(
             sessionStorage.getItem("selectedConference")
           );
-          if(this.conferenceSelect.evaluationConfiguration && this.conferenceSelect.evaluationConfiguration.evaluationDisplayStatus == "OPEN"){
+          if (
+            this.conferenceSelect.evaluationConfiguration &&
+            this.conferenceSelect.evaluationConfiguration
+              .evaluationDisplayStatus == "OPEN"
+          ) {
             sessionStorage.setItem("isEvaluationOpen", JSON.stringify(true));
           }
         }
@@ -182,8 +209,15 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   private async getDomainConfiguration() {
     await this.proposalEvaluationService
       .getDomainConfiguration(this.conferenceSelect.id)
-      .then((response) => (this.proposalEvaluationService.domainConfigNamesObj = response))
-      .finally(() => this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj)
+      .then(
+        (response) =>
+          (this.proposalEvaluationService.domainConfigNamesObj = response)
+      )
+      .finally(
+        () =>
+          (this.domainConfigNamesObj =
+            this.proposalEvaluationService.domainConfigNamesObj)
+      );
   }
 
   private async listProposalEvaluationsByConference(
@@ -191,8 +225,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     pageSize: number,
     searchFilter?: IProposalEvaluationSearchFilter
   ) {
-
-    this.loading = true
+    this.loading = true;
     await this.proposalEvaluationService
       .listProposalEvaluationsByConference(
         this.conferenceSelect.id,
@@ -209,7 +242,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.pageState.page = response.pageable.pageNumber;
         this.proposalList = response.content;
       })
-      .finally(() => this.loading = false);
+      .finally(() => (this.loading = false));
   }
 
   private initSearchForm() {
@@ -217,16 +250,24 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
       evaluationStatus: new FormControl(
         this.propEvalSearchFilter?.evaluationStatus ?? null
       ),
-      localityId: new FormControl(this.propEvalSearchFilter?.localityId ?? null),
+      localityId: new FormControl(
+        this.propEvalSearchFilter?.localityId ?? null
+      ),
       planItemAreaId: new FormControl(
         this.propEvalSearchFilter?.planItemAreaId ?? null
       ),
-      planItemId: new FormControl(this.propEvalSearchFilter?.planItemId ?? null),
+      planItemId: new FormControl(
+        this.propEvalSearchFilter?.planItemId ?? null
+      ),
       organizationGuid: new FormControl(
         this.propEvalSearchFilter?.organizationGuid ?? null
       ),
-      loaIncluded: new FormControl(this.propEvalSearchFilter?.loaIncluded ?? null),
-      commentText: new FormControl(this.propEvalSearchFilter?.commentText ?? null),
+      loaIncluded: new FormControl(
+        this.propEvalSearchFilter?.loaIncluded ?? null
+      ),
+      commentText: new FormControl(
+        this.propEvalSearchFilter?.commentText ?? null
+      ),
     });
   }
 
@@ -247,7 +288,10 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.localityOptions = response.map((locality) => {
           return { label: locality.localityName, value: locality.localityId };
         });
-        this.localityOptions.unshift({ label: this.translateService.instant("all"), value: null });
+        this.localityOptions.unshift({
+          label: this.translateService.instant("all"),
+          value: null,
+        });
       });
   }
 
@@ -258,7 +302,10 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.planItemOptions = response.map((planItem) => {
           return { label: planItem.name, value: planItem.id };
         });
-        this.planItemOptions.unshift({ label: this.translateService.instant("all"), value: null });
+        this.planItemOptions.unshift({
+          label: this.translateService.instant("all"),
+          value: null,
+        });
       });
   }
 
@@ -269,16 +316,19 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         this.planItemAreaOptions = response.map((planItemArea) => {
           return { label: planItemArea.name, value: planItemArea.id };
         });
-        this.planItemAreaOptions.unshift({ label: this.translateService.instant("all"), value: null });
+        this.planItemAreaOptions.unshift({
+          label: this.translateService.instant("all"),
+          value: null,
+        });
       });
   }
 
   private async populateSearchFilterOptions() {
-    this.getEvaluationStatusOptions();
-    this.getLoaIncludedOptions();
     await this.getLocalityOptions();
     await this.getPlanItemOptions();
     await this.getPlanItemAreaOptions();
+    this.getEvaluationStatusOptions();
+    this.getLoaIncludedOptions();
   }
 
   private buildBreadcrumb() {
@@ -313,14 +363,14 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     this.getEvaluationStatusOptions();
     this.getLoaIncludedOptions();
 
-    const propEvalSearchFormControls = this.proposalEvaluationSearchForm.controls
+    const propEvalSearchFormControls =
+      this.proposalEvaluationSearchForm.controls;
 
     for (const key in propEvalSearchFormControls) {
-      if(propEvalSearchFormControls[key].value == null){
-        propEvalSearchFormControls[key].patchValue(null)
+      if (propEvalSearchFormControls[key].value == null) {
+        propEvalSearchFormControls[key].patchValue(null);
         propEvalSearchFormControls[key].updateValueAndValidity();
       }
     }
-
   }
 }

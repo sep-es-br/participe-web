@@ -5,8 +5,9 @@ export interface IProposal {
     planItemName: string;
     planItemAreaName: string;
     description: string;
-    evaluatorOrgsNameList: Array<string>;
+    evaluatorOrgsNameList?: Array<string>;
     evaluatorName?: string;
+    loaIncluded?: boolean;
 }
 
 export interface IProposalEvaluation {
