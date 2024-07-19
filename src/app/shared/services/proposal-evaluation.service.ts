@@ -70,7 +70,7 @@ export class ProposalEvaluationService {
 
   constructor(
     private _http: HttpClient,
-    private translateService: TranslateService,
+    private translateService: TranslateService
   ) {
     this.translateEvaluation();
   }
@@ -132,13 +132,18 @@ export class ProposalEvaluationService {
   }
 
   public getBudgetActionListByBudgetUnitId(
-    budgetUnitId: string
+    budgetUnitIdValues: Array<string>
   ): Array<IBudgetAction> {
-    return this.budgetOptions
-      .find((item) => item.budgetUnitId == budgetUnitId)
-      .budgetActions.sort(
-        (a, b) => Number(a.budgetActionId) - Number(b.budgetActionId)
-      );
+    const budgetActionList: Array<IBudgetAction> = [];
+
+    this.budgetOptions
+      .filter((item) => budgetUnitIdValues.includes(item.budgetUnitId))
+      .map((item) => item.budgetActions)
+      .forEach((item) => budgetActionList.push(...item));
+
+    return budgetActionList.sort(
+      (a, b) => Number(a.budgetActionId) - Number(b.budgetActionId)
+    );
   }
 
   public getDomainConfiguration(conferenceId: number): Promise<any> {
