@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { ConfirmationService, MessageService } from "primeng/api";
 import { RadioButtonClickEvent } from "primeng/radiobutton";
-import { DropdownChangeEvent } from "primeng/dropdown";
+import { MultiSelectChangeEvent } from "primeng/multiselect";
+
 import { TranslateService } from "@ngx-translate/core";
 import { ModalService } from "@app/core/modal/modal.service";
 import { ModalData } from "@app/shared/interface/IModalData";
@@ -24,7 +25,6 @@ import {
 } from "@app/shared/models/ProposalEvaluationModel";
 
 import { StoreKeys } from "@app/shared/constants";
-import { IEvaluatorOrganization } from "@app/shared/interface/IEvaluatorData";
 
 @Component({
   selector: "app-evaluate",
@@ -32,8 +32,8 @@ import { IEvaluatorOrganization } from "@app/shared/interface/IEvaluatorData";
   templateUrl: "./evaluate.component.html",
   styleUrl: "./evaluate.component.scss",
 })
-export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
-  public loading: boolean = false;
+export class EvaluateComponent implements OnInit, OnDestroy {
+  public loading: boolean = true;
 
   public modalData: ModalData;
 
@@ -112,22 +112,10 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public async ngOnInit() {
-    this.initCreateProposalForm();
-    this.populateOptionsLists();
     await this.getProposalEvaluationData();
+    this.populateOptionsLists();
     this.modalOpen();
     this.getOrgName();
-  }
-
-  public async ngAfterViewInit() {
-    if (
-      this.budgetUnitOptions.length === 0 ||
-      this.reasonOptions.length === 0
-    ) {
-      await this.proposalEvaluationService.populateBudgetOptions().then(() => {
-        this.populateOptionsLists();
-      });
-    }
   }
 
   public onDropdownChange(event: any): void {
@@ -236,15 +224,23 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.patchProposalEvaluationFormValue(event.value);
   }
 
-  public get formBudgetUnit(): IBudgetUnit {
+  public get formBudgetUnit(): Array<IBudgetUnit> {
     return this.proposalEvaluationForm.get("budgetUnit").value;
   }
 
-  public budgetUnitChanged(event: DropdownChangeEvent): void {
+  public budgetUnitChanged(event: MultiSelectChangeEvent): void {
+    const budgetUnitIdValues = event.value.map((item) => item.budgetUnitId);
+
     this.budgetActionOptions =
       this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(
-        event.value.budgetUnitId
+        budgetUnitIdValues
       );
+
+    this.proposalEvaluationForm.get("budgetAction").patchValue(null);
+  }
+
+  public budgetUnitCleared() {
+    this.budgetActionOptions = [];
     this.proposalEvaluationForm.get("budgetAction").patchValue(null);
   }
 
@@ -359,7 +355,7 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
         null,
         Validators.required
       ),
-      budgetUnit: new FormControl<IBudgetUnit>(null),
+      budgetUnit: new FormControl<Array<IBudgetUnit>>(null),
       budgetAction: new FormControl<Array<IBudgetAction>>(null),
       budgetPlan: new FormControl<string>(null),
       reason: new FormControl<string>(null),
@@ -370,9 +366,15 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
     proposalEvaluationData: ProposalEvaluationModel
   ) {
     if (proposalEvaluationData.includedInNextYearLOA) {
+      const budgetUnitIdArray = proposalEvaluationData.budgetUnitId.includes(
+        ";"
+      )
+        ? proposalEvaluationData.budgetUnitId.split(";")
+        : [proposalEvaluationData.budgetUnitId];
+
       this.budgetActionOptions =
         this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(
-          proposalEvaluationData.budgetUnitId
+          budgetUnitIdArray
         );
     }
 
@@ -381,7 +383,7 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
         proposalEvaluationData.includedInNextYearLOA,
         Validators.required
       ),
-      budgetUnit: new FormControl<IBudgetUnit>(
+      budgetUnit: new FormControl<Array<IBudgetUnit>>(
         proposalEvaluationData.budgetUnitControlValue
       ),
       budgetAction: new FormControl<Array<IBudgetAction>>(
@@ -394,7 +396,6 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async getProposalEvaluationData() {
     try {
-      this.loading = true;
       await this.proposalEvaluationService
         .getProposalEvaluationData(this.proposalId)
         .then((response) => {
@@ -441,7 +442,10 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
       reasonControl.patchValue(null);
       reasonControl.clearValidators();
 
-      budgetUnitControl.addValidators(Validators.required);
+      budgetUnitControl.addValidators([
+        Validators.required,
+        Validators.maxLength(2),
+      ]);
       budgetActionControl.addValidators([
         Validators.required,
         Validators.maxLength(3),
@@ -474,6 +478,30 @@ export class EvaluateComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return !keysArray.every((key) => {
       switch (key) {
+        case "budgetUnitId":
+          const currentStateBudgetUnitId = currentState[key].includes(";")
+            ? currentState[key].split(";")
+            : [currentState[key]];
+          const initialStateBudgetUnitId =
+            this.proposalEvaluationFormInitialState[key].includes(";")
+              ? this.proposalEvaluationFormInitialState[key].split(";")
+              : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetUnitId.every((id) =>
+            initialStateBudgetUnitId.includes(id)
+          );
+
+        case "budgetUnitName":
+          const currentStateBudgetUnitName = currentState[key].includes(";")
+            ? currentState[key].split(";")
+            : [currentState[key]];
+          const initialStateBudgetUnitName =
+            this.proposalEvaluationFormInitialState[key].includes(";")
+              ? this.proposalEvaluationFormInitialState[key].split(";")
+              : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetUnitName.every((name) =>
+            initialStateBudgetUnitName.includes(name)
+          );
+
         case "budgetActionId":
           const currentStateBudgetActionId = currentState[key].includes(";")
             ? currentState[key].split(";")
