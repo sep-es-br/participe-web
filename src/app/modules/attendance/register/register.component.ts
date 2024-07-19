@@ -177,9 +177,14 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.isReadonly = false
     this.form.reset();
     if(this.newAccount){
-      console.log(attendee.sub)
       const { name, locality, authType, email, phone, sub } = this.form.controls;
-      name.setValue(attendee.name)
+      console.log(attendee.name)
+      if(attendee.name == "<novo usuário>"){
+        name.setValue(null)
+      }else{
+        name.setValue(attendee.name)
+      }
+
       authType.setValue(AuthTypeEnum.EMAIL)
       if(attendee.email){
         this.isReadonly = true
@@ -189,14 +194,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
     }
   }
-
-  // toggleNewAccount(attendee: IAttendee) {
-  //   this.modalSuceesPresence = false;
-  //   this.newAccount = !this.newAccount;
-  //   const { name, locality, authType, email, phone, sub } = this.form.controls;
-  //   name.setValue(attendee.name)
-  //   email.
-  // }
 
   onInput($event) {
     this.form.patchValue(
