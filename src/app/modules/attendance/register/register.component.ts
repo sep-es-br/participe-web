@@ -178,7 +178,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.form.reset();
     if(this.newAccount){
       const { name, locality, authType, email, phone, sub } = this.form.controls;
-      console.log(attendee.name)
       if(attendee.name == "<novo usuário>"){
         name.setValue(null)
       }else{
