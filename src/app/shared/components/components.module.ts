@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { InputMessageComponent } from '@app/shared/components/input-message/input-message.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   imports: [
@@ -12,10 +13,12 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule
   ],
   declarations: [
-    InputMessageComponent
+    InputMessageComponent,
+    LoadingSpinnerComponent
   ],
   exports: [
-    InputMessageComponent
+    InputMessageComponent,
+    LoadingSpinnerComponent
   ]
 })
 export class ComponentsModule {}

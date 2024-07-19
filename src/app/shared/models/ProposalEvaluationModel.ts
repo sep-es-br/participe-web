@@ -35,12 +35,25 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
     return this._id;
   }
 
-  public get budgetUnitControlValue(): IBudgetUnit | null {
+  public get budgetUnitControlValue(): Array<IBudgetUnit> | null {
     if (!this.budgetUnitId || !this.budgetUnitName) {
       return null;
     }
 
-    return { budgetUnitId: this.budgetUnitId, budgetUnitName: this.budgetUnitName }
+    const budgetUnitIdList = this.budgetUnitId.split(";");
+    const budgetUnitNameList = this.budgetUnitName.split(";");
+
+    let budgetUnitControlValueArray: Array<IBudgetUnit> = [];
+
+    for (let i = 0; i < budgetUnitIdList.length; i++) {
+      const budgetUnit: IBudgetUnit = {
+        budgetUnitId: budgetUnitIdList[i],
+        budgetUnitName: budgetUnitNameList[i],
+      };
+      budgetUnitControlValueArray.push(budgetUnit);
+    }
+
+    return budgetUnitControlValueArray;
   }
 
   public get budgetActionControlValue(): Array<IBudgetAction> | null {
@@ -54,7 +67,10 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
     let budgetActionControlValueArray: Array<IBudgetAction> = [];
 
     for (let i = 0; i < budgetActionIdList.length; i++) {
-      const budgetAction: IBudgetAction = { budgetActionId: budgetActionIdList[i], budgetActionName: budgetActionNameList[i] }
+      const budgetAction: IBudgetAction = {
+        budgetActionId: budgetActionIdList[i],
+        budgetActionName: budgetActionNameList[i],
+      };
       budgetActionControlValueArray.push(budgetAction);
     }
 
@@ -76,7 +92,12 @@ export class ProposalEvaluationCreateFormModel
   public budgetPlan?: string;
   public representing: string;
 
-  constructor(formValue: any, personId: number, proposalId: number, representing: string) {
+  constructor(
+    formValue: any,
+    personId: number,
+    proposalId: number,
+    representing: string
+  ) {
     this.includedInNextYearLOA = formValue.includedInNextYearLOA;
     if (formValue.includedInNextYearLOA) {
       this.budgetUnitId = this.getBudgetUnitId(formValue.budgetUnit);
@@ -92,12 +113,12 @@ export class ProposalEvaluationCreateFormModel
     this.representing = representing;
   }
 
-  private getBudgetUnitId(value: IBudgetUnit): string {
-    return value.budgetUnitId;
+  private getBudgetUnitId(value: Array<IBudgetUnit>): string {
+    return value.map((item) => item.budgetUnitId).join(";");
   }
 
-  private getBudgetUnitName(value: IBudgetUnit): string {
-    return value.budgetUnitName;
+  private getBudgetUnitName(value: Array<IBudgetUnit>): string {
+    return value.map((item) => item.budgetUnitName).join(";");
   }
 
   private getBudgetActionId(value: Array<IBudgetAction>): string {
