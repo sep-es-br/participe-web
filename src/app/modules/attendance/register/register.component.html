@@ -28,7 +28,7 @@
           </div>
           <div class="col-12">
             <label [class.required]="form.get('authType').value === 'E-Mail'">{{ 'citizen.mail' | translate }}</label>
-            <input pInputText readonly class="form-control" formControlName="email">
+            <input [readonly]="isReadonly" pInputText class="form-control" formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
           </div>
           <div class="col-12">
