@@ -16,4 +16,5 @@ export interface IAttendee {
   preRegisteredDate?: string;
   checkingIn?: boolean;
   authName?: List<string>;
+  sub?: string;
 }

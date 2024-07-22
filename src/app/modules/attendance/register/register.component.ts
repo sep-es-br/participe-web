@@ -171,11 +171,27 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     return success;
   }
 
-  toggleNewAccount() {
+  toggleNewAccount(attendee?: IAttendee) {
     this.modalSuceesPresence = false;
     this.newAccount = !this.newAccount;
+    this.isReadonly = false
     this.form.reset();
-    this.form.controls.authType.setValue(AuthTypeEnum.CPF);
+    if(this.newAccount){
+      const { name, locality, authType, email, phone, sub } = this.form.controls;
+      if(attendee.name == "<novo usuário>"){
+        name.setValue(null)
+      }else{
+        name.setValue(attendee.name)
+      }
+
+      authType.setValue(AuthTypeEnum.EMAIL)
+      if(attendee.email){
+        this.isReadonly = true
+      }
+      email.setValue(attendee.email)
+      sub.setValue(attendee.sub)
+
+    }
   }
 
   onInput($event) {
