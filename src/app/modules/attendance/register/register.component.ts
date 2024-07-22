@@ -175,6 +175,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.modalSuceesPresence = false;
     this.newAccount = !this.newAccount;
     this.isReadonly = false
+    this.authName = []
     this.form.reset();
     if(this.newAccount){
       const { name, locality, authType, email, phone, sub } = this.form.controls;

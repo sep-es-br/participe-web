@@ -514,7 +514,7 @@ export class AttendanceModel {
   toggleSelectedAttendee() {
     this.isAttendeeSelected = !this.isAttendeeSelected;
     this.selectedAttende = null;
+    this.authName = [];
     this.form.reset();
-    this.form.controls.authType.setValue(AuthTypeEnum.CPF);
   }
 }
