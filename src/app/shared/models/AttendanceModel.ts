@@ -237,11 +237,11 @@ export class AttendanceModel {
       this.listAttendees = result.content;
       this.lastPage = result.last;
       this.noResult = result.empty;
-    } catch {
+    } catch(error) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('attendance.error.whenSearching'),
+        detail: error.error.message
       });
     }
     await this.setActionBar();
@@ -255,7 +255,8 @@ export class AttendanceModel {
       const result = await this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees(true));
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
-    } catch {
+    } catch (error){
+      console.log(error)
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
