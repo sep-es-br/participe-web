@@ -28,7 +28,14 @@
 
       <div class="col-6 d-flex justify-content-around align-items-center">
         <div class="col-9 d-inline-flex align-content-center flex-wrap">
-          <button class="org-badge evaluated pe-none" *ngFor="let orgGuid of proposal.evaluatorOrgsNameList">
+          <button 
+            *ngFor="let orgGuid of proposal.evaluatorOrgsNameList"
+            class="org-badge pe-none"
+            [ngClass]="{
+              loaIncluded: proposal.loaIncluded,
+              'not-loaIncluded': !proposal.loaIncluded
+            }"
+          > 
             {{ getOrgName(orgGuid) }}
           </button>
         </div>

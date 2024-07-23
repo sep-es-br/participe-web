@@ -13,5 +13,6 @@ export class CitizenSenderModel {
   resetPassword?: boolean;
   active?: boolean;
   selfDeclaration: CitizenSelfDeclarationSenderModel;
+  sub?: string;
 }
 

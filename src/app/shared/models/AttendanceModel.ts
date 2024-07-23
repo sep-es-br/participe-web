@@ -43,6 +43,7 @@ export class AttendanceModel {
   pageSize = 30;
   noResult = false;
   isSearching = false;
+  isReadonly = false;
 
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
@@ -106,6 +107,7 @@ export class AttendanceModel {
       email: [''],
       phone: ['', Validators.maxLength(20)],
       resetPassword: false,
+      sub: ['']
     });
 
     this.getConferencesAndMeetings().then();
@@ -138,38 +140,40 @@ export class AttendanceModel {
     )
   }
 
+  toggleNewAccount(attendee?: IAttendee) {
+  }
+
   async selectAttendee(attendee: IAttendee) {
-    const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
-    try {
-      this.isAttendeeSelected = true;
-      this.selectedAttende = attendee;
-      const {
-        success,
-        data
-      } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
-      if (success) {
-        const auhtTypeAttendee = data.typeAuthentication === 'cpf' ? AuthTypeEnum.CPF : AuthTypeEnum.EMAIL;
-        name.setValue(data.name);
-        locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
-        this.handleChangeAuthType(auhtTypeAttendee);
-        authType.setValue(auhtTypeAttendee);
-        if (auhtTypeAttendee === AuthTypeEnum.CPF) {
-          cpf.setValue(data.cpf);
-          password.setValue(data.password);
+    if(!attendee.personId){
+      this.toggleNewAccount(attendee);
+    }else{
+      const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
+      try {
+        this.isAttendeeSelected = true;
+        this.selectedAttende = attendee;
+        const {
+          success,
+          data
+        } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
+        if (success) {
+          name.setValue(data.name);
+          locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
+          authType.setValue(AuthTypeEnum.EMAIL);
+          this.isReadonly = true
+          email.setValue(data.email);
+          phone.setValue(data.telephone);
+          this.selectedAttende.password = data.password;
+          this.citizenAutentications = data.autentication || [];
+          this.authName = data.authName || [];
         }
-        email.setValue(data.email);
-        phone.setValue(data.telephone);
-        this.selectedAttende.password = data.password;
-        this.citizenAutentications = data.autentication || [];
-        this.authName = data.authName || [];
+      } catch (error) {
+        this.messageSrv.add({
+          severity: 'warn',
+          summary: this.translate.instant('error'),
+          detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
+        });
+        this.toggleSelectedAttendee();
       }
-    } catch (error) {
-      this.messageSrv.add({
-        severity: 'warn',
-        summary: this.translate.instant('error'),
-        detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
-      });
-      this.toggleSelectedAttendee();
     }
   }
 
@@ -184,7 +188,7 @@ export class AttendanceModel {
       return { success: false };
     }
 
-    const { name, locality, phone, authType, cpf, password, email, resetPassword } = this.form.value;
+    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub } = this.form.value;
 
     const formAPI: CitizenSenderModel = {
       name,
@@ -200,6 +204,7 @@ export class AttendanceModel {
         locality,
       },
       resetPassword: !!resetPassword,
+      sub: sub
     };
 
     const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);
@@ -232,11 +237,11 @@ export class AttendanceModel {
       this.listAttendees = result.content;
       this.lastPage = result.last;
       this.noResult = result.empty;
-    } catch {
+    } catch(error) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('attendance.error.whenSearching'),
+        detail: error.error.message
       });
     }
     await this.setActionBar();
@@ -250,7 +255,8 @@ export class AttendanceModel {
       const result = await this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees(true));
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
-    } catch {
+    } catch (error){
+      console.log(error)
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
@@ -509,7 +515,7 @@ export class AttendanceModel {
   toggleSelectedAttendee() {
     this.isAttendeeSelected = !this.isAttendeeSelected;
     this.selectedAttende = null;
+    this.authName = [];
     this.form.reset();
-    this.form.controls.authType.setValue(AuthTypeEnum.CPF);
   }
 }

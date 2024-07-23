@@ -4,15 +4,20 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { ConfirmationService, MessageService } from "primeng/api";
 import { RadioButtonClickEvent } from "primeng/radiobutton";
-import { DropdownChangeEvent } from "primeng/dropdown";
+import { MultiSelectChangeEvent } from "primeng/multiselect";
+
 import { TranslateService } from "@ngx-translate/core";
-import { ModalService } from '@app/core/modal/modal.service';
-import { ModalData } from '@app/shared/interface/IModalData';
+import { ModalService } from "@app/core/modal/modal.service";
+import { ModalData } from "@app/shared/interface/IModalData";
 
 import { ProposalEvaluationService } from "@app/shared/services/proposal-evaluation.service";
 import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
-import { IBudgetAction, IBudgetUnit, IProposal } from "@app/shared/interface/IProposal";
+import {
+  IBudgetAction,
+  IBudgetUnit,
+  IProposal,
+} from "@app/shared/interface/IProposal";
 
 import {
   ProposalEvaluationModel,
@@ -20,7 +25,6 @@ import {
 } from "@app/shared/models/ProposalEvaluationModel";
 
 import { StoreKeys } from "@app/shared/constants";
-import { IEvaluatorOrganization } from "@app/shared/interface/IEvaluatorData";
 
 @Component({
   selector: "app-evaluate",
@@ -29,7 +33,7 @@ import { IEvaluatorOrganization } from "@app/shared/interface/IEvaluatorData";
   styleUrl: "./evaluate.component.scss",
 })
 export class EvaluateComponent implements OnInit, OnDestroy {
-  public loading: boolean = false;
+  public loading: boolean = true;
 
   public modalData: ModalData;
 
@@ -48,7 +52,6 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public orgName: string;
   public orgNameTag: string;
 
-
   public proposalEvaluationForm: FormGroup;
   private proposalEvaluationFormInitialState: ProposalEvaluationModel;
 
@@ -63,10 +66,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public budgetActionOptions: Array<IBudgetAction> = [];
   public reasonOptions: Array<string> = [];
 
-  public optionsData:Array<string>;
-  public selectedOrg:any;
-
-
+  public optionsData: Array<string>;
+  public selectedOrg: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -78,13 +79,15 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     public modalService: ModalService,
     private proposalEvaluationService: ProposalEvaluationService
   ) {
-    this.isEvaluationOpen = JSON.parse(sessionStorage.getItem('isEvaluationOpen'));
+    this.isEvaluationOpen = JSON.parse(
+      sessionStorage.getItem("isEvaluationOpen")
+    );
 
     this.proposalId = Number(this.route.snapshot.params["proposalId"]);
 
     this.evaluatorOrgGuid = String(sessionStorage.getItem("evaluatorOrgGuid"));
 
-    if(sessionStorage.getItem("evaluatorOrgGuid")){
+    if (sessionStorage.getItem("evaluatorOrgGuid")) {
       this.hasEvaluatorOrgGuid = true;
     }
 
@@ -92,96 +95,121 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
     this.readOnlyProposalEvaluation = this.proposal.evaluationStatus;
 
-    this.domainConfigNamesObj = this.proposalEvaluationService.domainConfigNamesObj;
+    this.domainConfigNamesObj =
+      this.proposalEvaluationService.domainConfigNamesObj;
 
-    this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject;
+    this.organizationsGuidNameMapObject =
+      this.evaluatorsService.organizationsGuidNameMapObject;
 
-    this.modalData = new ModalData(translateService.instant('proposal_evaluation.modalTitle'),
-     {confirm: translateService.instant('proposal_evaluation.modalConfirm'), cancel: translateService.instant('proposal_evaluation.modalCancel')}, true);
+    this.modalData = new ModalData(
+      translateService.instant("proposal_evaluation.modalTitle"),
+      {
+        confirm: translateService.instant("proposal_evaluation.modalConfirm"),
+        cancel: translateService.instant("proposal_evaluation.modalCancel"),
+      },
+      true
+    );
   }
 
   public async ngOnInit() {
-    this.initCreateProposalForm();
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
     this.modalOpen();
-    this.getOrgName() 
+    this.getOrgName();
   }
 
-  public onDropdownChange(event: any): void{
+  public onDropdownChange(event: any): void {
     this.orgNamedropDownSelect = event.value;
   }
 
-  public confirmedModal(){
-    const modalGuidNameList = JSON.parse(sessionStorage.getItem("modalGuidNameList"))
-    const orgname = this.orgNamedropDownSelect
+  public confirmedModal() {
+    const modalGuidNameList = JSON.parse(
+      sessionStorage.getItem("modalGuidNameList")
+    );
+    const orgname = this.orgNamedropDownSelect;
 
-    const guidName = modalGuidNameList.find(item => item.name === orgname);
+    const guidName = modalGuidNameList.find((item) => item.name === orgname);
 
-    this.orgNameTag = guidName.name.split("-")[1].trim()
-    this.orgName = guidName.name.split("-")[0].trim()
+    this.orgNameTag = guidName.name.split("-")[1].trim();
+    this.orgName = guidName.name.split("-")[0].trim();
 
-    if(this.orgHasPreference == true){
-      sessionStorage.setItem("orgPreference", guidName.guid)
+    if (this.orgHasPreference == true) {
+      sessionStorage.setItem("orgPreference", guidName.guid);
     }
-    this.evaluatorOrgGuid = guidName.guid
+    this.evaluatorOrgGuid = guidName.guid;
   }
 
-  public modalOpen(){
-    if(!this.readOnlyProposalEvaluation){
+  public modalOpen() {
+    if (!this.readOnlyProposalEvaluation) {
       const guid = this.evaluatorOrgGuid.split(",");
-      if(guid.length > 1) {
-        if(!sessionStorage.getItem("orgPreference")){
+      if (guid.length > 1) {
+        if (!sessionStorage.getItem("orgPreference")) {
           this.orgHasPreference = true;
-          this.modalService.open('modalEvaluate');
+          this.modalService.open("modalEvaluate");
           this.optionsData = this.getOrgNameModal();
           this.orgNameList = true;
-        }else{
-          this.evaluatorOrgGuid = sessionStorage.getItem("orgPreference")
+        } else {
+          this.evaluatorOrgGuid = sessionStorage.getItem("orgPreference");
         }
       }
     }
   }
 
-  public getOrgNameModal(): string[]{
+  public getOrgNameModal(): string[] {
     const guid = this.evaluatorOrgGuid.split(",");
-    const organizationsList = this.evaluatorsService.organizationsList
+    const organizationsList = this.evaluatorsService.organizationsList;
 
-    const listGuidsPerson: Set<string> = new Set(guid)
+    const listGuidsPerson: Set<string> = new Set(guid);
 
-    const guidNameList = organizationsList.filter(item => listGuidsPerson.has(item.guid))
+    const guidNameList = organizationsList.filter((item) =>
+      listGuidsPerson.has(item.guid)
+    );
 
     const lista1JSON = JSON.stringify(guidNameList);
-    
+
     sessionStorage.setItem("modalGuidNameList", lista1JSON);
     let guids;
-    try{
-      guids = guid.map((guid) => this.organizationsGuidNameMapObject[guid].trim()) 
+    try {
+      guids = guid.map((guid) =>
+        this.organizationsGuidNameMapObject[guid].trim()
+      );
       this.orgNamedropDownSelect = this.selectedOrg = guids[0];
-    }catch(error){
+    } catch (error) {
       this.router.navigate(["proposal-evaluation"]);
     }
 
-    return guids
+    return guids;
   }
 
   public getOrgName(): void {
-    try{
+    try {
       const guid = this.readOnlyProposalEvaluation
         ? this.proposal.evaluatorOrgsNameList[0]
         : this.evaluatorOrgGuid;
-      if(!this.readOnlyProposalEvaluation){
-        if(!this.orgNameList){
-          this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
-          this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
-        }else if(sessionStorage.getItem("orgPreference")){
-          const guid = JSON.parse(sessionStorage.getItem("orgPreference"))
-          this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim()
-          this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim()
+      if (!this.readOnlyProposalEvaluation) {
+        if (!this.orgNameList) {
+          this.orgNameTag = this.organizationsGuidNameMapObject[guid]
+            .split("-")[1]
+            .trim();
+          this.orgName = this.organizationsGuidNameMapObject[guid]
+            .split("-")[0]
+            .trim();
+        } else if (sessionStorage.getItem("orgPreference")) {
+          const guid = JSON.parse(sessionStorage.getItem("orgPreference"));
+          this.orgNameTag = this.organizationsGuidNameMapObject[guid]
+            .split("-")[1]
+            .trim();
+          this.orgName = this.organizationsGuidNameMapObject[guid]
+            .split("-")[0]
+            .trim();
         }
-      }else{
-       this.orgNameTag = this.organizationsGuidNameMapObject[guid].split("-")[1].trim();
-       this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim();
+      } else {
+        this.orgNameTag = this.organizationsGuidNameMapObject[guid]
+          .split("-")[1]
+          .trim();
+        this.orgName = this.organizationsGuidNameMapObject[guid]
+          .split("-")[0]
+          .trim();
       }
     } catch (error) {
       this.router.navigate(["proposal-evaluation"]);
@@ -196,13 +224,24 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.patchProposalEvaluationFormValue(event.value);
   }
 
-  public get formBudgetUnit(): IBudgetUnit {
+  public get formBudgetUnit(): Array<IBudgetUnit> {
     return this.proposalEvaluationForm.get("budgetUnit").value;
   }
 
-  public budgetUnitChanged(event: DropdownChangeEvent): void {
-    this.budgetActionOptions = this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(event.value.budgetUnitId)
-    this.proposalEvaluationForm.get('budgetAction').patchValue(null);
+  public budgetUnitChanged(event: MultiSelectChangeEvent): void {
+    const budgetUnitIdValues = event.value.map((item) => item.budgetUnitId);
+
+    this.budgetActionOptions =
+      this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(
+        budgetUnitIdValues
+      );
+
+    this.proposalEvaluationForm.get("budgetAction").patchValue(null);
+  }
+
+  public budgetUnitCleared() {
+    this.budgetActionOptions = [];
+    this.proposalEvaluationForm.get("budgetAction").patchValue(null);
   }
 
   public formatBudgetUnit(value: IBudgetUnit): string {
@@ -218,7 +257,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formBudgetPlan(): string {
-    return this.proposalEvaluationForm.get("budgetPlan").value ?? (this.translateService.instant('proposal_evaluation.budgetPlan_nullValue'));
+    return (
+      this.proposalEvaluationForm.get("budgetPlan").value ??
+      this.translateService.instant("proposal_evaluation.budgetPlan_nullValue")
+    );
   }
 
   public get formReason(): string {
@@ -232,9 +274,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public async delete() {
     this.confirmationService.confirm({
-      message: this.translateService.instant("proposal_evaluation.confirm.delete", {
-        name: this.proposal.description,
-      }),
+      message: this.translateService.instant(
+        "proposal_evaluation.confirm.delete",
+        {
+          name: this.proposal.description,
+        }
+      ),
       key: "deleteProposalEvaluation",
       acceptLabel: this.translateService.instant("yes"),
       rejectLabel: this.translateService.instant("no"),
@@ -269,21 +314,25 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.evaluatorOrgGuid
     );
 
-    if(!this.checkFormChanged(reqBody)) {
+    if (!this.checkFormChanged(reqBody)) {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("attention"),
-        detail: this.translateService.instant("proposal_evaluation.error.identicalForm"),
+        detail: this.translateService.instant(
+          "proposal_evaluation.error.identicalForm"
+        ),
       });
 
       return;
     }
 
-    if(!this.checkFormChanged(reqBody)) {
+    if (!this.checkFormChanged(reqBody)) {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("attention"),
-        detail: this.translateService.instant("proposal_evaluation.error.identicalForm"),
+        detail: this.translateService.instant(
+          "proposal_evaluation.error.identicalForm"
+        ),
       });
 
       return;
@@ -302,8 +351,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private initCreateProposalForm() {
     this.proposalEvaluationForm = new FormGroup({
-      includedInNextYearLOA: new FormControl<boolean>(null, Validators.required),
-      budgetUnit: new FormControl<IBudgetUnit>(null),
+      includedInNextYearLOA: new FormControl<boolean>(
+        null,
+        Validators.required
+      ),
+      budgetUnit: new FormControl<Array<IBudgetUnit>>(null),
       budgetAction: new FormControl<Array<IBudgetAction>>(null),
       budgetPlan: new FormControl<string>(null),
       reason: new FormControl<string>(null),
@@ -313,8 +365,17 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   private initEditProposalForm(
     proposalEvaluationData: ProposalEvaluationModel
   ) {
-    if(proposalEvaluationData.includedInNextYearLOA) {
-      this.budgetActionOptions = this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(proposalEvaluationData.budgetUnitId);
+    if (proposalEvaluationData.includedInNextYearLOA) {
+      const budgetUnitIdArray = proposalEvaluationData.budgetUnitId.includes(
+        ";"
+      )
+        ? proposalEvaluationData.budgetUnitId.split(";")
+        : [proposalEvaluationData.budgetUnitId];
+
+      this.budgetActionOptions =
+        this.proposalEvaluationService.getBudgetActionListByBudgetUnitId(
+          budgetUnitIdArray
+        );
     }
 
     this.proposalEvaluationForm = new FormGroup({
@@ -322,7 +383,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         proposalEvaluationData.includedInNextYearLOA,
         Validators.required
       ),
-      budgetUnit: new FormControl<IBudgetUnit>(
+      budgetUnit: new FormControl<Array<IBudgetUnit>>(
         proposalEvaluationData.budgetUnitControlValue
       ),
       budgetAction: new FormControl<Array<IBudgetAction>>(
@@ -335,11 +396,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private async getProposalEvaluationData() {
     try {
-      this.loading = true;
       await this.proposalEvaluationService
         .getProposalEvaluationData(this.proposalId)
         .then((response) => {
-          this.proposalEvaluationFormInitialState = new ProposalEvaluationModel(response);
+          this.proposalEvaluationFormInitialState = new ProposalEvaluationModel(
+            response
+          );
 
           this.evaluationId = this.proposalEvaluationFormInitialState.id;
           this.readOnlyProposalEvaluation
@@ -351,7 +413,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant("proposal_evaluation.error.fetchData"),
+        detail: this.translateService.instant(
+          "proposal_evaluation.error.fetchData"
+        ),
       });
     } finally {
       this.loading = false;
@@ -378,7 +442,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       reasonControl.patchValue(null);
       reasonControl.clearValidators();
 
-      budgetUnitControl.addValidators(Validators.required);
+      budgetUnitControl.addValidators([
+        Validators.required,
+        Validators.maxLength(2),
+      ]);
       budgetActionControl.addValidators([
         Validators.required,
         Validators.maxLength(3),
@@ -396,29 +463,82 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.reasonOptions = this.proposalEvaluationService.getReasonOptions();
   }
 
-  private checkFormChanged(currentState: ProposalEvaluationCreateFormModel): boolean {
-    const keysArray = ["includedInNextYearLOA", "budgetUnitId", "budgetUnitName", "budgetActionId", "budgetActionName", "budgetPlan", "reason"];
+  private checkFormChanged(
+    currentState: ProposalEvaluationCreateFormModel
+  ): boolean {
+    const keysArray = [
+      "includedInNextYearLOA",
+      "budgetUnitId",
+      "budgetUnitName",
+      "budgetActionId",
+      "budgetActionName",
+      "budgetPlan",
+      "reason",
+    ];
 
     return !keysArray.every((key) => {
-
       switch (key) {
-        case 'budgetActionId':
-          const currentStateBudgetActionId = currentState[key].includes(";") ? currentState[key].split(";") : [currentState[key]];
-          const initialStateBudgetActionId = this.proposalEvaluationFormInitialState[key].includes(";") ? this.proposalEvaluationFormInitialState[key].split(";") : [this.proposalEvaluationFormInitialState[key]];
-          return currentStateBudgetActionId.every((id) => initialStateBudgetActionId.includes(id));
-        
-        case 'budgetActionName':
-          const currentStateBudgetActionName = currentState[key].includes(";") ? currentState[key].split(";") : [currentState[key]];
-          const initialStateBudgetActionName = this.proposalEvaluationFormInitialState[key].includes(";") ? this.proposalEvaluationFormInitialState[key].split(";") : [this.proposalEvaluationFormInitialState[key]];
-          return currentStateBudgetActionName.every((name) => initialStateBudgetActionName.includes(name));
+        case "budgetUnitId":
+          const currentStateBudgetUnitId = currentState[key].includes(";")
+            ? currentState[key].split(";")
+            : [currentState[key]];
+          const initialStateBudgetUnitId =
+            this.proposalEvaluationFormInitialState[key].includes(";")
+              ? this.proposalEvaluationFormInitialState[key].split(";")
+              : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetUnitId.every((id) =>
+            initialStateBudgetUnitId.includes(id)
+          );
 
-        case 'budgetPlan':
-          const currentStateBudgetPlan = currentState[key] == null ? '' : currentState[key]
-          const initialStateBudgetPlan = this.proposalEvaluationFormInitialState[key] == undefined ? '' : this.proposalEvaluationFormInitialState[key]
-          return currentStateBudgetPlan == initialStateBudgetPlan
-        
+        case "budgetUnitName":
+          const currentStateBudgetUnitName = currentState[key].includes(";")
+            ? currentState[key].split(";")
+            : [currentState[key]];
+          const initialStateBudgetUnitName =
+            this.proposalEvaluationFormInitialState[key].includes(";")
+              ? this.proposalEvaluationFormInitialState[key].split(";")
+              : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetUnitName.every((name) =>
+            initialStateBudgetUnitName.includes(name)
+          );
+
+        case "budgetActionId":
+          const currentStateBudgetActionId = currentState[key].includes(";")
+            ? currentState[key].split(";")
+            : [currentState[key]];
+          const initialStateBudgetActionId =
+            this.proposalEvaluationFormInitialState[key].includes(";")
+              ? this.proposalEvaluationFormInitialState[key].split(";")
+              : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetActionId.every((id) =>
+            initialStateBudgetActionId.includes(id)
+          );
+
+        case "budgetActionName":
+          const currentStateBudgetActionName = currentState[key].includes(";")
+            ? currentState[key].split(";")
+            : [currentState[key]];
+          const initialStateBudgetActionName =
+            this.proposalEvaluationFormInitialState[key].includes(";")
+              ? this.proposalEvaluationFormInitialState[key].split(";")
+              : [this.proposalEvaluationFormInitialState[key]];
+          return currentStateBudgetActionName.every((name) =>
+            initialStateBudgetActionName.includes(name)
+          );
+
+        case "budgetPlan":
+          const currentStateBudgetPlan =
+            currentState[key] == null ? "" : currentState[key];
+          const initialStateBudgetPlan =
+            this.proposalEvaluationFormInitialState[key] == undefined
+              ? ""
+              : this.proposalEvaluationFormInitialState[key];
+          return currentStateBudgetPlan == initialStateBudgetPlan;
+
         default:
-          return currentState[key] == this.proposalEvaluationFormInitialState[key]
+          return (
+            currentState[key] == this.proposalEvaluationFormInitialState[key]
+          );
       }
     });
   }
@@ -441,10 +561,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant("proposal_evaluation.error.saving"),
+        detail: this.translateService.instant(
+          "proposal_evaluation.error.saving"
+        ),
       });
     } finally {
-      setTimeout(() => this.cancel(), 3000)
+      setTimeout(() => this.cancel(), 3000);
     }
   }
 
@@ -455,10 +577,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     try {
       this.loading = true;
 
-      await this.proposalEvaluationService.putProposalEvaluation(
-        id,
-        reqBody
-      );
+      await this.proposalEvaluationService.putProposalEvaluation(id, reqBody);
 
       this.messageService.add({
         severity: "success",
@@ -470,26 +589,30 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: "error",
         summary: this.translateService.instant("error"),
-        detail: this.translateService.instant("proposal_evaluation.error.saving"),
+        detail: this.translateService.instant(
+          "proposal_evaluation.error.saving"
+        ),
       });
     } finally {
-      setTimeout(() => this.cancel(), 3000)
+      setTimeout(() => this.cancel(), 3000);
     }
   }
 
   private async deleteProposalEvaluation(id: number) {
-
     const emptyReqBody = new ProposalEvaluationCreateFormModel(
       {},
       JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
       id,
       this.evaluatorOrgGuid
-    )
+    );
 
     try {
       this.loading = true;
 
-      await this.proposalEvaluationService.deleteProposalEvaluation(id, emptyReqBody);
+      await this.proposalEvaluationService.deleteProposalEvaluation(
+        id,
+        emptyReqBody
+      );
 
       this.messageService.add({
         severity: "success",
@@ -507,7 +630,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       setTimeout(() => this.cancel(), 3000);
     }
   }
-  
+
   ngOnDestroy(): void {
     sessionStorage.removeItem("proposalData");
     sessionStorage.removeItem("modalGuidNameList");
