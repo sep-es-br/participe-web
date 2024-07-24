@@ -143,7 +143,8 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
   public showCreateEvaluator() {
     this.editEvaluatorSection = false;
     this.showForm = true;
-
+    this.organizationsList = this.evaluatorsService.organizationsList
+    this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject
     this.initCreateEvaluatorsForm();
     this.formHeaderText = "evaluator.new";
   }
