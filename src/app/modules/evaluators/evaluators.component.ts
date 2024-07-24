@@ -82,6 +82,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private evaluatorsService: EvaluatorsService
   ) {
+    
     this.updatePageReportTemplateTranslateParams();
 
     this.evaluatorsSearchFilter = JSON.parse(sessionStorage.getItem("evaluatorsSearchFilter"))
@@ -143,7 +144,8 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
   public showCreateEvaluator() {
     this.editEvaluatorSection = false;
     this.showForm = true;
-
+    this.organizationsList = this.evaluatorsService.organizationsList
+    this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject
     this.initCreateEvaluatorsForm();
     this.formHeaderText = "evaluator.new";
   }
@@ -405,7 +407,6 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       pageNumber: pageState.first / pageState.rows,
       pageSize: pageState.rows,
     };
-
     await this.evaluatorsService
       .getEvaluatorsList(pageable, searchFilter)
       .then((response) => {
@@ -498,7 +499,6 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async prepareEvaluatorsTable() {
     this.loading = true;
-
     const organizationsGuidList =
       this.evaluatorsList.length > 0
         ? this.evaluatorsList.map((evaluator) => evaluator.organizationGuid)
@@ -522,15 +522,13 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (sectionsGuidList.length == 0 && rolesGuidList.length == 0) {
       this.loading = false;
-      return;
     }
-
+  
     const reqBody: IEvaluatorNamesRequest = {
       organizationsGuidList: organizationsGuidList,
       sectionsGuidList: sectionsGuidList,
       rolesGuidList: rolesGuidList,
     };
-
     await this.evaluatorsService
       .getNamesFromGuidLists(reqBody)
       .then((response) => {
@@ -544,7 +542,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.organizationsList = this.evaluatorsService.organizationsList
           this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject
         }
-      );  
+      ); 
   }
 
   private prepareRolesGuidFormControl(rolesGuid: Array<string>) {
