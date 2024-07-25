@@ -188,6 +188,9 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
           this.conferenceSelect = JSON.parse(
             sessionStorage.getItem("selectedConference")
           );
+
+          this.conferenceSelect = this.conferences.find(conference => conference.id === this.conferenceSelect.id)
+
           if (
             this.conferenceSelect.evaluationConfiguration &&
             this.conferenceSelect.evaluationConfiguration

@@ -1,3 +1,18 @@
+
+<app-modal [id]="proposal.commentId.toString()" [modalData]="modalData" (confirmed)="confirmedModal()" (closed)="cancel()">
+  <div class="row">
+    <p-dropdown class="dropdown-modal" [options]="optionsData" [(ngModel)]="selectedOrg" [styleClass]="'w-100'"
+      (onChange)="onDropdownChange($event)"></p-dropdown>
+    <div class="p-2 field-switch">
+      <p-inputSwitch class="input-switch-modal" id="orgPreference" [(ngModel)]="orgHasPreference">
+      </p-inputSwitch>
+      <label for="orgPreference">{{
+        "proposal_evaluation.orgPreference" | translate
+        }}</label>
+    </div>
+  </div>
+</app-modal>
+
 <div class="card card-w-title mb-3">
     <div class="row">
       <div class="col-6">
@@ -29,23 +44,24 @@
       <div class="col-6 d-flex justify-content-around align-items-center">
         <div class="col-9 d-inline-flex align-content-center flex-wrap">
           <button 
-            *ngFor="let orgGuid of proposal.evaluatorOrgsNameList"
-            class="org-badge pe-none"
+            *ngFor="let orgGuid of proposal.evaluatorOrgsNameAndLoaIncludedList"
+            class="org-badge"
+            (click)="createOrEditProposal(proposal, orgGuid.evaluatorOrgsName)"
             [ngClass]="{
-              loaIncluded: proposal.loaIncluded,
-              'not-loaIncluded': !proposal.loaIncluded
+              loaIncluded: orgGuid.loaIncluded,
+              'not-loaIncluded': !orgGuid.loaIncluded
             }"
           > 
-            {{ getOrgName(orgGuid) }}
+            {{ getOrgName(orgGuid.evaluatorOrgsName) }}
           </button>
         </div>
   
-        <div *ngIf="(isEvaluationOpen && isEvaluatorOrgGuid) || proposal.evaluationStatus">
+        <div *ngIf="isEvaluationOpen && isEvaluatorOrgGuid">
           <button
             pButton
             icon="fa-solid fa-clipboard-check fa-lg"
             class="py-1 px-2"
-            (click)="evaluateProposal(proposal)"
+            (click)="createOrEditProposal(proposal)"
           ></button>
         </div>
       </div>
