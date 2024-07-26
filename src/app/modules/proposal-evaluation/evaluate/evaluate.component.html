@@ -43,8 +43,9 @@
           <button
             class="org-badge pe-none"
             [ngClass]="{
-              evaluated: proposal.evaluationStatus,
-              'not-evaluated': !proposal.evaluationStatus
+              evaluated: readOnlyProposalEvaluation,
+              'evaluated-not-loaIncluded': !proposalEvaluationFormInitialState.includedInNextYearLOA,
+              'not-evaluated': !readOnlyProposalEvaluation
             }"
           >
             {{ orgNameTag }}
