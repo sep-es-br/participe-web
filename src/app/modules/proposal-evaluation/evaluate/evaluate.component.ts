@@ -54,7 +54,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public orgNameTag: string;
 
   public proposalEvaluationForm: FormGroup;
-  private proposalEvaluationFormInitialState: ProposalEvaluationModel;
+  public proposalEvaluationFormInitialState: ProposalEvaluationModel;
 
   public editProposalEvaluation: boolean = false;
   public readOnlyProposalEvaluation: boolean = false;
