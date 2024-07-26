@@ -57,3 +57,36 @@ button.org-badge {
     background-color: #ef8533;
   }
 }
+
+.dropdown-modal {
+  display: flex;
+  padding-right: 10px;
+}
+
+.input-switch-modal {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+::ng-deep .p-dropdown-item {
+  padding: 5px;
+}
+
+::ng-deep .field-switch {
+  display: flex;
+  align-items: center;
+  label {
+    font-weight: normal;
+    margin-left: 0.4rem;
+  }
+}
+
+::ng-deep {
+  app-modal .app-modal {
+    width: auto !important;
+
+    @media screen and (max-width: 991px) {
+      width: 80% !important;
+    }
+  }
+}
