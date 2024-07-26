@@ -187,11 +187,16 @@ export class ProposalEvaluationService {
   }
 
   public getProposalEvaluationData(
-    proposalId: number
+    proposalId: number,
+    guid: string
   ): Promise<IProposalEvaluation> {
+    const params = {
+      guid: guid
+    }
     return this._http
       .get<IProposalEvaluation>(`${this._url}/${proposalId}`, {
         headers: Common.buildHeaders(),
+        params: params
       })
       .toPromise();
   }

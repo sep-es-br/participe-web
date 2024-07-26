@@ -47,6 +47,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public orgNameList: boolean = false;
   public hasEvaluatorOrgGuid: boolean;
+  public hasViewEvaluation: boolean = true;
   public orgHasPreference: boolean;
   public orgNamedropDownSelect: string;
   public orgName: string;
@@ -87,13 +88,23 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
     this.evaluatorOrgGuid = String(sessionStorage.getItem("evaluatorOrgGuid"));
 
+    if(sessionStorage.getItem("viewEvaluation")){
+      if (!(sessionStorage.getItem("evaluatorOrgGuid") == sessionStorage.getItem("viewEvaluation"))) {
+        this.hasViewEvaluation = false;
+      }
+    }
+
     if (sessionStorage.getItem("evaluatorOrgGuid")) {
       this.hasEvaluatorOrgGuid = true;
     }
 
     this.proposal = JSON.parse(sessionStorage.getItem("proposalData"));
 
-    this.readOnlyProposalEvaluation = this.proposal.evaluationStatus;
+    if(this.isEvaluationOpen == false || sessionStorage.getItem("viewEvaluation")){
+      this.readOnlyProposalEvaluation = true
+    }else{
+      this.readOnlyProposalEvaluation =  this.proposal.evaluatorOrgsNameAndLoaIncludedList?.some(item => item.evaluatorOrgsName === this.evaluatorOrgGuid);
+    }
 
     this.domainConfigNamesObj =
       this.proposalEvaluationService.domainConfigNamesObj;
@@ -114,88 +125,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public async ngOnInit() {
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
-    this.modalOpen();
     this.getOrgName();
-  }
-
-  public onDropdownChange(event: any): void {
-    this.orgNamedropDownSelect = event.value;
-  }
-
-  public confirmedModal() {
-    const modalGuidNameList = JSON.parse(
-      sessionStorage.getItem("modalGuidNameList")
-    );
-    const orgname = this.orgNamedropDownSelect;
-
-    const guidName = modalGuidNameList.find((item) => item.name === orgname);
-
-    this.orgNameTag = guidName.name.split("-")[1].trim();
-    this.orgName = guidName.name.split("-")[0].trim();
-
-    if (this.orgHasPreference == true) {
-      sessionStorage.setItem("orgPreference", guidName.guid);
-    }
-    this.evaluatorOrgGuid = guidName.guid;
-  }
-
-  public modalOpen() {
-    if (!this.readOnlyProposalEvaluation) {
-      const guid = this.evaluatorOrgGuid.split(",");
-      if (guid.length > 1) {
-        if (!sessionStorage.getItem("orgPreference")) {
-          this.orgHasPreference = true;
-          this.modalService.open("modalEvaluate");
-          this.optionsData = this.getOrgNameModal();
-          this.orgNameList = true;
-        } else {
-          this.evaluatorOrgGuid = sessionStorage.getItem("orgPreference");
-        }
-      }
-    }
-  }
-
-  public getOrgNameModal(): string[] {
-    const guid = this.evaluatorOrgGuid.split(",");
-    const organizationsList = this.evaluatorsService.organizationsList;
-
-    const listGuidsPerson: Set<string> = new Set(guid);
-
-    const guidNameList = organizationsList.filter((item) =>
-      listGuidsPerson.has(item.guid)
-    );
-
-    const lista1JSON = JSON.stringify(guidNameList);
-
-    sessionStorage.setItem("modalGuidNameList", lista1JSON);
-    let guids;
-    try {
-      guids = guid.map((guid) =>
-        this.organizationsGuidNameMapObject[guid].trim()
-      );
-      this.orgNamedropDownSelect = this.selectedOrg = guids[0];
-    } catch (error) {
-      this.router.navigate(["proposal-evaluation"]);
-    }
-
-    return guids;
   }
 
   public getOrgName(): void {
     try {
-      const guid = this.readOnlyProposalEvaluation
-        ? this.proposal.evaluatorOrgsNameList[0]
-        : this.evaluatorOrgGuid;
+      const guid =  this.evaluatorOrgGuid;
       if (!this.readOnlyProposalEvaluation) {
         if (!this.orgNameList) {
-          this.orgNameTag = this.organizationsGuidNameMapObject[guid]
-            .split("-")[1]
-            .trim();
-          this.orgName = this.organizationsGuidNameMapObject[guid]
-            .split("-")[0]
-            .trim();
-        } else if (sessionStorage.getItem("orgPreference")) {
-          const guid = JSON.parse(sessionStorage.getItem("orgPreference"));
           this.orgNameTag = this.organizationsGuidNameMapObject[guid]
             .split("-")[1]
             .trim();
@@ -314,28 +251,18 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.evaluatorOrgGuid
     );
 
-    if (!this.checkFormChanged(reqBody)) {
-      this.messageService.add({
-        severity: "warn",
-        summary: this.translateService.instant("attention"),
-        detail: this.translateService.instant(
-          "proposal_evaluation.error.identicalForm"
-        ),
-      });
-
-      return;
-    }
-
-    if (!this.checkFormChanged(reqBody)) {
-      this.messageService.add({
-        severity: "warn",
-        summary: this.translateService.instant("attention"),
-        detail: this.translateService.instant(
-          "proposal_evaluation.error.identicalForm"
-        ),
-      });
-
-      return;
+    if(reqBody.includedInNextYearLOA){
+      if (!this.checkFormChanged(reqBody)) {
+        this.messageService.add({
+          severity: "warn",
+          summary: this.translateService.instant("attention"),
+          detail: this.translateService.instant(
+            "proposal_evaluation.error.identicalForm"
+          ),
+        });
+  
+        return;
+      }
     }
 
     if (this.editProposalEvaluation) {
@@ -395,9 +322,13 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   private async getProposalEvaluationData() {
+    if(sessionStorage.getItem("viewEvaluation")){
+      this.evaluatorOrgGuid = sessionStorage.getItem("viewEvaluation");
+    }
+
     try {
       await this.proposalEvaluationService
-        .getProposalEvaluationData(this.proposalId)
+        .getProposalEvaluationData(this.proposalId,this.evaluatorOrgGuid)
         .then((response) => {
           this.proposalEvaluationFormInitialState = new ProposalEvaluationModel(
             response
@@ -633,6 +564,6 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     sessionStorage.removeItem("proposalData");
-    sessionStorage.removeItem("modalGuidNameList");
+    sessionStorage.removeItem("viewEvaluation");
   }
 }
