@@ -70,14 +70,14 @@
             </div>
             <div class="col-3">
               <label class="form-label">{{ 'proposal_evaluation.description' | translate }}</label>
-              <input pInputText class="form-control" formControlName="commentText" />
+              <input pInputText class="form-control commentText" formControlName="commentText" />
             </div>
             <div class="col-3 mt-auto">
               <button
                 pButton
                 icon="pi pi-search"
                 [disabled]="loading"
-                class="me-2"
+                class="me-2 mb-1"
                 [label]="'search' | translate"
                 (click)="searchHandle()"
               ></button>
@@ -85,9 +85,18 @@
                 pButton 
                 icon="pi pi-ban" 
                 [disabled]="loading"
+                class="me-2 mb-1"
                 [label]="'clean.search'|translate"
                 (click)="clearSearchForm();searchHandle();"
                 ></button>
+              <button 
+                pButton 
+                icon="pi pi-download"
+                class="mb-1" 
+                [label]="'.xlsx'"
+                [disabled]="loading"
+                (click)="downloadProposalEvaluation()"
+              ></button>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 import { environment } from "@environments/environment";
@@ -317,5 +317,37 @@ export class ProposalEvaluationService {
         { label: langConfig.translations["no"], value: false },
       ];
     });
+  }
+
+  public jasperxlsx(conferenceId: number, search?: IProposalEvaluationSearchFilter) {
+    const params = {
+      conferenceId: conferenceId,
+    };
+
+    const urlWithFilters = this._url + "/proposalEvaluationXlsx?" + qs.stringify(search);
+
+    return this._http
+      .get(urlWithFilters, {
+        headers: Common.buildHeaders({
+        }),
+        params: params,
+        responseType: 'blob' 
+      })
+      .toPromise()
+      .then((response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'AvaliacaoDeProposta.xlsx'; 
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+        console.log('Download iniciado.');
+      })
+      .catch(error => {
+        console.error('Error fetching report:', error);
+        throw error;
+      });
   }
 }

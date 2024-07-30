@@ -144,7 +144,12 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public async downloadProposalEvaluation(){
+    await this.proposalEvaluationService.jasperxlsx( this.conferenceSelect.id, this.proposalEvaluationSearchForm.value)
+  }
+
   public async searchHandle() {
+
     sessionStorage.setItem(
       "propEvalSearchFilter",
       JSON.stringify(this.proposalEvaluationSearchForm.value)
