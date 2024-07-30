@@ -170,18 +170,21 @@ export class ProposalEvaluationService {
     pageSize: number,
     searchFilter?: IProposalEvaluationSearchFilter
   ): Promise<IResultPaginated<IProposal>> {
+    const { organizationGuid, ...restSearchFilter } = searchFilter || {};
     const params = {
       conferenceId: conferenceId,
       page: pageNumber,
       size: pageSize,
+      organizationGuid: organizationGuid
     };
 
-    const urlWithFilters = this._url + "?" + qs.stringify(searchFilter);
+    const urlWithFilters = this._url + "?" + qs.stringify(restSearchFilter);
 
     return this._http
       .get<IResultPaginated<IProposal>>(urlWithFilters, {
         headers: Common.buildHeaders(),
         params: params,
+        
       })
       .toPromise();
   }
@@ -320,11 +323,13 @@ export class ProposalEvaluationService {
   }
 
   public jasperxlsx(conferenceId: number, search?: IProposalEvaluationSearchFilter) {
+    const { organizationGuid, ...restSearchFilter } = search || {};
     const params = {
       conferenceId: conferenceId,
+      organizationGuid: organizationGuid,
     };
 
-    const urlWithFilters = this._url + "/proposalEvaluationXlsx?" + qs.stringify(search);
+    const urlWithFilters = this._url + "/proposalEvaluationXlsx?" + qs.stringify(restSearchFilter);
 
     return this._http
       .get(urlWithFilters, {
