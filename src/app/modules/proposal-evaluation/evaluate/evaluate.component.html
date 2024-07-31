@@ -1,43 +1,14 @@
 <app-template>
-  <app-modal
-    id="modalEvaluate"
-    [modalData]="modalData"
-    (confirmed)="confirmedModal()"
-    (closed)="cancel()"
-  >
-    <div class="row">
-      <p-dropdown
-        class="dropdown-modal"
-        [options]="optionsData"
-        [(ngModel)]="selectedOrg"
-        [styleClass]="'w-100'"
-        (onChange)="onDropdownChange($event)"
-      ></p-dropdown>
-      <div class="p-2 field-switch">
-        <p-inputSwitch
-          class="input-switch-modal"
-          id="orgPreference"
-          [(ngModel)]="orgHasPreference"
-        >
-        </p-inputSwitch>
-        <label for="orgPreference">{{
-          "proposal_evaluation.orgPreference" | translate
-        }}</label>
-      </div>
-    </div>
-  </app-modal>
   <div
     class="row"
     *ngIf="
-      this.readOnlyProposalEvaluation && isEvaluationOpen && hasEvaluatorOrgGuid
+      this.readOnlyProposalEvaluation && isEvaluationOpen && hasEvaluatorOrgGuid && hasViewEvaluation
     "
   >
     <div class="col-12 d-flex flex-row justify-content-end">
       <button
         [disabled]="loading"
         pButton
-        text="true"
-        severity="secondary"
         icon="pi pi-pencil"
         class="mx-2"
         type="button"
@@ -47,8 +18,6 @@
       <button
         [disabled]="loading"
         pButton
-        text="true"
-        severity="secondary"
         icon="pi pi-trash"
         class="mx-2"
         type="button"
@@ -70,8 +39,9 @@
           <button
             class="org-badge pe-none"
             [ngClass]="{
-              evaluated: proposal.evaluationStatus,
-              'not-evaluated': !proposal.evaluationStatus
+              evaluated: readOnlyProposalEvaluation,
+              'evaluated-not-loaIncluded': !proposalEvaluationFormInitialState.includedInNextYearLOA,
+              'not-evaluated': !readOnlyProposalEvaluation
             }"
           >
             {{ orgNameTag }}

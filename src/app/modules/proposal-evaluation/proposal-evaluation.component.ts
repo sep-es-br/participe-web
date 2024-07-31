@@ -43,6 +43,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
   public planItemAreaOptions: SelectItem[] = [];
   public planItemOptions: SelectItem[] = [];
   public organizationOptions: SelectItem[] = [];
+  public transformedOptions: SelectItem[] = [];
   public loaIncludedOptions: SelectItem[] = [];
 
   public pageState: PaginatorState = {
@@ -90,7 +91,10 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
         (this.organizationOptions =
           this.evaluatorsService.organizationsListSelectItem)
     );
-
+    this.transformedOptions = this.organizationOptions.map(option => ({
+      ...option,
+      label: this.invertLabel(option.label)
+    }));
     if (
       this.propEvalSearchFilter &&
       Object.values(this.propEvalSearchFilter).some((value) => !!value)
@@ -144,7 +148,12 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public async downloadProposalEvaluation(){
+    await this.proposalEvaluationService.jasperxlsx( this.conferenceSelect.id, this.proposalEvaluationSearchForm.value)
+  }
+
   public async searchHandle() {
+
     sessionStorage.setItem(
       "propEvalSearchFilter",
       JSON.stringify(this.proposalEvaluationSearchForm.value)
@@ -188,6 +197,9 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
           this.conferenceSelect = JSON.parse(
             sessionStorage.getItem("selectedConference")
           );
+
+          this.conferenceSelect = this.conferences.find(conference => conference.id === this.conferenceSelect.id)
+
           if (
             this.conferenceSelect.evaluationConfiguration &&
             this.conferenceSelect.evaluationConfiguration
@@ -373,4 +385,10 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
+  invertLabel(label: string): string {
+    const parts = label.split(' - ');
+    return parts.length > 1 ? `${parts[1]} - ${parts[0]}` : label;
+  }
+
 }

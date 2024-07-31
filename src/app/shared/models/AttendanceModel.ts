@@ -256,7 +256,6 @@ export class AttendanceModel {
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
     } catch (error){
-      console.log(error)
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
