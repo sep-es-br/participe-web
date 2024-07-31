@@ -326,7 +326,7 @@ export class ProposalEvaluationService {
     const { organizationGuid, ...restSearchFilter } = search || {};
     const params = {
       conferenceId: conferenceId,
-      organizationGuid: organizationGuid,
+      ...(organizationGuid !== undefined && organizationGuid !== null  ? { organizationGuid: organizationGuid } : { organizationGuid: [] })
     };
 
     const urlWithFilters = this._url + "/proposalEvaluationXlsx?" + qs.stringify(restSearchFilter);
