@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 import { environment } from "@environments/environment";
@@ -170,18 +170,21 @@ export class ProposalEvaluationService {
     pageSize: number,
     searchFilter?: IProposalEvaluationSearchFilter
   ): Promise<IResultPaginated<IProposal>> {
+    const { organizationGuid, ...restSearchFilter } = searchFilter || {};
     const params = {
       conferenceId: conferenceId,
       page: pageNumber,
       size: pageSize,
+      ...(organizationGuid !== undefined && organizationGuid !== null  ? { organizationGuid: organizationGuid } : { organizationGuid: [] })
     };
 
-    const urlWithFilters = this._url + "?" + qs.stringify(searchFilter);
+    const urlWithFilters = this._url + "?" + qs.stringify(restSearchFilter);
 
     return this._http
       .get<IResultPaginated<IProposal>>(urlWithFilters, {
         headers: Common.buildHeaders(),
         params: params,
+        
       })
       .toPromise();
   }
@@ -317,5 +320,38 @@ export class ProposalEvaluationService {
         { label: langConfig.translations["no"], value: false },
       ];
     });
+  }
+
+  public jasperxlsx(conferenceId: number, search?: IProposalEvaluationSearchFilter) {
+    const { organizationGuid, ...restSearchFilter } = search || {};
+    const params = {
+      conferenceId: conferenceId,
+      ...(organizationGuid !== undefined && organizationGuid !== null  ? { organizationGuid: organizationGuid } : { organizationGuid: [] })
+    };
+
+    const urlWithFilters = this._url + "/proposalEvaluationXlsx?" + qs.stringify(restSearchFilter);
+
+    return this._http
+      .get(urlWithFilters, {
+        headers: Common.buildHeaders({
+        }),
+        params: params,
+        responseType: 'blob' 
+      })
+      .toPromise()
+      .then((response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'AvaliacaoDeProposta.xlsx'; 
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+      })
+      .catch(error => {
+        console.error('Error fetching report:', error);
+        throw error;
+      });
   }
 }
