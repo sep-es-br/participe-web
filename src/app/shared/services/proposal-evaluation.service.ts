@@ -175,7 +175,7 @@ export class ProposalEvaluationService {
       conferenceId: conferenceId,
       page: pageNumber,
       size: pageSize,
-      organizationGuid: organizationGuid
+      ...(organizationGuid !== undefined && organizationGuid !== null  ? { organizationGuid: organizationGuid } : { organizationGuid: [] })
     };
 
     const urlWithFilters = this._url + "?" + qs.stringify(restSearchFilter);
@@ -348,7 +348,6 @@ export class ProposalEvaluationService {
 
         window.URL.revokeObjectURL(url);
 
-        console.log('Download iniciado.');
       })
       .catch(error => {
         console.error('Error fetching report:', error);
