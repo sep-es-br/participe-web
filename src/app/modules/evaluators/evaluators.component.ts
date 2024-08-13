@@ -253,6 +253,13 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
   public async saveEvaluatorsForm(form: FormGroup) {
     const controls = form.controls;
 
+    const formValue = form.getRawValue();
+    const selectedOrganizationGuid = formValue.organizationGuid;
+    
+    const selectedOrganization = this.organizationsList
+    .find(org => org.guid === selectedOrganizationGuid);
+
+
     for (const key in controls) {
       controls[key].markAsTouched();
     }
@@ -267,13 +274,33 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const reqBody = new EvaluatorCreateFormModel(form.value);
+    const payload = {
+      organization: {
+        guid: selectedOrganizationGuid,
+        name: selectedOrganization ? selectedOrganization.name : null,
+      },
+      sections: this.transformSections(formValue.sectionsGuid),
+      roles: formValue.rolesGuid
+    };
+
+
+    const reqBody = new EvaluatorCreateFormModel(payload);
+    
 
     if (this.editEvaluatorSection && this.evaluationSectionId) {
       await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
     } else {
       await this.postEvaluatorsForm(reqBody);
     }
+  }
+
+  private transformSections(selectedGuids: string[]): { guid: string, name: string }[] {
+    return this.sectionsList
+      .filter(section => selectedGuids.includes(section.guid))
+      .map(section => ({
+        guid: section.guid,
+        name: section.name
+      }));
   }
 
   private async postEvaluatorsForm(reqBody: EvaluatorCreateFormModel) {
@@ -309,12 +336,11 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading = true;
 
       await this.evaluatorsService.putEvaluator(id, reqBody);
-
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
         detail: this.translateService.instant("evaluator.updated", {
-          name: this.organizationsGuidNameMapObject[reqBody.organizationGuid],
+          name: this.organizationsGuidNameMapObject[reqBody.organization.guid],
         }),
       });
     } catch (error) {
