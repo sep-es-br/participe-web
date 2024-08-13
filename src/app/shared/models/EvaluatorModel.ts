@@ -1,5 +1,5 @@
 import { IEvaluator, IEvaluatorCreateForm } from "../interface/IEvaluator";
-import { IEvaluatorRole } from "../interface/IEvaluatorData";
+import { IEvaluatorOrganization, IEvaluatorRole, IEvaluatorSection } from "../interface/IEvaluatorData";
 
 export class EvaluatorModel implements IEvaluator {
   private readonly _id: number;
@@ -24,17 +24,20 @@ export class EvaluatorCreateFormModel implements IEvaluatorCreateForm {
   public sectionsGuid: Array<string>;
   public rolesGuid: Array<string>;
 
-  constructor(formValue: {
-    organizationGuid: string;
-    sectionsGuid: Array<string>;
-    rolesGuid: Array<IEvaluatorRole>;
-  }) {
-    this.organizationGuid = formValue.organizationGuid;
-    this.sectionsGuid = formValue.sectionsGuid;
-    this.rolesGuid = formValue.rolesGuid.length > 0 ? this.treatRolesGuid(formValue.rolesGuid) : ['all'];
-  }
+  public organization: IEvaluatorOrganization;
+  public sections: Array<IEvaluatorSection>;
+  public roles: Array<IEvaluatorRole>;
 
-  private treatRolesGuid(formRolesGuid: Array<IEvaluatorRole>): Array<string> {
-    return formRolesGuid.map((role) => role.guid ? `${role.guid}:${role.lotacao}` : 'all')
+  constructor(formValue: {
+    organization: IEvaluatorOrganization;
+    sections: Array<IEvaluatorSection>;
+    roles: Array<IEvaluatorRole>;
+  }) {
+    this.organization = formValue.organization;
+    this.sections = formValue.sections;
+
+    this.roles = formValue.roles.length === 0 
+      ? [{ guid: null, name: "Todos", lotacao: null }] 
+      : formValue.roles;
   }
 }
