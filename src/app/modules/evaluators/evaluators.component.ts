@@ -336,7 +336,6 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loading = true;
 
       await this.evaluatorsService.putEvaluator(id, reqBody);
-      console.log(reqBody)
       this.messageService.add({
         severity: "success",
         summary: this.translateService.instant("success"),
