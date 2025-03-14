@@ -41,6 +41,8 @@
     "@types/heatmap.js": "^2.0.36",
     "@types/leaflet": "1.7.6",
     "@types/leaflet.heat": "^0.2.0",
+    "@zxing/browser": "^0.1.5",
+    "@zxing/library": "^0.21.3",
     "@zxing/ngx-scanner": "^17.0.1",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
