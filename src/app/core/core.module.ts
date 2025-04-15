@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -78,6 +78,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateChangeService } from '../shared/services/translateChange.service';
 import { GradientComponent } from './gradient/gradient.component';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 
 @NgModule({
   imports: [
@@ -234,7 +238,8 @@ import { GradientComponent } from './gradient/gradient.component';
    ],
    providers: [
      MessageService,
-     TranslateChangeService
+     TranslateChangeService,
+     {provide: LOCALE_ID, useValue: 'pt'}
   ]
 })
 export class CoreModule {}
