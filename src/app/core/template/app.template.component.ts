@@ -1,6 +1,7 @@
 import { AuthService } from '@app/shared/services/auth.service';
 import {Component, Renderer2} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+
 @Component({
   selector: 'app-template',
   templateUrl: './app.template.component.html',

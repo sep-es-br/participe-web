@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Location } from "@angular/common";
 
@@ -17,6 +17,7 @@ import {
 } from "@app/shared/interface/IProposal";
 
 import { Conference } from "@app/shared/models/conference";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-proposal-evaluation",
@@ -24,7 +25,7 @@ import { Conference } from "@app/shared/models/conference";
   templateUrl: "./proposal-evaluation.component.html",
   styleUrl: "./proposal-evaluation.component.scss",
 })
-export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
+export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDestroy {
   public loading: boolean = false;
 
   public domainConfigNamesObj: Object = {};
@@ -137,6 +138,10 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
     this.showSelectConference = false;
   }
 
+  public ngOnDestroy(): void {
+      this.actionBarService.recordAmount = undefined;
+  }
+
   public toggleSearch() {
     this.search = !this.search;
     sessionStorage.setItem("searchState", this.search ? "show" : "hide");
@@ -247,6 +252,11 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit {
       )
       .then((response) => {
         this.totalRecords = response.totalElements;
+        this.actionBarService.recordAmount = {
+          icon: faComment,
+          label: "dashboard.proposals",
+          amount:response.totalElements
+        }
         this.pageState.first =
           response.pageable.pageNumber * response.pageable.pageSize;
         this.pageState.rows = response.pageable.pageSize;

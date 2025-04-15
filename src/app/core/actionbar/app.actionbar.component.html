@@ -26,4 +26,9 @@
       </div>
     </div>
   </div>
+  <div class="record-amount flex align-items-center" *ngIf="recordAmount">
+    <fa-icon [icon]="recordAmount.icon"></fa-icon>
+    {{recordAmount.amount | number: '1.0-0' : translationLang}}
+    {{recordAmount.label | translate}}
+  </div>
 </div>
