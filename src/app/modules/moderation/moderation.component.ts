@@ -4,7 +4,7 @@ import { ModerationComments } from "@app/shared/models/moderationComments";
 import { ModerationFilter } from "@app/shared/models/moderationFilter";
 import { ModerationService } from "@app/shared/services/moderation.service";
 import { HelperUtils } from "@app/shared/util/HelpersUtil";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { BreadcrumbService } from "@app/core/breadcrumb/breadcrumb.service";
 import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
 import { TranslateService } from "@ngx-translate/core";
@@ -17,6 +17,7 @@ import { AuthService } from "@app/shared/services/auth.service";
 import { ConferenceService } from "@app/shared/services/conference.service";
 import { TypeofExpr } from "@angular/compiler";
 import { PaginatorState } from "primeng/paginator";
+import { Dropdown } from "primeng/dropdown";
 
 @Component({
   selector: "app-moderation",
@@ -32,7 +33,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   typeOptions: SelectItem[] = [];
   calendarTranslate: any = calendar;
   microregion: SelectItem[] = [];
-  planItem: SelectItem[] = [];
+  planItem: any[] = [];
   labelMicroregion: string;
   labelPlanItem: string;
   language: string;
@@ -154,7 +155,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.actionBarSrv.setItems([
       {
         position: "RIGHT",
-        label: `${this.conferenceComments.length} Textos`,
+        label: `${this.paginatorTotalRecords} Textos`,
         icon: "comment.svg",
       },
       {
@@ -277,15 +278,23 @@ export class ModerationComponent implements OnInit, OnDestroy {
         const data = await this.moderationSrv.getPlanItem(
           this.conferenceSelect.id
         );
-        this.planItem = _.map(
-          _.get(data, "planItems", []),
-          ({ planItemId, planItemName }) => ({
-            value: planItemId,
-            label: planItemName,
-          })
-        );
-        this.planItem.unshift({ value: null, label: "Todos" });
-        this.labelPlanItem = _.get(data, "structureItemName");
+        this.planItem = _.flatMap(_.get(data, "planItems", []), ({ planItemId, planItemName, planItemsChildren }) => {
+          const items = [
+            { value: planItemId, label: planItemName, styleClass: 'fw-bold'},
+            ..._.map(planItemsChildren, ({ planItemId: childItemId, planItemName: childItemName }) => ({
+              value: childItemId,
+              label: childItemName,
+              styleClass: ''
+            }))
+          ];
+          return items;
+        });
+        this.planItem.unshift({
+          value: null,
+          label: "Todos",
+          styleClass: 'fw-bold'
+        });
+        this.labelPlanItem = `${_.get(data, "structureItemName", "")} / ${_.get(data, "structureItemChildrenName", "")}`;
       }
     } catch (error) {
       this.messageService.add({
@@ -304,14 +313,6 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.filter[field] = moment(event).format("DD/MM/yyyy");
   }
 
-  //  selectLocality(locality: SelectItem) {
-  //    this.filter.localityIds = [locality.value];
-  //  }
-
-  //  selectPlanItem(planItem: SelectItem) {
-  //    this.filter.planItemId = [planItem.value];
-  //  }
-
   async changeSmallFilter(status: string) {
     this.filter.status = status;
     this.pageState = {
@@ -326,6 +327,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   async searchHandle() {
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 15,
+    };
     await this.loadComments();
 
     this.configureActionBar();
@@ -334,6 +340,11 @@ export class ModerationComponent implements OnInit, OnDestroy {
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     sessionStorage.setItem("selectedConference", JSON.stringify(conference));
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 15,
+    };
     await this.prepareScreen();
     this.showSelectConference = false;
   }
@@ -360,6 +371,26 @@ export class ModerationComponent implements OnInit, OnDestroy {
     try {
       await this.moderationSrv.update({
         type: item.type,
+        id: item.commentId,
+      } as any);
+      this.messageService.add({
+        severity: "success",
+        summary: this.translate.instant("success"),
+        detail: this.translate.instant("moderation.label.saved_success"),
+      });
+    } catch (error) {
+      this.messageService.add({
+        severity: "error",
+        summary: this.translate.instant("error"),
+        detail: this.translate.instant("moderation.error.update_comment"),
+      });
+    }
+  }
+
+  async selectCommentDuplicated(item: ModerationComments) {
+    try {
+      await this.moderationSrv.update({
+        duplicated: item.duplicated,
         id: item.commentId,
       } as any);
       this.messageService.add({

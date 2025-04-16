@@ -1,3 +1,5 @@
+import { List } from "lodash";
+
 export interface IAttendee {
   personId: number;
   name: string;
@@ -10,5 +12,9 @@ export interface IAttendee {
   regionalizable?: string;
   checkedIn: boolean;
   checkedInDate?: string;
+  preRegistered?: boolean;
+  preRegisteredDate?: string;
   checkingIn?: boolean;
+  authName?: List<string>;
+  sub?: string;
 }

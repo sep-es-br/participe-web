@@ -87,6 +87,14 @@
                         <input type="color"  class="form-control form-control-color" formControlName="cardBorderColor"   />
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <label class="fw-bold mr-2 me-2">{{"conference.cssTab.labels.cardLogin" | translate}}</label>
+                    </td>
+                    <td>
+                        <input type="color"  class="form-control form-control-color" formControlName="cardLoginColor"   />
+                    </td>
+                </tr>
             </tbody>
             </table>
         </form>
@@ -105,13 +113,16 @@
                 <p>{{"conference.cssTab.preview.text" | translate}}</p>
             </div>
             <div class="row m-auto">
-                <div class="col-md-5 mx-2 card shadow p-3" [ngStyle]="{'border': '0.5rem solid '+borderColorCard, 'background-color': colorCard }">
+                <div class="col  card shadow " [ngStyle]="{'border': '0.5rem solid '+borderColorCard, 'background-color': colorCard }">
                     <h6 class="text-center">{{"conference.cssTab.preview.card" | translate}}</h6>
                     <p [ngStyle]="{'color': colorTextCard }">{{"conference.cssTab.preview.textCard" | translate}}</p>
                 </div>
-                <div class="col-md-5 mx-2 card shadow p-3" [ngStyle]="{'border': '0.5rem solid '+borderColorCard, 'background-color': colorAccentCard }">
+                <div class="col mx-1 card shadow " [ngStyle]="{'border': '0.5rem solid '+borderColorCard, 'background-color': colorAccentCard }">
                     <h6 class="text-center">{{"conference.cssTab.preview.cardAccent" | translate}}</h6>
                     <p [ngStyle]="{'color': colorFontAccent }">{{"conference.cssTab.preview.textAccentCard" | translate}}</p>
+                </div>
+                <div class="col card shadow " [ngStyle]="{'background-color': colorCardLogin }">
+                    <h6 class="text-center">{{"conference.cssTab.preview.cardLogin" | translate}}</h6>
                 </div>
             </div>
 

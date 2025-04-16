@@ -12,40 +12,24 @@
             <tt-input-message [form]="form" field="name"></tt-input-message>
           </div>
           <div class="col-12">
-            <label class="required">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
-            <p-dropdown [options]="optionsLocalities" formControlName="locality" class=" " [styleClass]="'d-flex form-control'"
+            <label class="required" for="locality">{{ localitySrv.getTranslatedLabelLocality(localityLabel) }}</label>
+            <p-dropdown [styleClass]="'d-flex form-control'" [options]="optionsLocalities" formControlName="locality"
                         [placeholder]="'placeholder.select' | translate"></p-dropdown>
             <tt-input-message [form]="form" field="locality"></tt-input-message>
           </div>
           <div class="col-12">
             <label>{{ 'attendance.authentication' | translate }}</label>
             <div class="auth-type">
-              <img *ngIf="newAccount || (form.get('resetPassword').value && !citizenHasNativeAuth)"
-                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/>
-              <img *ngFor="let auth of citizenAutentications" [src]="authSrv.getAuthenticationIcon(auth.loginName)"
-                   [title]="auth.loginName" [alt]="auth.loginName"/>
-              <p-radioButton *ngFor="let type of authTypeEnum" name="authType" [value]="type" [label]="type"
-                             formControlName="authType"></p-radioButton>
+              <!-- <img *ngIf="newAccount || (form.get('resetPassword').value && !citizenHasNativeAuth)"
+                   src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/> -->
+              <img *ngFor="let auth of authName" [src]="authSrv.getAuthenticationIcon(auth)"
+                   [title]="auth" [alt]="auth"/>
             </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.cpf' | translate }}</label>
-            <p-inputMask mask="999.999.999-99" placeholder="000.000.000-00" unmask="true" [styleClass]="'form-control'"
-                         slotChar="___.___.___-__" formControlName="cpf"></p-inputMask>
-            <tt-input-message [form]="form" field="cpf"></tt-input-message>
-          </div>
-          <div class="col-12 col-md-6">
-            <label [class.required]="form.get('authType').value === 'CPF'">{{ 'citizen.password' | translate }}</label>
-            <input pInputText class="form-control" formControlName="password" [maxLength]="6">
-            <tt-input-message [form]="form" field="password"></tt-input-message>
           </div>
           <div class="col-12">
             <label [class.required]="form.get('authType').value === 'E-Mail'">{{ 'citizen.mail' | translate }}</label>
-            <input pInputText class="form-control" formControlName="email">
+            <input [readonly]="isReadonly" pInputText class="form-control" formControlName="email">
             <tt-input-message [form]="form" field="email"></tt-input-message>
-            <p-checkbox class="checkbox-reset" *ngIf="isAttendeeSelected && form.get('authType').value === 'E-Mail'"
-                        [binary]="true"
-                        [label]="'citizen.resetpassword' | translate" formControlName="resetPassword"></p-checkbox>
           </div>
           <div class="col-12">
             <label>{{ 'citizen.phone' | translate }}</label>
@@ -57,12 +41,12 @@
             <div class="form-actions">
               <ng-container *ngIf="newAccount; else attendeeSelected">
                 <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
-                        [label]="'attendance.saveAndRegister' | translate"></button>
+                        [label]="'attendance.saveAndRegister' | translate" class="me-2" ></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                         (click)="toggleNewAccount()"></button>
               </ng-container>
               <ng-template #attendeeSelected>
-                <button pButton icon="pi pi-check" type="button" (click)="checkIn(selectedAttende)"
+                <button pButton icon="pi pi-check" type="button" [disabled]="form.invalid" class="me-2" (click)="checkIn(selectedAttende)"
                         [label]="'attendance.registerAttendance' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                         (click)="toggleSelectedAttendee()"></button>
@@ -94,9 +78,9 @@
           <button pButton icon="pi pi-plus" class="xs-w-100 mt-1" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
         </div>
       </div>
-      <app-modal id="QRCodeReader"  [modalData]="modalData">
+      <app-modal id="QRCodeReader"  [modalData]="modalData" (closed)="closeQRCodeReader()" >
         <div class="row"  >
-          <div class="col-md-6 col-12 text-center">
+          <div class="col-12 col-md-6  text-center">
             <!-- <label>Dispositivos</label> -->
             <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
               <!-- <option value="" [selected]="!deviceCurrent">{{ 'qrcode.noDevice' | translate }}</option> -->
@@ -115,7 +99,7 @@
         </div>
         <div class="col-12 mt-3 p2">
           <zxing-scanner 
-          [enable]="scannerEnabled"  
+          [(enable)]="scannerEnabled"  
           [torch]="torchEnabled" 
           [(device)]="deviceCurrent" 
           
@@ -161,11 +145,15 @@
               <div class="locality">{{ attendee.locality }}</div>
               <div class="region">{{ attendee.superLocality }}</div>
             </div>
+            <div class="authNameIcon" >
+              <img *ngFor="let auth of attendee.authName" [src]="authSrv.getAuthenticationIcon(auth)" class="mx-1">
+            </div>
             <div class="info-checkin" *ngIf="attendee?.checkedIn">
               <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                 {{ getHowLongAgo(attendee.checkedInDate) }}
               </div>
             </div>
+            <div class="info-checkin" *ngIf="!attendee?.checkedIn"></div>
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
@@ -227,13 +215,16 @@
 </ng-template>
 
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
-          [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
   <div class="label">{{ 'administration.conference' | translate }}</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [(ngModel)]="selectedConference"
-              optionLabel="name"></p-dropdown>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
   <div class="label">{{ 'meeting' | translate }}</div>
-  <p-dropdown [options]="optionsMeeting" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
-  <button pButton class="change-button" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt"
-          (click)="setCurrentMeeting()"></button>
+  <div class="form-group">
+    <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'"  [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+  </div>
+  <div class=" col-12 col-md-6 col-lg-3 m-auto">
+    <div class="d-grid gap-2 mt-3">
+      <button pButton class=" btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+    </div>
+  </div>
 </p-dialog>

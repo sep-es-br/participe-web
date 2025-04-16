@@ -11,6 +11,7 @@ import { IPerson } from '@app/shared/interface/IPerson';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
 import * as moment from 'moment';
+import { ProposalEvaluationService } from '@app/shared/services/proposal-evaluation.service';
 
 @Component({
   selector: 'tt-home',
@@ -23,7 +24,8 @@ export class HomeComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private authSrv: AuthService,
     private conferenceService: ConferenceService,
-    private router: Router ) {
+    private router: Router,
+    private proposalEvaluationService: ProposalEvaluationService ) {
   }
 
   async ngOnInit() {
@@ -49,10 +51,21 @@ export class HomeComponent implements OnInit {
         await this.router.navigate(['/login']);
       }
 
-      await this.SetStartPage(user);
+      await this.setInfo(user);
     } catch (error) {
       console.log('Social login error: ', error);
     }
+  }
+
+  private async setInfo(user: IPerson){
+      await this.proposalEvaluationService.checkIsPersonEvaluator(user.id)
+      .then(
+        (response) => {
+          sessionStorage.setItem("evaluatorOrgGuid", response);
+        }
+      ).finally(() => {
+        this.SetStartPage(user);
+      })
   }
 
   private async SetStartPage(user: IPerson) {
@@ -62,6 +75,9 @@ export class HomeComponent implements OnInit {
         { label: 'home', routerLink: ['/home'] }
       ]);
       this.router.navigate(['/control-panel-dashboard']);
+
+    } else if (sessionStorage.getItem("evaluatorOrgGuid")) {
+      this.router.navigate(['/proposal-evaluation']);
     } else if (user.roles.find(r => (r === 'Recepcionist'))) {
       if (await this.HaveMeetingsForReceptionist()) {
         this.breadcrumbService.setItems([
@@ -70,11 +86,9 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/attendance']);
       } else {
         alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-        this.authSrv.signOut();
       }
     } else {
       alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-      this.authSrv.signOut();
     }
   }
 

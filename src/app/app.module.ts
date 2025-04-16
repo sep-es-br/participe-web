@@ -29,8 +29,12 @@ import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/c
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ProposalEvaluationModule } from './modules/proposal-evaluation/proposal-evaluation.module';
 
+import { EvaluatorsModule } from './modules/evaluators/evaluators.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 @NgModule({
   imports: [
+    FontAwesomeModule,
     AppRoutes,
     AttendanceModule,
     BrowserAnimationsModule,
@@ -49,6 +53,7 @@ import { ProposalEvaluationModule } from './modules/proposal-evaluation/proposal
     CoreModule,
     StructureModule,
     CitizenModule,
+    EvaluatorsModule,
     ModerationModule,
     ProposalEvaluationModule,
     ControlPanelDashboardModule,

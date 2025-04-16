@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import { StoreKeys } from '../constants';
 import { IPerson } from '../interface/IPerson';
 import { ISocialLoginResult } from './../interface/ISocialLoginResult';
+import { List } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -38,7 +39,7 @@ export class AuthService {
     this.document.location.href = AuthService.getUrlForSocialAuth('idsvr');
   }
 
-  async refresh() {
+  public async refresh() {
     try {
       const refreshToken = this.getRefreshToken();
       if (refreshToken) {

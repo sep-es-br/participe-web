@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MessageService, SelectItem } from 'primeng/api';
+import { LazyLoadEvent, MessageService, SelectItem } from 'primeng/api';
 
 import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
 import { AuthService } from '@app/shared/services/auth.service';
@@ -22,6 +22,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { LocalityService } from '@app/shared/services/locality.service';
 import { StoreKeys } from '@app/shared/constants';
+import { Router } from '@angular/router';
+import { PaginatorState } from 'primeng/paginator';
 
 @Component({
   selector: 'app-citizen',
@@ -30,6 +32,7 @@ import { StoreKeys } from '@app/shared/constants';
 })
 export class CitizenComponent extends BasePageList<CitizenModel> implements OnInit, OnDestroy {
 
+  allConference: Conference = new Conference();
   formEdit: boolean = false;
   citizenForm: UntypedFormGroup;
   localities: SelectItem[] = [];
@@ -38,48 +41,54 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   loading: boolean = false;
   idCitizen: number = 0;
   authenticationsCitizen: CitizenAuthenticationModel[] = [];
+  authName:string[] =[];
   labelLocality: string;
   status: SelectItem[] = [
     { value: '', label: 'Todos' },
     { value: true, label: 'Ativo' },
     { value: false, label: 'Inativo' }];
-  pageSizeOptions: SelectItem[] = [
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 30, label: '30' },
-    { value: 50, label: '50' },
-    { value: 100, label: '100' },
-    { value: 500, label: '500' },
+  pageSizeOptions: number[] = [
+    10 ,
+    20 ,
+    30 ,
+    50 ,
+    100 ,
+    500 ,
   ];
   showSelectConference: boolean = false;
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
-  sort: string = 'name';
-  search: any = { status: '' };
+  sort: string = "apoc.text.clean(name)";
+  search: any = { status: '', autentication: ''};
+  dataSearch: any = { status: '', autentication: ''};
   selectedLocalities: [];
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
   mailValidators = [ Validators.required, Validators.email ];
   cpfValidators = [ Validators.required, Validators.maxLength(11), CustomValidators.ValidateCPF ];
   cols: ITableCol[] = [
-    { field: 'name', header: 'citizen.name', sorteable: true },
-    { field: 'email', header: 'citizen.mail', sorteable: true },
-    { field: 'localityName', header: 'citizen.locality', sorteable: false },
-    {
-      field: 'autentication', header: 'citizen.attendance_count', styleClass: 'col-attendance_count', handleView: (value, row) => {
-        return row.autentication.reduce((accumulate, auth) => (accumulate + auth.acesses), 0);
-      }
-    },
     {
       field: 'autentication', header: 'citizen.authentication', styleClass: 'col-authentication', handleView: (value, row) => {
         let container = '';
-        row.autentication.filter(a => a.acesses > 0).forEach(({ loginName }) => {
+        row.autenticationIcon.filter(a => a.acesses > 0).forEach(({ loginName }) => {
           container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
         });
         return container;
       }
     },
+    { field: 'name', header: 'citizen.name', sorteable: true },
+    { field: 'email', header: 'citizen.mail', sorteable: true },
+    { field: 'localityName', header: 'citizen.locality', sorteable: false },
+    { field: 'conferencesName', header: 'citizen.conferencia', handleView: (value, row) => {
+      return !!row.conferencesName ? row.conferencesName.join('\n') : '';
+    } },
+    {
+      field: 'autentication', header: 'citizen.attendance_count', styleClass: 'col-attendance_count', handleView: (value, row) => {
+        return row.autentication.reduce((accumulate, auth) => (accumulate + auth.acesses), 0);
+      }
+    },
   ];
+  pageState: PaginatorState;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
@@ -90,9 +99,17 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     public authSrv: AuthService,
     private moderationSrv: ModerationService,
     private actionbarSrv: ActionBarService,
-    public localitySrv: LocalityService
+    public localitySrv: LocalityService,
+    private router: Router
   ) {
     super(citizenSrv);
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+   }
+    this.allConference.id = null;
+    this.allConference.name = 'Todas as Audiências Públicas';
   }
 
   ngOnDestroy(): void {
@@ -100,10 +117,9 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async ngOnInit() {
-    await this.loadConferencesActives();
-
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
+    this.authentications.unshift({label: 'Todos', value: '' })
     await this.prepareScreen();
   }
 
@@ -118,26 +134,77 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     ]);
   }
 
+  async selectAllConference(conference: Conference){
+    this.conferenceSelect = conference;
+    this.showSelectConference = false;
+    this.search.conferenceId = this.conferenceSelect.id;
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+    }
+    await this.loadData(this.pageState);
+    this.buildBreadcrumb();
+    await this.loadLocalitiesOptions();
+    this.configureActionBar();
+  }
+
+  async searchHandle() {
+
+
+    this.search.name = this.dataSearch.name
+    this.search.email = this.dataSearch.email
+    this.search.autentication = this.dataSearch.autentication
+    this.search.status = this.dataSearch.status
+    this.search.locality = this.dataSearch.locality
+
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+    }
+
+    await this.loadData(this.pageState);
+
+    this.configureActionBar();
+  }
+
   async selectOtherConference(conference: Conference) {
     this.conferenceSelect = conference;
     this.showSelectConference = false;
-    await this.prepareScreen();
+    this.pageState = {
+      first: 0,
+      page: 0,
+      rows: 10,
+    }
+    await this.prepareScreen(this.pageState);
   }
 
-  async prepareScreen() {
 
+  async citizenLoadData(event?: PaginatorState){
 
-    if (this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) {
+    
+    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
+      await this.loadConferencesActives();
+    }
+    
+    this.search.conferenceId = this.conferenceSelect.id;
+    
+      await this.loadData(event);
+    
+    this.buildBreadcrumb();
+    this.configureActionBar();
+  }
+
+  async prepareScreen(event?: PaginatorState) {
+
+    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
       await this.loadConferencesActives();
     }
     this.search.conferenceId = this.conferenceSelect.id;
-    if (!this.conferenceSelect.id) {
-      
-      return this.messageService.add({ severity: 'warn', detail: this.translateSrv.instant('empty.conference') });
-    } else {
-      
-      await this.loadData();
-    }
+
+    await this.loadData(event);
+
     this.buildBreadcrumb();
     await this.loadLocalitiesOptions();
     this.configureActionBar();
@@ -168,7 +235,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       { label: 'administration.label' },
       { label: this.conferenceSelect.name, routerLink: ['/administration/citizen'] }
     ]);
-    console.log(this.breadcrumbService)
   }
 
   clearSearch() {
@@ -228,6 +294,25 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   async save(formData) {
+    try {
+      if(!this.conferenceSelect.id){
+        const data = await this.moderationSrv.getConferencesActive(false);
+        this.conferencesActives = data;
+        if (data.length > 0) {
+          if (data.filter(conf => conf.isActive).length === 0) {
+            this.conferenceSelect = data[0];
+          } else {
+            this.conferenceSelect = data.filter(conf => conf.isActive)[0];
+          }
+        }
+      }
+      } catch (error) {
+        console.error(error);
+        this.messageService.add({
+          severity: 'error', summary: 'Erro',
+          detail: this.translateSrv.instant('citizen.error.fetch.conferenceActive')
+        });
+      }
     if (!this.isValidForm(formData)) { return; }
     const { cpf, mail, password, typeAuthentication, locality, name, telephone, resetPassword, statusIsActive, receiveInformational }
     = formData.value;
@@ -249,6 +334,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       resetPassword,
       active: statusIsActive
     };
+
     await this.citizenSrv.save(sender as any, this.idCitizen);
     this.messageService.add({
       severity: 'success',
@@ -271,8 +357,10 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       const { success, data } = await this.citizenSrv.GetById(citizen.id, {
         search: { conferenceId: _.get(this.conferenceSelect, 'id', 0) }
       });
+
       if (success) {
         this.setForm(data);
+        this.authName = data.authName || [];
         this.authenticationsCitizen = data.autentication || [];
       }
     } else {
@@ -318,9 +406,9 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   get getAuthenticationsFromCitizen(): string {
     let container = '';
     if (this.idCitizen > 0) {
-      this.authenticationsCitizen.forEach(({ loginName }) => {
-        container += `<img class="authentication-icon" title="${loginName}" src="${this.authSrv.getAuthenticationIcon(loginName)}"  alt=""/>`;
-      });
+        this.authName.forEach((name) => {
+          container += `<img class="authentication-icon" title="${name}" src="${this.authSrv.getAuthenticationIcon(name)}"  alt=""/>`;
+        });
     }
     return container;
   }
@@ -329,8 +417,22 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     if (!query) { 
       return this.filteredLocalities = this.localities;
     }
-    this.filteredLocalities = this.localities.map(item => item).filter( value => value.label.toLowerCase().includes(query.toLowerCase())); 
+    this.filteredLocalities = this.localities.map(item => item).filter( value => this.replaceSpecialChars(value.label).includes(this.replaceSpecialChars(query))); 
   }
+
+  replaceSpecialChars(str)	{
+		if (!str) return '';			    
+		str = str.toLowerCase();
+    str = str.trim();
+    str = str.replace(/\s/g, '')
+		str = str.replace(/[aáàãäâ]/,'a');
+		str = str.replace(/[eéèëê]/,'e');
+		str = str.replace(/[iíìïî]/,'i');
+		str = str.replace(/[oóòõöô]/,'o');
+		str = str.replace(/[uúùüû]/,'u');
+    str = str.replace(/[ç]/,'c');
+		return str; 
+	  }
 
   toStandardText(str: string) {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -353,6 +455,6 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       {emitEvent: false});
   }
   setSearchLocality(){
-    this.search.locality = this.selectedLocalities.map(item => item['value'] );
+    this.dataSearch.locality = this.selectedLocalities.map(item => item['value'] );
   }
 }

@@ -25,3 +25,4 @@ import { EvaluateComponent } from "./evaluate/evaluate.component";
   providers: [],
 })
 export class ProposalEvaluationModule {}
+

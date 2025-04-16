@@ -84,6 +84,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+
   }
 
   ngOnDestroy(): void {
@@ -138,7 +139,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         detail: this.translate.instant('attendance.error.failedToCheckIn')
       });
     }
-
+    this.lastPage = true
     attendee.checkingIn = false;
   }
 
@@ -152,7 +153,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           name: result.name,
           email: result.email,
           checkedIn: false,
-          checkingIn: false
+          checkingIn: false,
+          authName: result.authName
         };
         await this.checkIn(newAttendee);
         this.toggleNewAccount();
@@ -163,17 +165,34 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           detail: this.translate.instant('attendance.successDetail.saveAccount')
         });
       }
-      setTimeout(() => document.getElementById('btnSearchRegister').click(), 250);
     }
-
+    this.cleanListAtendees();
+    this.lastPage = true
     return success;
   }
 
-  toggleNewAccount() {
+  toggleNewAccount(attendee?: IAttendee) {
     this.modalSuceesPresence = false;
     this.newAccount = !this.newAccount;
+    this.isReadonly = false
+    this.authName = []
     this.form.reset();
-    this.form.controls.authType.setValue(AuthTypeEnum.CPF);
+    if(this.newAccount){
+      const { name, locality, authType, email, phone, sub } = this.form.controls;
+      if(attendee.name == "<novo usuário>"){
+        name.setValue(null)
+      }else{
+        name.setValue(attendee.name)
+      }
+
+      authType.setValue(AuthTypeEnum.EMAIL)
+      if(attendee.email){
+        this.isReadonly = true
+      }
+      email.setValue(attendee.email)
+      sub.setValue(attendee.sub)
+
+    }
   }
 
   onInput($event) {
@@ -200,44 +219,83 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       });
     }
     this.scannerEnabled = true;
-    this.deviceCurrent = this.availableDevices[0];
+    this.getCamera();
     this.modalData = {title: this.translate.instant('qrcode.titleModal') };
     this.modalService.open('QRCodeReader'); 
+  }
+
+  getCamera(){
+    this.deviceCurrent = this.availableDevices[0];
+    for (const device of this.availableDevices) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        this.deviceCurrent = device;
+        break;
+      }
+    }
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.deviceCurrent = this.availableDevices[0];
-    this.scannerEnabled = true;
+    for (const device of devices) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        this.deviceCurrent = device;
+        break;
+      }
+    }
     this.hasDevices = Boolean(devices && devices.length);
   }
 
-  onCodeResult(resultString: string) {
+  onCodeResult(resultString: string) {    
     this.qrResultString = resultString;
-    if(!isNaN(Number(resultString))){
-      this.modalService.close('QRCodeReader'); 
-      this.scannerEnabled = false;
+    const regex = /PersonId:(\d+)/;
+    const match = this.qrResultString.match(regex);
+    if(!isNaN(Number(resultString)) || Number(match[1])){
+      this.closeQRCodeReader();
+      this.modalService.close('QRCodeReader');
       this.loadingService.loading(true);
-      this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
-      .then((resp)=>{
-        this.modalSuceesPresence = true;
-        this.dataPresence = resp;
-      })
-    .catch((err)=>{
-      setTimeout(() => {
-        this.readQRCode();
-      }, 1200);
       
-    })
-    .finally(() => {
-        
-        this.loadingService.loading(false);
-      });
+      if (match && match[1]) {
+        const personId = match[1];
+        this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
+        .then((resp)=>{
+          this.modalSuceesPresence = true;
+          this.dataPresence = resp;
+          this.playSoundNotification('success');
+        })
+      .catch((err)=>{
+        this.playSoundNotification('error');
+        setTimeout(() => {
+          this.readQRCode();
+        }, 2700);
+      })
+      .finally(() => {
+          
+          this.loadingService.loading(false);
+        });
+      } else {
+        this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
+        .then((resp)=>{
+          this.modalSuceesPresence = true;
+          this.dataPresence = resp;
+          this.playSoundNotification('success');
+        })
+      .catch((err)=>{
+        this.playSoundNotification('error');
+        setTimeout(() => {
+          this.readQRCode();
+        }, 2700);
+      })
+      .finally(() => {
+          
+          this.loadingService.loading(false);
+        });
+      }
+      
     }
   }
 
   onDeviceSelectChange(selected: string) {
-    this.scannerEnabled = true;
     const device = this.availableDevices.find(x => x.deviceId === selected);
     this.deviceCurrent = device || null;
   }
@@ -290,5 +348,16 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       time: '00/00/0000 00:00'
     };
     this.readQRCode();
+  }
+
+  closeQRCodeReader(){
+    this.scannerEnabled = false;
+  }
+
+  playSoundNotification(type: string){
+    let audio = new Audio();
+    audio.src = type === 'success' ? 'assets/sounds/success.mp3' : 'assets/sounds/error.mp3';
+    audio.load();
+    audio.play();
   }
 }

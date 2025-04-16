@@ -33,7 +33,8 @@ export class AttendanceModel {
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   idMeeting: number;
-  totalAttendees: number;
+  totalCheckedIn: number;
+  totalPreRegistered: number;
   listAttendees: IAttendee[] = [];
 
   nameSearch: string;
@@ -42,6 +43,7 @@ export class AttendanceModel {
   pageSize = 30;
   noResult = false;
   isSearching = false;
+  isReadonly = false;
 
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
@@ -56,7 +58,9 @@ export class AttendanceModel {
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
+  selectedFilterBy = 'pres';
   citizenAutentications: CitizenAuthenticationModel[] = [];
+  authName:string[]
 
   selectedCounty: Locality;
   localities: Locality[];
@@ -103,6 +107,7 @@ export class AttendanceModel {
       email: [''],
       phone: ['', Validators.maxLength(20)],
       resetPassword: false,
+      sub: ['']
     });
 
     this.getConferencesAndMeetings().then();
@@ -126,41 +131,49 @@ export class AttendanceModel {
     return this.citizenAutentications.length > 0 ? this.citizenAutentications.findIndex(c => c.loginName === 'Participe') !== -1 : false;
   }
 
-  async updateTotalAttendees() {
-    this.totalAttendees = await this.meetingSrv.getTotalAttendeesByMeeting(this.idMeeting);
+  async getTotalParticipants() {
+    await this.meetingSrv.getTotalParticipantsInMeeting(this.idMeeting, this.getQueryListAttendees()).then(
+      (response) => {
+        this.totalCheckedIn = response.checkedIn
+        this.totalPreRegistered = response.preRegistered
+      }
+    )
+  }
+
+  toggleNewAccount(attendee?: IAttendee) {
   }
 
   async selectAttendee(attendee: IAttendee) {
-    const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
-    try {
-      this.isAttendeeSelected = true;
-      this.selectedAttende = attendee;
-      const {
-        success,
-        data
-      } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
-      if (success) {
-        const auhtTypeAttendee = data.typeAuthentication === 'cpf' ? AuthTypeEnum.CPF : AuthTypeEnum.EMAIL;
-        name.setValue(data.name);
-        locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
-        this.handleChangeAuthType(auhtTypeAttendee);
-        authType.setValue(auhtTypeAttendee);
-        if (auhtTypeAttendee === AuthTypeEnum.CPF) {
-          cpf.setValue(data.cpf);
-          password.setValue(data.password);
+    if(!attendee.personId){
+      this.toggleNewAccount(attendee);
+    }else{
+      const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
+      try {
+        this.isAttendeeSelected = true;
+        this.selectedAttende = attendee;
+        const {
+          success,
+          data
+        } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
+        if (success) {
+          name.setValue(data.name);
+          locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
+          authType.setValue(AuthTypeEnum.EMAIL);
+          this.isReadonly = true
+          email.setValue(data.email);
+          phone.setValue(data.telephone);
+          this.selectedAttende.password = data.password;
+          this.citizenAutentications = data.autentication || [];
+          this.authName = data.authName || [];
         }
-        email.setValue(data.email);
-        phone.setValue(data.telephone);
-        this.selectedAttende.password = data.password;
-        this.citizenAutentications = data.autentication || [];
+      } catch (error) {
+        this.messageSrv.add({
+          severity: 'warn',
+          summary: this.translate.instant('error'),
+          detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
+        });
+        this.toggleSelectedAttendee();
       }
-    } catch (error) {
-      this.messageSrv.add({
-        severity: 'warn',
-        summary: this.translate.instant('error'),
-        detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
-      });
-      this.toggleSelectedAttendee();
     }
   }
 
@@ -175,7 +188,7 @@ export class AttendanceModel {
       return { success: false };
     }
 
-    const { name, locality, phone, authType, cpf, password, email, resetPassword } = this.form.value;
+    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub } = this.form.value;
 
     const formAPI: CitizenSenderModel = {
       name,
@@ -191,6 +204,7 @@ export class AttendanceModel {
         locality,
       },
       resetPassword: !!resetPassword,
+      sub: sub
     };
 
     const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);
@@ -223,14 +237,16 @@ export class AttendanceModel {
       this.listAttendees = result.content;
       this.lastPage = result.last;
       this.noResult = result.empty;
-    } catch {
+    } catch(error) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('attendance.error.whenSearching'),
+        detail: error.error.message
       });
     }
+    await this.setActionBar();
     this.isSearching = false;
+    
   }
 
   async loadNextPageRegister() {
@@ -239,13 +255,15 @@ export class AttendanceModel {
       const result = await this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees(true));
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
-    } catch {
+    } catch (error){
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+
+    await this.setActionBar();
     this.isSearching = false;
   }
 
@@ -262,9 +280,10 @@ export class AttendanceModel {
         detail: this.translate.instant('attendance.error.whenSearching'),
       });
     }
+
+    await this.setActionBar();
     this.isSearching = false;
   }
-
   handleChangeAuthType(value: AuthTypeEnum) {
     const { password: passwordControl, email: emailControl, cpf: cpfControl } = this.form.controls;
     if (this.valueChangeCPFSub) {
@@ -355,13 +374,16 @@ export class AttendanceModel {
       ]);
     }
 
-    await this.setActionBar();
     await this.searchByName();
+    await this.setActionBar();
+    // await this.searchByName();
     this.showSelectMeeting = false;
   }
 
   async setActionBar() {
-    await this.updateTotalAttendees();
+
+    await this.getTotalParticipants();
+
     this.actionbarSrv.setItems([
       {
         position: 'LEFT',
@@ -370,10 +392,16 @@ export class AttendanceModel {
       },
       {
         position: 'RIGHT',
-        handle: () => this.updateTotalAttendees(),
+        handle: () => {},
         icon: 'user-solid.svg',
-        label: `${this.totalAttendees} ${this.translate.instant('attendance.attendant')}`,
+        label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
       },
+      {
+        position: 'RIGHT',
+        handle: () => {},
+        icon: 'preregister_phone.svg',
+        label: `${this.totalPreRegistered} Pré-credenciados`
+      }
     ]);
   }
 
@@ -445,6 +473,7 @@ export class AttendanceModel {
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
+        filter: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
       },
     };
@@ -469,7 +498,7 @@ export class AttendanceModel {
   }
 
   getListOfLettersForLoading(): string[] {
-    const lastInListLetter = this.listAttendees.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
+    const lastInListLetter = this.listAttendees?.length > 0 ? this.listAttendees[this.listAttendees.length - 1].name.trim()[0] : 'A';
     const indexLastLetter = this.alphabet.indexOf(lastInListLetter.toUpperCase());
     return this.alphabet.split('').splice(indexLastLetter, this.pageSize);
   }
@@ -485,7 +514,7 @@ export class AttendanceModel {
   toggleSelectedAttendee() {
     this.isAttendeeSelected = !this.isAttendeeSelected;
     this.selectedAttende = null;
+    this.authName = [];
     this.form.reset();
-    this.form.controls.authType.setValue(AuthTypeEnum.CPF);
   }
 }

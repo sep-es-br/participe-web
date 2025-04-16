@@ -88,7 +88,7 @@
       flex-wrap: wrap;
 
       img {
-        width: 20px;
+        width: 40px;
         margin-right: 5px;
 
         &:last-of-type {
@@ -147,6 +147,10 @@
     cursor: auto !important;
   }
 
+  .p-dropdown.p-component.p-inputwrapper, .p-autocomplete.p-component.p-inputwrapper {
+    width: 100%;
+  }
+
   .top-bar {
    
     margin: 0 15px;
@@ -187,4 +191,11 @@
       padding-left: 15px;
     }
   }
+}
+
+.preregister-icon {
+  height: 100%;
+  width: 20px;
+  margin-left: 8%;
+  margin-right: 5%;
 }

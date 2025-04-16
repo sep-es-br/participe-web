@@ -4,6 +4,7 @@
 		"conference": "Consulta",
 		"conference-name": "Consulta: {{name}}",
 		"domain": "Domínio",
+		"evaluators": "Avaliadores",
 		"label": "Administração",
 		"moderation": "Moderação",
 		"plan": "Plano",
@@ -48,13 +49,14 @@
 		"successDetail": {
 			"checkin": "Presença registrada para {{name}}",
 			"saveAccount": "Usuário salvo!",
-			"uncheckin": "Prenseça removida!"
+			"uncheckin": "Presença removida!"
 		},
 		"tooltipLabelCheckin": "Registrar presença de ",
 		"tooltipLabelUnchecking": "Remover presença de ",
 		"tooltipLabelView": "Visualizar "
 	},
 	"cancel": "Cancelar",
+	"back": "Voltar",
 	"automatic": "Automático",
 	"manual": "Manual",
 	"change": "Trocar",
@@ -79,7 +81,8 @@
 		"resetpassword": "Resetar senha",
 		"status": "Situação",
 		"updated": "Cidadão {{name}} atualizado",
-		"receive_informational": "Desejo receber mensagens informativas"
+		"receive_informational": "Desejo receber mensagens informativas",
+		"conferencia": "Conferência"
 	},
 	"clean": {
 		"search": "Limpar Pesquisa"
@@ -93,6 +96,8 @@
 		"preOpening": "Pré-abertura",
 		"postClosure": "Pós-encerramento",
 		"open": "Aberta",
+		"closed": "Fechado",
+		"evaluation": "Avaliação",
 		"text": "Texto",
 		"label": "Rótulo",
 		"howWork": "Como funciona",
@@ -113,6 +118,7 @@
 		"showStatistics": "Mostrar estatística",
 		"showCalendar": "Mostrar calendário",
 		"showStatisticsPanel": "Mostrar painel de estatística",
+		"showProposalsPanel": "Mostrar painel de propostas",
 		"showExternalLinks": "Mostrar links externos",
 		"stepUpdated": "Passo alterado",
 		"externalLinkUpdated": "Link externo alterado",
@@ -139,6 +145,8 @@
 			"endDateOutOfRange": "A data de término da conferência deve ser posterior à data de abertura"
 		},
 		"image": "Imagem",
+		"footer-image": "Imagem de Rodapé",
+		"header-image": "Imagem de Cabeçalho",
 		"in-progress": "Consulta em andamento, não pode ser excluída!",
 		"inserted": "Consulta {{name}} inserida",
 		"locality-citizen": "Tipo de localidade do cidadão",
@@ -234,11 +242,12 @@
 				"accent": "Destaque",
 				"card": "Caixa",
 				"accentCard": "Caixa em destaque",
-				"textCard": "Texto do Card",
+				"textCard": "Texto da caixa",
 				"textAccentCard": "Texto em caixa destacada",
 				"borderCard": "Borda da caixa",
 				"solid": "Cor Sólida",
-				"gradient": "Gradiente"
+				"gradient": "Gradiente",
+				"cardLogin": "Caixa do login"
 			},
 			"preview": {
 				"titleSection": "Pré visualização",
@@ -251,8 +260,14 @@
 				"textCard": "Assim será apresentado o texto sobre a caixa",
 				"textAccentCard": "Assim será apresentado o texto sobre a caixa em destaque.",
 				"card":"Caixa",
-				"cardAccent":"Caixa em destaque"
+				"cardAccent":"Caixa em destaque",
+				"cardLogin": "Caixa do login"
 			}
+		},
+		"actions": {
+			"edit":"Editar Consulta",
+			"delete":"Excluir Consulta",
+			"meeting":"Visualizar Reuniões"
 		}
 	},
 	"dashboard": {
@@ -354,6 +369,26 @@
 		"field-must-contain-only-letters": "O campo deve conter apenas letras"
 	},
 	"error": "Erro",
+	"evaluator": {
+		"confirm": {
+			"delete": "Deseja realmente deletar {{name}}?"
+		},
+		"delete": "Excluir Avaliador",
+		"edit": "Editar Avaliador",
+		"emptyRoles": "A unidade não possui papéis atrelados á ela",
+		"error": {
+			"saving": "Erro ao salvar o avaliador",
+			"fetchData": "Erro ao buscar {{name}}"
+		},
+		"inserted": "Novo Avaliador inserido",
+		"new": "Novo Avaliador",
+		"organization": "Órgão",
+		"section": "Setor",
+		"sections": "Setores",
+		"role": "Papel",
+		"roles": "Papéis",
+		"updated": "Avaliador {{name}} atualizado"
+	},
 	"exists": {
 		"name": "Esse nome já existe"
 	},
@@ -433,7 +468,12 @@
 			"strategic_area": "Área Estratégica"
 		},
 		"moderate": {
+			"duplicated": "Duplicado",
 			"about": "Sobre",
+			"confirmDeleteCommentWithPropEval": {
+				"header": "O comentário possui avaliação!",
+				"body": "Alterar o estado do comentário para {{status}} irá remover a avaliação. Tem certeza que quer prosseguir?"
+			},
 			"moveText": "Mover texto",
 			"placeholder": {
 				"moveFilter": ""
@@ -468,6 +508,9 @@
 	"new-a": "Novo (a)",
 	"no": "Não",
 	"of": "de",
+	"page": {
+		"pageReportTemplate": "Exibindo {{first}} a {{last}} de {{totalRecords}} itens"
+	},
 	"pending": "Pendente",
 	"placeholder": {
 		"select": "Selecione"
@@ -511,7 +554,41 @@
 			"contain-conference": "Plano não pode ser excluído, pois está vinculado a uma consulta"
 		}
 	},
-	"proposal_evaluation": "Avaliação de Propostas",
+	"proposal_evaluation": {
+		"modalConfirm": "confirmar",
+		"modalCancel": "Cancelar",
+		"modalTitle": "Lista de organizaçoes",
+		"orgPreference": "Você deseja definir a organização selecionada como padrão?",
+		"budgetAction": "Ação Orçamentária",
+		"budgetPlan": "Plano Orçamentário",
+		"budgetPlan_nullValue": "Nenhum plano orçamentário fornecido",
+		"budgetUnit": "Unidade Orçamentária",
+		"confirm": {
+			"delete": "Deseja realmente deletar a avaliação?"
+		},
+		"delete": "Excluir Avaliação de Proposta",
+		"description": "Texto da Proposta",
+		"edit": "Editar Avaliação de Proposta",
+		"error": {
+			"fetchData": "Erro ao buscar as informações da proposta",
+			"identicalForm": "Não houve alterações na avaliação de proposta",
+			"saving": "Erro ao salvar a avaliação de proposta"
+		},
+		"evaluated_by": "Órgão Avaliador",
+		"evaluationStatus_false": "Não Avaliada",
+		"evaluationStatus_true": "Avaliada",
+		"evaluationStatus": "Situação",
+		"evaluator": "Avaliador",
+		"inserted": "Nova avaliação de proposta inserida",
+		"loaIncluded": "Inclusa na LOA do próximo ano",
+		"loaIncluded_question": "Será incluída na LOA do próximo ano?",
+		"new": "Nova Avaliação de Proposta",
+		"noResult": "Nenhum resultado encontrado",
+		"reason": "Motivo da não inclusão",
+		"title": "Avaliação de Proposta",
+		"under_evaluation_by": "Em avaliação por",
+		"updated": "Avaliação de Proposta atualizada"
+	},
 	"published": "Publicado",
 	"qrcode": {
 		"checkIn": {

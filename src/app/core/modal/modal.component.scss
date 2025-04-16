@@ -3,17 +3,21 @@
 app-modal {
     /* modals are hidden by default */
     display: none;
-    // width: 500px;
 
+    width:fit-content;
     .app-modal {
+
         /* modal container fixed across whole screen */
         position: fixed;
         top: 50%;
         transform: translate(-50%, -50%);
-        // right: 0;
-        // bottom: 0;
+        right: 0;
+        bottom: 0;
         left: 50%;
-        width: auto;
+        width: 50%;
+        height: fit-content;
+        max-height: 95%;
+
 
         /* z-index must be higher than .app-modal-background */
         z-index: 1000;
@@ -57,6 +61,12 @@ app-modal {
 
         /* z-index must be below .app-modal and above everything else  */
         z-index: 900;
+    }
+
+    @media screen and (max-width: 768px){
+        .app-modal{
+            width: 95%;
+        }
     }
 }
 

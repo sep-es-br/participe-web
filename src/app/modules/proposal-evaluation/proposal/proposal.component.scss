@@ -1,3 +1,4 @@
+
 .test {
   border: 1px solid black;
 }
@@ -17,8 +18,32 @@
     }
   }
 
+.evalStatus-locality {
+  span.evalStatus-text {
+
+    font-weight: 700;
+    margin-right: 5px;
+    font-size: 1rem;
+
+    &.evaluated {
+      color: #00c853;
+    }
+
+    &.not-evaluated {
+      color: #ef8533;
+    }
+  }
+
   span.divider,
+
   span.microrregion-text {
+    color: #9a9a9a;
+    margin-left: 0.5rem;
+  }
+}
+
+  span.locality-text {
+
     color: #9a9a9a;
     margin-left: 0.5rem;
   }
@@ -34,8 +59,22 @@
     margin: auto 0.75rem;
   }
 
+.planItemArea-planItem {
+
+  span.divider {
+    color: #9a9a9a;
+    margin: auto 0.75rem;
+  }
+
   span.themearea-text,
   span.budgetcategory-text {
+        color: #9a9a9a;
+  }
+}
+  
+  span.planItemArea-text,
+  span.planItem-text {
+
     color: #9a9a9a;
   }
 }
@@ -47,6 +86,59 @@ button.entity-badge {
   margin-right: 0.7rem;
   padding: 0 2rem;
   color: white;
+button.org-badge {
+  border: none;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  margin-right: 0.7rem;
+  padding: 0 2rem;
+  color: white;
   background-color: #00c853;
   font-size: 0.75rem;
+
+
+  &.loaIncluded {
+    background-color: #00c853;
+  }
+
+  &.not-loaIncluded {
+    background-color: #aaaaaa97;
+  }
+
+  &.not-evaluated {
+    background-color: #ef8533;
+  }
+}
+
+.dropdown-modal {
+  display: flex;
+  padding-right: 10px;
+}
+
+.input-switch-modal {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+::ng-deep .p-dropdown-item {
+  padding: 5px;
+}
+
+::ng-deep .field-switch {
+  display: flex;
+  align-items: center;
+  label {
+    font-weight: normal;
+    margin-left: 0.4rem;
+  }
+}
+
+::ng-deep {
+  app-modal .app-modal {
+    width: auto !important;
+
+    @media screen and (max-width: 991px) {
+      width: 80% !important;
+    }
+  }
 }

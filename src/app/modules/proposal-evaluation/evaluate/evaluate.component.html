@@ -28,6 +28,66 @@
         <br />
         <label>Categoria Orçamentária</label>
         <p>{{ formBudgetCategory }}</p>
+  <div
+    class="row"
+    *ngIf="
+      this.readOnlyProposalEvaluation && isEvaluationOpen && hasEvaluatorOrgGuid && hasViewEvaluation
+    "
+  >
+    <div class="col-12 d-flex flex-row justify-content-end">
+      <button
+        [disabled]="loading"
+        pButton
+        icon="pi pi-pencil"
+        class="mx-2"
+        type="button"
+        (click)="switchEdit()"
+      ></button>
+
+      <button
+        [disabled]="loading"
+        pButton
+        icon="pi pi-trash"
+        class="mx-2"
+        type="button"
+        (click)="delete()"
+      ></button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!loading; else loadingSpinner">
+    <div class="row">
+      <div class="col-4">
+        <label>{{
+          (readOnlyProposalEvaluation
+            ? "proposal_evaluation.evaluated_by"
+            : "proposal_evaluation.under_evaluation_by"
+          ) | translate
+        }}</label>
+        <div class="evaluator-div">
+          <button
+            class="org-badge pe-none"
+            [ngClass]="{
+              evaluated: readOnlyProposalEvaluation,
+              'evaluated-not-loaIncluded': !proposalEvaluationFormInitialState.includedInNextYearLOA,
+              'not-evaluated': !readOnlyProposalEvaluation
+            }"
+          >
+            {{ orgNameTag }}
+          </button>
+          <span>{{ orgName }}</span>
+        </div>
+
+        <br />
+        <label>{{ domainConfigNamesObj["planItemAreaTypeName"] }}</label>
+        <p>{{ proposal.planItemAreaName }}</p>
+      </div>
+      <div class="col-4">
+        <label>{{ domainConfigNamesObj["localityTypeName"] }}</label>
+        <p>{{ proposal.localityName }}</p>
+        <br />
+        <label>{{ domainConfigNamesObj["planItemTypeName"] }}</label>
+        <p>{{ proposal.planItemName }}</p>
       </div>
     </div>
     <div class="row">
@@ -124,3 +184,281 @@
     </div>
   </form>
 </app-template>
+        <label>{{ "proposal_evaluation.description" | translate }}</label>
+        <p>{{ proposal.description }}</p>
+      </div>
+    </div>
+
+    <form
+      [formGroup]="proposalEvaluationForm"
+      *ngIf="!this.readOnlyProposalEvaluation"
+    >
+      <div class="row">
+        <div class="col-8">
+          <label>{{
+            "proposal_evaluation.loaIncluded_question" | translate
+          }}</label>
+          <div class="col-3 d-flex justify-content-between">
+            <div class="d-inline-flex align-items-center">
+              <p-radioButton
+                [disabled]="loading"
+                inputId="loaIncludedTrue"
+                [value]="true"
+                formControlName="includedInNextYearLOA"
+                (onClick)="loaChanged($event)"
+              ></p-radioButton>
+              <label for="loaIncludedTrue" class="ms-2">{{
+                "yes" | translate
+              }}</label>
+            </div>
+            <div class="d-inline-flex align-items-center">
+              <p-radioButton
+                [disabled]="loading"
+                inputId="loaIncludedFalse"
+                [value]="false"
+                formControlName="includedInNextYearLOA"
+                (onClick)="loaChanged($event)"
+              ></p-radioButton>
+              <label for="loaIncludedFalse" class="ms-2">{{
+                "no" | translate
+              }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-9">
+          <ng-container *ngIf="formLoaIncluded != null && formLoaIncluded">
+            <div class="col-12 d-flex flex-column">
+              <label for="budgetUnit">{{
+                "proposal_evaluation.budgetUnit" | translate
+              }}</label>
+              <p-multiSelect
+                [disabled]="loading"
+                [options]="budgetUnitOptions"
+                (onChange)="budgetUnitChanged($event)"
+                (onClear)="budgetUnitCleared()"
+                filter="true"
+                filterBy="budgetUnitId,budgetUnitName"
+                showClear="true"
+                showToggleAll="false"
+                selectionLimit="2"
+                formControlName="budgetUnit"
+                [style]="{ 'min-height': '38px' }"
+                styleClass="d-flex form-control my-1"
+                class="ng-dirty ng-invalid"
+              >
+                <ng-template let-value pTemplate="selectedItems">
+                  <span *ngFor="let option of value">
+                    {{ formatBudgetUnit(option) }}
+                  </span>
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  <span>{{ formatBudgetUnit(item) }}</span>
+                </ng-template>
+              </p-multiSelect>
+              <span class="fw-bold">{{
+                (formBudgetUnit?.length ?? 0).toString() + "/2"
+              }}</span>
+              <tt-input-message
+                [form]="proposalEvaluationForm"
+                field="budgetUnit"
+              ></tt-input-message>
+            </div>
+
+            <br />
+
+            <div class="col-12 d-flex flex-column">
+              <label for="budgetAction">{{
+                "proposal_evaluation.budgetAction" | translate
+              }}</label>
+              <p-multiSelect
+                [disabled]="loading"
+                [options]="budgetActionOptions"
+                filter="true"
+                filterBy="budgetActionId,budgetActionName"
+                showClear="true"
+                showToggleAll="false"
+                selectionLimit="3"
+                formControlName="budgetAction"
+                [style]="{ 'min-height': '38px' }"
+                styleClass="d-flex form-control my-1"
+                class="ng-dirty ng-invalid"
+              >
+                <ng-template let-value pTemplate="selectedItems">
+                  <span *ngFor="let option of value">
+                    {{ formatBudgetAction(option) }}
+                  </span>
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  <span>{{ formatBudgetAction(item) }}</span>
+                </ng-template>
+              </p-multiSelect>
+              <span class="fw-bold">{{
+                (formBudgetAction?.length ?? 0).toString() + "/3"
+              }}</span>
+              <tt-input-message
+                [form]="proposalEvaluationForm"
+                field="budgetAction"
+              ></tt-input-message>
+            </div>
+
+            <br />
+
+            <div class="col-12 d-flex flex-column">
+              <label for="budgetPlan">{{
+                "proposal_evaluation.budgetPlan" | translate
+              }}</label>
+              <input
+                [disabled]="loading"
+                type="text"
+                pInputText
+                formControlName="budgetPlan"
+                class="ng-dirty ng-invalid form-control"
+              />
+              <tt-input-message
+                [form]="proposalEvaluationForm"
+                field="budgetPlan"
+              ></tt-input-message>
+            </div>
+
+            <br />
+          </ng-container>
+          <ng-container *ngIf="formLoaIncluded != null && !formLoaIncluded">
+            <label for="reason"
+              >{{ "proposal_evaluation.reason" | translate }}?</label
+            >
+            <div class="col-12 d-flex flex-column">
+              <ng-container *ngFor="let reason of reasonOptions">
+                <div class="d-inline-flex align-items-center">
+                  <p-radioButton
+                    [disabled]="loading"
+                    inputId="reason"
+                    [value]="reason"
+                    formControlName="reason"
+                  ></p-radioButton>
+                  <label for="reason" name="reason" class="ms-2">{{
+                    reason
+                  }}</label>
+                </div>
+              </ng-container>
+              <tt-input-message
+                [form]="proposalEvaluationForm"
+                field="reason"
+              ></tt-input-message>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-8">
+          <button
+            [disabled]="loading"
+            pButton
+            icon="pi pi-check"
+            [label]="'save' | translate"
+            class="mx-2"
+            type="submit"
+            (click)="saveProposalEvaluation(proposalEvaluationForm)"
+          ></button>
+
+          <button
+            [disabled]="loading"
+            pButton
+            icon="pi pi-ban"
+            [label]="'cancel' | translate"
+            class="mx-2"
+            type="button"
+            (click)="cancel()"
+          ></button>
+        </div>
+      </div>
+    </form>
+
+    <form
+      [formGroup]="proposalEvaluationForm"
+      *ngIf="this.readOnlyProposalEvaluation"
+    >
+      <div class="row">
+        <div class="col-8">
+          <label>{{ "proposal_evaluation.loaIncluded" | translate }}</label>
+          <p>{{ (formLoaIncluded ? "yes" : "no") | translate }}</p>
+        </div>
+      </div>
+
+      <ng-container *ngIf="formLoaIncluded">
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.budgetUnit" | translate }}</label>
+            <p
+              *ngFor="let budgetUnit of formBudgetUnit"
+              class="budgetUnitParagraphEl"
+            >
+              {{ formatBudgetUnit(budgetUnit) }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.budgetAction" | translate }}</label>
+            <p
+              *ngFor="let budgetAction of formBudgetAction"
+              class="budgetActionParagraphEl"
+            >
+              {{ formatBudgetAction(budgetAction) }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
+            <p>{{ formBudgetPlan }}</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!formLoaIncluded">
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.reason" | translate }}</label>
+            <p>{{ formReason }}</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="row">
+        <div class="col-8">
+          <label>{{ "proposal_evaluation.evaluator" | translate }}</label>
+          <p>{{ proposal.evaluatorName }}</p>
+        </div>
+      </div>
+
+      <button
+        [disabled]="loading"
+        pButton
+        icon="pi pi-arrow-left"
+        [label]="'back' | translate"
+        class="mx-2"
+        type="button"
+        (click)="cancel()"
+      ></button>
+    </form>
+  </ng-container>
+
+  <p-confirmDialog
+    [header]="'proposal_evaluation.delete' | translate"
+    icon="pi pi-exclamation-triangle"
+    key="deleteProposalEvaluation"
+  >
+  </p-confirmDialog>
+</app-template>
+
+<ng-template #loadingSpinner>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

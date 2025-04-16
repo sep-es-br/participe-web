@@ -1,0 +1,259 @@
+<app-template>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-w-title">
+        <ng-container *ngIf="!showForm">
+          <div class="row">
+            <div class="col-5">
+              <button
+                [disabled]="loading"
+                pButton
+                type="button"
+                class="button-new"
+                [label]="'new' | translate"
+                (click)="showCreateEvaluator()"
+                icon="pi pi-plus"
+              ></button>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-5 d-flex justify-content-end align-items-center">
+              <a *ngIf="!loading" class="pointer" (click)="showSearchForm()">{{
+                (search ? "hide" : "search") | translate
+              }}</a>
+            </div>
+          </div>
+          <ng-container *ngIf="search">
+            <div class="row my-3">
+              <form [formGroup]="evaluatorsSearchForm">
+                <div
+                  class="d-flex flex-row justify-content-between align-items-end"
+                >
+                  <div class="col-3">
+                    <label for="searchOrganization">{{
+                      "evaluator.organization" | translate
+                    }}</label>
+                    <p-dropdown
+                      [disabled]="loading"
+                      [options]="organizationsOptions"
+                      filter="true"
+                      formControlName="searchOrganization"
+                      styleClass="d-flex form-control"
+                    ></p-dropdown>
+                  </div>
+                  <div class="col-3">
+                    <label for="searchSection">{{
+                      "evaluator.section" | translate
+                    }}</label>
+                    <p-dropdown
+                      [disabled]="loading"
+                      [options]="sectionsOptions"
+                      filter="true"
+                      formControlName="searchSection"
+                      styleClass="d-flex form-control"
+                    ></p-dropdown>
+                  </div>
+                  <div class="col-3">
+                    <label for="searchRole">{{
+                      "evaluator.role" | translate
+                    }}</label>
+                    <p-dropdown
+                      [disabled]="loading"
+                      [options]="rolesOptions"
+                      filter="true"
+                      formControlName="searchRole"
+                      styleClass="d-flex form-control"
+                    ></p-dropdown>
+                  </div>
+                    <div class="col-3 mt-auto">
+                      <button
+                        [disabled]="loading"
+                        pButton
+                        icon="pi pi-search"
+                        class="me-2"
+                        [label]="'search' | translate"
+                        (click)="searchHandle()"
+                      ></button>
+                      <button 
+                        [disabled]="loading"
+                        pButton 
+                        icon="pi pi-ban" 
+                        [label]="'clean.search'|translate"
+                        (click)="clearSearchForm();searchHandle();"
+                        ></button>
+                    </div>
+                </div>
+              </form>
+            </div>
+          </ng-container>
+          <div class="row">
+            <div class="col-12">
+              <div *ngIf="evaluatorsList.length == 0">
+                <p class="text-center">
+                  {{ "attendance.noResult" | translate }}
+                </p>
+              </div>
+
+              <p-table
+                *ngIf="evaluatorsList.length > 0"
+                [value]="evaluatorsList"
+                lazy="true"
+                [loading]="loading"
+                paginator="true"
+                paginatorPosition="both"
+                [first]="pageState.first"
+                [rows]="pageState.rows"
+                [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="rowsPerPageOptions"
+                showCurrentPageReport="true"
+                [currentPageReportTemplate]="
+                  'page.pageReportTemplate'
+                    | translate : pageReportTemplateTranslateParams
+                "
+                (onLazyLoad)="lazyLoadEvaluatorsList($event)"
+                responsiveLayout="stack"
+                class="data-column"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>
+                      {{ "evaluator.organization" | translate }}
+                    </th>
+                    <th>{{ "evaluator.sections" | translate }}</th>
+                    <th>{{ "evaluator.roles" | translate }}</th>
+                    <th></th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-evaluator>
+                  <tr>
+                    <td>
+                      {{ getOrganizationName(evaluator.organizationGuid) }}
+                    </td>
+                    <td>
+                      {{ getSectionNames(evaluator.sectionsGuid) | td_trunc }}
+                    </td>
+                    <td>{{ getRoleNames(evaluator.rolesGuid) | td_trunc }}</td>
+                    <td class="column-actions">
+                      <button
+                        pButton
+                        class="ui-button btn-icon"
+                        type="button"
+                        (click)="showEditEvaluator(evaluator)"
+                      >
+                        <i class="pi pi-pencil"></i>
+                      </button>
+                      <button
+                        pButton
+                        class="ui-button btn-icon"
+                        type="button"
+                        (click)="deleteEvaluator(evaluator)"
+                      >
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="showForm">
+          <div class="row">
+            <div class="col-12">
+              <span>{{ formHeaderText | translate }}</span>
+            </div>
+
+            <form
+              [formGroup]="evaluatorsForm"
+              (submit)="saveEvaluatorsForm(evaluatorsForm)"
+            >
+              <div class="col-6">
+                <label for="organizationGuid">{{
+                  "evaluator.organization" | translate
+                }}</label>
+                <p-dropdown
+                  [options]="organizationsList"
+                  optionLabel="name"
+                  optionValue="guid"
+                  filter="true"
+                  [readonly]="editEvaluatorSection"
+                  formControlName="organizationGuid"
+                  (onChange)="organizationChanged($event)"
+                  styleClass="d-flex form-control"
+                  class="ng-dirty ng-invalid"
+                ></p-dropdown>
+                <tt-input-message
+                  [form]="evaluatorsForm"
+                  field="organizationGuid"
+                ></tt-input-message>
+              </div>
+              <div class="col-6">
+                <label for="sectionsGuid">{{
+                  "evaluator.section" | translate
+                }}</label>
+                <p-multiSelect
+                  [disabled]="loading"
+                  [options]="sectionsList"
+                  optionLabel="name"
+                  optionValue="guid"
+                  formControlName="sectionsGuid"
+                  display="chip"
+                  showClear="true"
+                  showToggleAll="false"
+                  (onChange)="sectionsChanged($event)"
+                  (onClear)="sectionsCleared()"
+                  styleClass="d-flex form-control"
+                  class="ng-dirty ng-invalid"
+                ></p-multiSelect>
+                <tt-input-message
+                  [form]="evaluatorsForm"
+                  field="sectionsGuid"
+                ></tt-input-message>
+              </div>
+              <div class="col-6">
+                <label for="rolesGuid">{{
+                  "evaluator.role" | translate
+                }}</label>
+                <p-multiSelect
+                  [disabled]="loading"
+                  [options]="rolesList"
+                  optionLabel="name"
+                  [optionDisabled]="disableOptionsIfAllSelected()"
+                  formControlName="rolesGuid"
+                  display="chip"
+                  showClear="false"
+                  showToggleAll="false"
+                  (onChange)="patchValueIfAllSelected($event)"
+                  styleClass="d-flex form-control"
+                  class="ng-dirty ng-invalid"
+                ></p-multiSelect>
+              </div>
+              <div class="col-12 form-actions">
+                <button
+                  [disabled]="loading"
+                  pButton
+                  icon="pi pi-check"
+                  type="submit"
+                  [label]="'save' | translate"
+                ></button>
+                <button
+                  [disabled]="loading"
+                  pButton
+                  icon="pi pi-ban"
+                  type="button"
+                  [label]="'cancel' | translate"
+                  (click)="cancelForm()"
+                ></button>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <p-confirmDialog
+    [header]="'evaluator.delete' | translate"
+    icon="pi pi-exclamation-triangle"
+    key="deleteEvaluationSection"
+  >
+  </p-confirmDialog>
+</app-template>

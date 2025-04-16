@@ -24,6 +24,7 @@ export class Conference {
   subtitleRegionalization: string;
   fileParticipation: File;
   fileAuthentication: File;
+  fileFooter: File;
   locality: LocalityType;
   hasAttend: boolean;
   moderators: IPerson[];
@@ -33,6 +34,7 @@ export class Conference {
   showStatistics: Boolean;
   showCalendar: Boolean;
   showStatisticsPanel: Boolean;
+  showProposalsPanel: Boolean;
   showExternalLinks: Boolean;
   segmentation: boolean;
   targetedByItems: number[];
@@ -56,4 +58,10 @@ export class Conference {
   };
   localityType?: LocalityType;
   customProperties?:customProperties;
+  evaluationConfiguration:{
+    beginDate?: string;
+    endDate?: string;
+    displayMode?: string;
+    evaluationDisplayStatus?: string;
+  }
 }

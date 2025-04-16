@@ -59,6 +59,128 @@
 
   <div *ngFor="let proposal of proposalList">
     <app-proposal [proposalData]="proposal"></app-proposal>
+      <form [formGroup]="proposalEvaluationSearchForm">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-3">
+              <label class="form-label">{{ 'proposal_evaluation.evaluationStatus' | translate }}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="evaluationStatusOptions"
+                formControlName="evaluationStatus"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ domainConfigNamesObj['localityTypeName']}}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="localityOptions"
+                filter="true"
+                formControlName="localityId"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ domainConfigNamesObj['planItemAreaTypeName']}}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="planItemAreaOptions"
+                filter="true"
+                formControlName="planItemAreaId"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ domainConfigNamesObj['planItemTypeName']}}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="planItemOptions"
+                filter="true"
+                formControlName="planItemId"
+              ></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-3">
+              <label class="form-label">{{ 'evaluator.organization' | translate }}</label>
+              <p-multiSelect
+                styleClass="d-flex form-control"
+                [options]="transformedOptions"
+                filter="true"
+                display="chip"
+                formControlName="organizationGuid"
+              >
+            </p-multiSelect>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ 'proposal_evaluation.loaIncluded' | translate }}</label>
+              <p-dropdown
+                styleClass="d-flex form-control"
+                [options]="loaIncludedOptions"
+                formControlName="loaIncluded"
+              ></p-dropdown>
+            </div>
+            <div class="col-3">
+              <label class="form-label">{{ 'proposal_evaluation.description' | translate }}</label>
+              <input pInputText class="form-control commentText" formControlName="commentText" />
+            </div>
+            <div class="col-3 mt-auto">
+              <button
+                pButton
+                icon="pi pi-search"
+                [disabled]="loading"
+                class="me-2 mb-1"
+                [label]="'search' | translate"
+                (click)="searchHandle()"
+              ></button>
+              <button 
+                pButton 
+                icon="pi pi-ban" 
+                [disabled]="loading"
+                class="me-2 mb-1"
+                [label]="'clean.search'|translate"
+                (click)="clearSearchForm();searchHandle();"
+                ></button>
+              <button 
+                pButton 
+                icon="pi pi-download"
+                class="mb-1" 
+                [label]="'.xlsx'"
+                [disabled]="loading"
+                (click)="searchHandle();downloadProposalEvaluation()"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="paginator-proposal-list">
+    <p-paginator
+      [first]="pageState.first"
+      [rows]="pageState.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="pageChange($event)"
+      styleClass="my-2"
+    ></p-paginator>
+
+    <ng-container *ngIf="proposalList; else noResults">
+      <div *ngFor="let proposal of proposalList">
+        <app-proposal [proposalData]="proposal" [domainConfigNamesObj]="domainConfigNamesObj"></app-proposal>
+      </div>
+    </ng-container>
+
+    <p-paginator
+      [first]="pageState.first"
+      [rows]="pageState.rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="pageChange($event)"
+      styleClass="my-2"
+    ></p-paginator>
+    
   </div>
 
   <ng-container
@@ -105,4 +227,9 @@
       </div>
     </p-footer>
   </p-dialog>
+</ng-template>
+<ng-template #noResults>
+  <div class="col-12 d-flex justify-content-center">
+    <span>{{ 'proposal_evaluation.noResult' | translate }}</span>
+  </div>
 </ng-template>

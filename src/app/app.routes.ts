@@ -20,6 +20,20 @@ import { MeetPanelComponent } from "./modules/conference/meeting/meet-panel/meet
 import { ProposalEvaluationComponent } from "./modules/proposal-evaluation/proposal-evaluation.component";
 import { EvaluateComponent } from "./modules/proposal-evaluation/evaluate/evaluate.component";
 
+import {AdministrationDashboardComponent} from './modules/administration-dashboard/administration-dashboard.component';
+import {StructureComponent} from './modules/structure/structure.component';
+import {PlanComponent} from './modules/plan/plan.component';
+import {ConferenceComponent} from './modules/conference/conference.component';
+import {HomeComponent} from './modules/home/home.component';
+import {CitizenComponent} from './modules/citizen/citizen.component';
+import {ControlPanelDashboardComponent} from './modules/control-panel-dashboard/control-panel-dashboard.component';
+import {ConferenceListComponent} from './modules/conference/conference-list/conference-list.component';
+import { MeetPanelComponent } from './modules/conference/meeting/meet-panel/meet-panel.component';
+import { ProposalEvaluationComponent } from './modules/proposal-evaluation/proposal-evaluation.component';
+import { EvaluateComponent } from './modules/proposal-evaluation/evaluate/evaluate.component';
+import { EvaluatorsComponent } from './modules/evaluators/evaluators.component';
+
+
 export const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
   { path: "login", component: LoginComponent },
@@ -49,6 +63,7 @@ export const routes: Routes = [
     component: MeetPanelComponent,
   },
   { path: "administration/citizen", component: CitizenComponent },
+  { path: 'administration/evaluators', component: EvaluatorsComponent },
   { path: "moderation/search", component: ModerationComponent },
   {
     path: "moderation/moderate/:id/:conferenceId",
@@ -60,10 +75,9 @@ export const routes: Routes = [
       (await import("./modules/attendance/attendance.module")).AttendanceModule,
   },
   { path: "proposal-evaluation", component: ProposalEvaluationComponent },
-  {
-    path: "proposal-evaluation/:proposalId",
-    component: EvaluateComponent,
-  },
+  { path: "proposal-evaluation/:proposalId", component: EvaluateComponent }
+  
+
 ];
 
 export const AppRoutes: ModuleWithProviders<any> = RouterModule.forRoot(

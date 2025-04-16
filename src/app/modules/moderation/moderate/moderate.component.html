@@ -10,6 +10,13 @@
         <textarea class="form-control" [maxlength]="200" rows="4" [(ngModel)]="comment.text"></textarea>
         <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/200</span>
       </div>
+      <div class="col-12 col-md-12">
+        <div class="d-flex">
+          <div>{{'moderation.moderate.duplicated' | translate}}</div>
+          <p-inputSwitch class="input-switch-duplicated" [(ngModel)]="comment.duplicated">
+          </p-inputSwitch>
+        </div>
+        </div>
       <div class="col-12 col-md-12 margin-item">
         <p-radioButton [(ngModel)]="comment.type" name="optionModeration" value="Proposal"
           [label]="'moderation.label.proposal' | translate">
@@ -57,5 +64,11 @@
   </div>
   <p-confirmDialog [header]="'moderation.label.confirm_change_tree_title'|translate" icon="pi pi-exclamation-triangle"
     key="confirm_change_tree">
+  </p-confirmDialog>
+  <p-confirmDialog
+    [header]="'moderation.moderate.confirmDeleteCommentWithPropEval.header' | translate"
+    icon="pi pi-exclamation-triangle"
+    key="confirmDeleteCommentWithPropEval"
+  >
   </p-confirmDialog>
 </app-template>

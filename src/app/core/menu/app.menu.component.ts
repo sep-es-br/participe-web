@@ -10,6 +10,7 @@ import {
   faCrown,
   faEdit,
   faMapMarkedAlt,
+  faPortrait,
   faSitemap,
   faTachometerAlt,
   faUserCheck,
@@ -18,6 +19,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '@app/shared/services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
+import { IPerson } from '@app/shared/interface/IPerson';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -28,18 +31,25 @@ export class AppMenuComponent implements OnInit {
   @Input() reset: boolean;
 
   model: any[];
+  person: IPerson;
 
-  constructor(public template: AppTemplateComponent, private userAuth: AuthService, private translateSrv: TranslateService) {
+  constructor(public template: AppTemplateComponent, private userAuth: AuthService, private translateSrv: TranslateService, private router: Router) {
   }
 
   ngOnInit() {
     const person = this.userAuth.getUserInfo;
 
-    console.log(person)
+    if(this.userAuth.getUserInfo){
+      this.updateMenu();
+    }
+  }
+
+  updateMenu(){
+    this.person = this.userAuth.getUserInfo;
 
     this.model = [];
 
-    if (person.roles.includes('Moderator') || person.roles.includes('Administrator')) {
+    if (this.person.roles.includes('Moderator') || this.person.roles.includes('Administrator')) {
       this.model.push(
         {label: this.translateSrv.instant('control-panel'), icon: faTachometerAlt, routerLink: ['/home']}
       );
@@ -55,27 +65,11 @@ export class AppMenuComponent implements OnInit {
       )
     }
 
-    if (person.roles.includes('Recepcionist') && person.roles.includes('Administrator')) {
-      if (window.location.href.endsWith('#/attendance')) {
-        this.model.push(
-          {
-            label: 'attendance.label', icon: faUserCheck, items: [
-              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
-            ]
-          });
-      } else {
-        this.model.push(
-          {
-            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
-              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
-            ]
-          });
-      }
+    if(sessionStorage.getItem("evaluatorOrgGuid") && !this.person.roles.includes('Administrator')){
+      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
     }
 
-    if (person.roles.includes('Recepcionist') && !person.roles.includes('Administrator')) {
+    if (this.person.roles.includes('Recepcionist') && !this.person.roles.includes('Administrator')) {
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
           {
@@ -93,7 +87,28 @@ export class AppMenuComponent implements OnInit {
       }
     }
 
-    if (person.roles.includes('Administrator')) {
+    if (this.person.roles.includes('Administrator')) {
+      this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']})
+      if (window.location.href.endsWith('#/attendance')) {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, items: [
+              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
+              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+            ]
+          }
+          );
+      } else {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
+              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
+              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+            ]
+          }
+        );
+      }
+      
       if (window.location.href.endsWith('#/administration/dashboard')) {
         this.model.push(
           {
@@ -102,21 +117,26 @@ export class AppMenuComponent implements OnInit {
               {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
               {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
               {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
+              {label: 'administration.evaluators', icon: faPortrait, routerLink: ['/administration/evaluators']},
               {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
             ]
           });
-      } else {
-        this.model.push(
-          {
-            label: 'administration.label', icon: faCog, routerLink: ['/administration/dashboard'], items: [
-              {label: 'administration.domain', icon: faMapMarkedAlt, routerLink: ['/administration/domains']},
-              {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
-              {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
-              {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
-              {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
+        } else {
+          this.model.push(
+            {
+              label: 'administration.label', icon: faCog, routerLink: ['/administration/dashboard'], items: [
+                {label: 'administration.domain', icon: faMapMarkedAlt, routerLink: ['/administration/domains']},
+                {label: 'administration.structure', icon: faSitemap, routerLink: ['/administration/structures']},
+                {label: 'administration.plan', icon: faClipboardList, routerLink: ['/administration/plans']},
+                {label: 'administration.conference', icon: faComments, routerLink: ['/administration/conferences']},
+                {label: 'administration.evaluators', icon: faPortrait, routerLink: ['/administration/evaluators']},
+                {label: 'administration.citizen', icon: faUsers, routerLink: ['/administration/citizen']},
             ]
           });
       }
+    }
+    if(this.model.length === 0){
+      this.router.navigate(['/login']);
     }
   }
 }
