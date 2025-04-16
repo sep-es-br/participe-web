@@ -204,6 +204,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return this.proposalEvaluationForm.get("reason").value;
   }
 
+  public get formReasonDetail(): string {
+    return this.proposalEvaluationForm.get("reasonDetail").value;
+  }
+
   public switchEdit() {
     this.readOnlyProposalEvaluation = false;
     this.editProposalEvaluation = true;
@@ -286,6 +290,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetAction: new FormControl<Array<IBudgetAction>>(null),
       budgetPlan: new FormControl<string>(null),
       reason: new FormControl<string>(null),
+      reasonDetail: new FormControl<string>(null),
     });
   }
 
@@ -318,6 +323,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       ),
       budgetPlan: new FormControl<string>(proposalEvaluationData.budgetPlan),
       reason: new FormControl<string>(proposalEvaluationData.reason),
+      reasonDetail: new FormControl<string>(proposalEvaluationData.reasonDetail),
     });
   }
 
@@ -358,6 +364,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     const budgetActionControl = this.proposalEvaluationForm.get("budgetAction");
     const budgetPlanControl = this.proposalEvaluationForm.get("budgetPlan");
     const reasonControl = this.proposalEvaluationForm.get("reason");
+    const reasonDetailControl = this.proposalEvaluationForm.get("reasonDetail");
 
     if (!loaIncluded) {
       budgetUnitControl.patchValue(null);
@@ -373,6 +380,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       reasonControl.patchValue(null);
       reasonControl.clearValidators();
 
+      reasonDetailControl.patchValue(null);
+
       budgetUnitControl.addValidators([
         Validators.required,
         Validators.maxLength(2),
@@ -387,6 +396,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     budgetActionControl.updateValueAndValidity();
     budgetPlanControl.updateValueAndValidity();
     reasonControl.updateValueAndValidity();
+    reasonDetailControl.updateValueAndValidity();
   }
 
   private populateOptionsLists() {
@@ -405,6 +415,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       "budgetActionName",
       "budgetPlan",
       "reason",
+      "reasonDetail",
     ];
 
     return !keysArray.every((key) => {

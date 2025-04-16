@@ -9,6 +9,7 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
   private readonly _id: number;
   public includedInNextYearLOA: boolean;
   public reason?: string;
+  public reasonDetail?: string;
   public budgetUnitId?: string;
   public budgetUnitName?: string;
   public budgetActionId?: string;
@@ -27,6 +28,7 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
       this.budgetPlan = proposalEvaluation.budgetPlan;
     } else {
       this.reason = proposalEvaluation.reason;
+      this.reasonDetail = proposalEvaluation.reasonDetail;
     }
     this.representing = proposalEvaluation.representing;
   }
@@ -85,6 +87,7 @@ export class ProposalEvaluationCreateFormModel
   public proposalId: number;
   public includedInNextYearLOA: boolean;
   public reason?: string;
+  public reasonDetail?: string;
   public budgetUnitId?: string;
   public budgetUnitName?: string;
   public budgetActionId?: string;
@@ -107,6 +110,7 @@ export class ProposalEvaluationCreateFormModel
       this.budgetPlan = formValue.budgetPlan;
     } else {
       this.reason = formValue.reason;
+      this.reasonDetail = formValue.reasonDetail;
     }
     this.personId = personId;
     this.proposalId = proposalId;
