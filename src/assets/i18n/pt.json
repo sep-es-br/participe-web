@@ -88,6 +88,8 @@
 		"search": "Limpar Pesquisa"
 	},
 	"conference": {
+		"reports": "Relatórios",
+		"proposeReport": "Relatório de Audiência Pública",
 		"citizen-Authentication": "Autenticação do Cidadão",
 		"citizenPortal": "Portal do cidadão",
 		"segmentation": "Segmentação das Reuniões",
@@ -675,6 +677,9 @@
 		"profile": "Perfil",
 		"settings": "Configurações",
 		"yourhave": "Você possui"
+	},
+	"report": {
+		"list": "Relatórios"
 	},
 	"type": "Tipo",
 	"unauthorized.error": "Você não possui permissão de acesso a essa funcionalidade",

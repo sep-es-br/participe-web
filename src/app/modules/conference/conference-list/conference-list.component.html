@@ -62,7 +62,7 @@
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-conference>
-              <tr>
+              <tr (click)="handleClickConference($event, conference)" class="pointer">
                 <td>
                   <div class="row p-1">
                     <div class="p-column-title">{{'name'|translate}}</div>

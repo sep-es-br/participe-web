@@ -29,7 +29,8 @@
         "src/environments/*"
       ]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": ["@types/moment"]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

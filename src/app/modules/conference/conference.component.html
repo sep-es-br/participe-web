@@ -156,6 +156,18 @@
                   </div>
                 </div>
               </p-accordionTab>
+              <p-accordionTab header="{{'conference.reports' | translate}}">
+
+                <div class="report-list d-flex flex-column flex-sm-row align-items-center align-items-sm-start">
+
+                  <div class="container-icon" (click)="generateProposeReport()">
+                    <fa-icon size="6x" [icon]="reportIcon"></fa-icon>
+                    <label>{{'conference.proposeReport' | translate}}</label>
+                  </div>
+                
+                </div>
+
+              </p-accordionTab>
             </p-accordion>
             <div class="citizen-portal-section">
               <span class="citizen-portal-section-title">

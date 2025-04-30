@@ -87,6 +87,8 @@
 		"search": "Clear Search"
 	},
 	"conference": {
+		"reports": "Reports",
+		"proposeReport": "Public Hearing Report",
 		"citizen-Authentication": "Citizen Authentication",
 		"citizenPortal": "Citizen Portal",
 		"segmentation": "Meetig Segmentation",

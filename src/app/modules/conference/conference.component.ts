@@ -24,6 +24,8 @@ import { IHowItWorkStep } from '@app/shared/interface/IHowItWorkStep';
 import { IExternalLinks } from '@app/shared/interface/IExternalLinks';
 import { CustomValidators } from '@app/shared/util/CustomValidators';
 import { FileUpload } from 'primeng/fileupload';
+import { faFile } from '@fortawesome/free-solid-svg-icons';
+import { ReportService } from '@app/shared/services/report.service';
 
 @Component({
   selector: 'app-conference',
@@ -32,6 +34,8 @@ import { FileUpload } from 'primeng/fileupload';
 })
 
 export class ConferenceComponent implements OnInit {
+
+  reportIcon = faFile;
 
   idConference: number;
   conferenceForm: FormGroup;
@@ -91,7 +95,8 @@ export class ConferenceComponent implements OnInit {
     private filesSrv: FilesService,
     private structureItemSrv: StructureItemService,
     private personService: PersonService,
-    private location: Location) {
+    private location: Location,
+    private reportService: ReportService) {
     this.actRouter.queryParams.subscribe(async queryParams => {
       this.idConference = queryParams.id;
     });
@@ -128,6 +133,10 @@ export class ConferenceComponent implements OnInit {
       this.calendarTranslate = calendar[lang];
       this.loadListOptions();
     });
+  }
+
+  async generateProposeReport() {
+    this.reportService.getProposalReport(this.conference.id)
   }
 
   async loadPlanOptions() {

@@ -121,6 +121,18 @@ export class ConferenceListComponent implements OnInit {
     });
   }
 
+  async handleClickConference(evt : PointerEvent, c:Conference) {
+    let elem = (evt.target as HTMLElement);
+    let invalid = elem.classList.contains("dropdown-item");
+    if(!invalid){
+      elem = elem.parentElement;
+      invalid = elem.classList.contains("dropdown-toggle");
+    }
+        
+    if(!invalid)
+      this.handleEditConference(c);
+  }
+
   async searchConferences(formData) {
     let name = formData && formData.nameSearch ? formData.nameSearch : null;
     name = name && name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
