@@ -18,6 +18,7 @@ export interface IProposalEvaluation {
   readonly id: number;
   includedInNextYearLOA: boolean;
   reason?: string;
+  reasonDetail?: string;
   budgetUnitId?: string;
   budgetUnitName?: string;
   budgetActionId?: string;

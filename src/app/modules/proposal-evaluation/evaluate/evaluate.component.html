@@ -228,6 +228,16 @@
                 [form]="proposalEvaluationForm"
                 field="reason"
               ></tt-input-message>
+              
+            </div>
+            <label for="reasonDetail"
+              >{{ "proposal_evaluation.reasonDetail" | translate }}?</label
+            >
+            <div class="col-5 d-flex flex-column">
+              <textarea [rows]="5" [cols]="30" pInputTextarea class="form-control" placeholder="" formControlName="reasonDetail"
+                          autoResize="autoResize" maxlength="280">
+                        </textarea>
+              <i>Caracteres restante: {{proposalEvaluationForm.getRawValue().reasonDetail?.length || 0 }}/280</i>
             </div>
           </ng-container>
         </div>
@@ -307,6 +317,12 @@
           <div class="col-8">
             <label>{{ "proposal_evaluation.reason" | translate }}</label>
             <p>{{ formReason }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.reasonDetail" | translate }}</label>
+            <p>{{ formReasonDetail || '-' }}</p>
           </div>
         </div>
       </ng-container>
