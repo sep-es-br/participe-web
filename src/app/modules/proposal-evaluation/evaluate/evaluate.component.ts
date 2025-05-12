@@ -252,7 +252,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       form.value,
       JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
       this.proposalId,
-      this.evaluatorOrgGuid
+      this.evaluatorOrgGuid,
+      this.orgNameTag,
+      this.orgName
     );
 
     if(reqBody.includedInNextYearLOA){
@@ -545,7 +547,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       {},
       JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
       id,
-      this.evaluatorOrgGuid
+      this.evaluatorOrgGuid,
+      this.orgNameTag,
+      this.orgName
     );
 
     try {

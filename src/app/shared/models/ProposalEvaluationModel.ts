@@ -99,7 +99,9 @@ export class ProposalEvaluationCreateFormModel
     formValue: any,
     personId: number,
     proposalId: number,
-    representing: string
+    representing: string,
+    public representingOrgTag: string,
+    public representingOrgName: string
   ) {
     this.includedInNextYearLOA = formValue.includedInNextYearLOA;
     if (formValue.includedInNextYearLOA) {
@@ -115,6 +117,7 @@ export class ProposalEvaluationCreateFormModel
     this.personId = personId;
     this.proposalId = proposalId;
     this.representing = representing;
+    this.representingOrgName = representingOrgName;
   }
 
   private getBudgetUnitId(value: Array<IBudgetUnit>): string {
