@@ -52,6 +52,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public orgNamedropDownSelect: string;
   public orgName: string;
   public orgNameTag: string;
+  public evaluatorName: string;
 
   public proposalEvaluationForm: FormGroup;
   public proposalEvaluationFormInitialState: ProposalEvaluationModel;
@@ -254,7 +255,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.proposalId,
       this.evaluatorOrgGuid,
       this.orgNameTag,
-      this.orgName
+      this.orgName,
+      this.evaluatorName
     );
 
     if(reqBody.includedInNextYearLOA){
@@ -266,7 +268,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
             "proposal_evaluation.error.identicalForm"
           ),
         });
-  
+
         return;
       }
     }
@@ -327,6 +329,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       reason: new FormControl<string>(proposalEvaluationData.reason),
       reasonDetail: new FormControl<string>(proposalEvaluationData.reasonDetail),
     });
+
+    this.evaluatorName = proposalEvaluationData.evaluatorName;
   }
 
   private async getProposalEvaluationData() {
@@ -549,7 +553,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       id,
       this.evaluatorOrgGuid,
       this.orgNameTag,
-      this.orgName
+      this.orgName,
+      this.evaluatorName
     );
 
     try {

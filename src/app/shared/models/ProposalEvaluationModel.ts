@@ -15,6 +15,7 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
   public budgetActionId?: string;
   public budgetActionName?: string;
   public budgetPlan?: string;
+  public evaluatorName: string;
   public representing: string;
 
   constructor(proposalEvaluation: IProposalEvaluation) {
@@ -31,6 +32,7 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
       this.reasonDetail = proposalEvaluation.reasonDetail;
     }
     this.representing = proposalEvaluation.representing;
+    this.evaluatorName = proposalEvaluation.evaluatorName;
   }
 
   public get id(): number {
@@ -101,7 +103,8 @@ export class ProposalEvaluationCreateFormModel
     proposalId: number,
     representing: string,
     public representingOrgTag: string,
-    public representingOrgName: string
+    public representingOrgName: string,
+    public evaluatorName: string
   ) {
     this.includedInNextYearLOA = formValue.includedInNextYearLOA;
     if (formValue.includedInNextYearLOA) {
@@ -117,7 +120,6 @@ export class ProposalEvaluationCreateFormModel
     this.personId = personId;
     this.proposalId = proposalId;
     this.representing = representing;
-    this.representingOrgName = representingOrgName;
   }
 
   private getBudgetUnitId(value: Array<IBudgetUnit>): string {

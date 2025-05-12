@@ -25,6 +25,7 @@ export interface IProposalEvaluation {
   budgetActionName?: string;
   budgetPlan?: string;
   representing: string;
+  evaluatorName: string;
 }
 
 export interface IProposalEvaluationCreateForm
