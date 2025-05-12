@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
 import Common from "../util/Common";
+import * as moment from "moment";
 
 @Injectable({
   providedIn: "root",
@@ -29,8 +30,9 @@ export class ReportService {
       .then((response: Blob) => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
+        const today = new Date();
         a.href = url;
-        a.download = `ProposalReport.pdf`; 
+        a.download = `ProposalReport_${moment(today).format('YYYY_MM_DD_HH_mm')}.pdf`; 
         a.click();
 
         window.URL.revokeObjectURL(url);
