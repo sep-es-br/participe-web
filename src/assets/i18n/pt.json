@@ -568,6 +568,7 @@
 		"confirm": {
 			"delete": "Deseja realmente deletar a avaliação?"
 		},
+    "optional": "Opcional",
 		"delete": "Excluir Avaliação de Proposta",
 		"description": "Texto da Proposta",
 		"edit": "Editar Avaliação de Proposta",

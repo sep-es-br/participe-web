@@ -520,6 +520,7 @@
 		"confirm": {
 			"delete": "Are you sure you want to delete evaluation?"
 		},
+    "optional": "Optional",
 		"delete": "Delete Proposal Evaluation",
 		"description": "Proposal Text",
 		"edit": "Edit Proposal Evaluation",
