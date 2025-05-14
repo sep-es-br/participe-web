@@ -43,6 +43,7 @@
     "@zxing/browser": "^0.1.5",
     "@zxing/library": "^0.21.3",
     "@zxing/ngx-scanner": "^19.0.0",
+
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
     "chartjs-plugin-datalabels": "^2.2.0",
