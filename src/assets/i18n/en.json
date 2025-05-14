@@ -87,6 +87,8 @@
 		"search": "Clear Search"
 	},
 	"conference": {
+		"reports": "Reports",
+		"proposeReport": "Public Hearing Report",
 		"citizen-Authentication": "Citizen Authentication",
 		"citizenPortal": "Citizen Portal",
 		"segmentation": "Meetig Segmentation",
@@ -518,6 +520,7 @@
 		"confirm": {
 			"delete": "Are you sure you want to delete evaluation?"
 		},
+    "optional": "Optional",
 		"delete": "Delete Proposal Evaluation",
 		"description": "Proposal Text",
 		"edit": "Edit Proposal Evaluation",
@@ -537,6 +540,7 @@
 		"new": "New Proposal Evaluation",
 		"noResult": "No results found",
 		"reason": "Reason of exclusion",
+		"reasonDetail": "Description of the reason of exclusion",
 		"title": "Proposal Evaluation",
 		"under_evaluation_by": "Under evaluation by",
 		"updated": "Proposal Evaluation updated"

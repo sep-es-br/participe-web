@@ -88,6 +88,8 @@
 		"search": "Limpar Pesquisa"
 	},
 	"conference": {
+		"reports": "Relatórios",
+		"proposeReport": "Relatório de Audiência Pública",
 		"citizen-Authentication": "Autenticação do Cidadão",
 		"citizenPortal": "Portal do cidadão",
 		"segmentation": "Segmentação das Reuniões",
@@ -566,6 +568,7 @@
 		"confirm": {
 			"delete": "Deseja realmente deletar a avaliação?"
 		},
+    "optional": "Opcional",
 		"delete": "Excluir Avaliação de Proposta",
 		"description": "Texto da Proposta",
 		"edit": "Editar Avaliação de Proposta",
@@ -585,6 +588,7 @@
 		"new": "Nova Avaliação de Proposta",
 		"noResult": "Nenhum resultado encontrado",
 		"reason": "Motivo da não inclusão",
+		"reasonDetail": "Descrição do motivo da não inclusão",
 		"title": "Avaliação de Proposta",
 		"under_evaluation_by": "Em avaliação por",
 		"updated": "Avaliação de Proposta atualizada"
@@ -675,6 +679,9 @@
 		"profile": "Perfil",
 		"settings": "Configurações",
 		"yourhave": "Você possui"
+	},
+	"report": {
+		"list": "Relatórios"
 	},
 	"type": "Tipo",
 	"unauthorized.error": "Você não possui permissão de acesso a essa funcionalidade",

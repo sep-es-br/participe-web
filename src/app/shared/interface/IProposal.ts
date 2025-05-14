@@ -18,12 +18,14 @@ export interface IProposalEvaluation {
   readonly id: number;
   includedInNextYearLOA: boolean;
   reason?: string;
+  reasonDetail?: string;
   budgetUnitId?: string;
   budgetUnitName?: string;
   budgetActionId?: string;
   budgetActionName?: string;
   budgetPlan?: string;
   representing: string;
+  evaluatorName: string;
 }
 
 export interface IProposalEvaluationCreateForm

@@ -52,6 +52,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   public orgNamedropDownSelect: string;
   public orgName: string;
   public orgNameTag: string;
+  public evaluatorName: string;
 
   public proposalEvaluationForm: FormGroup;
   public proposalEvaluationFormInitialState: ProposalEvaluationModel;
@@ -204,6 +205,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return this.proposalEvaluationForm.get("reason").value;
   }
 
+  public get formReasonDetail(): string {
+    return this.proposalEvaluationForm.get("reasonDetail").value;
+  }
+
   public switchEdit() {
     this.readOnlyProposalEvaluation = false;
     this.editProposalEvaluation = true;
@@ -248,7 +253,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       form.value,
       JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
       this.proposalId,
-      this.evaluatorOrgGuid
+      this.evaluatorOrgGuid,
+      this.orgNameTag,
+      this.orgName,
+      this.evaluatorName
     );
 
     if(reqBody.includedInNextYearLOA){
@@ -260,7 +268,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
             "proposal_evaluation.error.identicalForm"
           ),
         });
-  
+
         return;
       }
     }
@@ -286,6 +294,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetAction: new FormControl<Array<IBudgetAction>>(null),
       budgetPlan: new FormControl<string>(null),
       reason: new FormControl<string>(null),
+      reasonDetail: new FormControl<string>(null),
     });
   }
 
@@ -318,7 +327,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       ),
       budgetPlan: new FormControl<string>(proposalEvaluationData.budgetPlan),
       reason: new FormControl<string>(proposalEvaluationData.reason),
+      reasonDetail: new FormControl<string>(proposalEvaluationData.reasonDetail),
     });
+
+    this.evaluatorName = proposalEvaluationData.evaluatorName;
   }
 
   private async getProposalEvaluationData() {
@@ -358,6 +370,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     const budgetActionControl = this.proposalEvaluationForm.get("budgetAction");
     const budgetPlanControl = this.proposalEvaluationForm.get("budgetPlan");
     const reasonControl = this.proposalEvaluationForm.get("reason");
+    const reasonDetailControl = this.proposalEvaluationForm.get("reasonDetail");
 
     if (!loaIncluded) {
       budgetUnitControl.patchValue(null);
@@ -373,6 +386,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       reasonControl.patchValue(null);
       reasonControl.clearValidators();
 
+      reasonDetailControl.patchValue(null);
+
       budgetUnitControl.addValidators([
         Validators.required,
         Validators.maxLength(2),
@@ -387,6 +402,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     budgetActionControl.updateValueAndValidity();
     budgetPlanControl.updateValueAndValidity();
     reasonControl.updateValueAndValidity();
+    reasonDetailControl.updateValueAndValidity();
   }
 
   private populateOptionsLists() {
@@ -405,6 +421,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       "budgetActionName",
       "budgetPlan",
       "reason",
+      "reasonDetail",
     ];
 
     return !keysArray.every((key) => {
@@ -534,7 +551,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       {},
       JSON.parse(localStorage.getItem(StoreKeys.USER_INFO))["id"],
       id,
-      this.evaluatorOrgGuid
+      this.evaluatorOrgGuid,
+      this.orgNameTag,
+      this.orgName,
+      this.evaluatorName
     );
 
     try {

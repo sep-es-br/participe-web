@@ -112,10 +112,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (str instanceof Date) {
       return new Date(str);
     }
+
+    if(str === '') return undefined;
     const [dateStr, timeStr] = str.split(' ');
     const args = dateStr.split('/');
     const argsTime = timeStr.split(':');
-    return new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1], argsTime[2]);
+    return argsTime[2] ?
+        new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1], argsTime[2])
+      : new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1]);
   }
 
   private static markFormGroupTouched(formGroup: UntypedFormGroup) {
@@ -472,6 +476,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
         disabled: false
       }, [Validators.required]],
     });
+
+    this.minDate = MeetingComponent.getDate(_.get(value, 'beginDate', ''));
   }
 
   setFormSearch(value?) {

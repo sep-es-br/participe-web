@@ -7,8 +7,8 @@
         {{comment?.localityName}}
       </div>
       <div class="col-12 col-md-12 description">
-        <textarea class="form-control" [maxlength]="200" rows="4" [(ngModel)]="comment.text"></textarea>
-        <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/200</span>
+        <textarea class="form-control" [maxlength]="280" rows="4" [(ngModel)]="comment.text"></textarea>
+        <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/280</span>
       </div>
       <div class="col-12 col-md-12">
         <div class="d-flex">
@@ -24,11 +24,6 @@
         <p-radioButton [(ngModel)]="comment.type" name="optionModeration" value="Comment"
           [label]="'moderation.label.comment'| translate ">
         </p-radioButton>
-      </div>
-      <div class="col-12 col-md-3 form-group" *ngIf="regionalization">
-        <label>{{ labelMicroregion }}</label>
-        <p-dropdown [styleClass]="'d-flex form-control'" [options]="microregion" [(ngModel)]="comment.localityId"
-          [placeholder]="'placeholder.select'|translate"></p-dropdown>
       </div>
       <div class="col-12 col-md-12 steps-container">
         <label>{{ 'moderation.moderate.about' | translate }}</label>

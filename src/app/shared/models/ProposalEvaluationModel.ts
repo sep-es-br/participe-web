@@ -9,11 +9,13 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
   private readonly _id: number;
   public includedInNextYearLOA: boolean;
   public reason?: string;
+  public reasonDetail?: string;
   public budgetUnitId?: string;
   public budgetUnitName?: string;
   public budgetActionId?: string;
   public budgetActionName?: string;
   public budgetPlan?: string;
+  public evaluatorName: string;
   public representing: string;
 
   constructor(proposalEvaluation: IProposalEvaluation) {
@@ -27,8 +29,10 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
       this.budgetPlan = proposalEvaluation.budgetPlan;
     } else {
       this.reason = proposalEvaluation.reason;
+      this.reasonDetail = proposalEvaluation.reasonDetail;
     }
     this.representing = proposalEvaluation.representing;
+    this.evaluatorName = proposalEvaluation.evaluatorName;
   }
 
   public get id(): number {
@@ -85,6 +89,7 @@ export class ProposalEvaluationCreateFormModel
   public proposalId: number;
   public includedInNextYearLOA: boolean;
   public reason?: string;
+  public reasonDetail?: string;
   public budgetUnitId?: string;
   public budgetUnitName?: string;
   public budgetActionId?: string;
@@ -96,7 +101,10 @@ export class ProposalEvaluationCreateFormModel
     formValue: any,
     personId: number,
     proposalId: number,
-    representing: string
+    representing: string,
+    public representingOrgTag: string,
+    public representingOrgName: string,
+    public evaluatorName: string
   ) {
     this.includedInNextYearLOA = formValue.includedInNextYearLOA;
     if (formValue.includedInNextYearLOA) {
@@ -107,6 +115,7 @@ export class ProposalEvaluationCreateFormModel
       this.budgetPlan = formValue.budgetPlan;
     } else {
       this.reason = formValue.reason;
+      this.reasonDetail = formValue.reasonDetail;
     }
     this.personId = personId;
     this.proposalId = proposalId;

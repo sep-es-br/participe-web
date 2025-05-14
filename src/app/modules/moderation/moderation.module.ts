@@ -7,22 +7,25 @@ import { CoreModule } from '@app/core/core.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService } from 'primeng/api';
 import { ModerateComponent } from './moderate/moderate.component';
+import { RouterModule } from '@angular/router';
+import { routes } from '@app/shared/routes/moderation.routing';
 
 
 @NgModule({
   imports: [
-    AppRoutingModule,
     CommonModule,
     ComponentsModule,
     CoreModule,
-    TranslateModule
+    TranslateModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [
     ModerationComponent,
     ModerateComponent
   ],
   exports: [
-    ModerationComponent
+    ModerationComponent,
+    RouterModule
   ],
   providers: [
     ConfirmationService,

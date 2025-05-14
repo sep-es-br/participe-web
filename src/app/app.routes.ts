@@ -26,18 +26,14 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'home', component: HomeComponent},
   {path: 'control-panel-dashboard', component: ControlPanelDashboardComponent},
-  {path: 'administration/dashboard', component: AdministrationDashboardComponent},
-  {path: 'administration/domains', component: DomainComponent},
-  {path: 'administration/structures', component: StructureComponent},
-  {path: 'administration/plans', component: PlanComponent},
-  {path: 'administration/conferences', component: ConferenceListComponent},
-  {path: 'administration/conferences/conference', component: ConferenceComponent},
-  {path: 'administration/conferences/:id/meeting', component: MeetingComponent},
-  {path: 'administration/conferences/:id/meeting/:idm/panel', component: MeetPanelComponent},
-  {path: 'administration/evaluators', component: EvaluatorsComponent},
-  {path: 'administration/citizen', component: CitizenComponent},
-  {path: 'moderation/search', component: ModerationComponent},
-  {path: 'moderation/moderate/:id/:conferenceId', component: ModerateComponent},
+  {
+    path: 'administration', 
+    loadChildren: async () => (await import('./modules/administration-dashboard/administration-dashboard.module')).AdministrationDashboardModule
+  },
+  {
+    path: 'moderation', 
+    loadChildren: async () => (await import('./modules/moderation/moderation.module')).ModerationModule
+  },
   {
     path: 'attendance',
     loadChildren: async () => (await import('./modules/attendance/attendance.module')).AttendanceModule

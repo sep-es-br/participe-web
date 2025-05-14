@@ -54,6 +54,34 @@ form {
   margin-top: 1em;
 }
 
+.report-list {
+  
+  .container-icon {
+    cursor: pointer;
+    border: 1px solid #F48730;
+    color: #F48730;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-weight: 700;
+    margin: 20px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+    flex-direction: column;
+
+    fa-icon {
+      margin-bottom: 15px;
+    }
+
+    label {
+      cursor: unset;
+      text-align: center;
+    }
+  }
+}
+
 ::ng-deep .switch-default-conference , 
 ::ng-deep .switch-show-statistics, 
 ::ng-deep .switch-show-calendar, 
