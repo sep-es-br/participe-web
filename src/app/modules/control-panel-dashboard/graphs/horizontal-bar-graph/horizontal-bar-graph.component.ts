@@ -16,7 +16,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
 
   @Input() chartData: IHorizontalBarChartItem[];
   @Input() typeBar: 'region' | 'strategic';
- 
+
   height: number;
   labels: string[];
   data;
@@ -128,21 +128,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
               label = this.chartData[label].description
               const maxValue = this.responsive ? 15 : 20;
               if (/\s/.test(label) && label.length > maxValue) {
-                const labelText = label.split(' ');
-                if (labelText.length === 2) {
-                  return labelText;
-                } else if (labelText.length >= 2 && labelText.length <= 4) {
-                  const middle = (labelText.length / 2).toFixed(0);
-                  const labelTextPart1 = labelText.slice(0, Number(middle));
-                  const labelTextPart2 = labelText.filter(item => !labelTextPart1.includes(item));
-                  return [labelTextPart1.join(' '), labelTextPart2.join(' ')];
-                } else if (labelText.length > 4) {
-                  const middle = (labelText.length / 3).toFixed(0);
-                  const labelTextPart1 = labelText.slice(0, (Number(middle)));
-                  const labelTextPart2 = labelText.slice(Number(middle), Number(middle) * 2);
-                  const labelTextPart3 = labelText.filter(item => !labelTextPart1.includes(item) && !labelTextPart2.includes(item));
-                  return [labelTextPart1.join(' '), labelTextPart2.join(' '), labelTextPart3.join(' ')];
-                }
+                return label.substring(0, maxValue) + '...';
               } else {
                 return label;
               }
