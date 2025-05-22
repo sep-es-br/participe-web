@@ -3,9 +3,9 @@ import { PersonService } from '@app/shared/services/person.service';
 import * as _ from 'lodash';
 
 import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {DatePipe, Location} from '@angular/common';
+import {DatePipe, DOCUMENT, Location} from '@angular/common';
 import {take} from 'rxjs/operators';
 import {MessageService, SelectItem} from 'primeng/api';
 
@@ -29,6 +29,7 @@ import {IChannel} from '@app/shared/interface/IChannel';
 import {CustomValidators} from '@app/shared/util/CustomValidators';
 import { ModalService } from '@app/core/modal/modal.service';
 import { ModalData } from '@app/shared/interface/IModalData';
+import {$} from 'protractor';
 
 @Component({
   selector: 'app-meeting',
@@ -105,6 +106,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private location: Location,
     private ModalService: ModalService,
+    @Inject(DOCUMENT) private document: Document,
   ) {
   }
 
@@ -464,6 +466,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
         disabled: false
       }, [Validators.required]],
       name: [_.get(value, 'name', ''), [Validators.required]],
+      authorityLink: [`${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/authority-credential/${this.meetingId}`)}`],
       beginDate: [_.get(value, 'beginDate', ''), [Validators.required]],
       endDate: [_.get(value, 'endDate', ''), [Validators.required]],
       localityPlace: [_.get(value, 'localityPlace', '')],
@@ -726,7 +729,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   async generateLinkMeetingPrecadastro(meeting: Meeting){
     this.meetingUrl = await this.meetingSrv.generateLinkPreRegistration(meeting.id);
     this.modalData = {title: meeting.name};
-    this.ModalService.open('geraLink'); 
+    this.ModalService.open('geraLink');
     this.meetingDataSelected = meeting;
   }
 
@@ -752,9 +755,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
       this.ImageQrCode = url;
     });
     this.modalData = {title: meeting.name};
-    this.ModalService.open('QRCodeImage'); 
+    this.ModalService.open('QRCodeImage');
     this.meetingDataSelected = meeting;
   }
 
-  
+
 }

@@ -121,11 +121,11 @@
                 <label [for]="type.value" class="label-type-meeting">{{type.label}}</label>
               </span>
             </div>
-            <div class="col-12 col-md-12">
+            <div class="col-12 col-md-12 row">
               <label for="name">{{'conference.meeting.name'|translate}}</label>
               <input pInputText class="form-control form-control-input"  formControlName="name">
               <tt-input-message [form]="form" field="name"></tt-input-message>
-            </div>
+          </div>
             <div class="col-12 col-md-12 row">
               <div class="col-12 col-md-6">
                 <label for="beginDate">{{'conference.meeting.beginDate'|translate}}</label>
@@ -142,6 +142,11 @@
                 </p-calendar>
                 <tt-input-message [form]="form" field="endDate"></tt-input-message>
               </div>
+            </div>
+            <div class="col-12 col-md-12">
+              <label for="authorityLink">{{'conference.meeting.authorityLink'|translate}}</label>
+              <input pInputText class="form-control form-control-input" readonly formControlName="authorityLink">
+              <tt-input-message [form]="form" field="authorityLink"></tt-input-message>
             </div>
             <div class="col-12 col-md-12" *ngIf="validTypeDifferentFromVirtual()">
               <div style="padding-bottom:5px;">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</div>
@@ -352,7 +357,7 @@
     <div class="text-center">
       <span class="text-center">Nenhum link gerado para este evento.</span><br>
     </div>
-    
+
   </ng-template>
 </app-modal>
 <app-modal id="QRCodeImage" [modalData]="modalData">
