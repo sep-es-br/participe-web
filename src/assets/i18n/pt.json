@@ -157,6 +157,7 @@
 			"beginDate": "Início",
 			"delete": "Excluir?",
 			"endDate": "Fim",
+      "authorityLink": "Link para credenciamento de autoridade",
 			"error": {
 				"delete": "Erro ao tentar excluír a reunião {{name}}",
 				"fetch": {
