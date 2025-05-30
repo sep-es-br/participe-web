@@ -25,6 +25,11 @@
           [label]="'moderation.label.comment'| translate ">
         </p-radioButton>
       </div>
+      <div class="col-12 col-md-3 form-group" *ngIf="regionalization">
+        <label>{{ labelMicroregion }}</label>
+        <p-dropdown [styleClass]="'d-flex form-control'" [options]="microregion" [(ngModel)]="comment.localityId"
+                    [placeholder]="'placeholder.select'|translate"></p-dropdown>
+      </div>
       <div class="col-12 col-md-12 steps-container">
         <label>{{ 'moderation.moderate.about' | translate }}</label>
         <div class="step-item-container" *ngFor="let item of comment.commentStructure; let i = index; let last = last">
