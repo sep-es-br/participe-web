@@ -149,7 +149,7 @@
       "beginDate": "Begin",
       "delete": "Remove?",
       "endDate": "End",
-      "authorityLink": "Link para credenciamento de autoridade",
+      "authorityLink": "Generate link for authority credential",
       "error": {
         "delete": "Error deleting meeting {{name}}",
         "fetch": {

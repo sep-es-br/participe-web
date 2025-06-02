@@ -99,6 +99,7 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item pointer" (click)="generateQRCodeAutoChekIn(meeting)"><span class="icon" ><i class="fa fa-qrcode" ></i></span>{{'conference.meeting.action.qrcode' | translate}}</a></li>
                   <li><a class="dropdown-item pointer" (click)="generateLinkMeetingPrecadastro(meeting)"><span class="icon" ><i class="fa fa-link" ></i></span>{{'conference.meeting.action.link' | translate}}</a></li>
+                  <li><a class="dropdown-item pointer" (click)="generateLinkMeetingCredenciamento(meeting)"><span class="icon" ><i class="fa fa-link" ></i></span>{{'conference.meeting.authorityLink'|translate}}</a></li>
                   <li><a class="dropdown-item pointer"  id="pencil" (click)="handleCreateOrEdit(meeting.id)"><span class="icon" ><i class="pi pi-pencil" ></i></span>{{'conference.meeting.action.edit' | translate}}</a></li>
                   <li><a class="dropdown-item pointer" (click)="handleShowPanel(meeting.id)"><span class="icon" ><i class="pi pi-external-link" ></i></span>{{'conference.meeting.action.panel' | translate}}</a></li>
                   <li><a class="dropdown-item pointer" (click)="handleDelete(meeting)"><span class="icon" ><i class="pi pi-trash" ></i></span>{{'conference.meeting.action.delete' | translate}}</a></li>
@@ -142,11 +143,6 @@
                 </p-calendar>
                 <tt-input-message [form]="form" field="endDate"></tt-input-message>
               </div>
-            </div>
-            <div class="col-12 col-md-12">
-              <label for="authorityLink">{{'conference.meeting.authorityLink'|translate}}</label>
-              <input pInputText class="form-control form-control-input" readonly formControlName="authorityLink">
-              <tt-input-message [form]="form" field="authorityLink"></tt-input-message>
             </div>
             <div class="col-12 col-md-12" *ngIf="validTypeDifferentFromVirtual()">
               <div style="padding-bottom:5px;">{{ localitySrv.getTranslatedLabelLocality(labelLocality) }}</div>
