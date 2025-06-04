@@ -107,8 +107,13 @@ export class AttendanceModel {
       email: [''],
       phone: ['', Validators.maxLength(20)],
       resetPassword: false,
-      sub: ['']
+      sub: [''],
+      isAuthority: false,
+      organization: [''],
+      role: ['']
     });
+
+    this.configureAuthorityValidation();
 
     this.getConferencesAndMeetings().then();
   }
@@ -143,11 +148,29 @@ export class AttendanceModel {
   toggleNewAccount(attendee?: IAttendee) {
   }
 
+  configureAuthorityValidation(): void {
+    this.form.get('isAuthority')?.valueChanges.subscribe((isAuth: boolean) => {
+      const organization = this.form.get('organization');
+      const role = this.form.get('role');
+  
+      if (isAuth) {
+        organization?.setValidators([Validators.required]);
+        role?.setValidators([Validators.required]);
+      } else {
+        organization?.clearValidators();
+        role?.clearValidators();
+      }
+  
+      organization?.updateValueAndValidity();
+      role?.updateValueAndValidity();
+    });
+  }
+
   async selectAttendee(attendee: IAttendee) {
     if(!attendee.personId){
       this.toggleNewAccount(attendee);
     }else{
-      const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
+      const { name, locality, authType, cpf, email, phone, password, isAuthority, organization, role } = this.form.controls;
       try {
         this.isAttendeeSelected = true;
         this.selectedAttende = attendee;
@@ -165,15 +188,21 @@ export class AttendanceModel {
           this.selectedAttende.password = data.password;
           this.citizenAutentications = data.autentication || [];
           this.authName = data.authName || [];
+          isAuthority.setValue(data.isAuthority);
+          organization.updateValueAndValidity();
+          role.updateValueAndValidity();
+          organization.setValue(data.organization);
+          role.setValue(data.role);
+
         }
       } catch (error) {
-        this.messageSrv.add({
-          severity: 'warn',
-          summary: this.translate.instant('error'),
-          detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
-        });
-        this.toggleSelectedAttendee();
-      }
+      this.messageSrv.add({
+        severity: 'warn',
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
+      });
+      this.toggleSelectedAttendee();
+     }
     }
   }
 
@@ -188,7 +217,7 @@ export class AttendanceModel {
       return { success: false };
     }
 
-    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub } = this.form.value;
+    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub, isAuthority, role, organization } = this.form.value;
 
     const formAPI: CitizenSenderModel = {
       name,
@@ -204,7 +233,12 @@ export class AttendanceModel {
         locality,
       },
       resetPassword: !!resetPassword,
-      sub: sub
+      sub: sub,
+      isAuthority,
+      ...(isAuthority && {
+        organization,
+        role
+      })
     };
 
     const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);

@@ -38,6 +38,21 @@
             <tt-input-message [form]="form" field="phone"></tt-input-message>
           </div>
           <div class="col-12">
+            <p-inputSwitch formControlName="isAuthority"></p-inputSwitch>
+            <label class="ms-2">{{ 'citizen.representative' | translate }}</label>
+          </div>
+          <div class="col-12" *ngIf="form.get('isAuthority').value">
+            <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+            <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
+            <tt-input-message [form]="form" field="organization"></tt-input-message>
+          </div>
+        
+          <div class="col-12" *ngIf="form.get('isAuthority').value">
+            <label for="role">{{ 'citizen.role' | translate }}*</label>
+            <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+            <tt-input-message [form]="form" field="role"></tt-input-message>
+          </div>
+          <div class="col-12">
             <div class="form-actions">
               <ng-container *ngIf="newAccount; else attendeeSelected">
                 <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"

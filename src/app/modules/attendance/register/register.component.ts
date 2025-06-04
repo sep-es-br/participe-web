@@ -154,7 +154,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           email: result.email,
           checkedIn: false,
           checkingIn: false,
-          authName: result.authName
+          authName: result.authName,
         };
         await this.checkIn(newAttendee);
         this.toggleNewAccount();
@@ -178,7 +178,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.authName = []
     this.form.reset();
     if(this.newAccount){
-      const { name, locality, authType, email, phone, sub } = this.form.controls;
+      const { name, locality, authType, email, phone, sub, isAuthority, role, organization } = this.form.controls;
       if(attendee.name == "<novo usuário>"){
         name.setValue(null)
       }else{
