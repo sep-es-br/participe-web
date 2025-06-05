@@ -380,6 +380,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetActionControl.clearValidators();
 
       budgetPlanControl.patchValue(null);
+      reasonDetailControl.patchValue(null);
 
       reasonControl.addValidators(Validators.required);
     } else {

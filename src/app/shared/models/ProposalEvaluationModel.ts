@@ -115,8 +115,8 @@ export class ProposalEvaluationCreateFormModel
       this.budgetPlan = formValue.budgetPlan;
     } else {
       this.reason = formValue.reason;
-      this.reasonDetail = formValue.reasonDetail;
     }
+    this.reasonDetail = formValue.reasonDetail;
     this.personId = personId;
     this.proposalId = proposalId;
     this.representing = representing;
