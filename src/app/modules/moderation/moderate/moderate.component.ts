@@ -208,6 +208,7 @@ export class ModerateComponent implements OnInit {
       sender.id = commentId;
       sender.type = type;
       sender.planItem = _.get(this.selectedStrategyArea, 'data', planItemId);
+      sender.locality = localityId;
       sender.text = text;
       sender.status = status;
       sender.duplicated = duplicated;

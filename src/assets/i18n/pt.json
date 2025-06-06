@@ -589,10 +589,13 @@
 		"new": "Nova Avaliação de Proposta",
 		"noResult": "Nenhum resultado encontrado",
 		"reason": "Motivo da não inclusão",
-		"reasonDetail": "Descrição do motivo da não inclusão",
+		"reasonIncludedDetail": "Observação",
+		"reasonNotIncludedDetail": "Observação",
 		"title": "Avaliação de Proposta",
 		"under_evaluation_by": "Em avaliação por",
-		"updated": "Avaliação de Proposta atualizada"
+		"updated": "Avaliação de Proposta atualizada",
+		"haveCost": "A proposta tem custo",
+		"newRequest": "A iniciativa será nova"
 	},
 	"published": "Publicado",
 	"qrcode": {

@@ -323,7 +323,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
       .then((response) => {
         this.planItemOptions = response.map((planItem) => {
           return { label: planItem.name, value: planItem.id };
-        });
+        }).reverse();
         this.planItemOptions.unshift({
           label: this.translateService.instant("all"),
           value: null,

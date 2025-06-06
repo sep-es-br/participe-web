@@ -203,7 +203,23 @@
                 field="budgetPlan"
               ></tt-input-message>
             </div>
-
+            <div class="col col-xxl-5 d-flex flex-column">
+              <label for="reasonDetail">
+                {{ "proposal_evaluation.reasonIncludedDetail" | translate }}? <i>({{"proposal_evaluation.optional" | translate}})</i>
+              </label>
+              <textarea [rows]="5" [cols]="30" pInputTextarea class="form-control" placeholder="" formControlName="reasonDetail"
+                          autoResize="autoResize" maxlength="280">
+                        </textarea>
+              <i>Caracteres restante: {{proposalEvaluationForm.getRawValue().reasonDetail?.length || 0 }}/280</i>
+            </div>
+            <div class="col-12 d-flex flex-row">
+              <p-inputSwitch inputId="input-switch-have-cost" formControlName="haveCost"></p-inputSwitch>
+              <label class="form-check-label ml-2" for="input-switch-have-cost">{{'proposal_evaluation.haveCost'|translate}}</label> 
+            </div>
+            <div class="col-12 d-flex flex-row">
+              <p-inputSwitch inputId="input-switch-new-request" formControlName="newRequest"></p-inputSwitch>
+              <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label> 
+            </div>
             <br />
           </ng-container>
           <ng-container *ngIf="formLoaIncluded != null && !formLoaIncluded">
@@ -231,9 +247,9 @@
 
             </div>
             <label for="reasonDetail"
-              >{{ "proposal_evaluation.reasonDetail" | translate }}?<i>({{"proposal_evaluation.optional" | translate}})</i></label
+              >{{ "proposal_evaluation.reasonNotIncludedDetail" | translate }}? <i>({{"proposal_evaluation.optional" | translate}})</i></label
             >
-            <div class="col-5 d-flex flex-column">
+            <div class="col col-xxl-5 d-flex flex-column">
               <textarea [rows]="5" [cols]="30" pInputTextarea class="form-control" placeholder="" formControlName="reasonDetail"
                           autoResize="autoResize" maxlength="280">
                         </textarea>
@@ -308,6 +324,24 @@
           <div class="col-8">
             <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
             <p>{{ formBudgetPlan }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.reasonDetail" | translate }}</label>
+            <p>{{ formReasonDetail || '-' }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.haveCost" | translate }}</label>
+            <p>{{ (formHaveCost ? 'yes' : 'no' ) | translate }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label>{{ "proposal_evaluation.newRequest" | translate }}</label>
+            <p>{{ (formNewRequest ? 'yes' : 'no' ) | translate }}</p>
           </div>
         </div>
       </ng-container>

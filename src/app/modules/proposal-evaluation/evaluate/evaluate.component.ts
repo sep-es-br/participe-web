@@ -209,6 +209,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return this.proposalEvaluationForm.get("reasonDetail").value;
   }
 
+  public get formHaveCost(): string {
+    return this.proposalEvaluationForm.get("haveCost").value;
+  }
+
+  public get formNewRequest(): string {
+    return this.proposalEvaluationForm.get("newRequest").value;
+  }
+
   public switchEdit() {
     this.readOnlyProposalEvaluation = false;
     this.editProposalEvaluation = true;
@@ -295,6 +303,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetPlan: new FormControl<string>(null),
       reason: new FormControl<string>(null),
       reasonDetail: new FormControl<string>(null),
+      haveCost: new FormControl<boolean>(false),
+      newRequest: new FormControl<boolean>(false)
     });
   }
 
@@ -328,6 +338,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetPlan: new FormControl<string>(proposalEvaluationData.budgetPlan),
       reason: new FormControl<string>(proposalEvaluationData.reason),
       reasonDetail: new FormControl<string>(proposalEvaluationData.reasonDetail),
+      haveCost: new FormControl<boolean>(proposalEvaluationData.haveCost),
+      newRequest: new FormControl<boolean>(proposalEvaluationData.newRequest)
     });
 
     this.evaluatorName = proposalEvaluationData.evaluatorName;
@@ -371,6 +383,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     const budgetPlanControl = this.proposalEvaluationForm.get("budgetPlan");
     const reasonControl = this.proposalEvaluationForm.get("reason");
     const reasonDetailControl = this.proposalEvaluationForm.get("reasonDetail");
+    const haveCostControl = this.proposalEvaluationForm.get("haveCost");
+    const newRequestControl = this.proposalEvaluationForm.get("newRequest");
 
     if (!loaIncluded) {
       budgetUnitControl.patchValue(null);
@@ -380,6 +394,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetActionControl.clearValidators();
 
       budgetPlanControl.patchValue(null);
+      reasonDetailControl.patchValue(null);
+
+      haveCostControl.patchValue(false);
+      newRequestControl.patchValue(false);      
 
       reasonControl.addValidators(Validators.required);
     } else {
@@ -403,6 +421,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     budgetPlanControl.updateValueAndValidity();
     reasonControl.updateValueAndValidity();
     reasonDetailControl.updateValueAndValidity();
+    haveCostControl.updateValueAndValidity();
+    newRequestControl.updateValueAndValidity();
   }
 
   private populateOptionsLists() {
@@ -422,6 +442,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       "budgetPlan",
       "reason",
       "reasonDetail",
+      "haveCost",
+      "newRequest",
     ];
 
     return !keysArray.every((key) => {
