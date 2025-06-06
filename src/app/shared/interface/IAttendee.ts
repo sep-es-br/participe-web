@@ -17,4 +17,7 @@ export interface IAttendee {
   checkingIn?: boolean;
   authName?: List<string>;
   sub?: string;
+  isAuthority?: boolean;
+  organization?: string;
+  role?: string;
 }

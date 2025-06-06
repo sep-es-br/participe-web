@@ -17,7 +17,10 @@ export class CitizenModel {
   active?: boolean;
   // view
   count: number;
-  authName?: string[]
+  authName?: string[];
+  isAuthority?: boolean;
+  organization?: string;
+  role?: string;
 }
 
 
