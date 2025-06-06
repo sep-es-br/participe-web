@@ -62,14 +62,32 @@ export class MeetingService extends BaseService<Meeting> {
     ).toPromise();
   }
 
-  postCheckIn(meetingId: number, personId: number, timeZone: string): Promise<any> {
+  postCheckIn(payload: {
+    meetingId: number;
+    personId: number;
+    timeZone: string;
+    isAuthority?: boolean;
+    organization?: any;
+    role?: any;
+  }): Promise<any> {
     return this.http.post(
       `${this.urlBase}/checkIn`,
-      {
-        meetingId,
-        personId,
-        timeZone
-      },
+      payload,
+      { headers: Common.buildHeaders() }
+    ).toPromise();
+  }
+
+  editCheckIn(payload: {
+    meetingId: number;
+    personId: number;
+    timeZone: string;
+    isAuthority?: boolean;
+    organization?: any;
+    role?: any;
+  }): Promise<any> {
+    return this.http.put(
+      `${this.urlBase}/checkIn`,
+      payload,
       { headers: Common.buildHeaders() }
     ).toPromise();
   }
