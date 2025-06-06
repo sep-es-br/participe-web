@@ -18,6 +18,10 @@ export class PersonService extends BaseService<any> {
     ).toPromise();
   }
 
+  getACRole(idPerson: number, idConference: number): Promise<any> {
+    return this.http.get<any>(`${this.urlBase}/${idPerson}/ACRole/${idConference}`,{ headers: Common.buildHeaders() }).toPromise();
+  }
+
 }
 
 

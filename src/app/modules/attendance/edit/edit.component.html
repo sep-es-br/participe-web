@@ -80,6 +80,22 @@
               <tt-input-message [form]="form" field="phone"></tt-input-message>
             </div>
             <div class="col-12">
+              <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
+              <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
+                (onChange)="loadACRole($event)"></p-inputSwitch>
+            </div>
+            <div class="col-12" *ngIf="form.get('isAuthority').value">
+              <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+              <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade" [readonly]="readonlyOrganization">
+              <tt-input-message [form]="form" field="organization"></tt-input-message>
+            </div>
+          
+            <div class="col-12" *ngIf="form.get('isAuthority').value">
+              <label for="role">{{ 'citizen.role' | translate }}*</label>
+              <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo" [readonly]="readonlyRole">
+              <tt-input-message [form]="form" field="role"></tt-input-message>
+            </div>
+            <div class="col-12">
               <div class="form-actions">
                 <button
                   pButton
@@ -232,7 +248,7 @@
                 <div class="action">
                   <fa-icon
                     size="2x"
-                    (click)="selectAttendee(attendee)"
+                    (click)="selectAttendee(attendee, true)"
                     [icon]="attendee.checkedIn ? iconChecked : iconCircle"
                     tooltipPosition="left"
                     [pTooltip]="getToolTipText(attendee)"

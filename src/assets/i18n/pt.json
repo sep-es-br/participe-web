@@ -61,6 +61,9 @@
 	"manual": "Manual",
 	"change": "Trocar",
 	"citizen": {
+		"representative": "Representante Oficial",
+		"organization": "Órgão/Entidade Representada",
+		"role": "Cargo do Representante",
 		"attendance_count": "Acesso",
 		"authentication": "Autenticação",
 		"cpf": "CPF",
@@ -694,4 +697,5 @@
 	"warn": "Cuidado",
 	"years": "Anos",
 	"yes": "Sim"
+
 }
