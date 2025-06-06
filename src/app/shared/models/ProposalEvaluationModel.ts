@@ -17,6 +17,8 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
   public budgetPlan?: string;
   public evaluatorName: string;
   public representing: string;
+  public haveCost: boolean;
+  public newRequest: boolean;
 
   constructor(proposalEvaluation: IProposalEvaluation) {
     this._id = proposalEvaluation.id;
@@ -27,10 +29,12 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
       this.budgetActionId = proposalEvaluation.budgetActionId;
       this.budgetActionName = proposalEvaluation.budgetActionName;
       this.budgetPlan = proposalEvaluation.budgetPlan;
+      this.haveCost = proposalEvaluation.haveCost;
+      this.newRequest = proposalEvaluation.newRequest;
     } else {
-      this.reason = proposalEvaluation.reason;
-      this.reasonDetail = proposalEvaluation.reasonDetail;
+      this.reason = proposalEvaluation.reason; 
     }
+    this.reasonDetail = proposalEvaluation.reasonDetail;
     this.representing = proposalEvaluation.representing;
     this.evaluatorName = proposalEvaluation.evaluatorName;
   }
@@ -96,6 +100,8 @@ export class ProposalEvaluationCreateFormModel
   public budgetActionName?: string;
   public budgetPlan?: string;
   public representing: string;
+  public haveCost : boolean;
+  public newRequest : boolean;
 
   constructor(
     formValue: any,
@@ -113,6 +119,8 @@ export class ProposalEvaluationCreateFormModel
       this.budgetActionId = this.getBudgetActionId(formValue.budgetAction);
       this.budgetActionName = this.getBudgetActionName(formValue.budgetAction);
       this.budgetPlan = formValue.budgetPlan;
+      this.haveCost = formValue.haveCost;
+      this.newRequest = formValue.newRequest;
     } else {
       this.reason = formValue.reason;
     }

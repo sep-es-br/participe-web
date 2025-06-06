@@ -541,11 +541,13 @@
 		"new": "New Proposal Evaluation",
 		"noResult": "No results found",
 		"reason": "Reason of exclusion",
-		"reasonIncludedDetail": "Reason of inclusion",
-		"reasonNotIncludedDetail": "Description of the reason of exclusion",
+		"reasonIncludedDetail": "Observation",
+		"reasonNotIncludedDetail": "Observation",
 		"title": "Proposal Evaluation",
 		"under_evaluation_by": "Under evaluation by",
-		"updated": "Proposal Evaluation updated"
+		"updated": "Proposal Evaluation updated",
+		"haveCost": "Does the proposal have a cost",
+		"newRequest": "Will the initiative be new"
 	},
 	"published": "Published",
 	"register": {
