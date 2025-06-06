@@ -513,6 +513,23 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     });
   }
 
+  get requireBudgetPlan() : boolean {
+    return this.formHaveCost && !this.formNewRequest;
+  }
+
+  updateBudgetPlanControlRequire() {
+    const budgetPlanControl = this.proposalEvaluationForm.get("budgetPlan");
+
+    if(this.requireBudgetPlan) {
+      budgetPlanControl.addValidators(Validators.required);
+    } else {
+      budgetPlanControl.patchValue(undefined);
+      budgetPlanControl.clearValidators();
+    }
+
+    budgetPlanControl.updateValueAndValidity();
+  }
+
   private async postProposalEvaluation(
     reqBody: ProposalEvaluationCreateFormModel
   ) {
