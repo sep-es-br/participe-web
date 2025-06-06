@@ -84,7 +84,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
-
   }
 
   ngOnDestroy(): void {
@@ -95,7 +94,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.actionbarSrv.setItems([]);
   }
 
-  async checkIn(attendee: IAttendee) {
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
     this.form.markAllAsTouched();
 
     if (attendee.checkedIn || attendee.checkingIn) {
@@ -103,6 +102,18 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     }
 
     attendee.checkingIn = true;
+
+    if(!fromSaveAccount){
+      const { isAuthority, organization, role } = this.form.controls;
+      attendee.isAuthority = isAuthority.value;
+      if (attendee.isAuthority) {
+        attendee.organization = organization.value;
+        attendee.role = role.value;
+      } else {
+        attendee.organization = null;
+        attendee.role = null;
+      }
+    }
 
     if (this.form.dirty) {
       const saved = await this.saveAccount();
@@ -115,7 +126,19 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     var now = new Date();
     var timeZone = now.toString().split(' ')[5];
 
-    const result = await this.meetingSrv.postCheckIn(this.idMeeting, attendee.personId, timeZone);
+    const params: any = {
+      meetingId: this.idMeeting,
+      personId: attendee.personId,
+      timeZone,
+      isAuthority: attendee.isAuthority ?? false,
+    };
+    
+    if (attendee.isAuthority) {
+      params.organization = attendee.organization;
+      params.role = attendee.role;
+    }
+
+    const result = await this.meetingSrv.postCheckIn(params);
 
     if (result) {
       attendee.checkedIn = true;
@@ -144,8 +167,10 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   async saveAccount() {
+    const isAuthority: boolean = this.form.get('isAuthority')?.value;
+    const organization: string = this.form.get('organization')?.value;
+    const role: string = this.form.get('role')?.value;
     const {success, result} = await this.save();
-
     if (success) {
       if (!this.selectedAttende) {
         const newAttendee: IAttendee = {
@@ -155,8 +180,13 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           checkedIn: false,
           checkingIn: false,
           authName: result.authName,
+          isAuthority,
+          ...(isAuthority && {
+            organization,
+            role
+          })
         };
-        await this.checkIn(newAttendee);
+        await this.checkIn(newAttendee, true);
         this.toggleNewAccount();
       } else {
         this.messageSrv.add({
@@ -178,7 +208,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.authName = []
     this.form.reset();
     if(this.newAccount){
-      const { name, locality, authType, email, phone, sub, isAuthority, role, organization } = this.form.controls;
+      const { name, locality, authType, email, phone, sub } = this.form.controls;
       if(attendee.name == "<novo usuário>"){
         name.setValue(null)
       }else{
