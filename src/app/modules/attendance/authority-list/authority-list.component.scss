@@ -193,9 +193,22 @@
   }
 }
 
-.preregister-icon {
-  height: 100%;
-  width: 20px;
-  margin-left: 8%;
-  margin-right: 5%;
+.secondary-info {
+  .info-preregister {
+    .how-long-ago {
+      font-size: .75rem;
+    }
+
+    .preregister-icon {
+      height: 100%;
+      width: 16px;
+      margin-left: 1em;
+    }
+  }
+  
+  .info-checkin {
+    .how-long-ago {
+      font-size: .75rem;
+    }
+  }
 }

@@ -4,7 +4,7 @@ import { ConferenceService } from '@app/shared/services/conference.service';
 import {Component, OnInit} from '@angular/core';
 import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
-import {faEdit, faUserPlus} from '@fortawesome/free-solid-svg-icons';
+import {faEdit, faUserPlus, faUserTie} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '@app/shared/services/auth.service';
 import { ActionBarService, ActionButtonItem } from '@app/core/actionbar/app.actionbar.actions.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
