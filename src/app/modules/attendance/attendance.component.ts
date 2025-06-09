@@ -43,9 +43,12 @@ export class AttendanceComponent implements OnInit {
           if (roles.includes('Administrator')) {
             this.actions.push({name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus});
             this.actions.push({name: 'attendance.edit', url: 'edit', icon: faEdit});
+            this.actions.push({name: 'attendance.authority', url: 'authority-list', icon: faUserTie});
           } else if (roles.includes('Recepcionist') && this.IsAMeetingRunning(confs)) {
           // Administrators and receptionists can register only during the meetings
             this.actions.push({name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus});
+          } else if (roles.includes('Presenter') && this.IsAMeetingRunning(confs)) {
+            this.actions.push({name: 'attendance.authority', url: 'authority-list', icon: faUserTie});
           }
         }
       });
