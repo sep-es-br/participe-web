@@ -85,6 +85,7 @@
     "resetpassword": "Password reset",
     "status": "Status",
     "updated": "Updated citizen {{name}} ",
+
     "receive_informational": "I want to receive informational messages"
   },
   "clean": {

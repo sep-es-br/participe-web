@@ -185,9 +185,16 @@
               ></tt-input-message>
             </div>
 
-            <br />
+            <div class="col-12 d-flex flex-row">
+              <p-inputSwitch inputId="input-switch-have-cost" formControlName="haveCost"></p-inputSwitch>
+              <label class="form-check-label ml-2" for="input-switch-have-cost">{{'proposal_evaluation.haveCost'|translate}}</label> 
+            </div>
+            <div class="col-12 d-flex flex-row">
+              <p-inputSwitch inputId="input-switch-new-request" formControlName="newRequest"></p-inputSwitch>
+              <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label> 
+            </div>
 
-            <div class="col-12 d-flex flex-column">
+            <div class="col-12 flex-column" [ngClass]="requireBudgetPlan ? 'd-flex' : ''" [hidden]="!requireBudgetPlan">
               <label for="budgetPlan">{{
                 "proposal_evaluation.budgetPlan" | translate
               }}</label>
@@ -211,14 +218,6 @@
                           autoResize="autoResize" maxlength="280">
                         </textarea>
               <i>Caracteres restante: {{proposalEvaluationForm.getRawValue().reasonDetail?.length || 0 }}/280</i>
-            </div>
-            <div class="col-12 d-flex flex-row">
-              <p-inputSwitch inputId="input-switch-have-cost" formControlName="haveCost"></p-inputSwitch>
-              <label class="form-check-label ml-2" for="input-switch-have-cost">{{'proposal_evaluation.haveCost'|translate}}</label> 
-            </div>
-            <div class="col-12 d-flex flex-row">
-              <p-inputSwitch inputId="input-switch-new-request" formControlName="newRequest"></p-inputSwitch>
-              <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label> 
             </div>
             <br />
           </ng-container>
