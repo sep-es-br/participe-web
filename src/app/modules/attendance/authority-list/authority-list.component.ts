@@ -102,6 +102,32 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     this.form.reset();
   }
     
+  override async setCurrentMeeting() {
+    if (this.currentConference !== this.selectedConference) {
+      this.currentConference = this.selectedConference;
+      await this.getLocalitiesBasedOnConference();
+    }
+    if (this.currentMeeting !== this.selectedMeeting) {
+      this.currentMeeting = this.selectedMeeting;
+      this.idMeeting = this.currentMeeting.id;
+      this.listAttendees = [];
+      this.lastPage = true;
+      this.nameSearch = '';
+      this.noResult = false;
+      this.breadcrumbSrv.setItems([
+        { label: 'attendance.authority' },
+        {
+          label: `${this.translate.instant("attendance.authority") } ${this.currentMeeting.name}`,
+          routerLink: [`/attendance/${this.routerLinkItem}`]
+        },
+      ]);
+    }
+
+    await this.searchByName();
+    await this.setActionBar();
+    // await this.searchByName();
+    this.showSelectMeeting = false;
+  }
 
   async selectAttendeeAuthority(attendee: IAttendeeAuthority , isEdit: boolean = false) {
     const { name, locality, authType, cpf, email, phone, password, isAuthority, organization, role } = this.form.controls;

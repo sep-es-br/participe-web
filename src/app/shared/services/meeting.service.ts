@@ -13,6 +13,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IAttendeeAuthority } from '../interface/IAttendeeAuthority';
 import { IHttpResult } from '../interface/IHttpResult';
+import { ICheckedInAt } from '../interface/CheckedInAt.interface';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
@@ -79,8 +80,8 @@ export class MeetingService extends BaseService<Meeting> {
     isAuthority?: boolean;
     organization?: any;
     role?: any;
-  }): Promise<any> {
-    return this.http.post(
+  }): Promise<ICheckedInAt> {
+    return this.http.post<ICheckedInAt>(
       `${this.urlBase}/checkIn`,
       payload,
       { headers: Common.buildHeaders() }

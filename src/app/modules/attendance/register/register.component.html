@@ -173,7 +173,7 @@
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
-              <fa-icon size="2x" [icon]="iconChecked"></fa-icon>
+              <fa-icon size="2x" [icon]="iconChecked" (click)="selectAttendee(attendee)"></fa-icon>
             </ng-container>
             <ng-template #canCheckIn>
               <fa-icon size="2x" (click)="selectAttendee(attendee)" [icon]="iconUnchecked"

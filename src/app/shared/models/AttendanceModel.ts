@@ -352,7 +352,7 @@ export class AttendanceModel {
         passwordControl.disable();
         emailControl.setValidators(this.emailValidators);
         emailControl.enable();
-        if (this.isAttendeeSelected && this.selectedAttende.email.indexOf('@cpf') === -1) {
+        if (this.isAttendeeSelected && this.selectedAttende.email?.indexOf('@cpf') === -1) {
           emailControl.setValue(this.selectedAttende.email);
         }
         break;
