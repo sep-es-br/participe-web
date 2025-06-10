@@ -11,6 +11,8 @@ import { IPerson } from '../interface/IPerson';
 import { IResultPlanItemByConference } from '../interface/IResultPlanItemByConference';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { IAttendeeAuthority } from '../interface/IAttendeeAuthority';
+import { IHttpResult } from '../interface/IHttpResult';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
@@ -45,6 +47,14 @@ export class MeetingService extends BaseService<Meeting> {
   getPlanItemsTargetedByConference(conferenceId: number) {
     return this.http.get<IResultPlanItemByConference[]>(`${this.urlBase}/${conferenceId}/targeted-by/plan-items`,
     { headers: Common.buildHeaders() }).toPromise();
+  }
+
+
+  getListAuthority(idMeeting: number, query: IQueryOptions): Promise<IAttendeeAuthority[]> {
+    return this.http.get<IAttendeeAuthority[]>(
+      `${this.urlBase}/${idMeeting}/authorities${PrepareHttpQuery(query)}`,
+      { headers: Common.buildHeaders() }
+    ).toPromise();
   }
 
 

@@ -1,14 +1,14 @@
-<div class="layout-topbar">
+<div class="layout-topbar d-flex gap-2">
   <div href="#" class="layout-topbar-logo">
     <a href="#">
       <img class="logo" src="assets/layout/images/logotype.png" alt="Ministério Público do" />
     </a>
   </div>
-  <a class="layout-menu-button" href="#" (click)="template.onMenuButtonClick($event)">
+  <a class="layout-menu-button" style="margin-left: auto;" href="#" (click)="template.onMenuButtonClick($event)">
     <i class="pi pi-bars"></i>
   </a>
 
-  <ul class="layout-topbar-menu" role="menu">
+  <ul class="layout-topbar-menu w-auto" role="menu">
 
     <li #profile class="user-profile" role="menuitem"
       [ngClass]="{'active-topmenuitem':template.activeTopbarItem === profile}">
@@ -17,7 +17,7 @@
           <span class="user-profile-name">{{shortName}}</span>
           <span class="user-profile-role"> {{ person?.defaultRole ? ('roles.' + person.defaultRole | translate) : '' }}</span>
         </div>
-        <img class="logo" src="assets/layout/images/avatar/avatar-default.png" alt="prestige-layout" />
+        <img class="logo" src="assets/layout/images/avatar/avatar-default.png" alt="prestige-layout" style="height: 30px; width: 30px;" />
       </a>
       <ul class="fadeInDown">
         <li class="profile-detail">

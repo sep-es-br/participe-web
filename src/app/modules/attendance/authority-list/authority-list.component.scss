@@ -1,5 +1,10 @@
 @import '../attendance.component.scss';
 
+.contact {
+  color: black !important;
+  font-size: 1rem !important;
+}
+
 .edit-attendees {
 
   .top-bar {
@@ -193,7 +198,26 @@
   }
 }
 
+.primary-info {
+  font-size: 20px !important;
+}
+
+.info-announced {
+  border: 1px solid black;
+  border-radius: 1rem;
+  padding-block: 1rem !important;
+
+  .how-long-ago {
+    margin-left: 0.75rem;
+  }
+}
+
+
 .secondary-info {
+  .locality {
+    text-align: center;
+  } 
+
   .info-preregister {
     .how-long-ago {
       font-size: .75rem;
@@ -206,9 +230,9 @@
     }
   }
   
-  .info-checkin {
+  .info-checkin, .info-announced {
     .how-long-ago {
-      font-size: .75rem;
+      font-size: 1rem;
     }
   }
 }

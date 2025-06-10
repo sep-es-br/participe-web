@@ -1,108 +1,5 @@
 <app-template>
   <div class="edit-attendees">
-    <section id="attendee-selected">
-      <ng-container *ngIf="isAttendeeSelected; else list">
-        <div class="col-12 col-md-6 m-a">
-          <form
-            class="row form-edit-account"
-            [formGroup]="form"
-            (submit)="saveEdit()"
-          >
-            <div class="col-12 title">
-              <span>{{ "attendance.editAttendanceIn" | translate }}</span>
-              <span
-                class="remove-action"
-                (click)="uncheckIn()"
-                [pTooltip]="getTooltipRemoveText()"
-                tooltipStyleClass="tooltip-uncheck"
-              >
-                <fa-icon [icon]="iconRemove"></fa-icon>
-                {{ "attendance.removeAttendee" | translate }}
-              </span>
-            </div>
-            <div class="col-12">
-              <label class="required form-label">{{
-                "name" | translate
-              }}</label>
-              <input pInputText class="form-control" formControlName="name" />
-              <tt-input-message [form]="form" field="name"></tt-input-message>
-            </div>
-            <div class="col-12">
-              <label class="required form-label">{{
-                localitySrv.getTranslatedLabelLocality(localityLabel)
-              }}</label>
-              <p-dropdown
-                [options]="optionsLocalities"
-                formControlName="locality"
-                [styleClass]="'d-flex form-control'"
-                [placeholder]="'placeholder.select' | translate"
-              ></p-dropdown>
-              <tt-input-message
-                [form]="form"
-                field="locality"
-              ></tt-input-message>
-            </div>
-            <div class="col-12">
-              <label>{{ "attendance.authentication" | translate }}</label>
-              <div class="auth-type">
-                <!-- <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
-                     src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/> -->
-                <img
-                  *ngFor="let auth of authName"
-                  [src]="authSrv.getAuthenticationIcon(auth)"
-                  [title]="auth"
-                  [alt]="auth"
-                />
-              </div>
-            </div>
-            <div class="col-12">
-              <label
-                [class.required]="form.get('authType').value === 'E-Mail'"
-                >{{ "citizen.mail" | translate }}</label
-              >
-              <input
-                pInputText
-                readonly
-                class="form-control"
-                formControlName="email"
-              />
-              <tt-input-message [form]="form" field="email"></tt-input-message>
-            </div>
-            <div class="col-12">
-              <label>{{ "citizen.phone" | translate }}</label>
-              <p-inputMask
-                mask="(99) 99999-9999"
-                placeholder="(00) 00000-0000"
-                unmask="true"
-                formControlName="phone"
-                [styleClass]="'form-control'"
-              ></p-inputMask>
-              <tt-input-message [form]="form" field="phone"></tt-input-message>
-            </div>
-            <div class="col-12">
-              <div class="form-actions">
-                <button
-                  pButton
-                  icon="pi pi-check"
-                  class="me-3"
-                  type="submit"
-                  [label]="'save' | translate"
-                ></button>
-                <button
-                  pButton
-                  icon="pi pi-ban"
-                  type="button"
-                  [label]="'cancel' | translate"
-                  (click)="toggleSelectedAttendee()"
-                ></button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </ng-container>
-    </section>
-
-    <ng-template #list>
       <section id="attendee-filter-row">
         <div class="row">
           <!-- <div class="col-3">
@@ -156,7 +53,7 @@
               </ng-template>
             </p-dropdown>
           </div> -->
-          <div class="col-12 col-md-6 col-lg-4">
+          <!-- <div class="col-12 col-md-6 col-lg-4">
             <div class="search">
               <div class="input-group mb-3">
                 <input
@@ -173,45 +70,48 @@
                   (click)="searchByName()"
                   for="search-name"
                 >
-                  <!-- {{ "search" | translate }} -->
+                  {{ "search" | translate }} 
                   <i class="ps-1 fa fa-search"></i>
-                  <!-- <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> -->
+                 <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> 
                 </label>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </section>
-
-      <h1>TESTE</h1>
 
       <section id="attendee-list">
         <div class="p-grid list-result">
           <div class="col-12" *ngIf="noResult">
             <div class="no-result">{{ "attendance.noResult" | translate }}</div>
           </div>
-          <div class="col-12 result" *ngFor="let attendee of listAttendees">
-            <div class="name-icon">
-              <div
-                class="letter-icon"
-                [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }"
-              >
-                {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
+          <div class="col-12 result" *ngFor="let attendee of listAttendeesAuthority">
+              <div class="info-announced d-flex justify-content-center w-100 cursor-pointer" (click)="toggleAnnounced(attendee)">
+                
+                <div class="action">
+                  <p-inputSwitch [(ngModel)]="attendee.announced"></p-inputSwitch>
+                  <!-- <fa-icon
+                    size="1x"
+                    (click)=""
+                    [icon]="attendee.checkedIn ? iconChecked : iconCircle"
+                    tooltipPosition="left"
+                    [pTooltip]="getToolTipText(attendee)"
+                    tooltipStyleClass="tooltip-uncheck"
+                  ></fa-icon> -->
+                </div>
+                <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
+                  {{ attendee.announced ? ' Anunciado' : ' Não Anunciado' }}
+                </div>
               </div>
-            </div>
             <div class="primary-info">
               <div class="name">{{ attendee.name }}</div>
               <div class="contact">
-                <span>{{ attendee.email }}</span>
-                <span *ngIf="attendee.telephone">{{
-                  " - " + attendee.telephone
-                }}</span>
+                <span>{{ attendee.role }}</span>
               </div>
             </div>
             <div class="secondary-info w-50">
               <div class="info-place mb-4 mb-sm-0">
-                <p class="locality">{{ attendee.locality }}</p>
-                <p class="region">{{ attendee.superLocality }}</p>
+                <p class="locality">{{ attendee.organization }}</p>
               </div>
               <div class="info-preregister d-flex justify-content-center w-100">
                 <div
@@ -224,30 +124,22 @@
                 <ng-template #nullField>
                   <p class="how-long-ago m-0">--</p>
                 </ng-template>
-
-                <div class="preregister-icon action">
-                  <img
-                    src="assets/layout/images/icons/preregister_phone.svg"
-                    class="img-fluid"
-                    alt=""
-                  />
-                </div>
               </div>
-              <div class="info-checkin d-flex justify-content-center w-100">
+              <!-- <div class="info-checkin d-flex justify-content-center w-100">
                 <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
                 <div class="action">
                   <fa-icon
                     size="1x"
-                    (click)="selectAttendee(attendee)"
+                    (click)="selectAttendeeAuthority(attendee)"
                     [icon]="attendee.checkedIn ? iconChecked : iconCircle"
                     tooltipPosition="left"
                     [pTooltip]="getToolTipText(attendee)"
                     tooltipStyleClass="tooltip-uncheck"
                   ></fa-icon>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <ng-container *ngIf="isSearching">
@@ -267,7 +159,6 @@
           </div>
         </div>
       </section>
-    </ng-template>
   </div>
 </app-template>
 
