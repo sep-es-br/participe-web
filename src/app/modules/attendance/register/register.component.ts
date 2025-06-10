@@ -146,7 +146,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('attendance.successDetail.checkin', {name: attendee.name.toUpperCase()}),
+        detail: this.translate.instant('attendance.successDetail.checkin', {name: result.meeting.name.toUpperCase()}),
         life: 10000
       });
 
