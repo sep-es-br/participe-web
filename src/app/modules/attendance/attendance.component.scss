@@ -25,11 +25,12 @@
         background: white;
         font-weight: 700;
         margin: 20px;
+        margin-bottom: 10px;
         box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
         flex-direction: column;
 
         fa-icon {
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             margin-right: 0;
         }
       }
@@ -121,7 +122,7 @@ $textFilterColor: #666;
             color: $grey;
           }
         }
-        .info-checkin {
+        .info-checkin, .info-announced {
           display: flex;
           text-align: right;
           justify-content: flex-end;

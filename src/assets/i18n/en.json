@@ -1,123 +1,125 @@
 {
-	"administration": {
-		"citizen": "Citizen",
-		"conference": "Conference",
-		"conference-name": "Conference: {{name}}",
-		"domain": "Domain",
-		"evaluators": "Evaluators",
-		"label": "Administration",
-		"moderation": "Moderation",
-		"plan": "Plan",
-		"presential-meeting": "Meetings",
-		"structure": "Structure"
-	},
-	"all": "All",
-	"begin": "Begin",
-	"end": "End",
-	"add": "Add",
-	"attention": "Attention",
-	"attendance": {
-		"arrival": "Arrival",
-		"attendant": "Attendants",
-		"authentication": "Authentication",
-		"county": "County",
-		"edit": "Edit Attendees",
-		"editAttendance": "Edit Attendance",
-		"editAttendanceIn": "Edit attendance in meeting: ",
-		"error": {
-			"couldNotConnectToServer": "Error trying to connect to server, try again",
-			"couldNotGetCitizenInfo": "Error retrieving information about user, try again",
-			"couldNotGetLocalities": "Error when trying to get conference localities, try again",
-			"couldNotUncheck": "Error when trying to uncheck attendance, try again",
-			"failedToCheckIn": "Error when trying to check-in, try again",
-			"invalidForm": "Invalid form, fill all required fields",
-			"lenghtOf6Password": "Password must have 6 digits",
-			"onlyDigitsPassword": "Password can only contain digits",
-			"whenSaving": "Error when trying to save, try again",
-			"whenSearching": "Error when searching list of citizens, try again"
-		},
-		"label": "Attendance List",
-		"loadMore": "Load more results",
-		"noResult": "No result",
-		"orderBy": "Order by",
-		"register": "Register",
-		"registerAttendance": "Register Attendance",
-		"registerAttendanceIn": "Register Attendance in ",
-		"removeAttendee": "Remove attendance",
-		"saveAndRegister": "Save and Register Attendance",
-		"selectMeeting": "Select meeting",
-		"successDetail": {
-			"checkin": "Checkin registered!",
-			"saveAccount": "User saved!",
-			"uncheckin": "Attendance removed!"
-		},
-		"tooltipLabelCheckin": "Register attendance of ",
-		"tooltipLabelUnchecking": "Remove attendance of ",
-		"tooltipLabelView": "View "
-	},
-	"cancel": "Cancel",
-	"back": "Back",
-	"change": "Change",
-	"automatic": "Automatic",
-	"manual": "Manual",
-	"citizen": {
-		"representative": "Official Representative",
-		"organization": "Represented Organization/Entity",
-		"role": "Representative's Role",
-		"attendance_count": "Attendance Count",
-		"authentication": "Authentication",
-		"cpf": "CPF",
-		"error": {
-			"empty.conference": "There is no conference for listing citizens",
-			"fetch": {
-				"conferenceActive": "Could not load active conferences",
-				"regionalization": "Unable to load active conference locations"
-			},
-			"saving": "Cannot save the citizen"
-		},
-		"inserted": "Inserted citizen {{name}} ",
-		"locality": "Locality",
-		"mail": "Mail",
-		"name": "Name",
-		"password": "Password",
-		"phone": "Phone",
-		"resetpassword": "Password reset",
-		"status": "Status",
-		"updated": "Updated citizen {{name}} ",
+  "administration": {
+    "citizen": "Citizen",
+    "conference": "Conference",
+    "conference-name": "Conference: {{name}}",
+    "domain": "Domain",
+    "evaluators": "Evaluators",
+    "label": "Administration",
+    "moderation": "Moderation",
+    "plan": "Plan",
+    "presential-meeting": "Meetings",
+    "structure": "Structure"
+  },
+  "all": "All",
+  "begin": "Begin",
+  "end": "End",
+  "add": "Add",
+  "attention": "Attention",
+  "attendance": {
+    "arrival": "Arrival",
+    "attendant": "Attendants",
+    "authentication": "Authentication",
+    "county": "County",
+    "edit": "Edit Attendees",
+    "editAttendance": "Edit Attendance",
+    "editAttendanceIn": "Edit attendance in meeting: ",
+    "error": {
+      "couldNotConnectToServer": "Error trying to connect to server, try again",
+      "couldNotGetCitizenInfo": "Error retrieving information about user, try again",
+      "couldNotGetLocalities": "Error when trying to get conference localities, try again",
+      "couldNotUncheck": "Error when trying to uncheck attendance, try again",
+      "failedToCheckIn": "Error when trying to check-in, try again",
+      "invalidForm": "Invalid form, fill all required fields",
+      "lenghtOf6Password": "Password must have 6 digits",
+      "onlyDigitsPassword": "Password can only contain digits",
+      "whenSaving": "Error when trying to save, try again",
+      "whenSearching": "Error when searching list of citizens, try again"
+    },
+    "label": "Attendance List",
+    "loadMore": "Load more results",
+    "noResult": "No result",
+    "orderBy": "Order by",
+    "register": "Register",
+    "registerAttendance": "Register Attendance",
+    "registerAttendanceIn": "Register Attendance in ",
+    "removeAttendee": "Remove attendance",
+    "saveAndRegister": "Save and Register Attendance",
+    "selectMeeting": "Select meeting",
+    "successDetail": {
+      "checkin": "Checkin registered!",
+      "saveAccount": "User saved!",
+      "uncheckin": "Attendance removed!"
+    },
+    "tooltipLabelCheckin": "Register attendance of ",
+    "tooltipLabelUnchecking": "Remove attendance of ",
+    "tooltipLabelView": "View ",
+    "authority": "Presence List of Representants"
+  },
+  "cancel": "Cancel",
+  "back": "Back",
+  "change": "Change",
+  "automatic": "Automatic",
+  "manual": "Manual",
+  "citizen": {
+    "representative": "Official Representative",
+    "organization": "Represented Organization/Entity",
+    "role": "Representative's Role",
+    "attendance_count": "Attendance Count",
+    "authentication": "Authentication",
+    "cpf": "CPF",
+    "error": {
+      "empty.conference": "There is no conference for listing citizens",
+      "fetch": {
+        "conferenceActive": "Could not load active conferences",
+        "regionalization": "Unable to load active conference locations"
+      },
+      "saving": "Cannot save the citizen"
+    },
+    "inserted": "Inserted citizen {{name}} ",
+    "locality": "Locality",
+    "mail": "Mail",
+    "name": "Name",
+    "password": "Password",
+    "phone": "Phone",
+    "resetpassword": "Password reset",
+    "status": "Status",
+    "updated": "Updated citizen {{name}} ",
+
     "receive_informational": "I want to receive informational messages"
-	},
-	"clean": {
-		"search": "Clear Search"
-	},
-	"conference": {
-		"reports": "Reports",
-		"proposeReport": "Public Hearing Report",
-		"citizen-Authentication": "Citizen Authentication",
-		"citizenPortal": "Citizen Portal",
-		"segmentation": "Meetig Segmentation",
-		"targetedBy": "Targeted by",
-		"display": "Display",
-		"preOpening": "Pre Opening",
-		"postClosure": "Post Closure",
-		"open": "Open",
-		"closed": "Closed",
-		"evaluation": "Evaluation",
-		"text": "Text",
-		"label": "Label",
-		"howWork": "How it works",
-		"research": "Research",
-		"backgroundImages": "Background Images",
-		"externalLinks": "External Links",
-		"mode": "Mode",
-		"step": "Step",
-		"opening": "Opening",
-		"closure": "Closure",
-		"displayOfTheCitizenPortal": "Display mode at the citizen portal",
-		"estimatedTime": "Estimated time (Text)",
-		"serverName": "Server name",
-		"conferenceName": "Conference name",
-		"defaultServerConference": "Default server conference",
-		"stepUpdated": "Step is updated",
+  },
+  "clean": {
+    "search": "Clear Search"
+  },
+  "conference": {
+    "reports": "Reports",
+    "proposeReport": "Public Hearing Report",
+    "citizen-Authentication": "Citizen Authentication",
+    "citizenPortal": "Citizen Portal",
+    "segmentation": "Meetig Segmentation",
+    "targetedBy": "Targeted by",
+    "display": "Display",
+    "preOpening": "Pre Opening",
+    "postClosure": "Post Closure",
+    "open": "Open",
+    "closed": "Closed",
+    "evaluation": "Evaluation",
+    "text": "Text",
+    "label": "Label",
+    "howWork": "How it works",
+    "research": "Research",
+    "backgroundImages": "Background Images",
+    "externalLinks": "External Links",
+    "mode": "Mode",
+    "step": "Step",
+    "opening": "Opening",
+    "closure": "Closure",
+    "displayOfTheCitizenPortal": "Display mode at the citizen portal",
+    "estimatedTime": "Estimated time (Text)",
+    "serverName": "Server name",
+    "conferenceName": "Conference name",
+    "defaultServerConference": "Default server conference",
+    "stepUpdated": "Step is updated",
     "externalLinkUpdated": "External link updated",
     "requiredInputs": "Fill in all the information",
     "confirm": {
@@ -142,8 +144,8 @@
       "endDateOutOfRange": "Conference closure date must be after opening date"
     },
     "image": "Image",
-	"footer-image": "Footer image",
-	"header-image": "Header Image",
+    "footer-image": "Footer image",
+    "header-image": "Header Image",
     "in-progress": "Conference in progress, cannot be deleted!",
     "inserted": "Inserted conference {{name}} ",
     "locality-citizen": "Type of citizen locality",
@@ -168,7 +170,7 @@
         "beginDateAfterEndDate": "Meeting begin date must be before end date",
         "channelUrlInvalid": "Channel Url Invalid",
         "doesNotContainChannel": "At least one transmission channel is required"
-			},
+      },
       "type": {
         "presential": "Presential",
         "virtual": "Virtual",
@@ -180,460 +182,460 @@
         "manual": "Manual"
       },
       "segmentation": "Segmentation",
-			"locality": "Locality",
-			"localityCovers": "Coverage",
-			"mail": "Email",
-			"name": "Name",
+      "locality": "Locality",
+      "localityCovers": "Coverage",
+      "mail": "Email",
+      "name": "Name",
       "url": "URL",
-			"place": "Place",
-			"receptionists": "Receptionists",
-			"receptionists-active": "Receptionists Enabled",
-			"receptionists-active-empty": "No receptionist was qualified for this meeting",
-			"receptionists-not-found": "No receptionist was found with the filter used",
+      "place": "Place",
+      "receptionists": "Receptionists",
+      "receptionists-active": "Receptionists Enabled",
+      "receptionists-active-empty": "No receptionist was qualified for this meeting",
+      "receptionists-not-found": "No receptionist was found with the filter used",
       "broadcast-channels": "Broadcast Channels",
-			"success": {
-				"delete": "Meeting {{name}} deleted",
+      "success": {
+        "delete": "Meeting {{name}} deleted",
         "update": "Updated broadcast channel",
-				"updated": "Meeting {{name}} updated",
-				"created": "Meeting {{name}} created"
-			},
-			"title": "New Meeting",
+        "updated": "Meeting {{name}} updated",
+        "created": "Meeting {{name}} created"
+      },
+      "title": "New Meeting",
       "action": {
         "edit": "Edit",
         "panel": "Show Panel",
         "delete": "Delete"
       }
-		},
-		"moderator": {
-			"already-enabled": "{{name}} is already enabled as a moderator",
-			"empty": "No records found",
-			"enabled": "Enabled Moderators"
-		},
-		"moderators": "Moderators",
-		"name": "Name",
-		"new": "New conference {{name}} registered",
-		"participation-Pages": "Participation Pages",
-		"placeholder": {
-			"begin-date": "Select the start date of the conference",
-			"description": "Describe more details about the conference",
-			"email": "Enter conference e-mail",
-			"end-date": "Select the conference end date",
-			"month": "Select a month",
-			"name": "Enter conference name",
-			"plan": "Select the plan related to the conference",
-			"year": "Select a year"
-		},
-		"regionalization-Pages": "Regionalization Pages",
-		"sub-title": "Subtitle",
-		"title": "Title",
-		"updated": "Updated conference {{name}} "
-	},
-	"dashboard": {
-		"result": "Result",
-		"conference": "Conference",
-		"universe": "Universe",
-		"restore": "Restore",
-		"by": "by",
-		"agroup": "Agroup",
-		"value": "Value",
-		"display": "Display",
-		"county": "County",
-		"descendent": "Descending",
-		"ascendent": "Ascendent",
-		"microregion": "Microregion",
-		"alphabetic": "Alphabetic",
-		"presential": "Presential",
-		"origin": "Origin",
-		"remote": "Remote",
-		"all": "All",
-		"counties": "Counties",
-		"participants": "Participants",
-		"highlights": "Highlights",
-		"proposals": "Proposals",
-		"strategicArea": "Strategic Area",
-		"error": {
-			"notSeletedConference": "Select a conference to show dashboard"
-		}
-	},
-	"control-panel": "Control Panel",
-	"date": {
-		"end": "End Date",
-		"start": "Begin Date"
-	},
-	"description": "Description",
-	"domain": {
-		"confirm": {
-			"delete": "Are you sure that you want to delete {{name}}?"
-		},
-		"delete": "Delete Domain",
-		"error": {
-			"fetch": {
-				"types": "Error fetching types"
-			},
-			"locality": {
-				"invalid-type-level": "Invalid type. This type has already been used on another level or this level must be of a specific type.",
-				"save": "Error saving locality",
+    },
+    "moderator": {
+      "already-enabled": "{{name}} is already enabled as a moderator",
+      "empty": "No records found",
+      "enabled": "Enabled Moderators"
+    },
+    "moderators": "Moderators",
+    "name": "Name",
+    "new": "New conference {{name}} registered",
+    "participation-Pages": "Participation Pages",
+    "placeholder": {
+      "begin-date": "Select the start date of the conference",
+      "description": "Describe more details about the conference",
+      "email": "Enter conference e-mail",
+      "end-date": "Select the conference end date",
+      "month": "Select a month",
+      "name": "Enter conference name",
+      "plan": "Select the plan related to the conference",
+      "year": "Select a year"
+    },
+    "regionalization-Pages": "Regionalization Pages",
+    "sub-title": "Subtitle",
+    "title": "Title",
+    "updated": "Updated conference {{name}} "
+  },
+  "dashboard": {
+    "result": "Result",
+    "conference": "Conference",
+    "universe": "Universe",
+    "restore": "Restore",
+    "by": "by",
+    "agroup": "Agroup",
+    "value": "Value",
+    "display": "Display",
+    "county": "County",
+    "descendent": "Descending",
+    "ascendent": "Ascendent",
+    "microregion": "Microregion",
+    "alphabetic": "Alphabetic",
+    "presential": "Presential",
+    "origin": "Origin",
+    "remote": "Remote",
+    "all": "All",
+    "counties": "Counties",
+    "participants": "Participants",
+    "highlights": "Highlights",
+    "proposals": "Proposals",
+    "strategicArea": "Strategic Area",
+    "error": {
+      "notSeletedConference": "Select a conference to show dashboard"
+    }
+  },
+  "control-panel": "Control Panel",
+  "date": {
+    "end": "End Date",
+    "start": "Begin Date"
+  },
+  "description": "Description",
+  "domain": {
+    "confirm": {
+      "delete": "Are you sure that you want to delete {{name}}?"
+    },
+    "delete": "Delete Domain",
+    "error": {
+      "fetch": {
+        "types": "Error fetching types"
+      },
+      "locality": {
+        "invalid-type-level": "Invalid type. This type has already been used on another level or this level must be of a specific type.",
+        "save": "Error saving locality",
         "invalid-latitude-longitude": "Invalid latitude and longitude format, correct: latitude,longitude"
-			},
-			"locality-type": {
-				"not-found": "Locality type not found"
-			},
-			"not-found": "Domain not found",
-			"other": {
-				"level": "This type has already been associated to another level on this domain"
-			},
-			"saving": "Error saving domain"
-		},
-		"locality": {
-			"inserted": "New locality {{name}} registered",
-			"name": "Name",
-			"latitudeLongitude": "Latitude and Longitude",
-			"new": "New",
-			"updated": "Updated locality {{name}}"
-		},
-		"name": "Name",
-		"new": "New domain {{name}} registered",
-		"placeholder": {
-			"locality": "Enter the locality name",
-			"name": "Enter the domain name"
-		},
-		"updated": "Updated domain {{name}}",
-		"warn": {
-			"contain-plan": "Domain cannot be deleted, because it is linked to a plan"
-		}
-	},
-	"enuns": {
-		"all": "All",
-		"filed": "Filed",
-		"pending": "Pending",
-		"published": "Published",
-		"removed": "Removed"
-	},
-	"erro": {
-		"email": {
-			"field": "Invalid E-Mail"
-		},
-		"invalid": {
-			"data": "Invalid data. Verify provided information and try again.",
-			"field": "Invalid field"
-		},
-		"removing": {
-			"register": "Error removing register"
-		},
-		"required": {
-			"field": "Required field"
-		},
+      },
+      "locality-type": {
+        "not-found": "Locality type not found"
+      },
+      "not-found": "Domain not found",
+      "other": {
+        "level": "This type has already been associated to another level on this domain"
+      },
+      "saving": "Error saving domain"
+    },
+    "locality": {
+      "inserted": "New locality {{name}} registered",
+      "name": "Name",
+      "latitudeLongitude": "Latitude and Longitude",
+      "new": "New",
+      "updated": "Updated locality {{name}}"
+    },
+    "name": "Name",
+    "new": "New domain {{name}} registered",
+    "placeholder": {
+      "locality": "Enter the locality name",
+      "name": "Enter the domain name"
+    },
+    "updated": "Updated domain {{name}}",
+    "warn": {
+      "contain-plan": "Domain cannot be deleted, because it is linked to a plan"
+    }
+  },
+  "enuns": {
+    "all": "All",
+    "filed": "Filed",
+    "pending": "Pending",
+    "published": "Published",
+    "removed": "Removed"
+  },
+  "erro": {
+    "email": {
+      "field": "Invalid E-Mail"
+    },
+    "invalid": {
+      "data": "Invalid data. Verify provided information and try again.",
+      "field": "Invalid field"
+    },
+    "removing": {
+      "register": "Error removing register"
+    },
+    "required": {
+      "field": "Required field"
+    },
     "field-cannot-be-empty": "The field cannot be empty",
     "field-must-contain-only-letters": "The field must contain only letters"
-	},
-	"error": "Error",
-	"evaluator": {
-		"confirm": {
-			"delete": "Are you sure you want to delete {{name}}?"
-		},
-		"delete": "Delete Evaluator",
-		"edit": "Edit Evaluator",
-		"emptyRoles": "Unit does not have roles contained in it",
-		"error": {
-			"saving": "Error saving evaluator",
-			"fetchData": "Error fetching {{name}}"
-		},
-		"inserted": "New evaluator inserted",
-		"new": "New Evaluator",
-		"organization": "Organization",
-		"section": "Section",
-		"sections": "Sections",
-		"role": "Role",
-		"roles": "Roles",
-		"updated": "Evaluator {{name}} updated"
-	},
-	"exists": {
-		"name": "This name already exists"
-	},
-	"file": {
-		"browse": "Browse",
-		"label": "File",
-		"remove": "Remove file",
-		"required": "File is required",
-		"send": "Send"
-	},
-	"filed": "Filed",
-	"footer": {
-		"label1": "Open source provided free of charge, without support, without certification, without maintenance, without warranty and without indemnity for",
-		"label2": "Secretariat of Economy and Planning of the Espirito Santo State Government"
-	},
-	"generic.error": "We were unable to process your request",
-	"hide": "Hide",
-	"home": "Home",
-	"label": {
-		"parent": "Parent"
-	},
-	"locality": "Locality",
-	"meeting": "Meeting",
-	"moderation": {
-		"error": {
-			"begin": "The comment already is in moderation with another moderator",
-			"fetch": {
-				"comments": "Error in load comments",
-				"conferences": "Error loading conferences",
-				"planItems": "Error in load plan items",
-				"regionalization": "Error in load regionalization"
-			},
-			"moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save",
-			"publish_comment": "There was a problem publishing comments",
-			"update_comment": "There was a problem saving moderation"
-		},
-		"filters": {
-			"all": "All",
-			"endAt": "EndAt",
-			"microregion": "Microregion",
-			"pending": "Pending",
-			"startAt": "StartAt",
-			"status": "Status",
-			"text": "text",
-			"trash": "Trash",
-			"from": "Origin"
-		},
-		"label": {
-			"btnModerate": "Moderate",
-			"btnPublish": "Publish",
-			"comment": "Comment",
-			"confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
-			"confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
-			"confirm_alter_moderator_title": "Alter moderator",
-			"confirm_change_tree": "Confirm the change to the comment tree?",
-			"confirm_change_tree_title": "Confirm?",
-			"confirm_publish": "Do you really want to post the {{text}} comment made by {{citizenName}}?",
-			"confirm_publish_title": "Publish?",
-			"empty_comments": "There is no comment to moderate or the query did not return data",
-			"in_moderation_by": "in moderation by",
-			"msg": {
-				"filed_comment": "Comment filed",
-				"filed_proposal": "Proposal filed",
-				"pending_comment": "Comment pending",
-				"pending_proposal": "Proposal pending",
-				"publish_comment": "Comment published",
-				"publish_proposal": "Proposal published",
-				"removed_comment": "Comment in trash",
-				"removed_proposal": "Proposal in trash"
-			},
-			"presential": "Presential",
-			"proposal": "Proposal",
-			"remote": "Remote",
-			"all": "All",
-			"saved_success": "Comment saved!",
-			"select_conference": "Select the conference you want to moderate",
-			"strategic_area": "Strategic Area"
-		},
-		"moderate": {
-			"duplicated": "Duplicated",
-			"about": "About",
-			"confirmDeleteCommentWithPropEval": {
-				"header": "The comment has an evaluation!",
-				"body": "Changing the comment's status to {{status}} will remove the evaluation. Are you sure you want to proceed?"
-			},
-			"moveText": "Move text",
-			"placeholder": {
-				"moveFilter": ""
-			},
-			"save": {
-				"archived": "Archived",
-				"inTrash": "In the trash",
-				"pending": "Pending",
-				"published": "Published"
-			},
-			"saveAndTo": "Save and go to",
-			"title": "Text in moderation"
-		}
-	},
-	"month": {
-		"april": "April",
-		"august": "August",
-		"december": "December",
-		"february": "February",
-		"january": "January",
-		"july": "July",
-		"june": "June",
-		"label": "Month",
-		"march": "March",
-		"may": "May",
-		"november": "November",
-		"october": "October",
-		"september": "September"
-	},
-	"name": "Name",
-	"new": "New",
-	"new-a": "New",
-	"no": "No",
-	"of": "of",
-	"page": {
-		"pageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} items"
-	},
-	"pending": "Pending",
-	"placeholder": {
-		"select": "Select"
-	},
-	"plan": {
-		"RegionalizedBy": "Regionalized by",
-		"confirm": {
-			"delete": "Are you sure that you want to delete {{name}}?"
-		},
-		"delete": "Delete Plan",
-		"error": {
-			"fetch": {
-				"domains": "Error fetching domains",
-				"structures": "Error fetching structures"
-			},
-			"locality": {
-				"empty": "No records found",
-				"select": "Select one or more Localities"
-			},
-			"saving": "Error saving plan"
-		},
-		"file": "Image",
-		"inserted": "New plan {{name}} registered",
-		"item": {
-			"name": "Name",
-			"placeholder": {
-				"name": "Enter the plan item's name"
-			}
-		},
-		"label": "Plan",
-		"locality": "Locality",
-		"name": "Name",
-		"placeholder": {
-			"description": "Describe more details",
-			"name": "Enter the plan's name",
-			"select-domain": "Select the domain",
-			"select-structure": "Select the structure"
-		},
-		"updated": "Updated plan {{name}}",
-		"warn": {
-			"contain-conference": "Plan cannot be deleted, because it is linked to a conference"
-		}
-	},
-	"proposal_evaluation": {
-		"modalConfirm": "confirm",
-		"modalCancel": "cancel",
-		"modalTitle": "List of organizations",
-		"orgPreference": "Do you wish to set the selected organization as default?",
-		"budgetAction": "Budget Action",
-		"budgetPlan": "Budget Plan",
-		"budgetPlan_nullValue": "No budget plan provided",
-		"budgetUnit": "Budget Unit",
-		"confirm": {
-			"delete": "Are you sure you want to delete evaluation?"
-		},
+  },
+  "error": "Error",
+  "evaluator": {
+    "confirm": {
+      "delete": "Are you sure you want to delete {{name}}?"
+    },
+    "delete": "Delete Evaluator",
+    "edit": "Edit Evaluator",
+    "emptyRoles": "Unit does not have roles contained in it",
+    "error": {
+      "saving": "Error saving evaluator",
+      "fetchData": "Error fetching {{name}}"
+    },
+    "inserted": "New evaluator inserted",
+    "new": "New Evaluator",
+    "organization": "Organization",
+    "section": "Section",
+    "sections": "Sections",
+    "role": "Role",
+    "roles": "Roles",
+    "updated": "Evaluator {{name}} updated"
+  },
+  "exists": {
+    "name": "This name already exists"
+  },
+  "file": {
+    "browse": "Browse",
+    "label": "File",
+    "remove": "Remove file",
+    "required": "File is required",
+    "send": "Send"
+  },
+  "filed": "Filed",
+  "footer": {
+    "label1": "Open source provided free of charge, without support, without certification, without maintenance, without warranty and without indemnity for",
+    "label2": "Secretariat of Economy and Planning of the Espirito Santo State Government"
+  },
+  "generic.error": "We were unable to process your request",
+  "hide": "Hide",
+  "home": "Home",
+  "label": {
+    "parent": "Parent"
+  },
+  "locality": "Locality",
+  "meeting": "Meeting",
+  "moderation": {
+    "error": {
+      "begin": "The comment already is in moderation with another moderator",
+      "fetch": {
+        "comments": "Error in load comments",
+        "conferences": "Error loading conferences",
+        "planItems": "Error in load plan items",
+        "regionalization": "Error in load regionalization"
+      },
+      "moderator": "The edition of this proposal was canceled by Administrator of system your changes can't be save",
+      "publish_comment": "There was a problem publishing comments",
+      "update_comment": "There was a problem saving moderation"
+    },
+    "filters": {
+      "all": "All",
+      "endAt": "EndAt",
+      "microregion": "Microregion",
+      "pending": "Pending",
+      "startAt": "StartAt",
+      "status": "Status",
+      "text": "text",
+      "trash": "Trash",
+      "from": "Origin"
+    },
+    "label": {
+      "btnModerate": "Moderate",
+      "btnPublish": "Publish",
+      "comment": "Comment",
+      "confirm_alter_moderator_comment": "Comment in moderation with another user, do you want proced?",
+      "confirm_alter_moderator_proposal": "Proposal in moderation with another user, do you want proced?",
+      "confirm_alter_moderator_title": "Alter moderator",
+      "confirm_change_tree": "Confirm the change to the comment tree?",
+      "confirm_change_tree_title": "Confirm?",
+      "confirm_publish": "Do you really want to post the {{text}} comment made by {{citizenName}}?",
+      "confirm_publish_title": "Publish?",
+      "empty_comments": "There is no comment to moderate or the query did not return data",
+      "in_moderation_by": "in moderation by",
+      "msg": {
+        "filed_comment": "Comment filed",
+        "filed_proposal": "Proposal filed",
+        "pending_comment": "Comment pending",
+        "pending_proposal": "Proposal pending",
+        "publish_comment": "Comment published",
+        "publish_proposal": "Proposal published",
+        "removed_comment": "Comment in trash",
+        "removed_proposal": "Proposal in trash"
+      },
+      "presential": "Presential",
+      "proposal": "Proposal",
+      "remote": "Remote",
+      "all": "All",
+      "saved_success": "Comment saved!",
+      "select_conference": "Select the conference you want to moderate",
+      "strategic_area": "Strategic Area"
+    },
+    "moderate": {
+      "duplicated": "Duplicated",
+      "about": "About",
+      "confirmDeleteCommentWithPropEval": {
+        "header": "The comment has an evaluation!",
+        "body": "Changing the comment's status to {{status}} will remove the evaluation. Are you sure you want to proceed?"
+      },
+      "moveText": "Move text",
+      "placeholder": {
+        "moveFilter": ""
+      },
+      "save": {
+        "archived": "Archived",
+        "inTrash": "In the trash",
+        "pending": "Pending",
+        "published": "Published"
+      },
+      "saveAndTo": "Save and go to",
+      "title": "Text in moderation"
+    }
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "label": "Month",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
+  },
+  "name": "Name",
+  "new": "New",
+  "new-a": "New",
+  "no": "No",
+  "of": "of",
+  "page": {
+    "pageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} items"
+  },
+  "pending": "Pending",
+  "placeholder": {
+    "select": "Select"
+  },
+  "plan": {
+    "RegionalizedBy": "Regionalized by",
+    "confirm": {
+      "delete": "Are you sure that you want to delete {{name}}?"
+    },
+    "delete": "Delete Plan",
+    "error": {
+      "fetch": {
+        "domains": "Error fetching domains",
+        "structures": "Error fetching structures"
+      },
+      "locality": {
+        "empty": "No records found",
+        "select": "Select one or more Localities"
+      },
+      "saving": "Error saving plan"
+    },
+    "file": "Image",
+    "inserted": "New plan {{name}} registered",
+    "item": {
+      "name": "Name",
+      "placeholder": {
+        "name": "Enter the plan item's name"
+      }
+    },
+    "label": "Plan",
+    "locality": "Locality",
+    "name": "Name",
+    "placeholder": {
+      "description": "Describe more details",
+      "name": "Enter the plan's name",
+      "select-domain": "Select the domain",
+      "select-structure": "Select the structure"
+    },
+    "updated": "Updated plan {{name}}",
+    "warn": {
+      "contain-conference": "Plan cannot be deleted, because it is linked to a conference"
+    }
+  },
+  "proposal_evaluation": {
+    "modalConfirm": "confirm",
+    "modalCancel": "cancel",
+    "modalTitle": "List of organizations",
+    "orgPreference": "Do you wish to set the selected organization as default?",
+    "budgetAction": "Budget Action",
+    "budgetPlan": "Budget Plan",
+    "budgetPlan_nullValue": "No budget plan provided",
+    "budgetUnit": "Budget Unit",
+    "confirm": {
+      "delete": "Are you sure you want to delete evaluation?"
+    },
     "optional": "Optional",
-		"delete": "Delete Proposal Evaluation",
-		"description": "Proposal Text",
-		"edit": "Edit Proposal Evaluation",
-		"error": {
-			"fetchData": "Error fetching proposal data",
-			"identicalForm": "There were no changes to the proposal evaluation",
-			"saving": "Error saving proposal evaluation"
-		},
-		"evaluated_by": "Evaluator Organization",
-		"evaluationStatus_false": "Not Evaluated",
-		"evaluationStatus_true": "Evaluated",
-		"evaluationStatus": "Status",
-		"evaluator": "Evaluator",
-		"inserted": "New proposal evaluation inserted",
-		"loaIncluded": "Included in next year's LOA",
-		"loaIncluded_question": "Will be included in next year's LOA?",
-		"new": "New Proposal Evaluation",
-		"noResult": "No results found",
-		"reason": "Reason of exclusion",
-		"reasonIncludedDetail": "Observation",
-		"reasonNotIncludedDetail": "Observation",
-		"title": "Proposal Evaluation",
-		"under_evaluation_by": "Under evaluation by",
-		"updated": "Proposal Evaluation updated",
-		"haveCost": "Does the proposal have a cost",
-		"newRequest": "Will the initiative be new"
-	},
-	"published": "Published",
-	"register": {
-		"removed": "Register removed"
-	},
-	"removed": "In trash",
-	"roles": {
-		"Administrator": "Administrator",
-		"Moderator": "Moderator",
-		"Recepcionist": "Recepcionist"
-	},
-	"rowPerPage": "Row per page",
-	"save": "Save",
-	"saveContinue": "Save and continue",
-	"search": "Search",
-	"select": "Select",
-	"state": "State",
-	"status": {
-		"active": "Active",
-		"activeUser": "Active User",
-		"inactive": "Inactive",
-		"inactiveUser": "Inactive User"
-	},
-	"structure": {
-		"comments": "Comments",
-		"confirm": {
-			"delete": "Are you sure that you want to delete {{name}}?"
-		},
-		"delete": "Delete Structure",
-		"error": {
-			"item": "Error saving structure item",
-			"saving": "Error saving structure"
-		},
-		"item": {
-			"item": "Item",
-			"name": "Name",
-			"new": "New structure item {{name}} registered",
-			"placeholder": {
-				"name": "Enter the name of the structure-item"
-			},
-			"updated": "Structure item {{name}} updated"
-		},
-		"link": "Link to alternative proposal",
-		"locality": "Locality",
+    "delete": "Delete Proposal Evaluation",
+    "description": "Proposal Text",
+    "edit": "Edit Proposal Evaluation",
+    "error": {
+      "fetchData": "Error fetching proposal data",
+      "identicalForm": "There were no changes to the proposal evaluation",
+      "saving": "Error saving proposal evaluation"
+    },
+    "evaluated_by": "Evaluator Organization",
+    "evaluationStatus_false": "Not Evaluated",
+    "evaluationStatus_true": "Evaluated",
+    "evaluationStatus": "Status",
+    "evaluator": "Evaluator",
+    "inserted": "New proposal evaluation inserted",
+    "loaIncluded": "Included in next year's LOA",
+    "loaIncluded_question": "Will be included in next year's LOA?",
+    "new": "New Proposal Evaluation",
+    "noResult": "No results found",
+    "reason": "Reason of exclusion",
+    "reasonIncludedDetail": "Observation",
+    "reasonNotIncludedDetail": "Observation",
+    "title": "Proposal Evaluation",
+    "under_evaluation_by": "Under evaluation by",
+    "updated": "Proposal Evaluation updated",
+    "haveCost": "Does the proposal have a cost",
+    "newRequest": "Will the initiative be new"
+  },
+  "published": "Published",
+  "register": {
+    "removed": "Register removed"
+  },
+  "removed": "In trash",
+  "roles": {
+    "Administrator": "Administrator",
+    "Moderator": "Moderator",
+    "Recepcionist": "Recepcionist"
+  },
+  "rowPerPage": "Row per page",
+  "save": "Save",
+  "saveContinue": "Save and continue",
+  "search": "Search",
+  "select": "Select",
+  "state": "State",
+  "status": {
+    "active": "Active",
+    "activeUser": "Active User",
+    "inactive": "Inactive",
+    "inactiveUser": "Inactive User"
+  },
+  "structure": {
+    "comments": "Comments",
+    "confirm": {
+      "delete": "Are you sure that you want to delete {{name}}?"
+    },
+    "delete": "Delete Structure",
+    "error": {
+      "item": "Error saving structure item",
+      "saving": "Error saving structure"
+    },
+    "item": {
+      "item": "Item",
+      "name": "Name",
+      "new": "New structure item {{name}} registered",
+      "placeholder": {
+        "name": "Enter the name of the structure-item"
+      },
+      "updated": "Structure item {{name}} updated"
+    },
+    "link": "Link to alternative proposal",
+    "locality": "Locality",
     "regionalization": "Regionalization",
-		"logo": "Image",
-		"name": "Name",
-		"new": "New structure {{name}} registered",
-		"placeholder": {
-			"name": "Enter the name of the structure"
-		},
-		"subTitle": "Subtitle",
-		"title": "Title",
-		"updated": "Updated {{name}} structure",
-		"votes": "Destaques"
-	},
-	"success": "Success",
-	"topbar": {
-		"edit": {
-			"profile": "Edit Profile"
-		},
-		"language": {
-			"en": "English",
-			"ptbr": "Portuguese"
-		},
-		"messages": "Messages",
-		"new": "new",
-		"notification": "Notifications",
-		"notifications": {
-			"empty": "No new notifications"
-		},
-		"panel": {
-			"settings": "Settings Panel"
-		},
-		"profile": "Profile",
-		"settings": "Settings",
-		"yourhave": "You Have"
-	},
-	"type": "Type",
-	"unauthorized.error": "You do not have permission to access this functionality",
+    "logo": "Image",
+    "name": "Name",
+    "new": "New structure {{name}} registered",
+    "placeholder": {
+      "name": "Enter the name of the structure"
+    },
+    "subTitle": "Subtitle",
+    "title": "Title",
+    "updated": "Updated {{name}} structure",
+    "votes": "Destaques"
+  },
+  "success": "Success",
+  "topbar": {
+    "edit": {
+      "profile": "Edit Profile"
+    },
+    "language": {
+      "en": "English",
+      "ptbr": "Portuguese"
+    },
+    "messages": "Messages",
+    "new": "new",
+    "notification": "Notifications",
+    "notifications": {
+      "empty": "No new notifications"
+    },
+    "panel": {
+      "settings": "Settings Panel"
+    },
+    "profile": "Profile",
+    "settings": "Settings",
+    "yourhave": "You Have"
+  },
+  "type": "Type",
+  "unauthorized.error": "You do not have permission to access this functionality",
   "expired.error": "Your session has expired. Please login again.",
-	"update": "Update",
-	"warn": "Warn",
-	"years": "Years",
-	"yes": "Yes"
+  "update": "Update",
+  "warn": "Warn",
+  "years": "Years",
+  "yes": "Yes"
 }

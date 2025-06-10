@@ -1,6 +1,6 @@
 .layout-topbar {
     @include clearfix();
-    margin-bottom: 25px;
+    //margin-bottom: 25px;
 
     .layout-topbar-logo {
         display: inline-block;
@@ -31,7 +31,8 @@
 
     .layout-topbar-menu {
         float: right;
-        padding: 0;
+        padding: 0 !important;
+        margin: 0 !important;
 
         > li {
             margin-left: 10px;

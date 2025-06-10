@@ -139,6 +139,7 @@ div.search {
   display: flex;
   height: 60px;
   align-items: center;
+  align-self: center;
   justify-content: space-between;
 
   .action-item {
@@ -156,6 +157,10 @@ div.search {
     color: silver;
     font-weight: 700;
     font-size: 13px;
+
+    @media screen and (max-width: 576px) {
+      flex-direction: column;
+    } 
   }
 
   img {

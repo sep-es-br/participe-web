@@ -97,9 +97,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
     this.form.markAllAsTouched();
 
-    if (attendee.checkedIn || attendee.checkingIn) {
-      return;
-    }
+    // if (attendee.checkedIn || attendee.checkingIn) {
+    //   return;
+    // }
 
     attendee.checkingIn = true;
 
@@ -146,7 +146,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('attendance.successDetail.checkin', {name: attendee.name.toUpperCase()}),
+        detail: this.translate.instant('attendance.successDetail.checkin', {name: result.meeting.name.toUpperCase()}),
         life: 10000
       });
 
@@ -287,39 +287,56 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       
       if (match && match[1]) {
         const personId = match[1];
-        this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
-        .then((resp)=>{
-          this.modalSuceesPresence = true;
-          this.dataPresence = resp;
-          this.playSoundNotification('success');
-        })
-      .catch((err)=>{
-        this.playSoundNotification('error');
-        setTimeout(() => {
-          this.readQRCode();
-        }, 2700);
-      })
-      .finally(() => {
+
+
+        this.selectAttendee({personId: Number(personId)} as IAttendee);
+      //   this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
+      //   .then((resp)=>{
+      //     this.modalSuceesPresence = true;
+      //     this.dataPresence = resp;
+      //     this.playSoundNotification('success');
+      //   })
+      // .catch((err)=>{
+      //   this.playSoundNotification('error');
+      //   // setTimeout(() => {
+      //   //   this.readQRCode();
+      //   // }, 2700);
+      // })
+      // .finally(() => {
           
-          this.loadingService.loading(false);
-        });
+      //     this.loadingService.loading(false);
+      //   });
       } else {
-        this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
-        .then((resp)=>{
-          this.modalSuceesPresence = true;
-          this.dataPresence = resp;
-          this.playSoundNotification('success');
-        })
-      .catch((err)=>{
-        this.playSoundNotification('error');
-        setTimeout(() => {
-          this.readQRCode();
-        }, 2700);
-      })
-      .finally(() => {
+
+        
+        this.preRegistrationService.GetById(Number(this.qrResultString)).then(
+          result => {
+            const {data, success} = result;
+            if(success) {
+              this.selectAttendee({personId: data.person.id} as IAttendee);
+            }
+
+            
+          }
+        )
+
+
+        // this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
+        // .then((resp)=>{
+        //   this.modalSuceesPresence = true;
+        //   this.dataPresence = resp;
+        //   this.playSoundNotification('success');
+        // })
+      // .catch((err)=>{
+      //   this.playSoundNotification('error');
+      //   // setTimeout(() => {
+      //   //   this.readQRCode();
+      //   // }, 2700);
+      // })
+      // .finally(() => {
           
-          this.loadingService.loading(false);
-        });
+      //     this.loadingService.loading(false);
+      //   });
       }
       
     }

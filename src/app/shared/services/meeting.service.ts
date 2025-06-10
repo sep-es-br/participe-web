@@ -11,6 +11,9 @@ import { IPerson } from '../interface/IPerson';
 import { IResultPlanItemByConference } from '../interface/IResultPlanItemByConference';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { IAttendeeAuthority } from '../interface/IAttendeeAuthority';
+import { IHttpResult } from '../interface/IHttpResult';
+import { ICheckedInAt } from '../interface/CheckedInAt.interface';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
@@ -48,6 +51,14 @@ export class MeetingService extends BaseService<Meeting> {
   }
 
 
+  getListAuthority(idMeeting: number, query: IQueryOptions): Promise<IAttendeeAuthority[]> {
+    return this.http.get<IAttendeeAuthority[]>(
+      `${this.urlBase}/${idMeeting}/authorities${PrepareHttpQuery(query)}`,
+      { headers: Common.buildHeaders() }
+    ).toPromise();
+  }
+
+
   getListPerson(idMeeting: number, query: IQueryOptions): Promise<IResultPaginated<IAttendee>> {
     return this.http.get<IResultPaginated<IAttendee>>(
       `${this.urlBase}/${idMeeting}/persons${PrepareHttpQuery(query)}`,
@@ -69,8 +80,8 @@ export class MeetingService extends BaseService<Meeting> {
     isAuthority?: boolean;
     organization?: any;
     role?: any;
-  }): Promise<any> {
-    return this.http.post(
+  }): Promise<ICheckedInAt> {
+    return this.http.post<ICheckedInAt>(
       `${this.urlBase}/checkIn`,
       payload,
       { headers: Common.buildHeaders() }
