@@ -1,15 +1,14 @@
-<div class="layout-topbar d-flex gap-2">
+<div class="layout-topbar d-flex justify-content-md-between gap-2">
   <div href="#" class="layout-topbar-logo">
     <a href="#">
       <img class="logo" src="assets/layout/images/logotype.png" alt="Ministério Público do" />
     </a>
   </div>
-  <a class="layout-menu-button" style="margin-left: auto;" href="#" (click)="template.onMenuButtonClick($event)">
+  <a class="layout-menu-button align-self-center mb-2" style="margin-left: auto;" href="#" (click)="template.onMenuButtonClick($event)">
     <i class="pi pi-bars"></i>
   </a>
 
-  <ul class="layout-topbar-menu w-auto" role="menu">
-
+  <ul class="layout-topbar-menu w-auto align-self-center" role="menu">
     <li #profile class="user-profile" role="menuitem"
       [ngClass]="{'active-topmenuitem':template.activeTopbarItem === profile}">
       <a href="#" (click)="template.onTopbarItemClick($event,profile)">
