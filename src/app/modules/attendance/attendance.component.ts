@@ -35,7 +35,7 @@ export class AttendanceComponent implements OnInit {
     const {roles} = this.userAuth.getUserInfo;
     this.actions = [];
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
-    if (roles.includes('Recepcionist') || roles.includes('Administrator')) {
+    if (roles.includes('Recepcionist') || roles.includes('Presenter') || roles.includes('Administrator')) {
       this.conferenceService.getConferencesWithPresentialMeetings(date).then((confs) => {
         // We have any conference with presential meetings?
         if (confs.length > 0) {
