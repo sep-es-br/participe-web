@@ -195,6 +195,7 @@ export class AttendanceModel {
           this.citizenAutentications = data.autentication || [];
           this.authName = data.authName || [];
           isAuthority.setValue(data.isAuthority ?? false);
+          if(data.isAuthority !== undefined) this.markAuthorityTouched()
           organization.updateValueAndValidity();
           role.updateValueAndValidity();
           this.readonlyOrganization = data.organization != null;

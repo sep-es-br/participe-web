@@ -86,13 +86,13 @@
             </div>
             <div class="col-12" *ngIf="form.get('isAuthority').value">
               <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-              <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade" [readonly]="readonlyOrganization">
+              <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
               <tt-input-message [form]="form" field="organization"></tt-input-message>
             </div>
           
             <div class="col-12" *ngIf="form.get('isAuthority').value">
               <label for="role">{{ 'citizen.role' | translate }}*</label>
-              <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo" [readonly]="readonlyRole">
+              <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
               <tt-input-message [form]="form" field="role"></tt-input-message>
             </div>
             <div class="col-12">
