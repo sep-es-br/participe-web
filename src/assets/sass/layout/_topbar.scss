@@ -1,6 +1,6 @@
 .layout-topbar {
-    @include clearfix();
-    margin-bottom: 25px;
+    // @include clearfix();
+    //margin-bottom: 25px;
 
     .layout-topbar-logo {
         display: inline-block;
@@ -30,8 +30,9 @@
     }
 
     .layout-topbar-menu {
-        float: right;
-        padding: 0;
+        // float: right;
+        padding: 0 !important;
+        margin: 0 !important;
 
         > li {
             margin-left: 10px;
@@ -226,6 +227,10 @@
                     animation-duration: $transitionDuration;
                     @include shadow($overlayMenuShadow);
 
+                    @media screen and (min-width: 992px) {
+                      right: 21px;
+                    }
+
                     &:before, &:after {
                         bottom: 100%;
                         border: solid transparent;
@@ -235,6 +240,10 @@
                         position: absolute;
                         pointer-events: none;
                         left: 227px;
+
+                        @media screen and (min-width: 992px) {
+                          left: 293px;
+                        }
                     }
 
                     &:before {
@@ -272,6 +281,7 @@
                                 .profile-info {
                                     margin-top: 4px;
                                     margin-left: 8px;
+                                    margin-right: 12px;
                                     float: left;
 
                                    .user-profile-name {

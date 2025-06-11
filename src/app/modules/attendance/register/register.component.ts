@@ -84,7 +84,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
-
   }
 
   ngOnDestroy(): void {
@@ -95,14 +94,26 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.actionbarSrv.setItems([]);
   }
 
-  async checkIn(attendee: IAttendee) {
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
     this.form.markAllAsTouched();
 
-    if (attendee.checkedIn || attendee.checkingIn) {
-      return;
-    }
+    // if (attendee.checkedIn || attendee.checkingIn) {
+    //   return;
+    // }
 
     attendee.checkingIn = true;
+
+    if(!fromSaveAccount){
+      const { isAuthority, organization, role } = this.form.controls;
+      attendee.isAuthority = isAuthority.value;
+      if (attendee.isAuthority) {
+        attendee.organization = organization.value;
+        attendee.role = role.value;
+      } else {
+        attendee.organization = null;
+        attendee.role = null;
+      }
+    }
 
     if (this.form.dirty) {
       const saved = await this.saveAccount();
@@ -115,7 +126,19 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     var now = new Date();
     var timeZone = now.toString().split(' ')[5];
 
-    const result = await this.meetingSrv.postCheckIn(this.idMeeting, attendee.personId, timeZone);
+    const params: any = {
+      meetingId: this.idMeeting,
+      personId: attendee.personId,
+      timeZone,
+      isAuthority: attendee.isAuthority ?? false,
+    };
+    
+    if (attendee.isAuthority) {
+      params.organization = attendee.organization;
+      params.role = attendee.role;
+    }
+
+    const result = await this.meetingSrv.postCheckIn(params);
 
     if (result) {
       attendee.checkedIn = true;
@@ -123,7 +146,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('attendance.successDetail.checkin', {name: attendee.name.toUpperCase()}),
+        detail: this.translate.instant('attendance.successDetail.checkin', {name: result.meeting.name.toUpperCase()}),
         life: 10000
       });
 
@@ -144,8 +167,10 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   async saveAccount() {
+    const isAuthority: boolean = this.form.get('isAuthority')?.value;
+    const organization: string = this.form.get('organization')?.value;
+    const role: string = this.form.get('role')?.value;
     const {success, result} = await this.save();
-
     if (success) {
       if (!this.selectedAttende) {
         const newAttendee: IAttendee = {
@@ -154,9 +179,14 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           email: result.email,
           checkedIn: false,
           checkingIn: false,
-          authName: result.authName
+          authName: result.authName,
+          isAuthority,
+          ...(isAuthority && {
+            organization,
+            role
+          })
         };
-        await this.checkIn(newAttendee);
+        await this.checkIn(newAttendee, true);
         this.toggleNewAccount();
       } else {
         this.messageSrv.add({
@@ -257,39 +287,56 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       
       if (match && match[1]) {
         const personId = match[1];
-        this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
-        .then((resp)=>{
-          this.modalSuceesPresence = true;
-          this.dataPresence = resp;
-          this.playSoundNotification('success');
-        })
-      .catch((err)=>{
-        this.playSoundNotification('error');
-        setTimeout(() => {
-          this.readQRCode();
-        }, 2700);
-      })
-      .finally(() => {
+
+
+        this.selectAttendee({personId: Number(personId)} as IAttendee);
+      //   this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
+      //   .then((resp)=>{
+      //     this.modalSuceesPresence = true;
+      //     this.dataPresence = resp;
+      //     this.playSoundNotification('success');
+      //   })
+      // .catch((err)=>{
+      //   this.playSoundNotification('error');
+      //   // setTimeout(() => {
+      //   //   this.readQRCode();
+      //   // }, 2700);
+      // })
+      // .finally(() => {
           
-          this.loadingService.loading(false);
-        });
+      //     this.loadingService.loading(false);
+      //   });
       } else {
-        this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
-        .then((resp)=>{
-          this.modalSuceesPresence = true;
-          this.dataPresence = resp;
-          this.playSoundNotification('success');
-        })
-      .catch((err)=>{
-        this.playSoundNotification('error');
-        setTimeout(() => {
-          this.readQRCode();
-        }, 2700);
-      })
-      .finally(() => {
+
+        
+        this.preRegistrationService.GetById(Number(this.qrResultString)).then(
+          result => {
+            const {data, success} = result;
+            if(success) {
+              this.selectAttendee({personId: data.person.id} as IAttendee);
+            }
+
+            
+          }
+        )
+
+
+        // this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
+        // .then((resp)=>{
+        //   this.modalSuceesPresence = true;
+        //   this.dataPresence = resp;
+        //   this.playSoundNotification('success');
+        // })
+      // .catch((err)=>{
+      //   this.playSoundNotification('error');
+      //   // setTimeout(() => {
+      //   //   this.readQRCode();
+      //   // }, 2700);
+      // })
+      // .finally(() => {
           
-          this.loadingService.loading(false);
-        });
+      //     this.loadingService.loading(false);
+      //   });
       }
       
     }

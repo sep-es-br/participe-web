@@ -38,6 +38,22 @@
             <tt-input-message [form]="form" field="phone"></tt-input-message>
           </div>
           <div class="col-12">
+            <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
+            <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
+              (onChange)="loadACRole($event)"></p-inputSwitch>
+          </div>
+          <div class="col-12" *ngIf="form.get('isAuthority').value">
+            <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+            <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
+            <tt-input-message [form]="form" field="organization"></tt-input-message>
+          </div>
+        
+          <div class="col-12" *ngIf="form.get('isAuthority').value">
+            <label for="role">{{ 'citizen.role' | translate }}*</label>
+            <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+            <tt-input-message [form]="form" field="role"></tt-input-message>
+          </div>
+          <div class="col-12">
             <div class="form-actions">
               <ng-container *ngIf="newAccount; else attendeeSelected">
                 <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
@@ -157,7 +173,7 @@
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
-              <fa-icon size="2x" [icon]="iconChecked"></fa-icon>
+              <fa-icon size="2x" [icon]="iconChecked" (click)="selectAttendee(attendee)"></fa-icon>
             </ng-container>
             <ng-template #canCheckIn>
               <fa-icon size="2x" (click)="selectAttendee(attendee)" [icon]="iconUnchecked"

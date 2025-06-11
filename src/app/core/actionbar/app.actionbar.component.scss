@@ -1,3 +1,9 @@
 .record-amount {
     color: var(--bs-gray-500);
   }
+
+  .actions-right {
+    @media screen and (max-width: 500px) {
+      display: none;
+    }
+  }

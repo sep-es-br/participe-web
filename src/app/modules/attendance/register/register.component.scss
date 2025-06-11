@@ -112,13 +112,18 @@
     }
     .form-actions {
       display: flex;
+      gap: 1rem;
       flex: 1;
       flex-wrap: wrap;
+
+      @media screen and (max-width: 387px) {
+        justify-content: center;
+      }
+
       .ui-button {
         display: flex;
         flex: 1;
         align-items: center;
-        margin: 0 15px;
 
         @media screen and (max-width: 387px) {
           margin: 5px 0;

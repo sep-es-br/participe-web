@@ -7,6 +7,12 @@
       max-width: 800px;
       margin: 0 auto;
     }
+
+    .footerText {
+      @media screen and (max-width: 768px) {
+        font-size: smaller;
+      }
+    }
 }
 
 

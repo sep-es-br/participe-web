@@ -22,6 +22,7 @@ import { CitizenAuthenticationModel } from './CitizenAuthenticationModel';
 import { LocalityService } from '../services/locality.service';
 import * as moment from 'moment';
 import { concat } from 'lodash';
+import { PersonService } from '../services/person.service';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -44,6 +45,9 @@ export class AttendanceModel {
   noResult = false;
   isSearching = false;
   isReadonly = false;
+  readonlyOrganization = false;
+  readonlyRole= false;
+  authorityTouched = false;
 
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
@@ -83,6 +87,7 @@ export class AttendanceModel {
   protected formBuilder: UntypedFormBuilder;
   protected citizenSrv: CitizenService;
   protected localitySrv: LocalityService;
+  protected personSrv: PersonService;
 
   constructor(
     @Inject(Injector) injector: Injector,
@@ -97,6 +102,7 @@ export class AttendanceModel {
     this.formBuilder = injector.get(UntypedFormBuilder);
     this.citizenSrv = injector.get(CitizenService);
     this.localitySrv = injector.get(LocalityService);
+    this.personSrv = injector.get(PersonService);
 
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, CustomValidators.noWhitespaceValidator]],
@@ -107,8 +113,13 @@ export class AttendanceModel {
       email: [''],
       phone: ['', Validators.maxLength(20)],
       resetPassword: false,
-      sub: ['']
+      sub: [''],
+      isAuthority: false,
+      organization: [''],
+      role: ['']
     });
+
+    this.configureAuthorityValidation();
 
     this.getConferencesAndMeetings().then();
   }
@@ -143,18 +154,36 @@ export class AttendanceModel {
   toggleNewAccount(attendee?: IAttendee) {
   }
 
-  async selectAttendee(attendee: IAttendee) {
+  configureAuthorityValidation(): void {
+    this.form.get('isAuthority')?.valueChanges.subscribe((isAuth: boolean) => {
+      const organization = this.form.get('organization');
+      const role = this.form.get('role');
+  
+      if (isAuth) {
+        organization?.setValidators([Validators.required]);
+        role?.setValidators([Validators.required]);
+      } else {
+        organization?.clearValidators();
+        role?.clearValidators();
+      }
+  
+      organization?.updateValueAndValidity();
+      role?.updateValueAndValidity();
+    });
+  }
+
+  async selectAttendee(attendee: IAttendee , isEdit: boolean = false) {
     if(!attendee.personId){
       this.toggleNewAccount(attendee);
     }else{
-      const { name, locality, authType, cpf, email, phone, password } = this.form.controls;
+      const { name, locality, authType, cpf, email, phone, password, isAuthority, organization, role } = this.form.controls;
       try {
         this.isAttendeeSelected = true;
         this.selectedAttende = attendee;
         const {
           success,
           data
-        } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id } });
+        } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id, meetingId: this.idMeeting, isEdit: isEdit } });
         if (success) {
           name.setValue(data.name);
           locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
@@ -165,15 +194,23 @@ export class AttendanceModel {
           this.selectedAttende.password = data.password;
           this.citizenAutentications = data.autentication || [];
           this.authName = data.authName || [];
+          isAuthority.setValue(data.isAuthority ?? false);
+          organization.updateValueAndValidity();
+          role.updateValueAndValidity();
+          this.readonlyOrganization = data.organization != null;
+          this.readonlyRole = data.role != null;
+          organization.setValue(data.organization);
+          role.setValue(data.role);
+
         }
       } catch (error) {
-        this.messageSrv.add({
-          severity: 'warn',
-          summary: this.translate.instant('error'),
-          detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
-        });
-        this.toggleSelectedAttendee();
-      }
+      this.messageSrv.add({
+        severity: 'warn',
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
+      });
+      this.toggleSelectedAttendee();
+     }
     }
   }
 
@@ -188,7 +225,7 @@ export class AttendanceModel {
       return { success: false };
     }
 
-    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub } = this.form.value;
+    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub, isAuthority, organization, role } = this.form.value;
 
     const formAPI: CitizenSenderModel = {
       name,
@@ -211,7 +248,7 @@ export class AttendanceModel {
 
     if (result) {
       this.form.reset();
-      return { success: true, result: { ...result, name: formAPI.name, email: formAPI.confirmEmail } };
+      return { success: true, result: { ...result, name: formAPI.name, email: formAPI.confirmEmail, isAuthority, organization, role } };
     }
 
     this.messageSrv.add({
@@ -315,7 +352,7 @@ export class AttendanceModel {
         passwordControl.disable();
         emailControl.setValidators(this.emailValidators);
         emailControl.enable();
-        if (this.isAttendeeSelected && this.selectedAttende.email.indexOf('@cpf') === -1) {
+        if (this.isAttendeeSelected && this.selectedAttende.email?.indexOf('@cpf') === -1) {
           emailControl.setValue(this.selectedAttende.email);
         }
         break;
@@ -517,4 +554,28 @@ export class AttendanceModel {
     this.authName = [];
     this.form.reset();
   }
+
+  markAuthorityTouched(): void {
+    this.authorityTouched = true;
+  }
+
+  async loadACRole(event: any): Promise<void> {
+    const currentValue = event.checked;
+    const personId = this.selectedAttende?.personId;
+    const conferenceId = this.selectedConference?.id;
+    try {
+      if (this.authorityTouched && currentValue && personId && conferenceId) {
+        const acRole = await this.personSrv.getACRole(personId, conferenceId);
+        if (acRole?.role && acRole?.organization) {
+          this.readonlyOrganization = true;
+          this.readonlyRole = true;
+          this.form.get('role').setValue(acRole.role);
+          this.form.get('organization').setValue(acRole.organization);
+        }
+      }} catch (error) {
+        console.error('Erro ao buscar o AC Role:', error);
+      }
+        
+  }
+  
 }

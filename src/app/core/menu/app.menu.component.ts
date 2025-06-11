@@ -15,7 +15,8 @@ import {
   faTachometerAlt,
   faUserCheck,
   faUserPlus,
-  faUsers
+  faUsers,
+  faUserTie
 } from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '@app/shared/services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -71,6 +72,24 @@ export class AppMenuComponent implements OnInit {
           {
             label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']}
+            ]
+          });
+      }
+    }
+
+    if (this.person.roles.includes('Presenter') && !this.person.roles.includes('Administrator')) {
+      if (window.location.href.endsWith('#/attendance')) {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, items: [
+              {label: 'attendance.authority', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+            ]
+          });
+      } else {
+        this.model.push(
+          {
+            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
+              {label: 'attendance.authority', icon: faUserTie, routerLink: ['/attendance/authority-list']}
             ]
           });
       }

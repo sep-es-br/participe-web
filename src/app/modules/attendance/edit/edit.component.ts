@@ -65,8 +65,28 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   }
 
   async saveEdit() {
+    const isAuthority: boolean = this.form.get('isAuthority')?.value;
+    const organization: string = this.form.get('organization')?.value;
+    const role: string = this.form.get('role')?.value;
     const {success} = await this.save();
     if (success) {
+      if (this.authorityTouched) {
+        var now = new Date();
+        var timeZone = now.toString().split(' ')[5];
+  
+        const params: any = {
+          meetingId: this.idMeeting,
+          personId: this.selectedAttende?.personId,
+          timeZone,
+          isAuthority: isAuthority ?? false,
+        };
+        if(isAuthority){
+          params.organization = organization;
+          params.role = role;
+        }
+        await this.meetingSrv.editCheckIn(params);
+      }
+
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),

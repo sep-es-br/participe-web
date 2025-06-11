@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AttendanceComponent } from './attendance.component';
 import { RegisterComponent } from './register/register.component';
 import { EditComponent } from './edit/edit.component';
+import { AuthorityListComponent } from './authority-list/authority-list.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
         component: AttendanceComponent
       },
       {
@@ -21,6 +23,10 @@ const routes: Routes = [
         path: 'edit',
         component: EditComponent
       },
+      {
+        path: 'authority-list',
+        component: AuthorityListComponent
+      }
     ]
   },
 ];

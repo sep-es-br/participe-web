@@ -1,0 +1,211 @@
+<app-template>
+  <div class="edit-attendees">
+      <section id="attendee-filter-row">
+        <div class="row">
+          <!-- <div class="col-3">
+            <p-dropdown
+              [options]="optionsOrderBy"
+              [(ngModel)]="selectedOrderBy"
+              [styleClass]="''"
+              (onChange)="searchByName()"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                {{
+                  ("attendance.orderBy" | translate) +
+                    ": " +
+                    (option.label | translate)
+                }}
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label | translate }}
+              </ng-template>
+            </p-dropdown>
+          </div> -->
+          <!-- <div class="col-3">
+            <div class="county p-float-label">
+              <p-autoComplete
+                id="search-county"
+                field="name"
+                [(ngModel)]="selectedCounty"
+                class="d-flex h-100"
+                [suggestions]="resultSearchCounty"
+                [inputStyleClass]="'h-100 form-control'"
+                (completeMethod)="handleSearchCounty($event)"
+                [forceSelection]="true"
+                (onSelect)="searchByName()"
+              ></p-autoComplete>
+              <label for="search-county">{{
+                localitySrv.getTranslatedLabelLocality(localityLabel)
+              }}</label>
+            </div>
+          </div> -->
+          <!-- <div class="col-3">
+            <p-dropdown
+              [options]="optionsFilterBy"
+              [(ngModel)]="selectedFilterBy"
+              (onChange)="searchByName()"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                <span>Filtrar Por: {{ option.label }}</span>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </div> -->
+          <!-- <div class="col-12 col-md-6 col-lg-4">
+            <div class="search">
+              <div class="input-group mb-3">
+                <input
+                  class="d-flex form-control"
+                  type="text"
+                  id="search-name"
+                  placeholder="Pesquisar por nome"
+                  pInputText
+                  [(ngModel)]="nameSearch"
+                  (keydown.enter)="searchByName()"
+                />
+                <label
+                  class="input-group-text cursor-pointer"
+                  (click)="searchByName()"
+                  for="search-name"
+                >
+                  {{ "search" | translate }} 
+                  <i class="ps-1 fa fa-search"></i>
+                 <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> 
+                </label>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </section>
+
+      <section id="attendee-list">
+        <div class="p-grid list-result">
+          <div class="col-12" *ngIf="noResult">
+            <div class="no-result">{{ "attendance.noResult" | translate }}</div>
+          </div>
+          <div class="col-12 result" *ngFor="let attendee of listAttendeesAuthority">
+              <div class="info-announced d-flex justify-content-center w-100 cursor-pointer" (click)="toggleAnnounced(attendee)">
+                
+                <div class="action">
+                  <p-inputSwitch [(ngModel)]="attendee.announced"></p-inputSwitch>
+                  <!-- <fa-icon
+                    size="1x"
+                    (click)=""
+                    [icon]="attendee.checkedIn ? iconChecked : iconCircle"
+                    tooltipPosition="left"
+                    [pTooltip]="getToolTipText(attendee)"
+                    tooltipStyleClass="tooltip-uncheck"
+                  ></fa-icon> -->
+                </div>
+                <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
+                  {{ attendee.announced ? ' Anunciado' : ' Não Anunciado' }}
+                </div>
+              </div>
+            <div class="primary-info">
+              <div class="name">{{ attendee.name }}</div>
+              <div class="contact">
+                <span>{{ attendee.role }}</span>
+              </div>
+            </div>
+            <div class="secondary-info w-50">
+              <div class="info-place mb-4 mb-sm-0">
+                <p class="locality">{{ attendee.organization }}</p>
+              </div>
+              <div class="info-preregister d-flex justify-content-center w-100">
+                <div
+                  *ngIf="attendee.preRegistered else nullField"
+                  class="how-long-ago"
+                  [pTooltip]="attendee.preRegisteredDate"
+                >
+                  {{ getHowLongAgo(attendee.preRegisteredDate) }}
+                </div>
+                <ng-template #nullField>
+                  <p class="how-long-ago m-0">--</p>
+                </ng-template>
+              </div>
+              <!-- <div class="info-checkin d-flex justify-content-center w-100">
+                <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
+                  {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
+                </div>
+                <div class="action">
+                  <fa-icon
+                    size="1x"
+                    (click)="selectAttendeeAuthority(attendee)"
+                    [icon]="attendee.checkedIn ? iconChecked : iconCircle"
+                    tooltipPosition="left"
+                    [pTooltip]="getToolTipText(attendee)"
+                    tooltipStyleClass="tooltip-uncheck"
+                  ></fa-icon>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          <ng-container *ngIf="isSearching">
+            <ng-container
+              *ngTemplateOutlet="
+                loadingList;
+                context: { $implicit: getListOfLettersForLoading() }
+              "
+            ></ng-container>
+          </ng-container>
+          <div *ngIf="!lastPage" class="load-more">
+            <button
+              pButton
+              [label]="'attendance.loadMore' | translate"
+              (click)="loadNextPageEdit()"
+            ></button>
+          </div>
+        </div>
+      </section>
+  </div>
+</app-template>
+
+<ng-template #loadingList let-letters>
+  <div class="col-12 result loading" *ngFor="let letter of letters">
+    <div class="name-icon">
+      <div class="letter-icon">{{ letter }}</div>
+    </div>
+    <div class="primary-info">
+      <div class="name">
+        <div class="loading">&nbsp;</div>
+      </div>
+      <div class="contact">
+        <div class="loading">&nbsp;</div>
+      </div>
+    </div>
+    <div class="secondary-info">
+      <div class="info-place">
+        <div class="locality">
+          <div class="loading">&nbsp;</div>
+        </div>
+        <div class="region">
+          <div class="loading">&nbsp;</div>
+        </div>
+      </div>
+      <div class="info-checkin">
+        <div class="how-long-ago">
+          <div class="loading">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <div class="action">
+      <fa-icon size="2x" [icon]="iconCircle"></fa-icon>
+    </div>
+  </div>
+</ng-template>
+
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
+  <div class="label">{{ "administration.conference" | translate }}</div>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+  <div class="label">{{ "meeting" | translate }}</div>
+  <div class="form-group">
+    <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3 m-auto">
+    <div class="d-grid gap-2 mt-3">
+      <button pButton class="btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+    </div>
+  </div>
+</p-dialog>
