@@ -62,7 +62,7 @@ export class AttendanceModel {
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
-  selectedFilterBy = 'pres';
+  selectedFilterBy = 'prereg_or_pres';
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
 
