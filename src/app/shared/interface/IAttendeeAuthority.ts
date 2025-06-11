@@ -8,5 +8,6 @@ export interface IAttendeeAuthority {
   name: string;
   role: string;
   organization: string;
+  organizationShort: string;
   
 }
