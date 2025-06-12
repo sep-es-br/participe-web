@@ -199,3 +199,18 @@
   margin-left: 8%;
   margin-right: 5%;
 }
+
+.secondary-info {
+  flex: unset !important;
+
+  .authorityInfo {
+
+    .role {
+      font-size: small;
+    }
+
+    .organization {
+      font-weight: bolder;
+    }
+  }
+}

@@ -3,7 +3,7 @@ import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
 import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
-import {faQrcode, faTimes} from '@fortawesome/free-solid-svg-icons';
+import {faQrcode, faTimes, faUserTie} from '@fortawesome/free-solid-svg-icons';
 
 import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
 import {Locality} from '@app/shared/models/locality';
@@ -20,6 +20,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   iconChecked = faCheckCircle;
   iconCircle = faCircle;
   iconRemove = faTimes;
+  iconAuthority = faUserTie;
   // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
     {label: 'name', value: 'name'},
@@ -33,6 +34,12 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Pré-credenciados e Presentes', value: 'prereg_pres'},
     {label: 'Pré-credenciados e Ausentes', value: 'prereg_notpres'},
     {label: 'Presentes não Pré-credenciados', value: 'notprereg_pres'},
+  ]
+
+  optionsFilterByIsAuthority: SelectItem[] = [
+    {label: 'Representantes ou não', value: 'all'},
+    {label: 'Apenas representantes', value: true},
+    {label: 'Exceto representantes', value: false}
   ]
 
   authTypeChangeSub: Subscription;
