@@ -63,6 +63,7 @@ export class AttendanceModel {
   selectedAttende: IAttendee;
   selectedOrderBy = 'name';
   selectedFilterBy = 'prereg_or_pres';
+  selectedFilterByIsAuthority = 'all';
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
 
@@ -505,16 +506,17 @@ export class AttendanceModel {
   }
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
-    return {
-      search: {
+    let search = {
         name: this.nameSearch,
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
-        filter: this.selectedFilterBy,
+        filterBy: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
-      },
-    };
+        ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {}
+      };
+    
+    return { search: search };
   }
 
   getHowLongAgo(when: string): string {

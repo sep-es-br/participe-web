@@ -121,7 +121,7 @@
     <ng-template #list>
       <section id="attendee-filter-row">
         <div class="row">
-          <div class="col-3">
+          <div class="col-12 col-md-3">
             <p-dropdown
               [options]="optionsOrderBy"
               [(ngModel)]="selectedOrderBy"
@@ -140,7 +140,7 @@
               </ng-template>
             </p-dropdown>
           </div>
-          <div class="col-3">
+          <div class="col-12 col-md-3">
             <div class="county p-float-label">
               <p-autoComplete
                 id="search-county"
@@ -158,7 +158,21 @@
               }}</label>
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-12 col-md-3">
+            <p-dropdown
+              [options]="optionsFilterByIsAuthority"
+              [(ngModel)]="selectedFilterByIsAuthority"
+              (onChange)="searchByName()"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                <span>Filtrar Por: {{ option.label }}</span>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-md-3">
             <p-dropdown
               [options]="optionsFilterBy"
               [(ngModel)]="selectedFilterBy"
@@ -172,7 +186,10 @@
               </ng-template>
             </p-dropdown>
           </div>
-          <div class="col-3">
+          
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-3">
             <div class="search">
               <div class="input-group mb-3">
                 <input
@@ -212,7 +229,7 @@
                 {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
               </div>
             </div>
-            <div class="primary-info">
+            <div class="primary-info col">
               <div class="name">{{ attendee.name }}</div>
               <div class="contact">
                 <span>{{ attendee.email }}</span>
@@ -221,12 +238,21 @@
                 }}</span>
               </div>
             </div>
-            <div class="secondary-info">
+            <div class="secondary-info gap-3 col-8">
+              <div class="authorityInfo-wrapper col-5 p-0 d-flex align-items-center justify-content-center">
+                <ng-container *ngIf="attendee.isAuthority">
+                  <fa-icon [icon]="iconAuthority" aria-label="icone Autoridade" size="4x"></fa-icon>
+                  <div class="authorityInfo d-flex flex-column">
+                    <div class="role">{{attendee.role}}</div>
+                    <div class="organization">{{attendee.organization}}</div>
+                  </div>
+                </ng-container>
+              </div>
               <div class="info-place">
                 <div class="locality">{{ attendee.locality }}</div>
                 <div class="region">{{ attendee.superLocality }}</div>
               </div>
-              <div class="info-preregister" *ngIf="attendee.preRegistered">
+              <div class="info-preregister col-12 d-flex justify-content-center" *ngIf="attendee.preRegistered">
                 <div
                   class="how-long-ago"
                   [pTooltip]="attendee.preRegisteredDate"
