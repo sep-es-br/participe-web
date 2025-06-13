@@ -25,6 +25,7 @@
 		"authority": "Representantes",
 		"editAttendance": "Editar Presença",
 		"editAttendanceIn": "Editar presença na reunião: ",
+		"status": "Situação de Anuncio",
 		"error": {
 			"couldNotConnectToServer": "Erro ao tentar conectar com o servidor, tente novamente",
 			"couldNotGetCitizenInfo": "Erro ao buscar as informações do usuário, tente novamente",
