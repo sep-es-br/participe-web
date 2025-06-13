@@ -235,7 +235,7 @@
           <div class="col-12" *ngIf="noResult">
             <div class="no-result">{{ "attendance.noResult" | translate }}</div>
           </div>
-          <div class="col-12 result" *ngFor="let attendee of listAttendees">
+          <div class="col-12 result" (click)="selectAttendee(attendee, true)" *ngFor="let attendee of listAttendees">
             <div class="name-icon">
               <div
                 class="letter-icon"
@@ -253,7 +253,7 @@
                 }}</span>
               </div>
             </div>
-            <div class="secondary-info gap-3 col-12 col-md-9">
+            <div class="secondary-info gap-2 col-12 col-md-9">
               <div class="info-place">
                 <div class="locality">{{ attendee.locality }}</div>
                 <div class="region">{{ attendee.superLocality }}</div>
@@ -277,7 +277,7 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-preregister col-12 d-flex justify-content-center">
+              <div class="info-preregister col-12 col-md d-flex justify-content-center">
                 <ng-container *ngIf="attendee.preRegistered">
                   <div
                     class="how-long-ago"
@@ -294,14 +294,13 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-checkin">
+              <div class="info-checkin col-12 col-md p-0 m-0 justify-content-center justify-content-md-start">
                 <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
                 <div class="action">
                   <fa-icon
                     size="2x"
-                    (click)="selectAttendee(attendee, true)"
                     [icon]="attendee.checkedIn ? iconChecked : iconCircle"
                     tooltipPosition="left"
                     [pTooltip]="getToolTipText(attendee)"
