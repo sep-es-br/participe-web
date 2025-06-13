@@ -19,6 +19,7 @@ export class CitizenModel {
   count: number;
   authName?: string[];
   isAuthority?: boolean;
+  toAnnounce?: boolean;
   organization?: string;
   role?: string;
 }

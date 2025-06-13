@@ -3,12 +3,14 @@ import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
 import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
-import {faQrcode, faTimes, faUserTie} from '@fortawesome/free-solid-svg-icons';
+import {faBullhorn, faCheck, faHourglass, faHourglassStart, faQrcode, faTimes, faUserTie, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 
 import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
 import {Locality} from '@app/shared/models/locality';
 import {LocalityService} from '@app/shared/services/locality.service';
 import {AuthService} from '@app/shared/services/auth.service';
+import { IAttendee } from '@app/shared/interface/IAttendee';
+import { faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 
 @Component({
   selector: 'app-edit',
@@ -21,10 +23,16 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   iconCircle = faCircle;
   iconRemove = faTimes;
   iconAuthority = faUserTie;
+  iconToAnnounce = faBullhorn;
+  iconScreening = faHourglass;
+  iconAnnounced = faIconAnnounced;
+
+
   // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
     {label: 'name', value: 'name'},
     {label: 'attendance.arrival', value: 'checkedInDate'},
+    {label: 'attendance.status', value: 'status'},
   ];
   resultSearchCounty: Locality[];
 
@@ -40,6 +48,14 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Representantes ou não', value: 'all'},
     {label: 'Apenas representantes', value: true},
     {label: 'Exceto representantes', value: false}
+  ]
+
+  optionsFilterByStatus: SelectItem[] = [
+    // value = [toAnnounce, announced]
+    {label: 'Todos', value: 'all'},
+    {label: 'Em Triagem', value: 'screening'},
+    {label: 'Anunciar', value: 'toAnnounce'},
+    {label: 'Anunciado', value: 'announced'}
   ]
 
   authTypeChangeSub: Subscription;
@@ -75,6 +91,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     const isAuthority: boolean = this.form.get('isAuthority')?.value;
     const organization: string = this.form.get('organization')?.value;
     const role: string = this.form.get('role')?.value;
+    const toAnnounce: boolean = this.form.get('toAnnounce').value;
     const {success} = await this.save();
     if (success) {
       if (this.authorityTouched) {
@@ -90,6 +107,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
         if(isAuthority){
           params.organization = organization;
           params.role = role;
+          params.toAnnounce = toAnnounce;
         }
         await this.meetingSrv.editCheckIn(params);
       }
@@ -100,8 +118,39 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
         detail: this.translate.instant('attendance.successDetail.saveAccount')
       });
       this.toggleSelectedAttendee();
+      this.searchByName()
     }
     return;
+  }
+
+  getAuthStatus(attendee : IAttendee) : string {
+    if(attendee.isAuthority && !attendee.toAnnounce) {
+      return 'screening';
+    } else if(attendee.toAnnounce && !attendee.isAnnounced) {
+      return 'announce'
+    } else if(attendee.isAuthority && attendee.isAnnounced) {
+      return 'announced'
+    } else return undefined
+  }
+
+  getAuthIcon(attendee : IAttendee) : IconDefinition {
+    if(attendee.isAuthority && !attendee.toAnnounce) {
+      return faIconScreening;
+    } else if(attendee.toAnnounce && !attendee.isAnnounced) {
+      return faBullhorn
+    } else if(attendee.isAuthority && attendee.isAnnounced) {
+      return faIconAnnounced
+    } else return undefined
+  }
+
+  getAuthLabel(attendee : IAttendee) : string {
+    if(attendee.isAuthority && !attendee.toAnnounce) {
+      return 'Triagem';
+    } else if(attendee.toAnnounce && !attendee.isAnnounced) {
+      return 'Anunciar';
+    } else if(attendee.isAuthority && attendee.isAnnounced) {
+      return 'Anunciado';
+    } else return undefined;
   }
 
   async uncheckIn() {
