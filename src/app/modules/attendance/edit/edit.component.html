@@ -96,6 +96,10 @@
               <tt-input-message [form]="form" field="role"></tt-input-message>
             </div>
             <div class="col-12">
+              <label class="d-block mb-2">{{ 'Anunciar' | translate }}</label>
+              <p-inputSwitch formControlName="toAnnounce" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+            </div>
+            <div class="col-12">
               <div class="form-actions">
                 <button
                   pButton
@@ -238,34 +242,46 @@
                 }}</span>
               </div>
             </div>
-            <div class="secondary-info gap-3 col-8">
-              <div class="authorityInfo-wrapper col-5 p-0 d-flex align-items-center justify-content-center">
-                <ng-container *ngIf="attendee.isAuthority">
-                  <fa-icon [icon]="iconAuthority" aria-label="icone Autoridade" size="4x"></fa-icon>
-                  <div class="authorityInfo d-flex flex-column">
-                    <div class="role">{{attendee.role}}</div>
-                    <div class="organization">{{attendee.organization}}</div>
-                  </div>
-                </ng-container>
-              </div>
+            <div class="secondary-info gap-3 col-9">
               <div class="info-place">
                 <div class="locality">{{ attendee.locality }}</div>
                 <div class="region">{{ attendee.superLocality }}</div>
               </div>
-              <div class="info-preregister col-12 d-flex justify-content-center" *ngIf="attendee.preRegistered">
-                <div
-                  class="how-long-ago"
-                  [pTooltip]="attendee.preRegisteredDate"
-                >
-                  {{ getHowLongAgo(attendee.preRegisteredDate) }}
-                </div>
-                <div class="preregister-icon action">
-                  <img
-                    src="assets/layout/images/icons/preregister_phone.svg"
-                    class="img-fluid"
-                    alt=""
-                  />
-                </div>
+              <div class="authorityInfo-wrapper col-5 p-0 d-flex align-items-center justify-content-center justify-content-md-start">
+                <ng-container *ngIf="attendee.isAuthority">
+                
+                  <div class="col-1 p-0">
+                    <fa-icon [icon]="iconAuthority" aria-label="icone Autoridade" size="2x"></fa-icon>
+                  </div>
+                  <div class="authorityInfo col p-0 d-flex flex-column">
+                    <div class="role">{{attendee.role}}</div>
+                    <div class="organization">{{attendee.organization}}</div>
+                  </div>
+                  <div class="d-flex col-2 p-0 flex-column align-items-center" [ngClass]="'auth-' + getAuthStatus(attendee)">
+                    <fa-icon
+                      size="2x"
+                      [icon]="getAuthIcon(attendee)"
+                    ></fa-icon>
+                    <span [ngClass]="'auth-' + getAuthStatus(attendee)">{{getAuthLabel(attendee)}}</span>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="info-preregister col-12 d-flex justify-content-center">
+                <ng-container *ngIf="attendee.preRegistered">
+                  <div
+                    class="how-long-ago"
+                    [pTooltip]="attendee.preRegisteredDate"
+                  >
+                    {{ getHowLongAgo(attendee.preRegisteredDate) }}
+                  </div>
+                  <div class="preregister-icon action">
+                    <img
+                      src="assets/layout/images/icons/preregister_phone.svg"
+                      class="img-fluid"
+                      alt=""
+                    />
+                  </div>
+                </ng-container>
               </div>
               <div class="info-checkin">
                 <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">

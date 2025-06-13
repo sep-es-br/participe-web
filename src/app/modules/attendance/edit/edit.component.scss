@@ -200,16 +200,34 @@
   margin-right: 5%;
 }
 
+.auth- {
+  &screening {
+    color: gray;
+  }
+
+  &announce {
+    color: #f58634;
+  }
+
+  &announced {
+    color: #34659e;
+  }
+  
+}
+
+
 .secondary-info {
   flex: unset !important;
 
   .authorityInfo {
 
+
     .role {
-      font-size: small;
+      font-size: smaller;
     }
 
     .organization {
+      font-size: small;
       font-weight: bolder;
     }
   }

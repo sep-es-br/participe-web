@@ -95,6 +95,7 @@ export class MeetingService extends BaseService<Meeting> {
     isAuthority?: boolean;
     organization?: any;
     role?: any;
+    toAnnounce?: boolean
   }): Promise<any> {
     return this.http.put(
       `${this.urlBase}/checkIn`,
