@@ -61,8 +61,9 @@ export class AttendanceModel {
 
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
-  selectedOrderBy = 'name';
-  selectedFilterBy = 'prereg_or_pres';
+  selectedOrderBy = 'status';
+  selectedFilterBy = 'pres';
+  selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority = 'all';
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
@@ -511,17 +512,17 @@ export class AttendanceModel {
   }
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
-    let search = {
+    
+    return { search: {
         name: this.nameSearch,
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
         filterBy: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
-        ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {}
-      };
-    
-    return { search: search };
+        ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {},
+        ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {}
+      } };
   }
 
   getHowLongAgo(when: string): string {

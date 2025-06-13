@@ -32,6 +32,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   optionsOrderBy: SelectItem[] = [
     {label: 'name', value: 'name'},
     {label: 'attendance.arrival', value: 'checkedInDate'},
+    {label: 'attendance.status', value: 'status'},
   ];
   resultSearchCounty: Locality[];
 
@@ -47,6 +48,14 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Representantes ou não', value: 'all'},
     {label: 'Apenas representantes', value: true},
     {label: 'Exceto representantes', value: false}
+  ]
+
+  optionsFilterByStatus: SelectItem[] = [
+    // value = [toAnnounce, announced]
+    {label: 'Todos', value: 'all'},
+    {label: 'Em Triagem', value: 'screening'},
+    {label: 'Anunciar', value: 'toAnnounce'},
+    {label: 'Anunciado', value: 'announced'}
   ]
 
   authTypeChangeSub: Subscription;
