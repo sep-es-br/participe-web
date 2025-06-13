@@ -117,7 +117,8 @@ export class AttendanceModel {
       sub: [''],
       isAuthority: false,
       organization: [''],
-      role: ['']
+      role: [''],
+      toAnnounce: false
     });
 
     this.configureAuthorityValidation();
@@ -177,7 +178,10 @@ export class AttendanceModel {
     if(!attendee.personId){
       this.toggleNewAccount(attendee);
     }else{
-      const { name, locality, authType, cpf, email, phone, password, isAuthority, organization, role } = this.form.controls;
+      const { 
+        name, locality, authType, cpf, email, phone, password, isAuthority, organization, role,
+        toAnnounce
+       } = this.form.controls;
       try {
         this.isAttendeeSelected = true;
         this.selectedAttende = attendee;
@@ -197,6 +201,7 @@ export class AttendanceModel {
           this.authName = data.authName || [];
           isAuthority.setValue(data.isAuthority ?? false);
           if(data.isAuthority !== undefined) this.markAuthorityTouched()
+          toAnnounce.setValue(data.toAnnounce);
           organization.updateValueAndValidity();
           role.updateValueAndValidity();
           this.readonlyOrganization = data.organization != null;
