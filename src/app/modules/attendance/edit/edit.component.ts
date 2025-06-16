@@ -1,4 +1,4 @@
-import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
@@ -10,7 +10,8 @@ import {Locality} from '@app/shared/models/locality';
 import {LocalityService} from '@app/shared/services/locality.service';
 import {AuthService} from '@app/shared/services/auth.service';
 import { IAttendee } from '@app/shared/interface/IAttendee';
-import { faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
+import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
+import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
 
 @Component({
   selector: 'app-edit',
@@ -19,6 +20,8 @@ import { faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDef
 })
 export class EditComponent extends AttendanceModel implements OnInit, OnDestroy {
 
+  @ViewChildren('toAnnounceToggle', {read: ElementRef}) toAnnounceToggleElems! : QueryList<ElementRef>;
+
   iconChecked = faCheckCircle;
   iconCircle = faCircle;
   iconRemove = faTimes;
@@ -26,6 +29,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   iconToAnnounce = faBullhorn;
   iconScreening = faHourglass;
   iconAnnounced = faIconAnnounced;
+  iconAllowAnnouce = faIconAllowAnnounce;
 
 
   // iconPreRegister = faQrcode;
@@ -66,7 +70,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     public localitySrv: LocalityService,
     protected formBuilder: UntypedFormBuilder,
     public authSrv: AuthService,
-    @Inject(Injector) injector: Injector
+    @Inject(Injector) injector: Injector,
+    private authcSrv : AuthorityCredentialService
   ) {
     super(injector, true);
   }
@@ -74,9 +79,35 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   ngOnInit(): void {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+    
+    this.form.get('toAnnounce').valueChanges.subscribe(
+      value => {
+        if(!value) {
+          this.form.get('announced').patchValue(false);
+        }
+      }
+    );
+    
+    this.form.get('announced').valueChanges.subscribe(
+      value => {
+        if(value) {
+          this.form.get('toAnnounce').patchValue(true);
+        }
+      }
+    );
+
     setTimeout( () => {
       this.searchByName();
     }, 300)
+  }
+
+  selectAttendeeWithFilter(attendee: IAttendee, evt: MouseEvent, isEdit?: boolean): Promise<void> {
+      
+    if(this.toAnnounceToggleElems.some(
+      (el) => el.nativeElement.contains(evt.target)
+    ) ) return;
+
+    return super.selectAttendee(attendee, isEdit)
   }
 
   ngOnDestroy(): void {
@@ -92,6 +123,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     const organization: string = this.form.get('organization')?.value;
     const role: string = this.form.get('role')?.value;
     const toAnnounce: boolean = this.form.get('toAnnounce').value;
+    const announced: boolean = this.form.get('announced').value;
     const {success} = await this.save();
     if (success) {
       if (this.authorityTouched) {
@@ -108,6 +140,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
           params.organization = organization;
           params.role = role;
           params.toAnnounce = toAnnounce;
+          params.announced = announced;
         }
         await this.meetingSrv.editCheckIn(params);
       }
@@ -173,6 +206,16 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
         detail: this.translate.instant('attendance.error.couldNotUncheck')
       });
     }
+  }
+
+  async toggleToAnnounce(attendee: IAttendee) {
+        
+      const {
+        toAnnounce
+      } = await this.authcSrv.toggleToAnnounce(attendee.checkInId);
+      attendee.toAnnounce = toAnnounce;
+      this.searchByName();
+
   }
 
   handleSearchCounty({query}) {

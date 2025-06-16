@@ -20,6 +20,7 @@ export class CitizenModel {
   authName?: string[];
   isAuthority?: boolean;
   toAnnounce?: boolean;
+  announced?: boolean;
   organization?: string;
   role?: string;
 }
