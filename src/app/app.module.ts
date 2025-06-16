@@ -29,8 +29,7 @@ import { ControlPanelDashboardModule } from './modules/control-panel-dashboard/c
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ProposalEvaluationModule } from './modules/proposal-evaluation/proposal-evaluation.module';
 import { EvaluatorsModule } from './modules/evaluators/evaluators.module';
-import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faIconAnnounced } from './shared/util/CustomIconDefenition';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
@@ -79,9 +78,7 @@ import { faIconAnnounced } from './shared/util/CustomIconDefenition';
   ]
 })
 export class AppModule {
-  constructor(private faLib : FaIconLibrary) {
-    this.faLib.addIcons(faIconAnnounced);
-  }
+  
 
 }
 
