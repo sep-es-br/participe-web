@@ -215,10 +215,9 @@
   
 }
 
-.result {
+div[role="button"] {
   cursor: pointer;
 }
-
 
 .secondary-info {
   flex: unset !important;
@@ -234,5 +233,13 @@
       font-size: small;
       font-weight: bolder;
     }
+
+    
   }
+
+  .allow-announce-wrapper {
+      color: #008000
+    }
+
+
 }

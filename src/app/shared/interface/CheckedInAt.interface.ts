@@ -6,6 +6,7 @@ export interface ICheckedInAt {
     meeting: Meeting;
     time: string;
     isAuthority: boolean;
+    toAnnounce: boolean;
     isAnnounced: boolean;
     organization: string;
     role: string;

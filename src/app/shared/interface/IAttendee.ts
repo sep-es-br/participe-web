@@ -2,6 +2,7 @@ import { List } from "lodash";
 
 export interface IAttendee {
   personId: number;
+  checkInId: number;
   name: string;
   email: string;
   telephone?: string;
