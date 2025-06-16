@@ -84,17 +84,27 @@
               <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
                 (onChange)="loadACRole($event)"></p-inputSwitch>
             </div>
-            <div class="col-12" *ngIf="form.get('isAuthority').value">
-              <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-              <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
-              <tt-input-message [form]="form" field="organization"></tt-input-message>
-            </div>
-          
-            <div class="col-12" *ngIf="form.get('isAuthority').value">
-              <label for="role">{{ 'citizen.role' | translate }}*</label>
-              <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
-              <tt-input-message [form]="form" field="role"></tt-input-message>
-            </div>
+            <ng-container *ngIf="form.get('isAuthority').value">
+              <div class="col-12">
+                <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+                <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
+                <tt-input-message [form]="form" field="organization"></tt-input-message>
+              </div>
+            
+              <div class="col-12">
+                <label for="role">{{ 'citizen.role' | translate }}*</label>
+                <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+                <tt-input-message [form]="form" field="role"></tt-input-message>
+              </div>
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'Anunciar' | translate }}</label>
+                <p-inputSwitch formControlName="toAnnounce" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+              </div>
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'Já anunciado' | translate }}</label>
+                <p-inputSwitch formControlName="announced" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+              </div>
+            </ng-container>
             <div class="col-12">
               <div class="form-actions">
                 <button
@@ -120,8 +130,8 @@
 
     <ng-template #list>
       <section id="attendee-filter-row">
-        <div class="row">
-          <div class="col-3">
+        <div class="row gap-2">
+          <div class="col-12 col-md p-0">
             <p-dropdown
               [options]="optionsOrderBy"
               [(ngModel)]="selectedOrderBy"
@@ -140,7 +150,7 @@
               </ng-template>
             </p-dropdown>
           </div>
-          <div class="col-3">
+          <!-- <div class="col-12 col-md-2">
             <div class="county p-float-label">
               <p-autoComplete
                 id="search-county"
@@ -157,22 +167,50 @@
                 localitySrv.getTranslatedLabelLocality(localityLabel)
               }}</label>
             </div>
-          </div>
-          <div class="col-3">
+          </div> -->
+          <div class="col-12 col-md p-0">
             <p-dropdown
-              [options]="optionsFilterBy"
-              [(ngModel)]="selectedFilterBy"
+              [options]="optionsFilterByIsAuthority"
+              [(ngModel)]="selectedFilterByIsAuthority"
               (onChange)="searchByName()"
             >
               <ng-template let-option pTemplate="selectedItem">
-                <span>Filtrar Por: {{ option.label }}</span>
+                <span>{{ option.label }}</span>
               </ng-template>
               <ng-template let-option pTemplate="item">
                 {{ option.label }}
               </ng-template>
             </p-dropdown>
           </div>
-          <div class="col-3">
+          <div class="col-12 col-md p-0">
+            <p-dropdown
+              [options]="optionsFilterBy"
+              [(ngModel)]="selectedFilterBy"
+              (onChange)="searchByName()"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                <span>{{ option.label }}</span>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-md p-0">
+            <p-dropdown
+              [options]="optionsFilterByStatus"
+              [(ngModel)]="selectedFilterByStatus"
+              (onChange)="searchByName()"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                <span>{{ option.label }}</span>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-md p-0">
             <div class="search">
               <div class="input-group mb-3">
                 <input
@@ -188,13 +226,13 @@
                   (click)="searchByName()"
                   for="search-name"
                 >
-                  {{ "search" | translate }}
                   <i class="ps-1 fa fa-search"></i>
                   <!-- <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> -->
                 </label>
               </div>
             </div>
           </div>
+          
         </div>
       </section>
 
@@ -203,7 +241,7 @@
           <div class="col-12" *ngIf="noResult">
             <div class="no-result">{{ "attendance.noResult" | translate }}</div>
           </div>
-          <div class="col-12 result" *ngFor="let attendee of listAttendees">
+          <div class="col-12 result" *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
             <div class="name-icon">
               <div
                 class="letter-icon"
@@ -212,7 +250,7 @@
                 {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
               </div>
             </div>
-            <div class="primary-info">
+            <div class="primary-info col">
               <div class="name">{{ attendee.name }}</div>
               <div class="contact">
                 <span>{{ attendee.email }}</span>
@@ -221,39 +259,75 @@
                 }}</span>
               </div>
             </div>
-            <div class="secondary-info">
+            <div class="secondary-info gap-2 col-12 col-md-9">
               <div class="info-place">
                 <div class="locality">{{ attendee.locality }}</div>
                 <div class="region">{{ attendee.superLocality }}</div>
               </div>
-              <div class="info-preregister" *ngIf="attendee.preRegistered">
-                <div
-                  class="how-long-ago"
-                  [pTooltip]="attendee.preRegisteredDate"
-                >
-                  {{ getHowLongAgo(attendee.preRegisteredDate) }}
-                </div>
-                <div class="preregister-icon action">
-                  <img
-                    src="assets/layout/images/icons/preregister_phone.svg"
-                    class="img-fluid"
-                    alt=""
-                  />
-                </div>
+              <div class="authorityInfo-wrapper col-12 col-md-5 p-0 gap-2 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start">
+                <ng-container *ngIf="attendee.isAuthority">
+                
+                  <div class="col-1 p-0">
+                    <fa-icon [icon]="iconAuthority" aria-label="icone Autoridade" size="2x"></fa-icon>
+                  </div>
+                  <div class="authorityInfo col p-0 d-flex gap-1 flex-column">
+                    <div class="role text-center text-md-start">{{attendee.role}}</div>
+                    <div class="organization text-center text-md-start">{{attendee.organization}}</div>
+                  </div>
+                  <div class="d-flex col-2 p-0 flex-column align-items-center" [ngClass]="'auth-' + getAuthStatus(attendee)">
+                    <fa-icon
+                      size="2x"
+                      [icon]="getAuthIcon(attendee)"
+                    ></fa-icon>
+                    <span [ngClass]="'auth-' + getAuthStatus(attendee)">{{getAuthLabel(attendee)}}</span>
+                  </div>
+                  <div class="allow-announce-wrapper col-12 col-md-1 p-0 d-flex flex-column align-items-center align-items-center">
+                    <ng-container *ngIf="!attendee.toAnnounce">
+                        <div role="button" class="d-flex flex-column align-items-center justify-content-center" (click)="toggleToAnnounce(attendee)"
+                          #toAnnounceToggle>
+                          <fa-icon class="m-0"
+                            size="2x"
+                            [icon]="iconAllowAnnouce"
+                          ></fa-icon>
+                          <span [ngClass]="">{{ 'attendance.allow' | translate }}</span>
+                        </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
               </div>
-              <div class="info-checkin">
+              
+              <div class="info-preregister col-12 col-md d-flex justify-content-center">
+                <ng-container *ngIf="attendee.preRegistered">
+                  <div
+                    class="how-long-ago"
+                    [pTooltip]="attendee.preRegisteredDate"
+                  >
+                    {{ getHowLongAgo(attendee.preRegisteredDate) }}
+                  </div>
+                  <div class="preregister-icon action">
+                    <img
+                      src="assets/layout/images/icons/preregister_phone.svg"
+                      class="img-fluid"
+                      alt=""
+                    />
+                  </div>
+                </ng-container>
+              </div>
+              <div class="info-checkin col-12 col-md-1 p-0 m-0 flex-column flex-md-row justify-content-center">
                 <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
                 <div class="action">
-                  <fa-icon
-                    size="2x"
-                    (click)="selectAttendee(attendee, true)"
-                    [icon]="attendee.checkedIn ? iconChecked : iconCircle"
-                    tooltipPosition="left"
-                    [pTooltip]="getToolTipText(attendee)"
-                    tooltipStyleClass="tooltip-uncheck"
-                  ></fa-icon>
+                  <div role="button" class="d-flex flex-column align-items-center justify-content-center">
+                    <fa-icon
+                      size="2x" class="m-0"
+                      [icon]="attendee.checkedIn ? iconChecked : iconCircle"
+                      tooltipPosition="left"
+                      [pTooltip]="getToolTipText(attendee)"
+                      tooltipStyleClass="tooltip-uncheck"
+                    ></fa-icon>
+                    <span>{{ 'update' | translate }}</span>
+                  </div>
                 </div>
               </div>
             </div>

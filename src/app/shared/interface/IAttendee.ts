@@ -2,6 +2,7 @@ import { List } from "lodash";
 
 export interface IAttendee {
   personId: number;
+  checkInId: number;
   name: string;
   email: string;
   telephone?: string;
@@ -18,6 +19,9 @@ export interface IAttendee {
   authName?: List<string>;
   sub?: string;
   isAuthority?: boolean;
+  isAnnounced?: boolean;
+  toAnnounce?: boolean;
   organization?: string;
   role?: string;
 }
+

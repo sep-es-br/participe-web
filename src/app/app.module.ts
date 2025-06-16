@@ -77,6 +77,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     JwtHelperService
   ]
 })
-export class AppModule { }
+export class AppModule {
+  
+
+}
 
 

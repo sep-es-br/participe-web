@@ -199,3 +199,47 @@
   margin-left: 8%;
   margin-right: 5%;
 }
+
+.auth- {
+  &screening {
+    color: gray;
+  }
+
+  &announce {
+    color: #f58634;
+  }
+
+  &announced {
+    color: #34659e;
+  }
+  
+}
+
+div[role="button"] {
+  cursor: pointer;
+}
+
+.secondary-info {
+  flex: unset !important;
+
+  .authorityInfo {
+
+
+    .role {
+      font-size: smaller;
+    }
+
+    .organization {
+      font-size: small;
+      font-weight: bolder;
+    }
+
+    
+  }
+
+  .allow-announce-wrapper {
+      color: #008000
+    }
+
+
+}

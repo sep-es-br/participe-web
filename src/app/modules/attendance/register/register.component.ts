@@ -175,6 +175,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       if (!this.selectedAttende) {
         const newAttendee: IAttendee = {
           personId: result.id,
+          checkInId: undefined,
           name: result.name,
           email: result.email,
           checkedIn: false,

@@ -80,6 +80,7 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
     const data = this.chartData.map(item => item.quantity);
     const maxData = Math.max(...data);
     this.config = {
+      maintainAspectRatio: false,
       events: ['click'],
       indexAxis: 'y',
       onClick: (e, item) => this.registerEvent(item),
@@ -138,8 +139,19 @@ export class HorizontalBarGraphComponent implements OnInit, OnDestroy, OnChanges
           offset: true
         },
       },
+      datasets: {
+        bar: {
+          barThickness: 15
+        }
+      }
     };
-    this.height = (data.length * 60) < 100 ? 100 : (data.length * 60);
+    this.height = Math.max(100, (data.length * 500));
+  }
+
+  get chartHeight() {
+    const barCount = this.chartData.length || 1;
+    const heightPerBar = 25;
+    return `${barCount * heightPerBar}px`;
   }
 
   realoadConfig() {

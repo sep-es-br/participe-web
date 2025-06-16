@@ -61,8 +61,10 @@ export class AttendanceModel {
 
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
-  selectedOrderBy = 'name';
-  selectedFilterBy = 'prereg_or_pres';
+  selectedOrderBy = 'status';
+  selectedFilterBy = 'pres';
+  selectedFilterByStatus = 'all';
+  selectedFilterByIsAuthority : 'all' | boolean = true;
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
 
@@ -116,7 +118,9 @@ export class AttendanceModel {
       sub: [''],
       isAuthority: false,
       organization: [''],
-      role: ['']
+      role: [''],
+      toAnnounce: false,
+      announced: false
     });
 
     this.configureAuthorityValidation();
@@ -176,7 +180,10 @@ export class AttendanceModel {
     if(!attendee.personId){
       this.toggleNewAccount(attendee);
     }else{
-      const { name, locality, authType, cpf, email, phone, password, isAuthority, organization, role } = this.form.controls;
+      const { 
+        name, locality, authType, cpf, email, phone, password, isAuthority, organization, role,
+        toAnnounce, announced
+       } = this.form.controls;
       try {
         this.isAttendeeSelected = true;
         this.selectedAttende = attendee;
@@ -196,6 +203,8 @@ export class AttendanceModel {
           this.authName = data.authName || [];
           isAuthority.setValue(data.isAuthority ?? false);
           if(data.isAuthority !== undefined) this.markAuthorityTouched()
+          toAnnounce.setValue(data.toAnnounce);
+          announced.setValue(data.announced);
           organization.updateValueAndValidity();
           role.updateValueAndValidity();
           this.readonlyOrganization = data.organization != null;
@@ -505,16 +514,17 @@ export class AttendanceModel {
   }
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
-    return {
-      search: {
+    
+    return { search: {
         name: this.nameSearch,
         size: this.pageSize,
         page: nextPage ? ++this.currentPage : this.currentPage,
         sort: this.selectedOrderBy,
-        filter: this.selectedFilterBy,
+        filterBy: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
-      },
-    };
+        ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {},
+        ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {}
+      } };
   }
 
   getHowLongAgo(when: string): string {
