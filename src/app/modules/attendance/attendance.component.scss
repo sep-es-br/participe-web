@@ -149,7 +149,6 @@ $textFilterColor: #666;
         display: flex;
         align-items: center;
         color: $blue;
-        margin-left: 5%;
         fa-icon {
           cursor: pointer;
           &:active {
@@ -181,6 +180,7 @@ $textFilterColor: #666;
           }
           .info-checkin {
             margin-top: 10px;
+            gap: 5%;
           }
         }
       }
