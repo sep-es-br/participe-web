@@ -313,7 +313,7 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-checkin col-12 col-md-1 p-0 m-0 justify-content-center">
+              <div class="info-checkin col-12 col-md-1 p-0 m-0 flex-column flex-md-row justify-content-center">
                 <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>

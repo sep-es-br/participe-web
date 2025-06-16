@@ -64,7 +64,7 @@ export class AttendanceModel {
   selectedOrderBy = 'status';
   selectedFilterBy = 'pres';
   selectedFilterByStatus = 'all';
-  selectedFilterByIsAuthority = 'all';
+  selectedFilterByIsAuthority : 'all' | boolean = true;
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName:string[]
 
