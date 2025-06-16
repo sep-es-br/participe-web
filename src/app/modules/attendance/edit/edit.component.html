@@ -84,21 +84,27 @@
               <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
                 (onChange)="loadACRole($event)"></p-inputSwitch>
             </div>
-            <div class="col-12" *ngIf="form.get('isAuthority').value">
-              <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-              <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
-              <tt-input-message [form]="form" field="organization"></tt-input-message>
-            </div>
-          
-            <div class="col-12" *ngIf="form.get('isAuthority').value">
-              <label for="role">{{ 'citizen.role' | translate }}*</label>
-              <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
-              <tt-input-message [form]="form" field="role"></tt-input-message>
-            </div>
-            <div class="col-12" *ngIf="form.get('isAuthority').value">
-              <label class="d-block mb-2">{{ 'Anunciar' | translate }}</label>
-              <p-inputSwitch formControlName="toAnnounce" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
-            </div>
+            <ng-container *ngIf="form.get('isAuthority').value">
+              <div class="col-12">
+                <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+                <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
+                <tt-input-message [form]="form" field="organization"></tt-input-message>
+              </div>
+            
+              <div class="col-12">
+                <label for="role">{{ 'citizen.role' | translate }}*</label>
+                <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+                <tt-input-message [form]="form" field="role"></tt-input-message>
+              </div>
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'Anunciar' | translate }}</label>
+                <p-inputSwitch formControlName="toAnnounce" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+              </div>
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'Já anunciado' | translate }}</label>
+                <p-inputSwitch formControlName="announced" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+              </div>
+            </ng-container>
             <div class="col-12">
               <div class="form-actions">
                 <button
@@ -235,7 +241,7 @@
           <div class="col-12" *ngIf="noResult">
             <div class="no-result">{{ "attendance.noResult" | translate }}</div>
           </div>
-          <div class="col-12 result" *ngFor="let attendee of listAttendees">
+          <div class="col-12 result" *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
             <div class="name-icon">
               <div
                 class="letter-icon"
@@ -253,7 +259,7 @@
                 }}</span>
               </div>
             </div>
-            <div class="secondary-info gap-3 col-12 col-md-9">
+            <div class="secondary-info gap-2 col-12 col-md-9">
               <div class="info-place">
                 <div class="locality">{{ attendee.locality }}</div>
                 <div class="region">{{ attendee.superLocality }}</div>
@@ -275,9 +281,22 @@
                     ></fa-icon>
                     <span [ngClass]="'auth-' + getAuthStatus(attendee)">{{getAuthLabel(attendee)}}</span>
                   </div>
+                  <div class="allow-announce-wrapper col-12 col-md-1 p-0 d-flex flex-column align-items-center align-items-center">
+                    <ng-container *ngIf="!attendee.toAnnounce">
+                        <div role="button" class="d-flex flex-column align-items-center justify-content-center" (click)="toggleToAnnounce(attendee)"
+                          #toAnnounceToggle>
+                          <fa-icon class="m-0"
+                            size="2x"
+                            [icon]="iconAllowAnnouce"
+                          ></fa-icon>
+                          <span [ngClass]="">{{ 'attendance.allow' | translate }}</span>
+                        </div>
+                    </ng-container>
+                  </div>
                 </ng-container>
               </div>
-              <div class="info-preregister col-12 d-flex justify-content-center">
+              
+              <div class="info-preregister col-12 col-md d-flex justify-content-center">
                 <ng-container *ngIf="attendee.preRegistered">
                   <div
                     class="how-long-ago"
@@ -294,19 +313,21 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-checkin">
+              <div class="info-checkin col-12 col-md-1 p-0 m-0 justify-content-center">
                 <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
                 <div class="action">
-                  <fa-icon
-                    size="2x"
-                    (click)="selectAttendee(attendee, true)"
-                    [icon]="attendee.checkedIn ? iconChecked : iconCircle"
-                    tooltipPosition="left"
-                    [pTooltip]="getToolTipText(attendee)"
-                    tooltipStyleClass="tooltip-uncheck"
-                  ></fa-icon>
+                  <div role="button" class="d-flex flex-column align-items-center justify-content-center">
+                    <fa-icon
+                      size="2x" class="m-0"
+                      [icon]="attendee.checkedIn ? iconChecked : iconCircle"
+                      tooltipPosition="left"
+                      [pTooltip]="getToolTipText(attendee)"
+                      tooltipStyleClass="tooltip-uncheck"
+                    ></fa-icon>
+                    <span>{{ 'update' | translate }}</span>
+                  </div>
                 </div>
               </div>
             </div>

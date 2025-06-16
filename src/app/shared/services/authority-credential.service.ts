@@ -20,7 +20,19 @@ export class AuthorityCredentialService {
     idCheckedIn:number
     ) : Promise<ICheckedInAt> {
     
+    if(!idCheckedIn) return new Promise(() => {return {} as ICheckedInAt});
+
     return this.http.put<ICheckedInAt>(`${this.baseUrl}/${idCheckedIn}/toggleAnnounced`, undefined).toPromise();
   } 
 
+  toggleToAnnounce(
+    idCheckedIn:number
+    ) : Promise<ICheckedInAt> {
+    
+    if(!idCheckedIn) return new Promise(() => {return {} as ICheckedInAt});
+
+    return this.http.put<ICheckedInAt>(`${this.baseUrl}/${idCheckedIn}/toggleToAnnounce`, undefined).toPromise();
+  } 
+
+  
 }
