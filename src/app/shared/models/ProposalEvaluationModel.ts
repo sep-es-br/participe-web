@@ -139,10 +139,10 @@ export class ProposalEvaluationCreateFormModel
   }
 
   private getBudgetActionId(value: Array<IBudgetAction>): string {
-    return value.map((item) => item.budgetActionId).join(";");
+    return value?.map((item) => item.budgetActionId).join(";");
   }
 
   private getBudgetActionName(value: Array<IBudgetAction>): string {
-    return value.map((item) => item.budgetActionName).join(";");
+    return value?.map((item) => item.budgetActionName).join(";");
   }
 }
