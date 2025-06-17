@@ -149,7 +149,7 @@
 
             <br />
 
-            <div class="col-12 d-flex flex-column">
+            <div class="col-12 d-flex flex-column" *ngIf="budgetActionVisible">
               <label for="budgetAction">{{
                 "proposal_evaluation.budgetAction" | translate
               }}</label>
