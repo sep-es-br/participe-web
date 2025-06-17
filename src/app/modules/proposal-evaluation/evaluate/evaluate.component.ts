@@ -25,6 +25,7 @@ import {
 } from "@app/shared/models/ProposalEvaluationModel";
 
 import { StoreKeys } from "@app/shared/constants";
+import { combineLatest } from "rxjs";
 
 @Component({
   selector: "app-evaluate",
@@ -70,6 +71,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public optionsData: Array<string>;
   public selectedOrg: any;
+
+  budgetActionVisible = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -127,6 +130,28 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     await this.getProposalEvaluationData();
     this.populateOptionsLists();
     this.getOrgName();
+
+    combineLatest([
+      this.proposalEvaluationForm.controls.haveCost.valueChanges,
+      this.proposalEvaluationForm.controls.newRequest.valueChanges
+    ]).subscribe(([haveCost, newRequest]) => {
+          this.updateBudgetPlanControlRequire();
+          this.updateActionPlanControlRequire();
+        })
+
+  }
+
+  updateActionPlanControlRequire() {
+        this.budgetActionVisible = this.formHaveCost;
+        
+        if(this.budgetActionVisible) {
+          this.proposalEvaluationForm.controls.budgetAction.addValidators(Validators.required);
+        } else {
+          this.proposalEvaluationForm.controls.budgetAction.patchValue(undefined);
+          this.proposalEvaluationForm.controls.budgetAction.clearValidators();
+        }
+        
+        this.proposalEvaluationForm.controls.budgetAction.updateValueAndValidity();
   }
 
   public getOrgName(): void {
@@ -209,11 +234,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return this.proposalEvaluationForm.get("reasonDetail").value;
   }
 
-  public get formHaveCost(): string {
+  public get formHaveCost(): boolean {
     return this.proposalEvaluationForm.get("haveCost").value;
   }
 
-  public get formNewRequest(): string {
+  public get formNewRequest(): boolean {
     return this.proposalEvaluationForm.get("newRequest").value;
   }
 
