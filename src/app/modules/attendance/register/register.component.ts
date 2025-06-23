@@ -1,5 +1,5 @@
 import { delay } from 'rxjs/operators';
-import {AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit, signal} from '@angular/core';
 import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Message, MessageService} from 'primeng/api';
@@ -65,6 +65,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   torchAvailable$ = new BehaviorSubject<boolean>(false);
   tryHarder = false;
 
+  optsRoles = [];
+  optsOrgs = [];
+
   constructor(
     protected messageSrv: MessageService,
     protected formBuilder: UntypedFormBuilder,
@@ -84,6 +87,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+    
   }
 
   ngOnDestroy(): void {
@@ -91,7 +95,26 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     if (this.valueChangeCPFSub !== null) {
       this.valueChangeCPFSub.unsubscribe();
     }
-    this.actionbarSrv.setItems([]);
+    
+  }
+
+  override async selectAttendee(attendee: IAttendee, isEdit?: boolean): Promise<void> {
+      
+    await super.selectAttendee(attendee, isEdit);
+
+    if(attendee.sub) {
+      let papeis = await this.personSrv.findPapeisBySub(attendee.sub);
+
+      this.optsRoles = papeis.map(p => p.role);
+      this.optsOrgs = [
+        ...papeis.filter(p => p.organization).map(p => p.organization),
+        ...papeis.filter(p => p.organizationSh).map(p => p.organizationSh)
+      ]
+              
+      
+    }
+    
+    
   }
 
   async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {

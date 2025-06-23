@@ -43,14 +43,22 @@
               (onChange)="loadACRole($event)"></p-inputSwitch>
           </div>
           <div class="col-12" *ngIf="form.get('isAuthority').value">
+            <datalist id="orgsList">
+              <option *ngFor="let org of optsOrgs" [value]="org"></option>
+            </datalist>
+
             <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-            <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
+            <input list="orgsList" type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
             <tt-input-message [form]="form" field="organization"></tt-input-message>
           </div>
         
           <div class="col-12" *ngIf="form.get('isAuthority').value">
+            <datalist id="rolesList">
+              <option *ngFor="let role of optsRoles" [value]="role"></option>
+            </datalist>
+
             <label for="role">{{ 'citizen.role' | translate }}*</label>
-            <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+            <input list="rolesList" type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
             <tt-input-message [form]="form" field="role"></tt-input-message>
           </div>
           <div class="col-12">
