@@ -110,8 +110,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         ...papeis.filter(p => p.organization).map(p => p.organization),
         ...papeis.filter(p => p.organizationSh).map(p => p.organizationSh)
       ]
-              
-      
     }
     
     
