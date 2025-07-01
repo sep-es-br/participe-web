@@ -2,6 +2,7 @@ export interface IProposal {
   readonly commentId: number;
   evaluationStatus: boolean;
   localityName: string;
+  microrregionName: string;
   planItemName: string;
   planItemAreaName: string;
   description: string;
