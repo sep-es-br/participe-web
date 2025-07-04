@@ -600,7 +600,10 @@
 		"title": "Avaliação de Proposta",
 		"under_evaluation_by": "Em avaliação por",
 		"updated": "Avaliação de Proposta atualizada",
-		"haveCost": "A proposta tem custo",
+		"haveCost": "Tem custo?",
+		"noCost": "Sem custo",
+		"costCosting": "Custeio",
+		"costInvestiment": "Investimento",
 		"newRequest": "A iniciativa será nova"
 	},
 	"published": "Publicado",

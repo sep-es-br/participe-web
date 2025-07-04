@@ -149,6 +149,49 @@
 
             <br />
 
+            <div class="row">
+              <div class="col">
+                <label>{{
+                  "proposal_evaluation.haveCost" | translate
+                }}</label>
+                <div class="col-3 d-flex justify-content-between">
+                  <div class="d-inline-flex align-items-center">
+                    <p-radioButton
+                      [disabled]="loading"
+                      inputId="noCost"
+                      [value]="undefined"
+                      formControlName="costType"
+                    ></p-radioButton>
+                    <label for="noCost" class="ms-2">{{
+                      "proposal_evaluation.noCost" | translate
+                    }}</label>
+                  </div>
+                  <div class="d-inline-flex align-items-center">
+                    <p-radioButton
+                      [disabled]="loading"
+                      inputId="costCosting"
+                      value="Custeio"
+                      formControlName="costType"
+                    ></p-radioButton>
+                    <label for="costCosting" class="ms-2">{{
+                      "proposal_evaluation.costCosting" | translate
+                    }}</label>
+                  </div>
+                  <div class="d-inline-flex align-items-center">
+                    <p-radioButton
+                      [disabled]="loading"
+                      inputId="costInvestiment"
+                      value="Investimento"
+                      formControlName="costType"
+                    ></p-radioButton>
+                    <label for="costInvestiment" class="ms-2">{{
+                      "proposal_evaluation.costInvestiment" | translate
+                    }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div class="col-12 d-flex flex-column" *ngIf="budgetActionVisible">
               <label for="budgetAction">{{
                 "proposal_evaluation.budgetAction" | translate
@@ -185,11 +228,7 @@
               ></tt-input-message>
             </div>
 
-            <div class="col-12 d-flex flex-row">
-              <p-inputSwitch inputId="input-switch-have-cost" formControlName="haveCost"></p-inputSwitch>
-              <label class="form-check-label ml-2" for="input-switch-have-cost">{{'proposal_evaluation.haveCost'|translate}}</label> 
-            </div>
-            <div class="col-12 d-flex flex-row">
+            <div class="col-12 d-flex flex-row" *ngIf="showNewRequest">
               <p-inputSwitch inputId="input-switch-new-request" formControlName="newRequest"></p-inputSwitch>
               <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label> 
             </div>
@@ -198,13 +237,28 @@
               <label for="budgetPlan">{{
                 "proposal_evaluation.budgetPlan" | translate
               }}</label>
-              <input
+              <p-multiSelect
                 [disabled]="loading"
-                type="text"
-                pInputText
+                [options]="budgetActionOptions"
+                filter="true"
+                filterBy="budgetPlanId,budgetPlanName"
+                showClear="true"
+                showToggleAll="false"
                 formControlName="budgetPlan"
-                class="ng-dirty ng-invalid form-control"
-              />
+                [style]="{ 'min-height': '38px' }"
+                styleClass="d-flex form-control my-1"
+                class="ng-dirty ng-invalid"
+              >
+                <ng-template let-value pTemplate="selectedItems">
+                  <span *ngFor="let option of value">
+                    {{ formatBudgetAction(option) }}
+                  </span>
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  <span>{{ formatBudgetAction(item) }}</span>
+                </ng-template>
+              </p-multiSelect>
               <tt-input-message
                 [form]="proposalEvaluationForm"
                 field="budgetPlan"

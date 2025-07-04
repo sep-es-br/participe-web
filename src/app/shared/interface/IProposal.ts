@@ -28,6 +28,7 @@ export interface IProposalEvaluation {
   representing: string;
   evaluatorName: string;
   haveCost: boolean;
+  costType: string;
   newRequest: boolean;
 }
 
@@ -55,6 +56,11 @@ export interface IBudgetUnit {
 export interface IBudgetAction {
   budgetActionId: string;
   budgetActionName: string;
+}
+
+export interface IBudgetPlan {
+  budgetPlanId: string;
+  budgetPlanName: string;
 }
 
 export interface IBudgetOptions {
