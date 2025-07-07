@@ -14,6 +14,7 @@ import { IResultPaginated } from "../interface/IResultPaginated";
 import {
   IBudgetAction,
   IBudgetOptions,
+  IBudgetPlan,
   IBudgetUnit,
   IProposal,
   IProposalEvaluation,
@@ -245,6 +246,25 @@ export class ProposalEvaluationService {
       .toPromise();
   }
 
+  private fetchBudgetPlan(): Promise<Array<IBudgetOptions>> {
+    return this._http
+      .get<Array<IBudgetOptions>>(`${this._optionsUrl}/budgetOptions`, {
+        headers: Common.buildHeaders(),
+      })
+      .toPromise();
+  }
+
+
+
+  public getBudgetPlan(): Promise<IBudgetPlan[]> {
+    return this._http
+      .get<IBudgetPlan[]>(
+        `${this._url}/budgetPlanList`,
+        { headers: Common.buildHeaders() }
+      )
+      .toPromise();
+  }
+
   public checkIsCommentEvaluated(commentId: number): Promise<boolean> {
     return this._http
       .get<boolean>(`${this._url}/isCommentEvaluated?commentId=${commentId}`, {
@@ -260,6 +280,12 @@ export class ProposalEvaluationService {
         { headers: Common.buildHeaders() }
       )
       .toPromise();
+  }
+
+  public async populateBudgetPlan(): Promise<void> {
+    await this.fetchBudgetOptions().then(
+      (response) => (this.budgetOptions = response)
+    );
   }
 
   public async populateBudgetOptions(): Promise<void> {

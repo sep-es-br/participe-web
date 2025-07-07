@@ -112,7 +112,7 @@
             <div class="col-12 d-flex flex-column">
               <label for="budgetUnit">{{
                 "proposal_evaluation.budgetUnit" | translate
-              }}</label>
+              }}<span class="required">*</span></label>
               <p-multiSelect
                 [disabled]="loading"
                 [options]="budgetUnitOptions"
@@ -149,7 +149,7 @@
 
             <br />
 
-            <div class="row">
+            <div class="row" *ngIf="showHaveCost">
               <div class="col">
                 <label>{{
                   "proposal_evaluation.haveCost" | translate
@@ -239,7 +239,7 @@
               }}</label>
               <p-multiSelect
                 [disabled]="loading"
-                [options]="budgetActionOptions"
+                [options]="budgetPlanOptions"
                 filter="true"
                 filterBy="budgetPlanId,budgetPlanName"
                 showClear="true"
@@ -249,14 +249,12 @@
                 styleClass="d-flex form-control my-1"
                 class="ng-dirty ng-invalid"
               >
-                <ng-template let-value pTemplate="selectedItems">
-                  <span *ngFor="let option of value">
-                    {{ formatBudgetAction(option) }}
-                  </span>
+                <ng-template let-value pTemplate="selectedItems">                  
+                  {{ formatBudgetPlanValue(value) }}
                 </ng-template>
 
                 <ng-template let-item pTemplate="item">
-                  <span>{{ formatBudgetAction(item) }}</span>
+                  <span>{{ formatBudgetPlanItem(item) }}</span>
                 </ng-template>
               </p-multiSelect>
               <tt-input-message
@@ -376,7 +374,12 @@
         <div class="row">
           <div class="col-8">
             <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
-            <p>{{ formBudgetPlan }}</p>
+            <p *ngIf="!formBudgetPlan || formBudgetPlan.length === 0; else budgetPlanList">{{ 'proposal_evaluation.budgetPlan_nullValue' | translate }}</p>
+            
+            <ng-container #budgetPlanList>
+              <p *ngFor="let planItem of formBudgetPlan">{{ formatBudgetPlanItem(planItem) }}</p>
+            </ng-container>
+            
           </div>
         </div>
         <div class="row">
