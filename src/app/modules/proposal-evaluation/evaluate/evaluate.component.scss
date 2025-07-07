@@ -31,9 +31,10 @@ label {
     color: red;
   }
 
-  & + p {
+  & ~ p {
     margin-left: 1.5rem;
     text-align: justify;
+    margin-bottom: 0;
   }
 }
 
