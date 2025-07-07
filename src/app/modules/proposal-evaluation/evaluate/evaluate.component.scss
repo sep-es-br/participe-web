@@ -27,6 +27,10 @@ button.org-badge {
 label {
   font-weight: bold;
 
+  span.required {
+    color: red;
+  }
+
   & + p {
     margin-left: 1.5rem;
     text-align: justify;

@@ -183,6 +183,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     }
   }
 
+  public get showHaveCost() {
+    return !!this.formBudgetUnit
+  }
+
   public get showNewRequest() {
     return this.formHaveCost;
   }
@@ -236,11 +240,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formBudgetPlan(): string {
-    return (
-      this.proposalEvaluationForm.get("budgetPlan").value ??
-      this.translateService.instant("proposal_evaluation.budgetPlan_nullValue")
-    );
+    return this.proposalEvaluationForm.get("budgetPlan").value;
+
+    //this.translateService.instant("proposal_evaluation.budgetPlan_nullValue")
   }
+
 
   public get formReason(): string {
     return this.proposalEvaluationForm.get("reason").value;
@@ -376,7 +380,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetAction: new FormControl<Array<IBudgetAction>>(
         proposalEvaluationData.budgetActionControlValue
       ),
-      budgetPlan: new FormControl<string>(proposalEvaluationData.budgetPlan),
+      budgetPlan: new FormControl<IBudgetPlan[]>(proposalEvaluationData.budgetPlan),
       reason: new FormControl<string>(proposalEvaluationData.reason),
       reasonDetail: new FormControl<string>(proposalEvaluationData.reasonDetail),
       costType: new FormControl<string>(proposalEvaluationData.costType),
