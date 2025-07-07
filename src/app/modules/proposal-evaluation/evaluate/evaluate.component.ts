@@ -27,6 +27,7 @@ import {
 
 import { StoreKeys } from "@app/shared/constants";
 import { combineLatest } from "rxjs";
+import { LoadingService } from "@app/shared/services/loading.service";
 
 @Component({
   selector: "app-evaluate",
@@ -68,6 +69,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public budgetUnitOptions: Array<IBudgetUnit> = [];
   public budgetActionOptions: Array<IBudgetAction> = [];
+  public budgetPlanOptions: IBudgetPlan[] = [];
   public reasonOptions: Array<string> = [];
 
   public optionsData: Array<string>;
@@ -83,7 +85,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private evaluatorsService: EvaluatorsService,
     public modalService: ModalService,
-    private proposalEvaluationService: ProposalEvaluationService
+    private proposalEvaluationService: ProposalEvaluationService,
+    private loadingSrv : LoadingService
   ) {
     this.isEvaluationOpen = JSON.parse(
       sessionStorage.getItem("isEvaluationOpen")
@@ -222,6 +225,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public formatBudgetAction(value: IBudgetAction): string {
     return `${value.budgetActionId} - ${value.budgetActionName}`;
+  }
+
+  public formatBudgetPlanValue(value: IBudgetPlan[]): string {
+    return value?.map(plan => plan.budgetPlanId).join(', ');
+  }
+
+  public formatBudgetPlanItem(item: IBudgetPlan): string {
+    return item ? `(${item.budgetPlanId}) ${item.budgetPlanName}` : undefined;
   }
 
   public get formBudgetPlan(): string {
@@ -458,6 +469,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   private populateOptionsLists() {
     this.budgetUnitOptions = this.proposalEvaluationService.getBudgetUnitList();
     this.reasonOptions = this.proposalEvaluationService.getReasonOptions();
+    this.loadingSrv.loading(true);
+    this.proposalEvaluationService.getBudgetPlan()
+        .then(values => this.budgetPlanOptions = values)
+        .finally(() => this.loadingSrv.loading(false));
+
   }
 
   private checkFormChanged(

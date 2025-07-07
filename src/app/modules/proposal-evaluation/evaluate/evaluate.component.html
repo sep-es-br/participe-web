@@ -239,7 +239,7 @@
               }}</label>
               <p-multiSelect
                 [disabled]="loading"
-                [options]="budgetActionOptions"
+                [options]="budgetPlanOptions"
                 filter="true"
                 filterBy="budgetPlanId,budgetPlanName"
                 showClear="true"
@@ -249,14 +249,12 @@
                 styleClass="d-flex form-control my-1"
                 class="ng-dirty ng-invalid"
               >
-                <ng-template let-value pTemplate="selectedItems">
-                  <span *ngFor="let option of value">
-                    {{ formatBudgetAction(option) }}
-                  </span>
+                <ng-template let-value pTemplate="selectedItems">                  
+                  {{ formatBudgetPlanValue(value) }}
                 </ng-template>
 
                 <ng-template let-item pTemplate="item">
-                  <span>{{ formatBudgetAction(item) }}</span>
+                  <span>{{ formatBudgetPlanItem(item) }}</span>
                 </ng-template>
               </p-multiSelect>
               <tt-input-message
