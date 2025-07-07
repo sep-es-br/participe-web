@@ -1,5 +1,6 @@
 import {
   IBudgetAction,
+  IBudgetPlan,
   IBudgetUnit,
   IProposalEvaluation,
   IProposalEvaluationCreateForm,
@@ -14,7 +15,7 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
   public budgetUnitName?: string;
   public budgetActionId?: string;
   public budgetActionName?: string;
-  public budgetPlan?: string;
+  public budgetPlan?: IBudgetPlan[];
   public evaluatorName: string;
   public representing: string;
   public haveCost: boolean;
@@ -100,7 +101,7 @@ export class ProposalEvaluationCreateFormModel
   public budgetUnitName?: string;
   public budgetActionId?: string;
   public budgetActionName?: string;
-  public budgetPlan?: string;
+  public budgetPlan?: IBudgetPlan[];
   public representing: string;
   public haveCost : boolean;
   public costType: string;

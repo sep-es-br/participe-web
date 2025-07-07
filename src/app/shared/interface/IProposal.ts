@@ -24,7 +24,7 @@ export interface IProposalEvaluation {
   budgetUnitName?: string;
   budgetActionId?: string;
   budgetActionName?: string;
-  budgetPlan?: string;
+  budgetPlan?: IBudgetPlan[];
   representing: string;
   evaluatorName: string;
   haveCost: boolean;
