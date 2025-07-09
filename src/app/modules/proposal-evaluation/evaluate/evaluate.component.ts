@@ -261,7 +261,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formHaveCost(): boolean {
-    return !!this.proposalEvaluationForm.get("costType").value;
+    return !!this.formCostType;
+  }
+
+  public get formCostType(): boolean {
+    return this.proposalEvaluationForm.get("costType").value;
   }
 
   public get formNewRequest(): boolean {

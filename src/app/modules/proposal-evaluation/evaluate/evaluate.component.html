@@ -376,9 +376,9 @@
             <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
             <p *ngIf="!formBudgetPlan || formBudgetPlan.length === 0; else budgetPlanList">{{ 'proposal_evaluation.budgetPlan_nullValue' | translate }}</p>
             
-            <ng-container #budgetPlanList>
+            <ng-template #budgetPlanList>
               <p *ngFor="let planItem of formBudgetPlan">{{ formatBudgetPlanItem(planItem) }}</p>
-            </ng-container>
+            </ng-template>
             
           </div>
         </div>
@@ -391,10 +391,10 @@
         <div class="row">
           <div class="col-8">
             <label>{{ "proposal_evaluation.haveCost" | translate }}</label>
-            <p>{{ (formHaveCost ? 'yes' : 'no' ) | translate }}</p>
+            <p>{{ (formHaveCost ? 'yes' : 'no' ) | translate }}<ng-container *ngIf="formHaveCost">, {{formCostType}}</ng-container></p>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="showNewRequest">
           <div class="col-8">
             <label>{{ "proposal_evaluation.newRequest" | translate }}</label>
             <p>{{ (formNewRequest ? 'yes' : 'no' ) | translate }}</p>
