@@ -28,6 +28,7 @@ import {
 import { StoreKeys } from "@app/shared/constants";
 import { combineLatest } from "rxjs";
 import { LoadingService } from "@app/shared/services/loading.service";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-evaluate",
@@ -136,12 +137,17 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.getOrgName();
 
     combineLatest([
-      this.proposalEvaluationForm.controls.costType.valueChanges,
+      this.proposalEvaluationForm.controls.costType.valueChanges
+        .pipe(tap(
+          value => {
+            if(!value) this.proposalEvaluationForm.controls.newRequest.patchValue(undefined);
+          }
+        )),
       this.proposalEvaluationForm.controls.newRequest.valueChanges
     ]).subscribe(([haveCost, newRequest]) => {
           this.updateBudgetPlanControlRequire();
           this.updateActionPlanControlRequire();
-        })
+    })
 
   }
 
