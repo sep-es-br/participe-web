@@ -32,7 +32,7 @@ import { Conference } from "../models/conference";
 export class ProposalEvaluationService {
   private evaluationStatusOptions: SelectItem[] = [];
 
-  private loaIncludedOptions: SelectItem[] = [];
+  private approvedOptions: SelectItem[] = [];
 
   private reasonOptions: Array<string> = [
     "Entrega já realizada",
@@ -81,7 +81,7 @@ export class ProposalEvaluationService {
   }
 
   public getLoaIncludedOptions(): Array<SelectItem> {
-    return this.loaIncludedOptions;
+    return this.approvedOptions;
   }
 
   public getLocalityOptions(
@@ -314,7 +314,7 @@ export class ProposalEvaluationService {
           },
         ];
 
-        this.loaIncludedOptions = [
+        this.approvedOptions = [
           { label: translationsJSON["all"], value: null },
           { label: translationsJSON["yes"], value: true },
           { label: translationsJSON["no"], value: false },
@@ -340,7 +340,7 @@ export class ProposalEvaluationService {
         },
       ];
 
-      this.loaIncludedOptions = [
+      this.approvedOptions = [
         { label: langConfig.translations["all"], value: null },
         { label: langConfig.translations["yes"], value: true },
         { label: langConfig.translations["no"], value: false },

@@ -40,7 +40,7 @@
             class="org-badge pe-none"
             [ngClass]="{
               evaluated: readOnlyProposalEvaluation,
-              'evaluated-not-loaIncluded': !proposalEvaluationFormInitialState.includedInNextYearLOA,
+              'evaluated-not-approved': !proposalEvaluationFormInitialState.approved,
               'not-evaluated': !readOnlyProposalEvaluation
             }"
           >
@@ -75,30 +75,30 @@
       <div class="row">
         <div class="col-8">
           <label>{{
-            "proposal_evaluation.loaIncluded_question" | translate
+            "proposal_evaluation.approved_question" | translate
           }}</label>
           <div class="col-3 d-flex justify-content-between">
             <div class="d-inline-flex align-items-center">
               <p-radioButton
                 [disabled]="loading"
-                inputId="loaIncludedTrue"
+                inputId="approvedTrue"
                 [value]="true"
-                formControlName="includedInNextYearLOA"
+                formControlName="approved"
                 (onClick)="loaChanged($event)"
               ></p-radioButton>
-              <label for="loaIncludedTrue" class="ms-2">{{
+              <label for="approvedTrue" class="ms-2">{{
                 "yes" | translate
               }}</label>
             </div>
             <div class="d-inline-flex align-items-center">
               <p-radioButton
                 [disabled]="loading"
-                inputId="loaIncludedFalse"
+                inputId="approvedFalse"
                 [value]="false"
-                formControlName="includedInNextYearLOA"
+                formControlName="approved"
                 (onClick)="loaChanged($event)"
               ></p-radioButton>
-              <label for="loaIncludedFalse" class="ms-2">{{
+              <label for="approvedFalse" class="ms-2">{{
                 "no" | translate
               }}</label>
             </div>
@@ -341,7 +341,7 @@
     >
       <div class="row">
         <div class="col-8">
-          <label>{{ "proposal_evaluation.loaIncluded" | translate }}</label>
+          <label>{{ "proposal_evaluation.approved" | translate }}</label>
           <p>{{ (formLoaIncluded ? "yes" : "no") | translate }}</p>
         </div>
       </div>

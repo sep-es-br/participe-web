@@ -8,7 +8,7 @@ import {
 
 export class ProposalEvaluationModel implements IProposalEvaluation {
   private readonly _id: number;
-  public includedInNextYearLOA: boolean;
+  public approved: boolean;
   public reason?: string;
   public reasonDetail?: string;
   public budgetUnitId?: string;
@@ -24,8 +24,8 @@ export class ProposalEvaluationModel implements IProposalEvaluation {
 
   constructor(proposalEvaluation: IProposalEvaluation) {
     this._id = proposalEvaluation.id;
-    this.includedInNextYearLOA = proposalEvaluation.includedInNextYearLOA;
-    if (proposalEvaluation.includedInNextYearLOA) {
+    this.approved = proposalEvaluation.approved;
+    if (proposalEvaluation.approved) {
       this.budgetUnitId = proposalEvaluation.budgetUnitId;
       this.budgetUnitName = proposalEvaluation.budgetUnitName;
       this.budgetActionId = proposalEvaluation.budgetActionId;
@@ -94,7 +94,7 @@ export class ProposalEvaluationCreateFormModel
 {
   public personId: number;
   public proposalId: number;
-  public includedInNextYearLOA: boolean;
+  public approved: boolean;
   public reason?: string;
   public reasonDetail?: string;
   public budgetUnitId?: string;
@@ -116,8 +116,8 @@ export class ProposalEvaluationCreateFormModel
     public representingOrgName: string,
     public evaluatorName: string
   ) {
-    this.includedInNextYearLOA = formValue.includedInNextYearLOA;
-    if (formValue.includedInNextYearLOA) {
+    this.approved = formValue.approved;
+    if (formValue.approved) {
       this.budgetUnitId = this.getBudgetUnitId(formValue.budgetUnit);
       this.budgetUnitName = this.getBudgetUnitName(formValue.budgetUnit);
       this.budgetActionId = this.getBudgetActionId(formValue.budgetAction);

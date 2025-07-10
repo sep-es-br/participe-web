@@ -12,12 +12,12 @@ export interface IProposal {
 
 export interface IEvaluatorOrgsNameAndLoaIncludedList{
   evaluatorOrgsName: string
-  loaIncluded: boolean
+  approved: boolean
 }
 
 export interface IProposalEvaluation {
   readonly id: number;
-  includedInNextYearLOA: boolean;
+  approved: boolean;
   reason?: string;
   reasonDetail?: string;
   budgetUnitId?: string;
@@ -44,7 +44,7 @@ export interface IProposalEvaluationSearchFilter {
   planItemAreaId: number;
   planItemId: number;
   organizationGuid: string;
-  loaIncluded: boolean;
+  approved: boolean;
   commentText: string;
 }
 

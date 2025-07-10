@@ -45,7 +45,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
   public planItemOptions: SelectItem[] = [];
   public organizationOptions: SelectItem[] = [];
   public transformedOptions: SelectItem[] = [];
-  public loaIncludedOptions: SelectItem[] = [];
+  public approvedOptions: SelectItem[] = [];
 
   public pageState: PaginatorState = {
     first: 0,
@@ -284,8 +284,8 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
       organizationGuid: new FormControl(
         this.propEvalSearchFilter?.organizationGuid ?? null
       ),
-      loaIncluded: new FormControl(
-        this.propEvalSearchFilter?.loaIncluded ?? null
+      approved: new FormControl(
+        this.propEvalSearchFilter?.approved ?? null
       ),
       commentText: new FormControl(
         this.propEvalSearchFilter?.commentText ?? null
@@ -299,7 +299,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
   }
 
   private getLoaIncludedOptions() {
-    this.loaIncludedOptions =
+    this.approvedOptions =
       this.proposalEvaluationService.getLoaIncludedOptions();
   }
 
@@ -380,7 +380,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
     this.localityOptions[0].label = translation;
     this.planItemAreaOptions[0].label = translation;
     this.planItemOptions[0].label = translation;
-    this.loaIncludedOptions[0].label = translation;
+    this.approvedOptions[0].label = translation;
 
     this.getEvaluationStatusOptions();
     this.getLoaIncludedOptions();

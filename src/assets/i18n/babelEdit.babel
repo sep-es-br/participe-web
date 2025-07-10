@@ -5245,7 +5245,7 @@
                         </translations>
                     </concept_node>
                     <concept_node>
-                        <name>loaIncluded</name>
+                        <name>approved</name>
                         <definition_loaded>false</definition_loaded>
                         <description></description>
                         <comment></comment>
@@ -5262,7 +5262,7 @@
                         </translations>
                     </concept_node>
                     <concept_node>
-                        <name>loaIncluded_question</name>
+                        <name>approved_question</name>
                         <definition_loaded>false</definition_loaded>
                         <description></description>
                         <comment></comment>
