@@ -86,6 +86,7 @@ export class ProposalComponent implements OnInit {
     ) {
       await this.proposalEvaluationService.populateBudgetOptions();
     }
+
   }
 
   public modalOpen(proposal: IProposal) {

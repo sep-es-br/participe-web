@@ -45,11 +45,11 @@ button.org-badge {
   color: white;
   font-size: 0.75rem;
 
-  &.loaIncluded {
+  &.approved {
     background-color: #00c853;
   }
 
-  &.not-loaIncluded {
+  &.not-approved {
     background-color: #aaaaaa97;
   }
 

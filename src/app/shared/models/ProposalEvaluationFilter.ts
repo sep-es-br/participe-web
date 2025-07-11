@@ -4,6 +4,6 @@ export class ProposalEvaluationFilter {
   themeArea: string = null; // possivel number(id)? -> planItem
   budgetCategory: string = null; // possivel number(id)?
   entity: string = null; // possivel number(id)?
-  loaIncluded: boolean = null;
+  approved: boolean = null;
   text: string = "";
 }

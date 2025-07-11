@@ -40,7 +40,7 @@
             class="org-badge pe-none"
             [ngClass]="{
               evaluated: readOnlyProposalEvaluation,
-              'evaluated-not-loaIncluded': !proposalEvaluationFormInitialState.includedInNextYearLOA,
+              'evaluated-not-approved': !proposalEvaluationFormInitialState.approved,
               'not-evaluated': !readOnlyProposalEvaluation
             }"
           >
@@ -75,30 +75,30 @@
       <div class="row">
         <div class="col-8">
           <label>{{
-            "proposal_evaluation.loaIncluded_question" | translate
+            "proposal_evaluation.approved_question" | translate
           }}</label>
           <div class="col-3 d-flex justify-content-between">
             <div class="d-inline-flex align-items-center">
               <p-radioButton
                 [disabled]="loading"
-                inputId="loaIncludedTrue"
+                inputId="approvedTrue"
                 [value]="true"
-                formControlName="includedInNextYearLOA"
+                formControlName="approved"
                 (onClick)="loaChanged($event)"
               ></p-radioButton>
-              <label for="loaIncludedTrue" class="ms-2">{{
+              <label for="approvedTrue" class="ms-2">{{
                 "yes" | translate
               }}</label>
             </div>
             <div class="d-inline-flex align-items-center">
               <p-radioButton
                 [disabled]="loading"
-                inputId="loaIncludedFalse"
+                inputId="approvedFalse"
                 [value]="false"
-                formControlName="includedInNextYearLOA"
+                formControlName="approved"
                 (onClick)="loaChanged($event)"
               ></p-radioButton>
-              <label for="loaIncludedFalse" class="ms-2">{{
+              <label for="approvedFalse" class="ms-2">{{
                 "no" | translate
               }}</label>
             </div>
@@ -112,7 +112,7 @@
             <div class="col-12 d-flex flex-column">
               <label for="budgetUnit">{{
                 "proposal_evaluation.budgetUnit" | translate
-              }}</label>
+              }}<span class="required">*</span></label>
               <p-multiSelect
                 [disabled]="loading"
                 [options]="budgetUnitOptions"
@@ -149,6 +149,49 @@
 
             <br />
 
+            <div class="row" *ngIf="showHaveCost">
+              <div class="col">
+                <label>{{
+                  "proposal_evaluation.haveCost" | translate
+                }}</label>
+                <div class="col-3 d-flex justify-content-between">
+                  <div class="d-inline-flex align-items-center">
+                    <p-radioButton
+                      [disabled]="loading"
+                      inputId="noCost"
+                      [value]="undefined"
+                      formControlName="costType"
+                    ></p-radioButton>
+                    <label for="noCost" class="ms-2">{{
+                      "proposal_evaluation.noCost" | translate
+                    }}</label>
+                  </div>
+                  <div class="d-inline-flex align-items-center">
+                    <p-radioButton
+                      [disabled]="loading"
+                      inputId="costCosting"
+                      value="Custeio"
+                      formControlName="costType"
+                    ></p-radioButton>
+                    <label for="costCosting" class="ms-2">{{
+                      "proposal_evaluation.costCosting" | translate
+                    }}</label>
+                  </div>
+                  <div class="d-inline-flex align-items-center">
+                    <p-radioButton
+                      [disabled]="loading"
+                      inputId="costInvestiment"
+                      value="Investimento"
+                      formControlName="costType"
+                    ></p-radioButton>
+                    <label for="costInvestiment" class="ms-2">{{
+                      "proposal_evaluation.costInvestiment" | translate
+                    }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div class="col-12 d-flex flex-column" *ngIf="budgetActionVisible">
               <label for="budgetAction">{{
                 "proposal_evaluation.budgetAction" | translate
@@ -185,11 +228,7 @@
               ></tt-input-message>
             </div>
 
-            <div class="col-12 d-flex flex-row">
-              <p-inputSwitch inputId="input-switch-have-cost" formControlName="haveCost"></p-inputSwitch>
-              <label class="form-check-label ml-2" for="input-switch-have-cost">{{'proposal_evaluation.haveCost'|translate}}</label> 
-            </div>
-            <div class="col-12 d-flex flex-row">
+            <div class="col-12 d-flex flex-row" *ngIf="showNewRequest">
               <p-inputSwitch inputId="input-switch-new-request" formControlName="newRequest"></p-inputSwitch>
               <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label> 
             </div>
@@ -198,13 +237,26 @@
               <label for="budgetPlan">{{
                 "proposal_evaluation.budgetPlan" | translate
               }}</label>
-              <input
+              <p-multiSelect
                 [disabled]="loading"
-                type="text"
-                pInputText
+                [options]="budgetPlanOptions"
+                filter="true"
+                filterBy="budgetPlanId,budgetPlanName"
+                showClear="true"
+                showToggleAll="false"
                 formControlName="budgetPlan"
-                class="ng-dirty ng-invalid form-control"
-              />
+                [style]="{ 'min-height': '38px' }"
+                styleClass="d-flex form-control my-1"
+                class="ng-dirty ng-invalid"
+              >
+                <ng-template let-value pTemplate="selectedItems">                  
+                  {{ formatBudgetPlanValue(value) }}
+                </ng-template>
+
+                <ng-template let-item pTemplate="item">
+                  <span>{{ formatBudgetPlanItem(item) }}</span>
+                </ng-template>
+              </p-multiSelect>
               <tt-input-message
                 [form]="proposalEvaluationForm"
                 field="budgetPlan"
@@ -289,7 +341,7 @@
     >
       <div class="row">
         <div class="col-8">
-          <label>{{ "proposal_evaluation.loaIncluded" | translate }}</label>
+          <label>{{ "proposal_evaluation.approved" | translate }}</label>
           <p>{{ (formLoaIncluded ? "yes" : "no") | translate }}</p>
         </div>
       </div>
@@ -322,7 +374,12 @@
         <div class="row">
           <div class="col-8">
             <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
-            <p>{{ formBudgetPlan }}</p>
+            <p *ngIf="!formBudgetPlan || formBudgetPlan.length === 0; else budgetPlanList">{{ 'proposal_evaluation.budgetPlan_nullValue' | translate }}</p>
+            
+            <ng-template #budgetPlanList>
+              <p *ngFor="let planItem of formBudgetPlan">{{ formatBudgetPlanItem(planItem) }}</p>
+            </ng-template>
+            
           </div>
         </div>
         <div class="row">
@@ -334,10 +391,10 @@
         <div class="row">
           <div class="col-8">
             <label>{{ "proposal_evaluation.haveCost" | translate }}</label>
-            <p>{{ (formHaveCost ? 'yes' : 'no' ) | translate }}</p>
+            <p>{{ (formHaveCost ? 'yes' : 'no' ) | translate }}<ng-container *ngIf="formHaveCost">, {{formCostType}}</ng-container></p>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="showNewRequest">
           <div class="col-8">
             <label>{{ "proposal_evaluation.newRequest" | translate }}</label>
             <p>{{ (formNewRequest ? 'yes' : 'no' ) | translate }}</p>

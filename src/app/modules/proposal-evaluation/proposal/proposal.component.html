@@ -50,8 +50,8 @@
             class="org-badge"
             (click)="createOrEditProposal(proposal, orgGuid.evaluatorOrgsName)"
             [ngClass]="{
-              loaIncluded: orgGuid.loaIncluded,
-              'not-loaIncluded': !orgGuid.loaIncluded
+              approved: orgGuid.approved,
+              'not-approved': !orgGuid.approved
             }"
           > 
             {{ getOrgName(orgGuid.evaluatorOrgsName) }}

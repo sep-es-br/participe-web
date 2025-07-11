@@ -16,7 +16,7 @@ button.org-badge {
   background-color: #00c853;
 }
 
-.evaluated-not-loaIncluded{
+.evaluated-not-approved{
   background-color: #aaaaaa97;
 }
 
@@ -27,9 +27,14 @@ button.org-badge {
 label {
   font-weight: bold;
 
-  & + p {
+  span.required {
+    color: red;
+  }
+
+  & ~ p {
     margin-left: 1.5rem;
     text-align: justify;
+    margin-bottom: 0;
   }
 }
 

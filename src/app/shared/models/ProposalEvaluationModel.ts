@@ -1,5 +1,6 @@
 import {
   IBudgetAction,
+  IBudgetPlan,
   IBudgetUnit,
   IProposalEvaluation,
   IProposalEvaluationCreateForm,
@@ -7,29 +8,31 @@ import {
 
 export class ProposalEvaluationModel implements IProposalEvaluation {
   private readonly _id: number;
-  public includedInNextYearLOA: boolean;
+  public approved: boolean;
   public reason?: string;
   public reasonDetail?: string;
   public budgetUnitId?: string;
   public budgetUnitName?: string;
   public budgetActionId?: string;
   public budgetActionName?: string;
-  public budgetPlan?: string;
+  public budgetPlan?: IBudgetPlan[];
   public evaluatorName: string;
   public representing: string;
   public haveCost: boolean;
+  public costType: string;
   public newRequest: boolean;
 
   constructor(proposalEvaluation: IProposalEvaluation) {
     this._id = proposalEvaluation.id;
-    this.includedInNextYearLOA = proposalEvaluation.includedInNextYearLOA;
-    if (proposalEvaluation.includedInNextYearLOA) {
+    this.approved = proposalEvaluation.approved;
+    if (proposalEvaluation.approved) {
       this.budgetUnitId = proposalEvaluation.budgetUnitId;
       this.budgetUnitName = proposalEvaluation.budgetUnitName;
       this.budgetActionId = proposalEvaluation.budgetActionId;
       this.budgetActionName = proposalEvaluation.budgetActionName;
       this.budgetPlan = proposalEvaluation.budgetPlan;
       this.haveCost = proposalEvaluation.haveCost;
+      this.costType = proposalEvaluation.costType;
       this.newRequest = proposalEvaluation.newRequest;
     } else {
       this.reason = proposalEvaluation.reason; 
@@ -91,16 +94,17 @@ export class ProposalEvaluationCreateFormModel
 {
   public personId: number;
   public proposalId: number;
-  public includedInNextYearLOA: boolean;
+  public approved: boolean;
   public reason?: string;
   public reasonDetail?: string;
   public budgetUnitId?: string;
   public budgetUnitName?: string;
   public budgetActionId?: string;
   public budgetActionName?: string;
-  public budgetPlan?: string;
+  public budgetPlan?: IBudgetPlan[];
   public representing: string;
   public haveCost : boolean;
+  public costType: string;
   public newRequest : boolean;
 
   constructor(
@@ -112,14 +116,15 @@ export class ProposalEvaluationCreateFormModel
     public representingOrgName: string,
     public evaluatorName: string
   ) {
-    this.includedInNextYearLOA = formValue.includedInNextYearLOA;
-    if (formValue.includedInNextYearLOA) {
+    this.approved = formValue.approved;
+    if (formValue.approved) {
       this.budgetUnitId = this.getBudgetUnitId(formValue.budgetUnit);
       this.budgetUnitName = this.getBudgetUnitName(formValue.budgetUnit);
       this.budgetActionId = this.getBudgetActionId(formValue.budgetAction);
       this.budgetActionName = this.getBudgetActionName(formValue.budgetAction);
       this.budgetPlan = formValue.budgetPlan;
-      this.haveCost = formValue.haveCost;
+      this.haveCost = !!formValue.costType;
+      this.costType = formValue.costType;
       this.newRequest = formValue.newRequest;
     } else {
       this.reason = formValue.reason;

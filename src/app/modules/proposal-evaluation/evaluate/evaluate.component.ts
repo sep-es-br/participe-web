@@ -15,6 +15,7 @@ import { EvaluatorsService } from "@app/shared/services/evaluators.service";
 
 import {
   IBudgetAction,
+  IBudgetPlan,
   IBudgetUnit,
   IProposal,
 } from "@app/shared/interface/IProposal";
@@ -26,6 +27,8 @@ import {
 
 import { StoreKeys } from "@app/shared/constants";
 import { combineLatest } from "rxjs";
+import { LoadingService } from "@app/shared/services/loading.service";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-evaluate",
@@ -67,6 +70,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public budgetUnitOptions: Array<IBudgetUnit> = [];
   public budgetActionOptions: Array<IBudgetAction> = [];
+  public budgetPlanOptions: IBudgetPlan[] = [];
   public reasonOptions: Array<string> = [];
 
   public optionsData: Array<string>;
@@ -82,7 +86,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private evaluatorsService: EvaluatorsService,
     public modalService: ModalService,
-    private proposalEvaluationService: ProposalEvaluationService
+    private proposalEvaluationService: ProposalEvaluationService,
+    private loadingSrv : LoadingService
   ) {
     this.isEvaluationOpen = JSON.parse(
       sessionStorage.getItem("isEvaluationOpen")
@@ -132,12 +137,17 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.getOrgName();
 
     combineLatest([
-      this.proposalEvaluationForm.controls.haveCost.valueChanges,
+      this.proposalEvaluationForm.controls.costType.valueChanges
+        .pipe(tap(
+          value => {
+            if(!value) this.proposalEvaluationForm.controls.newRequest.patchValue(undefined);
+          }
+        )),
       this.proposalEvaluationForm.controls.newRequest.valueChanges
     ]).subscribe(([haveCost, newRequest]) => {
           this.updateBudgetPlanControlRequire();
           this.updateActionPlanControlRequire();
-        })
+    })
 
   }
 
@@ -179,8 +189,16 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     }
   }
 
+  public get showHaveCost() {
+    return !!this.formBudgetUnit
+  }
+
+  public get showNewRequest() {
+    return this.formHaveCost;
+  }
+
   public get formLoaIncluded(): boolean {
-    return this.proposalEvaluationForm.get("includedInNextYearLOA").value;
+    return this.proposalEvaluationForm.get("approved").value;
   }
 
   public loaChanged(event: RadioButtonClickEvent) {
@@ -219,12 +237,20 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return `${value.budgetActionId} - ${value.budgetActionName}`;
   }
 
-  public get formBudgetPlan(): string {
-    return (
-      this.proposalEvaluationForm.get("budgetPlan").value ??
-      this.translateService.instant("proposal_evaluation.budgetPlan_nullValue")
-    );
+  public formatBudgetPlanValue(value: IBudgetPlan[]): string {
+    return value?.map(plan => plan.budgetPlanId).join(', ');
   }
+
+  public formatBudgetPlanItem(item: IBudgetPlan): string {
+    return item ? `(${item.budgetPlanId}) ${item.budgetPlanName}` : undefined;
+  }
+
+  public get formBudgetPlan(): string {
+    return this.proposalEvaluationForm.get("budgetPlan").value;
+
+    //this.translateService.instant("proposal_evaluation.budgetPlan_nullValue")
+  }
+
 
   public get formReason(): string {
     return this.proposalEvaluationForm.get("reason").value;
@@ -235,7 +261,11 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   public get formHaveCost(): boolean {
-    return this.proposalEvaluationForm.get("haveCost").value;
+    return !!this.formCostType;
+  }
+
+  public get formCostType(): boolean {
+    return this.proposalEvaluationForm.get("costType").value;
   }
 
   public get formNewRequest(): boolean {
@@ -292,7 +322,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       this.evaluatorName
     );
 
-    if(reqBody.includedInNextYearLOA){
+    if(reqBody.approved){
       if (!this.checkFormChanged(reqBody)) {
         this.messageService.add({
           severity: "warn",
@@ -319,16 +349,16 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   private initCreateProposalForm() {
     this.proposalEvaluationForm = new FormGroup({
-      includedInNextYearLOA: new FormControl<boolean>(
+      approved: new FormControl<boolean>(
         null,
         Validators.required
       ),
       budgetUnit: new FormControl<Array<IBudgetUnit>>(null),
       budgetAction: new FormControl<Array<IBudgetAction>>(null),
-      budgetPlan: new FormControl<string>(null),
+      budgetPlan: new FormControl<Array<IBudgetPlan>>(null),
       reason: new FormControl<string>(null),
       reasonDetail: new FormControl<string>(null),
-      haveCost: new FormControl<boolean>(false),
+      costType: new FormControl<boolean>(undefined),
       newRequest: new FormControl<boolean>(false)
     });
   }
@@ -336,7 +366,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   private initEditProposalForm(
     proposalEvaluationData: ProposalEvaluationModel
   ) {
-    if (proposalEvaluationData.includedInNextYearLOA) {
+    if (proposalEvaluationData.approved) {
       const budgetUnitIdArray = proposalEvaluationData.budgetUnitId.includes(
         ";"
       )
@@ -350,8 +380,8 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     }
 
     this.proposalEvaluationForm = new FormGroup({
-      includedInNextYearLOA: new FormControl<boolean>(
-        proposalEvaluationData.includedInNextYearLOA,
+      approved: new FormControl<boolean>(
+        proposalEvaluationData.approved,
         Validators.required
       ),
       budgetUnit: new FormControl<Array<IBudgetUnit>>(
@@ -360,10 +390,10 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetAction: new FormControl<Array<IBudgetAction>>(
         proposalEvaluationData.budgetActionControlValue
       ),
-      budgetPlan: new FormControl<string>(proposalEvaluationData.budgetPlan),
+      budgetPlan: new FormControl<IBudgetPlan[]>(proposalEvaluationData.budgetPlan),
       reason: new FormControl<string>(proposalEvaluationData.reason),
       reasonDetail: new FormControl<string>(proposalEvaluationData.reasonDetail),
-      haveCost: new FormControl<boolean>(proposalEvaluationData.haveCost),
+      costType: new FormControl<string>(proposalEvaluationData.costType),
       newRequest: new FormControl<boolean>(proposalEvaluationData.newRequest)
     });
 
@@ -402,16 +432,16 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private patchProposalEvaluationFormValue(loaIncluded: boolean): void {
+  private patchProposalEvaluationFormValue(approved: boolean): void {
     const budgetUnitControl = this.proposalEvaluationForm.get("budgetUnit");
     const budgetActionControl = this.proposalEvaluationForm.get("budgetAction");
     const budgetPlanControl = this.proposalEvaluationForm.get("budgetPlan");
     const reasonControl = this.proposalEvaluationForm.get("reason");
     const reasonDetailControl = this.proposalEvaluationForm.get("reasonDetail");
-    const haveCostControl = this.proposalEvaluationForm.get("haveCost");
+    const costTypeControl = this.proposalEvaluationForm.get("costType");
     const newRequestControl = this.proposalEvaluationForm.get("newRequest");
 
-    if (!loaIncluded) {
+    if (!approved) {
       budgetUnitControl.patchValue(null);
       budgetUnitControl.clearValidators();
 
@@ -421,7 +451,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       budgetPlanControl.patchValue(null);
       reasonDetailControl.patchValue(null);
 
-      haveCostControl.patchValue(false);
+      costTypeControl.patchValue(false);
       newRequestControl.patchValue(false);      
 
       reasonControl.addValidators(Validators.required);
@@ -446,20 +476,25 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     budgetPlanControl.updateValueAndValidity();
     reasonControl.updateValueAndValidity();
     reasonDetailControl.updateValueAndValidity();
-    haveCostControl.updateValueAndValidity();
+    costTypeControl.updateValueAndValidity();
     newRequestControl.updateValueAndValidity();
   }
 
   private populateOptionsLists() {
     this.budgetUnitOptions = this.proposalEvaluationService.getBudgetUnitList();
     this.reasonOptions = this.proposalEvaluationService.getReasonOptions();
+    this.loadingSrv.loading(true);
+    this.proposalEvaluationService.getBudgetPlan()
+        .then(values => this.budgetPlanOptions = values)
+        .finally(() => this.loadingSrv.loading(false));
+
   }
 
   private checkFormChanged(
     currentState: ProposalEvaluationCreateFormModel
   ): boolean {
     const keysArray = [
-      "includedInNextYearLOA",
+      "approved",
       "budgetUnitId",
       "budgetUnitName",
       "budgetActionId",
@@ -467,7 +502,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       "budgetPlan",
       "reason",
       "reasonDetail",
-      "haveCost",
+      "costType",
       "newRequest",
     ];
 

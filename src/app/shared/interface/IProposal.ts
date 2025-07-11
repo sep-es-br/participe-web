@@ -12,22 +12,23 @@ export interface IProposal {
 
 export interface IEvaluatorOrgsNameAndLoaIncludedList{
   evaluatorOrgsName: string
-  loaIncluded: boolean
+  approved: boolean
 }
 
 export interface IProposalEvaluation {
   readonly id: number;
-  includedInNextYearLOA: boolean;
+  approved: boolean;
   reason?: string;
   reasonDetail?: string;
   budgetUnitId?: string;
   budgetUnitName?: string;
   budgetActionId?: string;
   budgetActionName?: string;
-  budgetPlan?: string;
+  budgetPlan?: IBudgetPlan[];
   representing: string;
   evaluatorName: string;
   haveCost: boolean;
+  costType: string;
   newRequest: boolean;
 }
 
@@ -43,7 +44,7 @@ export interface IProposalEvaluationSearchFilter {
   planItemAreaId: number;
   planItemId: number;
   organizationGuid: string;
-  loaIncluded: boolean;
+  approved: boolean;
   commentText: string;
 }
 
@@ -55,6 +56,11 @@ export interface IBudgetUnit {
 export interface IBudgetAction {
   budgetActionId: string;
   budgetActionName: string;
+}
+
+export interface IBudgetPlan {
+  budgetPlanId: string;
+  budgetPlanName: string;
 }
 
 export interface IBudgetOptions {

@@ -14,6 +14,7 @@ import { IResultPaginated } from "../interface/IResultPaginated";
 import {
   IBudgetAction,
   IBudgetOptions,
+  IBudgetPlan,
   IBudgetUnit,
   IProposal,
   IProposalEvaluation,
@@ -31,7 +32,7 @@ import { Conference } from "../models/conference";
 export class ProposalEvaluationService {
   private evaluationStatusOptions: SelectItem[] = [];
 
-  private loaIncludedOptions: SelectItem[] = [];
+  private approvedOptions: SelectItem[] = [];
 
   private reasonOptions: Array<string> = [
     "Entrega já realizada",
@@ -80,7 +81,7 @@ export class ProposalEvaluationService {
   }
 
   public getLoaIncludedOptions(): Array<SelectItem> {
-    return this.loaIncludedOptions;
+    return this.approvedOptions;
   }
 
   public getLocalityOptions(
@@ -245,6 +246,25 @@ export class ProposalEvaluationService {
       .toPromise();
   }
 
+  private fetchBudgetPlan(): Promise<Array<IBudgetOptions>> {
+    return this._http
+      .get<Array<IBudgetOptions>>(`${this._optionsUrl}/budgetOptions`, {
+        headers: Common.buildHeaders(),
+      })
+      .toPromise();
+  }
+
+
+
+  public getBudgetPlan(): Promise<IBudgetPlan[]> {
+    return this._http
+      .get<IBudgetPlan[]>(
+        `${this._url}/budgetPlanList`,
+        { headers: Common.buildHeaders() }
+      )
+      .toPromise();
+  }
+
   public checkIsCommentEvaluated(commentId: number): Promise<boolean> {
     return this._http
       .get<boolean>(`${this._url}/isCommentEvaluated?commentId=${commentId}`, {
@@ -260,6 +280,12 @@ export class ProposalEvaluationService {
         { headers: Common.buildHeaders() }
       )
       .toPromise();
+  }
+
+  public async populateBudgetPlan(): Promise<void> {
+    await this.fetchBudgetOptions().then(
+      (response) => (this.budgetOptions = response)
+    );
   }
 
   public async populateBudgetOptions(): Promise<void> {
@@ -288,7 +314,7 @@ export class ProposalEvaluationService {
           },
         ];
 
-        this.loaIncludedOptions = [
+        this.approvedOptions = [
           { label: translationsJSON["all"], value: null },
           { label: translationsJSON["yes"], value: true },
           { label: translationsJSON["no"], value: false },
@@ -314,7 +340,7 @@ export class ProposalEvaluationService {
         },
       ];
 
-      this.loaIncludedOptions = [
+      this.approvedOptions = [
         { label: langConfig.translations["all"], value: null },
         { label: langConfig.translations["yes"], value: true },
         { label: langConfig.translations["no"], value: false },
