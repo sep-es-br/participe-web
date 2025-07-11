@@ -71,7 +71,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
     );
 
     this.getEvaluationStatusOptions();
-    this.getLoaIncludedOptions();
+    this.getApprovedOptions();
   }
 
   public async ngOnInit() {
@@ -298,9 +298,9 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
       this.proposalEvaluationService.getEvaluationStatusOptions();
   }
 
-  private getLoaIncludedOptions() {
+  private getApprovedOptions() {
     this.approvedOptions =
-      this.proposalEvaluationService.getLoaIncludedOptions();
+      this.proposalEvaluationService.getApprovedOptions();
   }
 
   private async getLocalityOptions() {
@@ -350,7 +350,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
     await this.getPlanItemOptions();
     await this.getPlanItemAreaOptions();
     this.getEvaluationStatusOptions();
-    this.getLoaIncludedOptions();
+    this.getApprovedOptions();
   }
 
   private buildBreadcrumb() {
@@ -383,7 +383,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
     this.approvedOptions[0].label = translation;
 
     this.getEvaluationStatusOptions();
-    this.getLoaIncludedOptions();
+    this.getApprovedOptions();
 
     const propEvalSearchFormControls =
       this.proposalEvaluationSearchForm.controls;

@@ -46,7 +46,7 @@
       <div class="col-6 d-flex justify-content-around align-items-center">
         <div class="col-9 d-inline-flex align-content-center flex-wrap">
           <button 
-            *ngFor="let orgGuid of proposal.evaluatorOrgsNameAndLoaIncludedList"
+            *ngFor="let orgGuid of proposal.evaluatorOrgsNameAndApprovedList"
             class="org-badge"
             (click)="createOrEditProposal(proposal, orgGuid.evaluatorOrgsName)"
             [ngClass]="{

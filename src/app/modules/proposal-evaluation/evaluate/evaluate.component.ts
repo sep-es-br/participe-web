@@ -112,7 +112,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     if(this.isEvaluationOpen == false || sessionStorage.getItem("viewEvaluation")){
       this.readOnlyProposalEvaluation = true
     }else{
-      this.readOnlyProposalEvaluation =  this.proposal.evaluatorOrgsNameAndLoaIncludedList?.some(item => item.evaluatorOrgsName === this.evaluatorOrgGuid);
+      this.readOnlyProposalEvaluation =  this.proposal.evaluatorOrgsNameAndApprovedList?.some(item => item.evaluatorOrgsName === this.evaluatorOrgGuid);
     }
 
     this.domainConfigNamesObj =
@@ -197,7 +197,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return this.formHaveCost;
   }
 
-  public get formLoaIncluded(): boolean {
+  public get formApproved(): boolean {
     return this.proposalEvaluationForm.get("approved").value;
   }
 

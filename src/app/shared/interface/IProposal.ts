@@ -6,11 +6,11 @@ export interface IProposal {
   planItemName: string;
   planItemAreaName: string;
   description: string;
-  evaluatorOrgsNameAndLoaIncludedList?: Array<IEvaluatorOrgsNameAndLoaIncludedList>;
+  evaluatorOrgsNameAndApprovedList?: Array<IEvaluatorOrgsNameAndApprovedList>;
   evaluatorName?: string;
 }
 
-export interface IEvaluatorOrgsNameAndLoaIncludedList{
+export interface IEvaluatorOrgsNameAndApprovedList{
   evaluatorOrgsName: string
   approved: boolean
 }

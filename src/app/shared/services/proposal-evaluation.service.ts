@@ -80,7 +80,7 @@ export class ProposalEvaluationService {
     return this.evaluationStatusOptions;
   }
 
-  public getLoaIncludedOptions(): Array<SelectItem> {
+  public getApprovedOptions(): Array<SelectItem> {
     return this.approvedOptions;
   }
 
