@@ -141,6 +141,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         .pipe(tap(
           value => {
             if(!value) this.proposalEvaluationForm.controls.newRequest.patchValue(undefined);
+            this.proposalEvaluationForm.controls.budgetPlan.patchValue(undefined)
           }
         )),
       this.proposalEvaluationForm.controls.newRequest.valueChanges
