@@ -83,6 +83,18 @@ p.budgetActionParagraphEl {
   }
 }
 
+::ng-deep div.p-overlay.p-component {
+  max-width: 100%;
+
+  * {
+    max-width: 100%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+}
+
 ::ng-deep {
   app-modal .app-modal {
     width: auto !important;
