@@ -38,6 +38,15 @@ label {
   }
 }
 
+.trimText {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
 ::ng-deep .p-multiselect-label {
     display: flex;
     flex-direction: column;
@@ -72,6 +81,18 @@ p.budgetActionParagraphEl {
     font-weight: normal;
     margin-left: 0.4rem;
   }
+}
+
+::ng-deep div.p-overlay.p-component {
+  max-width: 100%;
+
+  * {
+    max-width: 100%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
 }
 
 ::ng-deep {

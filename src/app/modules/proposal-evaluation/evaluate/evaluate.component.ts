@@ -141,6 +141,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         .pipe(tap(
           value => {
             if(!value) this.proposalEvaluationForm.controls.newRequest.patchValue(undefined);
+            this.proposalEvaluationForm.controls.budgetPlan.patchValue(undefined)
           }
         )),
       this.proposalEvaluationForm.controls.newRequest.valueChanges
@@ -264,7 +265,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     return !!this.formCostType;
   }
 
-  public get formCostType(): boolean {
+  public get formCostType(): string {
     return this.proposalEvaluationForm.get("costType").value;
   }
 
@@ -488,6 +489,12 @@ export class EvaluateComponent implements OnInit, OnDestroy {
         .then(values => this.budgetPlanOptions = values)
         .finally(() => this.loadingSrv.loading(false));
 
+  }
+
+  get budgetPlanOptionsFiltered() {
+    return this.formCostType === "Investimento" ? 
+            this.budgetPlanOptions.filter(value => value.budgetPlanId !== "000001") :
+            this.budgetPlanOptions
   }
 
   private checkFormChanged(
