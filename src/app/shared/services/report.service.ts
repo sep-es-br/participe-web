@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
 import Common from "../util/Common";
 import * as moment from "moment";
+import { timeout } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -25,7 +26,7 @@ export class ReportService {
             headers: Common.buildHeaders(),
             params: params,
             responseType: 'blob' 
-      })
+      }).pipe(timeout(5 * 60 * 1000))
       .toPromise()
       .then((response: Blob) => {
         const url = window.URL.createObjectURL(response);

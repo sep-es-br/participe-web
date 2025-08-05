@@ -11,7 +11,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable, from, of, throwError } from 'rxjs';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, timeout } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 import { Injectable } from '@angular/core';
@@ -41,6 +41,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     this.loadingService.loading(!hideLoading);
 
     return next.handle(req).pipe(
+      timeout(5*60*1000),
       map((event: HttpEvent<any>) => {
         return hideLoading
           ? this.handleNoLoading(event)
