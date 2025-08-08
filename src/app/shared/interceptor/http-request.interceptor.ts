@@ -41,7 +41,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     this.loadingService.loading(!hideLoading);
 
     return next.handle(req).pipe(
-      timeout(5*60*1000),
       map((event: HttpEvent<any>) => {
         return hideLoading
           ? this.handleNoLoading(event)

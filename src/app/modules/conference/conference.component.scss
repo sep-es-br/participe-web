@@ -70,9 +70,24 @@ form {
     margin: 20px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
     flex-direction: column;
+    position: relative;
 
     fa-icon {
       margin-bottom: 15px;
+    }
+
+    &.ativo {
+      filter: brightness(0.8);
+      cursor: progress;
+    }
+
+    .reportLoading {
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
     }
 
     label {

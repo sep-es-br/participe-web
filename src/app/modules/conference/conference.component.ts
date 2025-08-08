@@ -1,6 +1,6 @@
 import { PersonService } from '@app/shared/services/person.service';
 import { FileCtrl } from './../../shared/models/file';
-import { AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, OnInit, signal, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { UntypedFormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
@@ -36,6 +36,7 @@ import { ReportService } from '@app/shared/services/report.service';
 export class ConferenceComponent implements OnInit {
 
   reportIcon = faFile;
+  reportLoadingSignal = signal<'propose'|undefined>(undefined);
 
   idConference: number;
   conferenceForm: FormGroup;
@@ -136,7 +137,10 @@ export class ConferenceComponent implements OnInit {
   }
 
   async generateProposeReport() {
-    this.reportService.getProposalReport(this.conference.id)
+    if(this.reportLoadingSignal()) return;
+
+    this.reportLoadingSignal.set('propose')
+    this.reportService.getProposalReport(this.conference.id).finally(() => this.reportLoadingSignal.set(undefined))
   }
 
   async loadPlanOptions() {
