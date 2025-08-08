@@ -11,7 +11,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable, from, of, throwError } from 'rxjs';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, timeout } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 import { Injectable } from '@angular/core';

@@ -160,7 +160,10 @@
 
                 <div class="report-list d-flex flex-column flex-sm-row align-items-center align-items-sm-start">
 
-                  <div class="container-icon" (click)="generateProposeReport()">
+                  <div class="container-icon" [ngClass]="reportLoadingSignal() ? 'ativo' : ''" (click)="generateProposeReport()">
+                    <div class="reportLoading" *ngIf="reportLoadingSignal() === 'propose'" >
+                        <img src="assets/layout/images/Loading_icon.gif" alt="carregando..." />
+                    </div>
                     <fa-icon size="6x" [icon]="reportIcon"></fa-icon>
                     <label>{{'conference.proposeReport' | translate}}</label>
                   </div>
