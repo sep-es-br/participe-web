@@ -23,6 +23,7 @@ import { LocalityService } from '../services/locality.service';
 import * as moment from 'moment';
 import { concat } from 'lodash';
 import { PersonService } from '../services/person.service';
+import {ParticipationService} from '@app/shared/services/participation.service';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -52,6 +53,7 @@ export class AttendanceModel {
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
   optionsMeeting: Meeting[];
+  optionsOrganization: string[];
   openListMeetings: Meeting[];
   closedListMeetings: Meeting[];
   selectedConference: IConferenceWithMeetings;
@@ -64,9 +66,10 @@ export class AttendanceModel {
   selectedOrderBy = 'status';
   selectedFilterBy = 'pres';
   selectedFilterByStatus = 'all';
-  selectedFilterByIsAuthority : 'all' | boolean = true;
+  selectedFilterByIsAuthority: 'all' | boolean = true;
+  selectedOrganization = 'Todos';
   citizenAutentications: CitizenAuthenticationModel[] = [];
-  authName:string[]
+  authName: string[];
 
   selectedCounty: Locality;
   localities: Locality[];
@@ -90,6 +93,7 @@ export class AttendanceModel {
   protected citizenSrv: CitizenService;
   protected localitySrv: LocalityService;
   protected personSrv: PersonService;
+  protected participationSrv: ParticipationService;
 
   constructor(
     @Inject(Injector) injector: Injector,
@@ -105,6 +109,7 @@ export class AttendanceModel {
     this.citizenSrv = injector.get(CitizenService);
     this.localitySrv = injector.get(LocalityService);
     this.personSrv = injector.get(PersonService);
+    this.participationSrv = injector.get(ParticipationService);
 
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, CustomValidators.noWhitespaceValidator]],
@@ -162,7 +167,7 @@ export class AttendanceModel {
     this.form.get('isAuthority')?.valueChanges.subscribe((isAuth: boolean) => {
       const organization = this.form.get('organization');
       const role = this.form.get('role');
-  
+
       if (isAuth) {
         organization?.setValidators([Validators.required]);
         role?.setValidators([Validators.required]);
@@ -170,7 +175,7 @@ export class AttendanceModel {
         organization?.clearValidators();
         role?.clearValidators();
       }
-  
+
       organization?.updateValueAndValidity();
       role?.updateValueAndValidity();
     });
@@ -180,7 +185,7 @@ export class AttendanceModel {
     if(!attendee.personId){
       this.toggleNewAccount(attendee);
     }else{
-      const { 
+      const {
         name, locality, authType, cpf, email, phone, password, isAuthority, organization, role,
         toAnnounce, announced
        } = this.form.controls;
@@ -293,7 +298,7 @@ export class AttendanceModel {
     }
     await this.setActionBar();
     this.isSearching = false;
-    
+
   }
 
   async loadNextPageRegister() {
@@ -421,6 +426,8 @@ export class AttendanceModel {
       ]);
     }
 
+    this.optionsOrganization = ['Todos', ...( await this.participationSrv.getOrganizations(this.idMeeting))];
+
     await this.searchByName();
     await this.setActionBar();
     // await this.searchByName();
@@ -488,7 +495,7 @@ export class AttendanceModel {
 
       let openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf())
       let closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()))
-      
+
       if (type == 'open') {
         return openMeeting
       } else if (type == 'closed') {
@@ -514,7 +521,7 @@ export class AttendanceModel {
   }
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
-    
+
     return { search: {
         name: this.nameSearch,
         size: this.pageSize,
@@ -586,7 +593,7 @@ export class AttendanceModel {
       }} catch (error) {
         console.error('Erro ao buscar o AC Role:', error);
       }
-        
+
   }
-  
+
 }
