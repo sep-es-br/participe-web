@@ -530,7 +530,8 @@ export class AttendanceModel {
         filterBy: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
         ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {},
-        ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {}
+        ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
+        ...this.selectedOrganization ? { filterByOrganization: this.selectedOrganization } : {},
       } };
   }
 
