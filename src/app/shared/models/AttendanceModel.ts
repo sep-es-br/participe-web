@@ -30,7 +30,11 @@ export enum AuthTypeEnum {
   EMAIL = 'E-Mail'
 }
 
+
+
 export class AttendanceModel {
+
+  public readonly OrgTodos = 'Orgão: Todos';
 
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -67,7 +71,7 @@ export class AttendanceModel {
   selectedFilterBy = 'pres';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;
-  selectedOrganization = 'Todos';
+  selectedOrganization = this.OrgTodos;
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName: string[];
 
@@ -426,7 +430,7 @@ export class AttendanceModel {
       ]);
     }
 
-    this.optionsOrganization = ['Todos', ...( await this.participationSrv.getOrganizations(this.idMeeting))];
+    this.optionsOrganization = [this.OrgTodos, ...( await this.participationSrv.getOrganizations(this.idMeeting))];
 
     await this.searchByName();
     await this.setActionBar();
@@ -531,7 +535,7 @@ export class AttendanceModel {
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
         ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {},
         ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
-        ...this.selectedOrganization ? { filterByOrganization: this.selectedOrganization } : {},
+        ...this.selectedOrganization !== this.OrgTodos ? { filterByOrganization: this.selectedOrganization } : {},
       } };
   }
 
