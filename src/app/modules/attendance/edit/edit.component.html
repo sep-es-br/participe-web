@@ -84,6 +84,10 @@
               <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
                 (onChange)="loadACRole($event)"></p-inputSwitch>
             </div>
+            <div class="col-12">
+              <label class="d-block mb-2">{{ 'citizen.team' | translate }}</label>
+              <p-inputSwitch formControlName="isTeam"></p-inputSwitch>
+            </div>
             <ng-container *ngIf="form.get('isAuthority').value">
               <div class="col-12">
                 <label for="organization">{{ 'citizen.organization' | translate }}*</label>
@@ -131,69 +135,111 @@
     <ng-template #list>
       <section id="attendee-filter-row">
         <div class="row gap-2">
-          <div class="row">
+          <div class="col-12 col-md p-0 d-flex flex-column">
+            <label for="optsOrderBy">Ordenar por:</label>
+            <p-dropdown
+                id="optsOrderBy"
+                [options]="optionsOrderBy"
+                [(ngModel)]="selectedOrderBy"
+                [styleClass]="''"
+                (onChange)="searchByName()"
+              >
+                <ng-template let-option pTemplate="selectedItem">
+                  {{
+                    (option.label | translate)
+                  }}
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                  {{ option.label | translate }}
+                </ng-template>
+              </p-dropdown>
+            </div>
             <div class="col-12 col-md p-0">
+              <label for="optsIsAuthority">Representantes:</label>
               <p-dropdown
-                  [options]="optionsOrderBy"
-                  [(ngModel)]="selectedOrderBy"
-                  [styleClass]="''"
-                  (onChange)="searchByName()"
-                >
-                  <ng-template let-option pTemplate="selectedItem">
-                    {{
-                      ("attendance.orderBy" | translate) +
-                      ": " +
-                      (option.label | translate)
-                    }}
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option.label | translate }}
-                  </ng-template>
-                </p-dropdown>
+                id="optsIsAuthority"
+                [options]="optionsFilterByTeam"
+                (onChange)="searchByName()"
+              >
+                <ng-template let-option pTemplate="selectedItem">
+                  <span>{{ option.label }}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                  {{ option.label }}
+                </ng-template>
+              </p-dropdown>
+            </div>
+          <div class="col-12 col-md p-0">
+            <label for="optTeam">Equipe de governo:</label>
+            <p-dropdown
+              id="optTeam"
+              [options]="optionsFilterBy"
+              [(ngModel)]="selectedFilterBy"
+              (onChange)="searchByName()"
+            >
+              <ng-template let-option pTemplate="selectedItem">
+                <span>{{ option.label }}</span>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+            <div class="col-12 col-md p-0">
+              <label for="optPresentes">Participantes:</label>
+              <p-dropdown
+                id="optPresentes"
+                [options]="optionsFilterBy"
+                [(ngModel)]="selectedFilterBy"
+                (onChange)="searchByName()"
+              >
+                <ng-template let-option pTemplate="selectedItem">
+                  <span>{{ option.label }}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                  {{ option.label }}
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-12 col-md p-0">
+              <label for="optStatus">Situação:</label>
+              <p-dropdown
+                id="optStatus"
+                [options]="optionsFilterByStatus"
+                [(ngModel)]="selectedFilterByStatus"
+                (onChange)="searchByName()"
+              >
+                <ng-template let-option pTemplate="selectedItem">
+                  <span>{{ option.label }}</span>
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                  {{ option.label }}
+                </ng-template>
+              </p-dropdown>
+            </div>
+              <div class="col-12 col-md p-0">
+                <label for="optOrganization">Orgao:</label>
+                <p-autoComplete
+                  class="d-flex"
+                  [suggestions]="optionsOrganization"
+                  [(ngModel)]="selectedOrganization"
+                  (completeMethod)="filterOrganization($event);searchByName()"></p-autoComplete>
+
+<!--                <p-dropdown-->
+<!--                  [options]="optionsOrganization"-->
+<!--                  [(ngModel)]="selectedOrganization"-->
+<!--                  (onChange)="searchByName()"-->
+<!--                >-->
+<!--                  <ng-template let-option pTemplate="selectedItem">-->
+<!--                    <span>{{ option }}</span>-->
+<!--                  </ng-template>-->
+<!--                  <ng-template let-option pTemplate="item">-->
+<!--                    {{ option }}-->
+<!--                  </ng-template>-->
+<!--                </p-dropdown>-->
               </div>
               <div class="col-12 col-md p-0">
-                <p-dropdown
-                  [options]="optionsFilterByIsAuthority"
-                  [(ngModel)]="selectedFilterByIsAuthority"
-                  (onChange)="searchByName()"
-                >
-                  <ng-template let-option pTemplate="selectedItem">
-                    <span>{{ option.label }}</span>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option.label }}
-                  </ng-template>
-                </p-dropdown>
-              </div>
-              <div class="col-12 col-md p-0">
-                <p-dropdown
-                  [options]="optionsFilterBy"
-                  [(ngModel)]="selectedFilterBy"
-                  (onChange)="searchByName()"
-                >
-                  <ng-template let-option pTemplate="selectedItem">
-                    <span>{{ option.label }}</span>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option.label }}
-                  </ng-template>
-                </p-dropdown>
-              </div>
-              <div class="col-12 col-md p-0">
-                <p-dropdown
-                  [options]="optionsFilterByStatus"
-                  [(ngModel)]="selectedFilterByStatus"
-                  (onChange)="searchByName()"
-                >
-                  <ng-template let-option pTemplate="selectedItem">
-                    <span>{{ option.label }}</span>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option.label }}
-                  </ng-template>
-                </p-dropdown>
-              </div>
-              <div class="col-12 col-md p-0">
+                <label for="search-name">Busca:</label>
                 <div class="search">
                   <div class="input-group mb-3">
                     <input
@@ -216,26 +262,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 col-md-2 p-0">
-                <p-dropdown
-                  [options]="optionsOrganization"
-                  [(ngModel)]="selectedOrganization"
-                  (onChange)="searchByName()"
-                >
-                  <ng-template let-option pTemplate="selectedItem">
-                    <span>{{ option }}</span>
-                  </ng-template>
-                  <ng-template let-option pTemplate="item">
-                    {{ option }}
-                  </ng-template>
-                </p-dropdown>
-              </div>
-            </div>
 
-
-
-        </div>
       </section>
 
       <section id="attendee-list">

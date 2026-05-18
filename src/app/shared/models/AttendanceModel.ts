@@ -57,6 +57,7 @@ export class AttendanceModel {
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
   optionsMeeting: Meeting[];
+  private _optionsOrganization: string[];
   optionsOrganization: string[];
   openListMeetings: Meeting[];
   closedListMeetings: Meeting[];
@@ -71,7 +72,7 @@ export class AttendanceModel {
   selectedFilterBy = 'pres';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;
-  selectedOrganization = this.OrgTodos;
+  selectedOrganization = undefined;
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName: string[];
 
@@ -430,12 +431,22 @@ export class AttendanceModel {
       ]);
     }
 
-    this.optionsOrganization = [this.OrgTodos, ...( await this.participationSrv.getOrganizations(this.idMeeting))];
+    this._optionsOrganization = await this.participationSrv.getOrganizations(this.idMeeting);
+
+    this.optionsOrganization = [...this._optionsOrganization];
 
     await this.searchByName();
     await this.setActionBar();
     // await this.searchByName();
     this.showSelectMeeting = false;
+  }
+
+  filterOrganization(evt: any) {
+    const query = evt.query.toLowerCase();
+
+    this.optionsOrganization = this._optionsOrganization.filter(org =>
+      org.toLowerCase().includes(query)
+    );
   }
 
   async setActionBar() {
@@ -535,7 +546,9 @@ export class AttendanceModel {
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
         ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {},
         ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
-        ...this.selectedOrganization !== this.OrgTodos ? { filterByOrganization: this.selectedOrganization } : {},
+        ...(this.selectedOrganization && this.selectedOrganization.trim().length > 0)
+                              ? { filterByOrganization: this.selectedOrganization } : {},
+
       } };
   }
 

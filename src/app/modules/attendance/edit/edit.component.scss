@@ -152,9 +152,9 @@
   }
 
   .top-bar {
-   
+
     margin: 0 15px;
-   
+
 
     input.ng-valid.ng-touched.ng-dirty:focus,
     p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
@@ -212,7 +212,7 @@
   &announced {
     color: #34659e;
   }
-  
+
 }
 
 div[role="button"] {
@@ -234,12 +234,29 @@ div[role="button"] {
       font-weight: bolder;
     }
 
-    
+
   }
 
   .allow-announce-wrapper {
       color: #008000
     }
 
+  ::ng-deep p-autocomplete.p-inputwrapper {
+    /* Força a tag do PrimeNG a se comportar como bloco ou ocupar 100% no eixo do flex */
+    display: block !important;
+    width: 100% !important;
+
+    /* Alvo: A div interna (selecionada no seu print com == $0) */
+    > div.p-autocomplete {
+      width: 100% !important;
+      display: flex !important;
+    }
+
+    /* Alvo: O input real dentro da div */
+    input.p-autocomplete-input {
+      width: 100% !important;
+      flex: 1 1 auto !important; /* Garante que ele vai esticar dentro da div flex */
+    }
+  }
 
 }

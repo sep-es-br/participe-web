@@ -50,9 +50,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   ];
 
   optionsFilterByIsAuthority: SelectItem[] = [
-    {label: 'Representantes ou não', value: 'all'},
+    {label: 'Todos', value: 'all'},
     {label: 'Apenas representantes', value: true},
-    {label: 'Exceto representantes', value: false}
+    {label: 'Não representantes', value: false}
   ];
 
   optionsFilterByStatus: SelectItem[] = [
@@ -61,6 +61,12 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Em Triagem', value: 'screening'},
     {label: 'Anunciar', value: 'toAnnounce'},
     {label: 'Anunciado', value: 'announced'}
+  ];
+
+  optionsFilterByTeam: SelectItem[] = [
+    {label: 'Todos', value: 'all'},
+    {label: 'Apenas equipe', value: 'onlyTeam'},
+    {label: 'Não equipe', value: 'notTeam'}
   ];
 
   authTypeChangeSub: Subscription;
