@@ -81,17 +81,23 @@
             </div>
             <div class="col-12">
               <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
-              <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
-                (onChange)="loadACRole($event)"></p-inputSwitch>
-            </div>
-            <div class="col-12">
-              <label class="d-block mb-2">{{ 'citizen.team' | translate }}</label>
-              <p-inputSwitch formControlName="isTeam"></p-inputSwitch>
+              <p-inputSwitch formControlName="isAuthority"  (mousedown)="markAuthorityTouched()"
+                (onChange)="loadACRole($event)" [disabled]="form.get('isTeam').value"></p-inputSwitch>
             </div>
             <ng-container *ngIf="form.get('isAuthority').value">
               <div class="col-12">
+                <label class="d-block mb-2">{{ 'citizen.team' | translate }}</label>
+                <p-inputSwitch formControlName="isTeam"></p-inputSwitch>
+              </div>
+              <div class="col-12">
                 <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-                <input type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
+                <p-autoComplete
+                  formControlName="organization"
+                  [suggestions]="filteredOrganizations()"
+                  optionLabel="name"
+                  placeholder="Digite o órgão ou entidade"
+                  (completeMethod)="filterOrganization($event)"
+                ></p-autoComplete>
                 <tt-input-message [form]="form" field="organization"></tt-input-message>
               </div>
 
@@ -109,7 +115,7 @@
                 <p-inputSwitch formControlName="announced" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
               </div>
             </ng-container>
-            <div class="col-12">
+            <div class="col-12 d-flex flex-column">
               <div class="form-actions">
                 <button
                   pButton
@@ -126,6 +132,7 @@
                   (click)="toggleSelectedAttendee()"
                 ></button>
               </div>
+              <span class="aviso h-100" *ngIf="form.get('isTeam').value">Equipe de governo, encaminhar ao local apropriado.</span>
             </div>
           </form>
         </div>
@@ -155,22 +162,17 @@
               </p-dropdown>
             </div>
             <div class="col-12 col-md p-0">
-              <label for="optsIsAuthority">Representantes:</label>
+              <label for="optsParticipantes">Tipo de Participantes:</label>
               <p-dropdown
-                id="optsIsAuthority"
-                [options]="optionsFilterByTeam"
+                id="optsParticipantes"
+                [options]="optionsParticipantes"
                 (onChange)="searchByName()"
+                [(ngModel)]="selectedParticipante"
               >
-                <ng-template let-option pTemplate="selectedItem">
-                  <span>{{ option.label }}</span>
-                </ng-template>
-                <ng-template let-option pTemplate="item">
-                  {{ option.label }}
-                </ng-template>
               </p-dropdown>
             </div>
           <div class="col-12 col-md p-0">
-            <label for="optTeam">Equipe de governo:</label>
+            <label for="optTeam">Credenciamento e presença:</label>
             <p-dropdown
               id="optTeam"
               [options]="optionsFilterBy"
@@ -186,23 +188,7 @@
             </p-dropdown>
           </div>
             <div class="col-12 col-md p-0">
-              <label for="optPresentes">Participantes:</label>
-              <p-dropdown
-                id="optPresentes"
-                [options]="optionsFilterBy"
-                [(ngModel)]="selectedFilterBy"
-                (onChange)="searchByName()"
-              >
-                <ng-template let-option pTemplate="selectedItem">
-                  <span>{{ option.label }}</span>
-                </ng-template>
-                <ng-template let-option pTemplate="item">
-                  {{ option.label }}
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-12 col-md p-0">
-              <label for="optStatus">Situação:</label>
+              <label for="optStatus">Status da nominata:</label>
               <p-dropdown
                 id="optStatus"
                 [options]="optionsFilterByStatus"
@@ -218,25 +204,13 @@
               </p-dropdown>
             </div>
               <div class="col-12 col-md p-0">
-                <label for="optOrganization">Orgao:</label>
+                <label for="optOrganization">Órgao:</label>
                 <p-autoComplete
                   class="d-flex"
                   [suggestions]="optionsOrganization"
                   [(ngModel)]="selectedOrganization"
                   (completeMethod)="filterOrganization($event);searchByName()"></p-autoComplete>
 
-<!--                <p-dropdown-->
-<!--                  [options]="optionsOrganization"-->
-<!--                  [(ngModel)]="selectedOrganization"-->
-<!--                  (onChange)="searchByName()"-->
-<!--                >-->
-<!--                  <ng-template let-option pTemplate="selectedItem">-->
-<!--                    <span>{{ option }}</span>-->
-<!--                  </ng-template>-->
-<!--                  <ng-template let-option pTemplate="item">-->
-<!--                    {{ option }}-->
-<!--                  </ng-template>-->
-<!--                </p-dropdown>-->
               </div>
               <div class="col-12 col-md p-0">
                 <label for="search-name">Busca:</label>

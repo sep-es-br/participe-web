@@ -24,6 +24,7 @@ import * as moment from 'moment';
 import { concat } from 'lodash';
 import { PersonService } from '../services/person.service';
 import {ParticipationService} from '@app/shared/services/participation.service';
+import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -51,12 +52,13 @@ export class AttendanceModel {
   isSearching = false;
   isReadonly = false;
   readonlyOrganization = false;
-  readonlyRole= false;
+  readonlyRole = false;
   authorityTouched = false;
 
   showSelectMeeting = false;
   optionsConference: IConferenceWithMeetings[];
   optionsMeeting: Meeting[];
+  // tslint:disable-next-line:variable-name
   private _optionsOrganization: string[];
   optionsOrganization: string[];
   openListMeetings: Meeting[];
@@ -72,7 +74,8 @@ export class AttendanceModel {
   selectedFilterBy = 'pres';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;
-  selectedOrganization = undefined;
+  selectedParticipante = 'all';
+  selectedOrganization: IOptionOrganization = undefined;
   citizenAutentications: CitizenAuthenticationModel[] = [];
   authName: string[];
 
@@ -127,6 +130,7 @@ export class AttendanceModel {
       resetPassword: false,
       sub: [''],
       isAuthority: false,
+      isTeam: false,
       organization: [''],
       role: [''],
       toAnnounce: false,
@@ -159,10 +163,10 @@ export class AttendanceModel {
   async getTotalParticipants() {
     await this.meetingSrv.getTotalParticipantsInMeeting(this.idMeeting, this.getQueryListAttendees()).then(
       (response) => {
-        this.totalCheckedIn = response.checkedIn
-        this.totalPreRegistered = response.preRegistered
+        this.totalCheckedIn = response.checkedIn;
+        this.totalPreRegistered = response.preRegistered;
       }
-    )
+    );
   }
 
   toggleNewAccount(attendee?: IAttendee) {
@@ -187,7 +191,7 @@ export class AttendanceModel {
   }
 
   async selectAttendee(attendee: IAttendee , isEdit: boolean = false) {
-    if(!attendee.personId){
+    if (!attendee.personId){
       this.toggleNewAccount(attendee);
     }else{
       const {
@@ -200,19 +204,25 @@ export class AttendanceModel {
         const {
           success,
           data
-        } = await this.citizenSrv.GetById(attendee.personId, { search: { conferenceId: this.currentConference.id, meetingId: this.idMeeting, isEdit: isEdit } });
+        } = await this.citizenSrv.GetById(attendee.personId, {
+          search: {
+            conferenceId: this.currentConference.id,
+            meetingId: this.idMeeting,
+            isEdit
+          }
+        });
         if (success) {
           name.setValue(data.name);
           locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
           authType.setValue(AuthTypeEnum.EMAIL);
-          this.isReadonly = true
+          this.isReadonly = true;
           email.setValue(data.email);
           phone.setValue(data.telephone);
           this.selectedAttende.password = data.password;
           this.citizenAutentications = data.autentication || [];
           this.authName = data.authName || [];
           isAuthority.setValue(data.isAuthority ?? false);
-          if(data.isAuthority !== undefined) this.markAuthorityTouched()
+          if (data.isAuthority !== undefined) this.markAuthorityTouched();
           toAnnounce.setValue(data.toAnnounce);
           announced.setValue(data.announced);
           organization.updateValueAndValidity();
@@ -261,7 +271,7 @@ export class AttendanceModel {
         locality,
       },
       resetPassword: !!resetPassword,
-      sub: sub
+      sub
     };
 
     const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);
@@ -294,7 +304,7 @@ export class AttendanceModel {
       this.listAttendees = result.content;
       this.lastPage = result.last;
       this.noResult = result.empty;
-    } catch(error) {
+    } catch (error) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
@@ -379,24 +389,24 @@ export class AttendanceModel {
     }
   }
 
-  handleChangeConference(item? : IConferenceWithMeetings) {
-    if(!item){
+  handleChangeConference(item?: IConferenceWithMeetings) {
+    if (!item){
       this.openListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'open');
       this.closedListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
     }else{
       this.openListMeetings = this.getRunningMeeting(item.meeting, 'open');
       this.closedListMeetings = this.getRunningMeeting(item.meeting, 'closed');
-      this.selectedConference = item
+      this.selectedConference = item;
     }
 
     if (this.openListMeetings.length > 0) {
       this.openListMeetings.sort((b, a) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime());
-      this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings)
-      this.selectedMeeting = this.optionsMeeting[0]
+      this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings);
+      this.selectedMeeting = this.optionsMeeting[0];
 
     } else {
-      this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings)
-      this.selectedMeeting = this.optionsMeeting[0]
+      this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings);
+      this.selectedMeeting = this.optionsMeeting[0];
     }
   }
 
@@ -486,38 +496,38 @@ export class AttendanceModel {
 
     this.optionsConference.forEach(item => {
       if (item.meeting.length > 0) {
-        this.handleChangeConference(item)
+        this.handleChangeConference(item);
       }
-    })
+    });
 
     await this.setCurrentMeeting();
   }
 
   getRunningMeeting(meetings: Meeting[], type: string): Meeting[] {
 
-    let now = Date.now();
-    let runningMeeting = meetings.filter((m) => {
-      let start = new Date(
+    const now = Date.now();
+    const runningMeeting = meetings.filter((m) => {
+      const start = new Date(
         +m.beginDate.toString().substring(6, 10), // Year
         +m.beginDate.toString().substring(3, 5) - 1, // Month
         +m.beginDate.toString().substring(0, 2), // Day
         0, 0, 0, 0);
-      let end = new Date(
+      const end = new Date(
         +m.endDate.toString().substring(6, 10), // Year
         +m.endDate.toString().substring(3, 5) - 1, // Month
         +m.endDate.toString().substring(0, 2), // Day
         23, 59, 59, 999);
 
-      let openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf())
-      let closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()))
+      const openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf());
+      const closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()));
 
-      if (type == 'open') {
-        return openMeeting
-      } else if (type == 'closed') {
-        return closedMeeting
+      if (type === 'open') {
+        return openMeeting;
+      } else if (type === 'closed') {
+        return closedMeeting;
       }
-    })
-    return runningMeeting
+    });
+    return runningMeeting;
   }
 
   async getLocalitiesBasedOnConference() {
@@ -544,9 +554,9 @@ export class AttendanceModel {
         sort: this.selectedOrderBy,
         filterBy: this.selectedFilterBy,
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
-        ...this.selectedFilterByIsAuthority !== 'all' ? { filterByIsAuthority: this.selectedFilterByIsAuthority } : {},
+        ...this.selectedParticipante !== 'all' ? { tipoParticipante: this.selectedParticipante } : {},
         ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
-        ...(this.selectedOrganization && this.selectedOrganization.trim().length > 0)
+        ...(this.selectedOrganization && this.selectedOrganization.name.trim().length > 0)
                               ? { filterByOrganization: this.selectedOrganization } : {},
 
       } };

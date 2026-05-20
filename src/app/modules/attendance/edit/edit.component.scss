@@ -1,6 +1,12 @@
 @import '../attendance.component.scss';
 
+
+
 .edit-attendees {
+  .aviso {
+    font-weight: bold;
+    color: #f58634;
+  }
 
   .top-bar {
     display: flex;

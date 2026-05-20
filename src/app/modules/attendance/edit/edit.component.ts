@@ -41,6 +41,14 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   ];
   resultSearchCounty: Locality[];
 
+  optionsParticipantes: SelectItem[] = [
+    {label: 'Todos', value: 'all'},
+    {label: 'Representantes', value: 'repr'},
+    {label: 'Representantes não equipe de governo', value: 'repr-not-equipe'},
+    {label: 'Representantes equipe de governo', value: 'repr-equipe'},
+    {label: 'Público', value: 'pub'}
+  ];
+
   optionsFilterBy: SelectItem[] = [
     {label: 'Presentes', value: 'pres'},
     {label: 'Pré-credenciados', value: 'prereg'},
@@ -48,13 +56,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Pré-credenciados e Ausentes', value: 'prereg_notpres'},
     {label: 'Presentes não Pré-credenciados', value: 'notprereg_pres'},
   ];
-
-  optionsFilterByIsAuthority: SelectItem[] = [
-    {label: 'Todos', value: 'all'},
-    {label: 'Apenas representantes', value: true},
-    {label: 'Não representantes', value: false}
-  ];
-
   optionsFilterByStatus: SelectItem[] = [
     // value = [toAnnounce, announced]
     {label: 'Todos', value: 'all'},
@@ -63,11 +64,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Anunciado', value: 'announced'}
   ];
 
-  optionsFilterByTeam: SelectItem[] = [
-    {label: 'Todos', value: 'all'},
-    {label: 'Apenas equipe', value: 'onlyTeam'},
-    {label: 'Não equipe', value: 'notTeam'}
-  ];
+  filteredOrganizations = this.meetingSrv.organizationList;
+
+
 
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
@@ -114,6 +113,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
       (el) => el.nativeElement.contains(evt.target)
     ) ) { return; }
 
+    this.meetingSrv.getCanEditIsTeam().then(val => val ? this.form.get('isTeam').enable() : this.form.get('isTeam').disable());
+
     return super.selectAttendee(attendee, isEdit);
   }
 
@@ -126,11 +127,16 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   }
 
   async saveEdit() {
-    const isAuthority: boolean = this.form.get('isAuthority')?.value;
-    const organization: string = this.form.get('organization')?.value;
-    const role: string = this.form.get('role')?.value;
-    const toAnnounce: boolean = this.form.get('toAnnounce').value;
-    const announced: boolean = this.form.get('announced').value;
+
+    const {
+      isAuthority,
+      isTeam,
+      organization,
+      role,
+      toAnnounce,
+      announced
+    } = this.form.value;
+
     const {success} = await this.save();
     if (success) {
       if (this.authorityTouched) {
@@ -144,6 +150,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
           isAuthority: isAuthority ?? false,
         };
         if (isAuthority){
+          params.isTeam = isTeam;
           params.organization = organization;
           params.role = role;
           params.toAnnounce = toAnnounce;
@@ -244,4 +251,12 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     const customName = names.length > 2 ? `${names[0]} ${names[names.length - 1]}` : names.join(' ');
     return this.translate.instant('attendance.tooltipLabelUnchecking') + customName;
   }
+
+  filterOrganization(evt: any) {
+    const query = evt.query.toLowerCase();
+
+    this.filteredOrganizations.set(this.meetingSrv.organizationList().filter(org => org.name.toLowerCase().includes(query)));
+
+  }
+
 }
