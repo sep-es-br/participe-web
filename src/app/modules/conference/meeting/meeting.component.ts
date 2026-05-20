@@ -733,8 +733,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.meetingDataSelected = meeting;
   }
 
-  async generateLinkMeetingCredenciamento(meeting: Meeting){
-    this.meetingUrl = { url : `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/authority-credential/${meeting.id}`)}`};
+  async generateLinkMeetingCredenciamento(meeting: Meeting, isTeam = false){
+    this.meetingUrl = { url : `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/authority-credential/${meeting.id}${isTeam ? '?isTeam=true' : ''}`)}`};
     this.modalData = {title: meeting.name};
     this.ModalService.open('geraLink');
     this.meetingDataSelected = meeting;

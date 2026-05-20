@@ -165,6 +165,7 @@
 			"delete": "Excluir?",
 			"endDate": "Fim",
       "authorityLink": "Gerar link para credenciamento de autoridade",
+      "teamLink": "Gerar link para credenciamento de Equpe",
 			"error": {
 				"delete": "Erro ao tentar excluír a reunião {{name}}",
 				"fetch": {
