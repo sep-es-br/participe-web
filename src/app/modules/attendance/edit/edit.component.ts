@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnIni
 import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
-import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
+import {faCheckCircle, faCircle, faIdBadge} from '@fortawesome/free-regular-svg-icons';
 import {faBullhorn, faCheck, faHourglass, faHourglassStart, faQrcode, faTimes, faUserTie, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 
 import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
@@ -27,6 +27,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   iconCircle = faCircle;
   iconRemove = faTimes;
   iconAuthority = faUserTie;
+  iconTeam = faIdBadge;
   iconToAnnounce = faBullhorn;
   iconScreening = faHourglass;
   iconAnnounced = faIconAnnounced;

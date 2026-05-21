@@ -271,7 +271,10 @@
                 <ng-container *ngIf="attendee.isAuthority">
 
                   <div class="col-1 p-0">
-                    <fa-icon [icon]="iconAuthority" aria-label="icone Autoridade" size="2x"></fa-icon>
+                    <fa-icon title="{{(attendee.isTeam ? 'attendance.teamGov' : 'attendance.authority') | translate}}"
+                             [ngStyle]="{color: attendee.isTeam ? '#0930a8' : 'black'}"
+                             [icon]="attendee.isTeam ? iconTeam : iconAuthority"
+                             aria-label="icone Autoridade" size="2x"></fa-icon>
                   </div>
                   <div class="authorityInfo col p-0 d-flex gap-1 flex-column">
                     <div class="role text-center text-md-start">{{attendee.role}}</div>
