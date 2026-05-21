@@ -427,7 +427,7 @@ export class ConferenceComponent implements OnInit {
     if (this.conference.evaluationConfiguration) {
       this.setConferenceEvaluation();
     }
-    
+
     if (this.conference.researchConfiguration) {
       this.setConferenceResearchForm();
     }
@@ -448,7 +448,7 @@ export class ConferenceComponent implements OnInit {
   }
 
   setConferenceResearchForm() {
-    
+
     this.conferenceResearchForm.controls.beginDate.setValue(this.getDate(this.conference.researchConfiguration.beginDate));
     this.conferenceResearchForm.controls.endDate.setValue(this.getDate(this.conference.researchConfiguration.endDate));
     this.conferenceResearchForm.controls.displayModeResearch.setValue(this.conference.researchConfiguration.displayModeResearch);
@@ -703,7 +703,7 @@ export class ConferenceComponent implements OnInit {
 
       this.conferenceEvaluationForm.controls.evaluationBeginDate.updateValueAndValidity()
       this.conferenceEvaluationForm.controls.evaluationEndDate.updateValueAndValidity()
-      
+
       this.markFormGroupTouched(this.conferenceForm);
       this.markFormGroupTouched(this.conferenceResearchForm);
       this.markFormGroupTouched(this.conferenceEvaluationForm)
@@ -792,7 +792,7 @@ export class ConferenceComponent implements OnInit {
           return image.file;
         }
       });
-      
+
       if(formData.showCalendar){
         this.calendarImages.forEach(image => {
             image.toDelete = true;
@@ -811,7 +811,7 @@ export class ConferenceComponent implements OnInit {
         else if (this.calendarImages[i].file.id !== null
           && this.calendarImages[i].file.id !== undefined
           && this.calendarImages[i].toDelete) {
-          
+
           await this.removeFile(this.calendarImages[i].file.id, 'mobile');
         }
       }
@@ -867,7 +867,7 @@ export class ConferenceComponent implements OnInit {
         }
       };
 
-      this.conferenceService.save(formData, !!this.idConference);
+      this.conferenceService.save(formData, !!this.idConference).then(() => this.location.back());
 
       this.messageService.add({
         severity: 'success',
@@ -875,7 +875,7 @@ export class ConferenceComponent implements OnInit {
         detail: this.translate.instant(this.idConference ? 'conference.updated' : 'conference.inserted', { name: formData.name }),
       });
 
-      this.location.back();
+
     } catch (err) {
       console.error(err);
       this.messageService.add({
@@ -1053,7 +1053,7 @@ export class ConferenceComponent implements OnInit {
             formData.append('file', file, file.name);
             return await this.filesSrv.uploadFile(formData);
           }
-          break;  
+          break;
         case 'background':
           if (this.backgroundImages[index].file.id === null || this.backgroundImages[index].file.id === undefined) {
             file = this.backgroundImages[index].file;

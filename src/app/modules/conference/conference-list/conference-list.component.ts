@@ -128,7 +128,7 @@ export class ConferenceListComponent implements OnInit {
       elem = elem.parentElement;
       invalid = elem.classList.contains("dropdown-toggle");
     }
-        
+
     if(!invalid)
       this.handleEditConference(c);
   }
