@@ -70,7 +70,7 @@ export class AttendanceModel {
 
   isAttendeeSelected = false;
   selectedAttende: IAttendee;
-  selectedOrderBy = 'status';
+  selectedOrderBy = 'namingStatus';
   selectedFilterBy = 'pres';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;

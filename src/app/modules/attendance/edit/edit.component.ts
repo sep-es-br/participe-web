@@ -32,12 +32,15 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   iconAnnounced = faIconAnnounced;
   iconAllowAnnouce = faIconAllowAnnounce;
 
-
+// Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
   // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
     {label: 'name', value: 'name'},
     {label: 'attendance.arrival', value: 'checkedInDate'},
-    {label: 'attendance.status', value: 'status'},
+    {label: 'attendance.participationType', value: 'participationType'},
+    {label: 'attendance.credentialPresence', value: 'credentialPresence'},
+    {label: 'attendance.namingStatus', value: 'namingStatus'},
+    {label: 'attendance.organization', value: 'organization'},
   ];
   resultSearchCounty: Locality[];
 

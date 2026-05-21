@@ -19,6 +19,10 @@
 	"attendance": {
 		"arrival": "Ordem de Chegada",
 		"attendant": "Presentes",
+    "participationType": "Tipo de Participante",
+    "credentialPresence": "Credenciamento e Presença",
+    "namingStatus": "Status da nominata",
+    "organization": "Órgao",
 		"authentication": "Autenticação",
 		"county": "Município",
 		"edit": "Editar Lista de Presença",

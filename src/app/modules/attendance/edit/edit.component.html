@@ -162,7 +162,7 @@
               </p-dropdown>
             </div>
             <div class="col-12 col-md p-0">
-              <label for="optsParticipantes">Tipo de Participantes:</label>
+              <label for="optsParticipantes">{{ 'attendance.participationType' | translate }}:</label>
               <p-dropdown
                 id="optsParticipantes"
                 [options]="optionsParticipantes"
@@ -172,7 +172,7 @@
               </p-dropdown>
             </div>
           <div class="col-12 col-md p-0">
-            <label for="optTeam">Credenciamento e presença:</label>
+            <label for="optTeam">{{ 'attendance.credentialPresence' | translate }}:</label>
             <p-dropdown
               id="optTeam"
               [options]="optionsFilterBy"
@@ -188,7 +188,7 @@
             </p-dropdown>
           </div>
             <div class="col-12 col-md p-0">
-              <label for="optStatus">Status da nominata:</label>
+              <label for="optStatus">{{ 'attendance.namingStatus' | translate }}:</label>
               <p-dropdown
                 id="optStatus"
                 [options]="optionsFilterByStatus"
@@ -204,7 +204,7 @@
               </p-dropdown>
             </div>
               <div class="col-12 col-md p-0">
-                <label for="optOrganization">Órgao:</label>
+                <label for="optOrganization">{{ 'attendance.organization' | translate }}:</label>
                 <p-autoComplete
                   class="d-flex"
                   [suggestions]="optionsOrganization"
