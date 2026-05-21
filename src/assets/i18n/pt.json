@@ -164,8 +164,6 @@
 			"beginDate": "Início",
 			"delete": "Excluir?",
 			"endDate": "Fim",
-      "authorityLink": "Gerar link para credenciamento de autoridade",
-      "teamLink": "Gerar link para credenciamento de Equpe",
 			"error": {
 				"delete": "Erro ao tentar excluír a reunião {{name}}",
 				"fetch": {
@@ -216,9 +214,11 @@
 				"edit": "Editar",
 				"panel": "Exibir painel",
 				"delete": "Excluir",
-				"link": "Gerar link de pré cadastro da reunião",
-				"qrcode": "Gerar qr code de check-in automático"
-			}
+				"link": "Link de pré-cadastro",
+				"qrcode": "QR code de check-in automático",
+        "authorityLink": "Link para representantes",
+        "teamLink": "Link para Equipe de governo"
+      }
 		},
 		"moderator": {
 			"already-enabled": "{{name}} já está habilitado como moderador",
