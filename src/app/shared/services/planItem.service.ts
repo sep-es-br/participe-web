@@ -26,9 +26,9 @@ export class PlanItemService {
   save(planItem, edit) {
     if (edit) {
       const url = `${this.url}/${planItem.id}`;
-      return this.http.put<Plan>(url, JSON.stringify(planItem), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.put<Plan>(url, planItem, { headers: Common.buildHeaders() }).toPromise();
     } else {
-      return this.http.post<Plan>(this.url, JSON.stringify(planItem), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.post<Plan>(this.url, planItem, { headers: Common.buildHeaders() }).toPromise();
     }
   }
 

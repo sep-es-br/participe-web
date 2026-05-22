@@ -24,9 +24,9 @@ export class LocalityService {
 
   save(locality: Locality, edit: boolean) {
     if (edit) {
-      return this.http.put<Locality>(`${this.url}/${locality.id}`, JSON.stringify(locality), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.put<Locality>(`${this.url}/${locality.id}`, locality, { headers: Common.buildHeaders() }).toPromise();
     } else {
-      return this.http.post<Locality>(this.url, JSON.stringify(locality), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.post<Locality>(this.url, locality, { headers: Common.buildHeaders() }).toPromise();
     }
   }
 
