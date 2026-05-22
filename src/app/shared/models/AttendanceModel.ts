@@ -196,7 +196,7 @@ export class AttendanceModel {
     }else{
       const {
         name, locality, authType, cpf, email, phone, password, isAuthority, organization, role,
-        toAnnounce, announced
+        toAnnounce, announced, isTeam
        } = this.form.controls;
       try {
         this.isAttendeeSelected = true;
@@ -223,6 +223,7 @@ export class AttendanceModel {
           this.authName = data.authName || [];
           isAuthority.setValue(data.isAuthority ?? false);
           if (data.isAuthority !== undefined) this.markAuthorityTouched();
+          isTeam.patchValue(data.isTeam ?? false);
           toAnnounce.setValue(data.toAnnounce);
           announced.setValue(data.announced);
           organization.updateValueAndValidity();

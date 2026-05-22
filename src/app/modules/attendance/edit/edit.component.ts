@@ -56,9 +56,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   optionsFilterBy: SelectItem[] = [
     {label: 'Presentes', value: 'pres'},
     {label: 'Pré-credenciados', value: 'prereg'},
-    {label: 'Pré-credenciados e Presentes', value: 'prereg_pres'},
-    {label: 'Pré-credenciados e Ausentes', value: 'prereg_notpres'},
-    {label: 'Presentes não Pré-credenciados', value: 'notprereg_pres'},
+    {label: 'Pré-credenciados presentes', value: 'prereg_pres'},
+    {label: 'Pré-credenciados ausentes', value: 'prereg_notpres'},
+    {label: 'Presentes não pré-credenciados', value: 'notprereg_pres'},
   ];
   optionsFilterByStatus: SelectItem[] = [
     // value = [toAnnounce, announced]

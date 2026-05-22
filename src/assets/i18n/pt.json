@@ -17,10 +17,10 @@
 	"add": "Adicionar",
 	"attention": "Atenção",
 	"attendance": {
-		"arrival": "Ordem de Chegada",
+		"arrival": "Ordem de chegada",
 		"attendant": "Presentes",
-    "participationType": "Tipo de Participante",
-    "credentialPresence": "Credenciamento e Presença",
+    "participationType": "Tipo de participante",
+    "credentialPresence": "Credenciamento e presença",
     "namingStatus": "Status da nominata",
     "organization": "Órgão",
 		"authentication": "Autenticação",
