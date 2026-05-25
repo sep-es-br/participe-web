@@ -256,7 +256,21 @@ export class AttendanceModel {
       return { success: false };
     }
 
-    const { name, locality, phone, authType, cpf, password, email, resetPassword, sub, isAuthority, organization, role } = this.form.value;
+    const {
+      name,
+      locality,
+      phone,
+      authType,
+      cpf,
+      password,
+      email,
+      resetPassword,
+      sub,
+      isAuthority,
+      isTeam,
+      organization,
+      role
+    } = this.form.value;
 
     const formAPI: CitizenSenderModel = {
       name,
@@ -272,7 +286,11 @@ export class AttendanceModel {
         locality,
       },
       resetPassword: !!resetPassword,
-      sub
+      sub,
+      isAuthority,
+      isTeam,
+      organization,
+      role
     };
 
     const result = await this.citizenSrv.save(formAPI as any, this.selectedAttende ? this.selectedAttende.personId : null);
@@ -306,10 +324,11 @@ export class AttendanceModel {
       this.lastPage = result.last;
       this.noResult = result.empty;
     } catch (error) {
+      console.log(error);
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
-        detail: error.error.message
+        detail: error.error?.message
       });
     }
     await this.setActionBar();
@@ -557,7 +576,7 @@ export class AttendanceModel {
         ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
         ...this.selectedParticipante !== 'all' ? { tipoParticipante: this.selectedParticipante } : {},
         ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
-        ...(this.selectedOrganization && this.selectedOrganization.name.trim().length > 0)
+        ...(this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0)
                               ? { filterByOrganization: this.selectedOrganization } : {},
 
       } };

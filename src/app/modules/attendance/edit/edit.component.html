@@ -207,7 +207,8 @@
                 <label for="optOrganization">{{ 'attendance.organization' | translate }}:</label>
                 <p-autoComplete
                   class="d-flex"
-                  [suggestions]="optionsOrganization"
+                  optionLabel="name"
+                  [suggestions]="filteredOrganizations()"
                   [(ngModel)]="selectedOrganization"
                   (completeMethod)="filterOrganization($event);searchByName()"></p-autoComplete>
 
@@ -282,20 +283,18 @@
                   </div>
                   <div class="d-flex col-2 p-0 flex-column align-items-center" [ngClass]="'auth-' + getAuthStatus(attendee)">
                     <fa-icon
-                      size="2x"
                       [icon]="getAuthIcon(attendee)"
                     ></fa-icon>
-                    <span [ngClass]="'auth-' + getAuthStatus(attendee)">{{getAuthLabel(attendee)}}</span>
+                    <span [ngClass]="'auth-' + getAuthStatus(attendee) + ' rem075'">{{getAuthLabel(attendee)}}</span>
                   </div>
                   <div class="allow-announce-wrapper col-12 col-md-1 p-0 d-flex flex-column align-items-center align-items-center">
                     <ng-container *ngIf="!attendee.toAnnounce">
                         <div role="button" class="d-flex flex-column align-items-center justify-content-center" (click)="toggleToAnnounce(attendee)"
                           #toAnnounceToggle>
                           <fa-icon class="m-0"
-                            size="2x"
                             [icon]="iconAllowAnnouce"
                           ></fa-icon>
-                          <span [ngClass]="">{{ 'attendance.allow' | translate }}</span>
+                          <span class="rem075">{{ 'attendance.allow' | translate }}</span>
                         </div>
                     </ng-container>
                   </div>
@@ -305,7 +304,7 @@
               <div class="info-preregister col-12 col-md d-flex justify-content-center">
                 <ng-container *ngIf="attendee.preRegistered">
                   <div
-                    class="how-long-ago"
+                    class="how-long-ago rem075"
                     [pTooltip]="attendee.preRegisteredDate"
                   >
                     {{ getHowLongAgo(attendee.preRegisteredDate) }}
@@ -319,20 +318,20 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-checkin col-12 col-md-1 p-0 m-0 flex-column flex-md-row justify-content-center">
-                <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
+              <div class="info-checkin col-12 col-md-1 p-0 m-0 flex-column flex-md-row justify-content-center gap-3">
+                <div class="how-long-ago rem075" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
                 <div class="action">
                   <div role="button" class="d-flex flex-column align-items-center justify-content-center">
                     <fa-icon
-                      size="2x" class="m-0"
+                      class="m-0" [ngStyle]="{fontSize: 'x-large'}"
                       [icon]="attendee.checkedIn ? iconChecked : iconCircle"
                       tooltipPosition="left"
                       [pTooltip]="getToolTipText(attendee)"
                       tooltipStyleClass="tooltip-uncheck"
                     ></fa-icon>
-                    <span>{{ 'update' | translate }}</span>
+                    <span class="rem075">{{ 'update' | translate }}</span>
                   </div>
                 </div>
               </div>

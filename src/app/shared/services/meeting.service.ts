@@ -85,6 +85,7 @@ export class MeetingService extends BaseService<Meeting> {
     personId: number;
     timeZone: string;
     isAuthority?: boolean;
+    isTeam?: boolean;
     organization?: any;
     role?: any;
   }): Promise<ICheckedInAt> {

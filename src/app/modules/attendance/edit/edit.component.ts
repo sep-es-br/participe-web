@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren} from '@angular/core';
 import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
@@ -68,7 +68,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     {label: 'Anunciado', value: 'announced'}
   ];
 
-  filteredOrganizations = this.meetingSrv.organizationList;
+  filteredOrganizations = signal(this.meetingSrv.organizationList()) ;
 
 
 
@@ -144,8 +144,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     const {success} = await this.save();
     if (success) {
       if (this.authorityTouched) {
-        let now = new Date();
-        let timeZone = now.toString().split(' ')[5];
+        const now = new Date();
+        const timeZone = now.toString().split(' ')[5];
 
         const params: any = {
           meetingId: this.idMeeting,
@@ -259,7 +259,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   filterOrganization(evt: any) {
     const query = evt.query.toLowerCase();
 
-    this.filteredOrganizations.set(this.meetingSrv.organizationList().filter(org => org.name.toLowerCase().includes(query)));
+    this.filteredOrganizations.set(this.meetingSrv.organizationList()
+      .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query)));
 
   }
 
