@@ -19,7 +19,7 @@ export class PersonService extends BaseService<any> {
 
   postOperator(profile: string, person: IPerson): Promise<any> {
     return this.http.post(
-      `${this.urlBase}/operator?profile=${profile}`, JSON.stringify(person),
+      `${this.urlBase}/operator?profile=${profile}`, person,
       { headers: Common.buildHeaders() }
     ).toPromise();
   }
