@@ -256,6 +256,11 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     return this.translate.instant('attendance.tooltipLabelUnchecking') + customName;
   }
 
+  onOrganizationSelected(event:any) {
+    this.selectedOrganization = event.value;
+    this.searchByName();
+  }
+
   filterOrganization(evt: any) {
     const query = evt.query.toLowerCase();
 

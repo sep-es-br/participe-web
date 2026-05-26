@@ -577,7 +577,7 @@ export class AttendanceModel {
         ...this.selectedParticipante !== 'all' ? { tipoParticipante: this.selectedParticipante } : {},
         ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
         ...(this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0)
-                              ? { filterByOrganization: this.selectedOrganization } : {},
+                              ? { filterByOrganization: this.selectedOrganization.name } : {},
 
       } };
   }

@@ -208,6 +208,7 @@
   margin-right: 5%;
 }
 
+
 .auth- {
   &screening {
     color: gray;
@@ -227,8 +228,13 @@ div[role="button"] {
   cursor: pointer;
 }
 
+.authorityInfo-wrapper {
+  fa-icon{
+    font-size: x-large;
+  }
+}
+
 .secondary-info {
-  flex: unset !important;
 
   .authorityInfo {
 
