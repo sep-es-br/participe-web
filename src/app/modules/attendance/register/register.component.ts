@@ -105,15 +105,18 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
     await super.selectAttendee(attendee, isEdit);
 
-    if(attendee.sub) {
-      let papeis = await this.personSrv.findPapeisBySub(attendee.sub);
+    if (attendee.sub) {
+      const papeis = await this.personSrv.findPapeisBySub(attendee.sub);
 
       this.optsRoles = papeis.map(p => p.role);
       this.optsOrgs = [
         ...papeis.filter(p => p.organization).map(p => p.organization),
         ...papeis.filter(p => p.organizationSh).map(p => p.organizationSh)
-      ]
+      ];
     }
+
+
+    this.meetingSrv.getCanEditIsTeam().then(val => val ? this.form.get('isTeam').enable() : this.form.get('isTeam').disable());
 
 
   }
