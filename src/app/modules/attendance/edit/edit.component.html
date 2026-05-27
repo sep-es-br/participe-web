@@ -254,13 +254,20 @@
               >
                 {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
               </div>
+              <ng-container *ngIf="attendee.isAuthority">
+                  <fa-icon *ngIf="!attendee.isTeam; else iconTeam" title="{{('attendance.authority') | translate}}"
+                         [ngStyle]="{color: 'black'}"
+                         [icon]="iconAuthority"
+                         aria-label="icone Autoridade" size="2x"></fa-icon>
 
-              <fa-icon *ngIf="attendee.isAuthority && !attendee.isTeam" title="{{('attendance.authority') | translate}}"
-                       [ngStyle]="{color: 'black'}"
-                       [icon]="iconAuthority"
-                       aria-label="icone Autoridade" size="2x"></fa-icon>
+                <ng-template #iconTeam>
+                  <img src="assets/layout/images/icons/EquipeGov.svg"  [ngStyle]="{height: '64px'}" >
+                </ng-template>
 
-              <img src="assets/layout/images/icons/EquipeGov.svg" [ngStyle]="{height: '64px'}" >
+              </ng-container>
+
+
+
 
             </div>
             <div class="primary-info col-12 col-md-3" style="max-width: 25%; min-width: 200px;">
