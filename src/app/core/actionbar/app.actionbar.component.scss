@@ -1,9 +1,22 @@
 .record-amount {
     color: var(--bs-gray-500);
-  }
+}
 
-  .actions-right {
-    @media screen and (max-width: 500px) {
-      display: none;
-    }
+.actions-container {
+  justify-self: flex-end;
+  width: auto;
+}
+
+.actions-left {
+
+}
+
+.actions-right {
+
+  justify-self: flex-end;
+  flex-shrink: 0;
+
+  @media screen and (max-width: 500px) {
+    display: none;
   }
+}

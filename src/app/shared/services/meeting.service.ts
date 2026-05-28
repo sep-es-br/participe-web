@@ -86,7 +86,7 @@ export class MeetingService extends BaseService<Meeting> {
     timeZone: string;
     isAuthority?: boolean;
     isTeam?: boolean;
-    organization?: any;
+    organization?: IOptionOrganization;
     role?: any;
   }): Promise<ICheckedInAt> {
     return this.http.post<ICheckedInAt>(
@@ -102,7 +102,7 @@ export class MeetingService extends BaseService<Meeting> {
     timeZone: string;
     isAuthority?: boolean;
     isTeam?: boolean;
-    organization?: any;
+    organization?: IOptionOrganization;
     role?: any;
     toAnnounce?: boolean,
     announced?: boolean
