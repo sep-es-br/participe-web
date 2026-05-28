@@ -20,9 +20,9 @@ export class DomainService {
   save(domain, edit) {
     if (edit) {
       const url = `${this.url}/${domain.id}`;
-      return this.http.put<Domain>(url, JSON.stringify(domain), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.put<Domain>(url, domain, { headers: Common.buildHeaders() }).toPromise();
     } else {
-      return this.http.post<Domain>(this.url, JSON.stringify(domain), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.post<Domain>(this.url, domain, { headers: Common.buildHeaders() }).toPromise();
     }
   }
 

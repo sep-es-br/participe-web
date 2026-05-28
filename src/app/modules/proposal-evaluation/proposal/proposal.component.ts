@@ -148,13 +148,13 @@ export class ProposalComponent implements OnInit {
   }
 
   public getOrgName(orgGuid: string): string {
-    if (Object.entries(this.organizationsGuidNameMapObject).length == 0) {
+    if (Object.entries(this.organizationsGuidNameMapObject).length === 0) {
       this.organizationsGuidNameMapObject =
         this.evaluatorsService.organizationsGuidNameMapObject;
     }
 
-    let orgname = this.organizationsGuidNameMapObject[orgGuid];
-    if (orgname !== undefined) return orgname.split("-")[1].trim();
+    const orgname = this.organizationsGuidNameMapObject[orgGuid];
+    if (orgname !== undefined) return orgname.split('-')[1]?.trim();
   }
 
   public evaluateProposal(proposal: IProposal) {

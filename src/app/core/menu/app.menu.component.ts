@@ -82,14 +82,14 @@ export class AppMenuComponent implements OnInit {
         this.model.push(
           {
             label: 'attendance.label', icon: faUserCheck, items: [
-              {label: 'attendance.authority', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
             ]
           });
       } else {
         this.model.push(
           {
             label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
-              {label: 'attendance.authority', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
             ]
           });
       }
@@ -116,7 +116,7 @@ export class AppMenuComponent implements OnInit {
           }
         );
       }
-      
+
       if (window.location.href.endsWith('#/administration/dashboard')) {
         this.model.push(
           {

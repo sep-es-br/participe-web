@@ -68,7 +68,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
   ) {
     super(injector, true);
   }
-  
+
   override async setActionBar() {
 
     await this.getTotalParticipants();
@@ -82,17 +82,17 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
       }
     ]);
   }
-  
+
   async toggleAnnounced(attendee: IAttendeeAuthority, isEdit: boolean = false) {
-    
-  
+
+
       const {
         isAnnounced
       } = await this.authcSrv.toggleAnnounced(attendee.idCheckIn);
       attendee.announced = isAnnounced;
       this.searchByName();
 
-    
+
   }
 
   override toggleSelectedAttendee() {
@@ -101,7 +101,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     this.authName = [];
     this.form.reset();
   }
-    
+
   override async setCurrentMeeting() {
     if (this.currentConference !== this.selectedConference) {
       this.currentConference = this.selectedConference;
@@ -115,9 +115,9 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
       this.nameSearch = '';
       this.noResult = false;
       this.breadcrumbSrv.setItems([
-        { label: 'attendance.authority' },
+        { label: 'attendance.authorities' },
         {
-          label: `${this.translate.instant("attendance.authority") } ${this.currentMeeting.name}`,
+          label: `${this.translate.instant("attendance.authorities") } ${this.currentMeeting.name}`,
           routerLink: [`/attendance/${this.routerLinkItem}`]
         },
       ]);
@@ -195,7 +195,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
         break;
     }
   }
-  
+
 
   override async searchByName() {
     if (!this.idMeeting) {
@@ -219,7 +219,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     }
     await this.setActionBar();
     this.isSearching = false;
-    
+
   }
 
   ngOnInit(): void {
@@ -238,8 +238,8 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     this.actionbarSrv.setItems([]);
   }
 
-  
-  
+
+
     override async save(): Promise<{ success: boolean; result?: any }> {
       if (!this.form.valid) {
         this.messageSrv.add({
@@ -247,12 +247,12 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
           summary: this.translate.instant('error'),
           detail: this.translate.instant('attendance.error.invalidForm'),
         });
-  
+
         return { success: false };
       }
-  
+
       const { name, locality, phone, authType, cpf, password, email, resetPassword, sub, isAuthority, organization, role } = this.form.value;
-  
+
       const formAPI: CitizenSenderModel = {
         name,
         telephone: phone,
@@ -269,20 +269,20 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
         resetPassword: !!resetPassword,
         sub: sub
       };
-  
+
       const result = await this.citizenSrv.save(formAPI as any, this.selectedAttendeAuthority?.idPerson);
-  
+
       if (result) {
         this.form.reset();
         return { success: true, result: { ...result, name: formAPI.name, email: formAPI.confirmEmail, isAuthority, organization, role } };
       }
-  
+
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
         detail: this.translate.instant('attendance.error.errorSaving'),
       });
-  
+
       return { success: false };
     }
 
@@ -295,7 +295,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
       if (this.authorityTouched) {
         var now = new Date();
         var timeZone = now.toString().split(' ')[5];
-  
+
         const params: any = {
           meetingId: this.idMeeting,
           personId: this.selectedAttendeAuthority?.idPerson,

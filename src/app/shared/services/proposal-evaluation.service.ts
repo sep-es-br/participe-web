@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import Common from "../util/Common";
 import * as qs from "qs";
-
+import { catchError } from 'rxjs/operators';
 import { IResultPaginated } from "../interface/IResultPaginated";
 import {
   IBudgetAction,
@@ -25,6 +25,7 @@ import { IResultPlanItemByConference } from "../interface/IResultPlanItemByConfe
 
 import { ProposalEvaluationCreateFormModel } from "../models/ProposalEvaluationModel";
 import { Conference } from "../models/conference";
+import {of} from 'rxjs';
 
 @Injectable({
   providedIn: "root",
@@ -161,7 +162,10 @@ export class ProposalEvaluationService {
       .get(`${this._url}/is-evaluator/${personId}`, {
         headers: Common.buildHeaders(),
         responseType: "text",
-      })
+      }).pipe(catchError((err) => {
+        console.error(err);
+        return of(undefined);
+      }))
       .toPromise();
   }
 
@@ -185,7 +189,7 @@ export class ProposalEvaluationService {
       .get<IResultPaginated<IProposal>>(urlWithFilters, {
         headers: Common.buildHeaders(),
         params: params,
-        
+
       })
       .toPromise();
   }
@@ -362,14 +366,14 @@ export class ProposalEvaluationService {
         headers: Common.buildHeaders({
         }),
         params: params,
-        responseType: 'blob' 
+        responseType: 'blob'
       })
       .toPromise()
       .then((response: Blob) => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'AvaliacaoDeProposta.xlsx'; 
+        a.download = 'AvaliacaoDeProposta.xlsx';
         a.click();
 
         window.URL.revokeObjectURL(url);

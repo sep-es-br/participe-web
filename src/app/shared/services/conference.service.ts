@@ -49,9 +49,9 @@ export class ConferenceService {
   save(conference, edit) {
     if (edit) {
       const url = `${this.url}/${conference.id}`;
-      return this.http.put<Conference>(url, JSON.stringify(conference), {headers: Common.buildHeaders()}).toPromise();
+      return this.http.put<Conference>(url, conference, {headers: Common.buildHeaders()}).toPromise();
     } else {
-      return this.http.post<Conference>(this.url, JSON.stringify(conference), {headers: Common.buildHeaders()}).toPromise();
+      return this.http.post<Conference>(this.url, conference, {headers: Common.buildHeaders()}).toPromise();
     }
   }
 

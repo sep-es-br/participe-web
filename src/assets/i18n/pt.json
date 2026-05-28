@@ -17,12 +17,18 @@
 	"add": "Adicionar",
 	"attention": "Atenção",
 	"attendance": {
-		"arrival": "Ordem de Chegada",
+		"arrival": "Ordem de chegada",
 		"attendant": "Presentes",
+    "participationType": "Tipo de participante",
+    "credentialPresence": "Credenciamento e presença",
+    "namingStatus": "Status da nominata",
+    "organization": "Órgão",
 		"authentication": "Autenticação",
 		"county": "Município",
 		"edit": "Editar Lista de Presença",
-		"authority": "Representantes",
+    "teamGov": "Equipe de governo",
+		"authorities": "Representantes",
+    "authority": "Representante",
 		"editAttendance": "Editar Presença",
 		"editAttendanceIn": "Editar presença na reunião: ",
 		"status": "Situação de Anuncio",
@@ -65,6 +71,7 @@
 	"change": "Trocar",
 	"citizen": {
 		"representative": "Representante Oficial",
+    "team": "Equipe de Governo",
 		"organization": "Órgão/Entidade Representada",
 		"role": "Cargo do Representante",
 		"attendance_count": "Acesso",
@@ -163,7 +170,6 @@
 			"beginDate": "Início",
 			"delete": "Excluir?",
 			"endDate": "Fim",
-      "authorityLink": "Gerar link para credenciamento de autoridade",
 			"error": {
 				"delete": "Erro ao tentar excluír a reunião {{name}}",
 				"fetch": {
@@ -214,9 +220,11 @@
 				"edit": "Editar",
 				"panel": "Exibir painel",
 				"delete": "Excluir",
-				"link": "Gerar link de pré cadastro da reunião",
-				"qrcode": "Gerar qr code de check-in automático"
-			}
+				"link": "Link de pré-cadastro",
+				"qrcode": "QR code de check-in automático",
+        "authorityLink": "Link para representantes",
+        "teamLink": "Link para Equipe de governo"
+      }
 		},
 		"moderator": {
 			"already-enabled": "{{name}} já está habilitado como moderador",

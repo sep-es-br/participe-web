@@ -50,7 +50,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     time: '12/03/2024 10:55'
   };
   timerModalSuccess:number = 5000;
-  
+
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.QR_CODE,
@@ -58,6 +58,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   hasDevices: boolean = false;
   hasPermission: boolean;
+
+
+  filteredOrganizations = signal(this.meetingSrv.organizationList());
 
   qrResultString: string;
 
@@ -87,7 +90,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
    ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
-    
+
   }
 
   ngOnDestroy(): void {
@@ -95,24 +98,27 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     if (this.valueChangeCPFSub !== null) {
       this.valueChangeCPFSub.unsubscribe();
     }
-    
+
   }
 
   override async selectAttendee(attendee: IAttendee, isEdit?: boolean): Promise<void> {
-      
+
     await super.selectAttendee(attendee, isEdit);
 
-    if(attendee.sub) {
-      let papeis = await this.personSrv.findPapeisBySub(attendee.sub);
+    if (attendee.sub) {
+      const papeis = await this.personSrv.findPapeisBySub(attendee.sub);
 
       this.optsRoles = papeis.map(p => p.role);
       this.optsOrgs = [
         ...papeis.filter(p => p.organization).map(p => p.organization),
         ...papeis.filter(p => p.organizationSh).map(p => p.organizationSh)
-      ]
+      ];
     }
-    
-    
+
+
+    this.meetingSrv.getCanEditIsTeam().then(val => val ? this.form.get('isTeam').enable() : this.form.get('isTeam').disable());
+
+
   }
 
   async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
@@ -124,13 +130,15 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
     attendee.checkingIn = true;
 
-    if(!fromSaveAccount){
-      const { isAuthority, organization, role } = this.form.controls;
+    if (!fromSaveAccount){
+      const { isAuthority, organization, role, isTeam } = this.form.controls;
       attendee.isAuthority = isAuthority.value;
       if (attendee.isAuthority) {
+        attendee.isTeam = isTeam.value;
         attendee.organization = organization.value;
         attendee.role = role.value;
       } else {
+        attendee.isTeam = null;
         attendee.organization = null;
         attendee.role = null;
       }
@@ -153,10 +161,11 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       timeZone,
       isAuthority: attendee.isAuthority ?? false,
     };
-    
+
     if (attendee.isAuthority) {
       params.organization = attendee.organization;
       params.role = attendee.role;
+      params.isTeam = attendee.isTeam;
     }
 
     const result = await this.meetingSrv.postCheckIn(params);
@@ -191,6 +200,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     const isAuthority: boolean = this.form.get('isAuthority')?.value;
     const organization: string = this.form.get('organization')?.value;
     const role: string = this.form.get('role')?.value;
+    const isTeam: boolean = this.form.get('isTeam')?.value;
     const {success, result} = await this.save();
     if (success) {
       if (!this.selectedAttende) {
@@ -204,6 +214,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           authName: result.authName,
           isAuthority,
           ...(isAuthority && {
+            isTeam,
             organization,
             role
           })
@@ -273,7 +284,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.scannerEnabled = true;
     this.getCamera();
     this.modalData = {title: this.translate.instant('qrcode.titleModal') };
-    this.modalService.open('QRCodeReader'); 
+    this.modalService.open('QRCodeReader');
   }
 
   getCamera(){
@@ -298,7 +309,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.hasDevices = Boolean(devices && devices.length);
   }
 
-  onCodeResult(resultString: string) {    
+  onCodeResult(resultString: string) {
     this.qrResultString = resultString;
     const regex = /PersonId:(\d+)/;
     const match = this.qrResultString.match(regex);
@@ -306,7 +317,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.closeQRCodeReader();
       this.modalService.close('QRCodeReader');
       this.loadingService.loading(true);
-      
+
       if (match && match[1]) {
         const personId = match[1];
 
@@ -325,12 +336,12 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       //   // }, 2700);
       // })
       // .finally(() => {
-          
+
       //     this.loadingService.loading(false);
       //   });
       } else {
 
-        
+
         this.preRegistrationService.GetById(Number(this.qrResultString)).then(
           result => {
             const {data, success} = result;
@@ -338,7 +349,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
               this.selectAttendee({personId: data.person.id} as IAttendee);
             }
 
-            
+
           }
         )
 
@@ -356,11 +367,11 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       //   // }, 2700);
       // })
       // .finally(() => {
-          
+
       //     this.loadingService.loading(false);
       //   });
       }
-      
+
     }
   }
 
@@ -428,5 +439,16 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     audio.src = type === 'success' ? 'assets/sounds/success.mp3' : 'assets/sounds/error.mp3';
     audio.load();
     audio.play();
+  }
+
+
+  filterOrganization(evt: any) {
+    const query = evt.query.toLowerCase();
+
+    this.filteredOrganizations.set(this.meetingSrv
+      .organizationList().filter(org =>
+        org.name.toLowerCase().includes(query) ||
+        org.shortName.toLowerCase().includes(query)));
+
   }
 }

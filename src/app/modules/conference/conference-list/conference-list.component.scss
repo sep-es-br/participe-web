@@ -109,3 +109,18 @@ form {
 .dropdown-toggle::after {
   display: none;
 }
+
+.icon-wrapper {
+  height: 32px;
+  width: 32px;
+
+  .icon {
+    color: black;
+    margin: 0;
+
+    &:hover {
+      color: darkgray;
+    }
+  }
+}
+

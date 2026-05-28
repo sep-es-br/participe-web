@@ -15,6 +15,7 @@ export class CitizenSenderModel {
   selfDeclaration: CitizenSelfDeclarationSenderModel;
   sub?: string;
   isAuthority?: boolean;
+  isTeam?: boolean;
   organization?: string;
   role?: string;
 }
