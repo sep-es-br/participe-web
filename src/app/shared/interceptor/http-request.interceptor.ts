@@ -40,6 +40,10 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     const hideLoading = !!req.headers.get('x-hidden-loading');
     this.loadingService.loading(!hideLoading);
 
+    const accessToken = this.authService.getAccessToken();
+    const headers = new HttpHeaders(accessToken ? { Authorization: `Bearer ${accessToken}` } : { }) ;
+    req = req.clone({ headers });
+
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         return hideLoading

@@ -39,28 +39,36 @@
           </div>
           <div class="col-12">
             <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
-            <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
-              (onChange)="loadACRole($event)"></p-inputSwitch>
+            <p-inputSwitch formControlName="isAuthority"  (mousedown)="markAuthorityTouched()"
+                           (onChange)="loadACRole($event)" [disabled]="form.get('isTeam').value"></p-inputSwitch>
           </div>
-          <div class="col-12" *ngIf="form.get('isAuthority').value">
-            <datalist id="orgsList">
-              <option *ngFor="let org of optsOrgs" [value]="org"></option>
-            </datalist>
+          <ng-container *ngIf="form.get('isAuthority').value">
+            <div class="col-12">
+              <label class="d-block mb-2">{{ 'citizen.team' | translate }}</label>
+              <p-inputSwitch formControlName="isTeam"></p-inputSwitch>
+            </div>
+            <div class="col-12" *ngIf="form.get('isAuthority').value">
+              <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+              <p-autoComplete
+                formControlName="organization"
+                [suggestions]="filteredOrganizations()"
+                optionLabel="name"
+                placeholder="Digite o órgão ou entidade"
+                (completeMethod)="filterOrganization($event)"
+              ></p-autoComplete>
+              <tt-input-message [form]="form" field="organization"></tt-input-message>
+            </div>
 
-            <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-            <input list="orgsList" type="text" id="entity" class="form-control" formControlName="organization" placeholder="Digite o órgão ou entidade">
-            <tt-input-message [form]="form" field="organization"></tt-input-message>
-          </div>
-        
-          <div class="col-12" *ngIf="form.get('isAuthority').value">
-            <datalist id="rolesList">
-              <option *ngFor="let role of optsRoles" [value]="role"></option>
-            </datalist>
+            <div class="col-12" *ngIf="form.get('isAuthority').value">
+              <datalist id="rolesList">
+                <option *ngFor="let role of optsRoles" [value]="role"></option>
+              </datalist>
 
-            <label for="role">{{ 'citizen.role' | translate }}*</label>
-            <input list="rolesList" type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
-            <tt-input-message [form]="form" field="role"></tt-input-message>
-          </div>
+              <label for="role">{{ 'citizen.role' | translate }}*</label>
+              <input list="rolesList" type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+              <tt-input-message [form]="form" field="role"></tt-input-message>
+            </div>
+          </ng-container>
           <div class="col-12">
             <div class="form-actions">
               <ng-container *ngIf="newAccount; else attendeeSelected">
@@ -76,6 +84,7 @@
                         (click)="toggleSelectedAttendee()"></button>
               </ng-template>
             </div>
+            <span class="aviso h-100" *ngIf="form.get('isTeam').value">Equipe de governo, encaminhar ao local apropriado.</span>
           </div>
         </form>
       </div>
@@ -116,22 +125,22 @@
           <div class="col-md-6 col-12 text-center">
             <a *ngIf="torchAvailable$?.value" (click)="toggleTorch()" class="btn btn-sm {{classFlash}}" >
               <span class="m-2"><i class="fas fa-bolt" ></i></span>
-              {{actionFlash}}              
+              {{actionFlash}}
             </a>
           </div>
           <!-- <input type="button" class="btn btn-sm btn-orange" value="" > -->
         </div>
         <div class="col-12 mt-3 p2">
-          <zxing-scanner 
-          [(enable)]="scannerEnabled"  
-          [torch]="torchEnabled" 
-          [(device)]="deviceCurrent" 
-          
+          <zxing-scanner
+          [(enable)]="scannerEnabled"
+          [torch]="torchEnabled"
+          [(device)]="deviceCurrent"
+
           (scanSuccess)="onCodeResult($event)"
-          [formats]="formatsEnabled" 
-          [tryHarder]="tryHarder" 
+          [formats]="formatsEnabled"
+          [tryHarder]="tryHarder"
           (permissionResponse)="onHasPermission($event)"
-          (camerasFound)="onCamerasFound($event)" 
+          (camerasFound)="onCamerasFound($event)"
           (torchCompatible)="onTorchCompatible($event)" ></zxing-scanner>
         </div>
       </app-modal>

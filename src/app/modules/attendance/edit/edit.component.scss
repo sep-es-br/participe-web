@@ -1,6 +1,14 @@
 @import '../attendance.component.scss';
 
+.rem075 {
+  font-size: 0.75rem;
+}
+
 .edit-attendees {
+  .aviso {
+    font-weight: bold;
+    color: #f58634;
+  }
 
   .top-bar {
     display: flex;
@@ -152,9 +160,9 @@
   }
 
   .top-bar {
-   
+
     margin: 0 15px;
-   
+
 
     input.ng-valid.ng-touched.ng-dirty:focus,
     p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
@@ -200,6 +208,7 @@
   margin-right: 5%;
 }
 
+
 .auth- {
   &screening {
     color: gray;
@@ -212,15 +221,20 @@
   &announced {
     color: #34659e;
   }
-  
+
 }
 
 div[role="button"] {
   cursor: pointer;
 }
 
+.authorityInfo-wrapper {
+  fa-icon{
+    font-size: x-large;
+  }
+}
+
 .secondary-info {
-  flex: unset !important;
 
   .authorityInfo {
 
@@ -234,12 +248,29 @@ div[role="button"] {
       font-weight: bolder;
     }
 
-    
+
   }
 
   .allow-announce-wrapper {
       color: #008000
     }
 
+  ::ng-deep p-autocomplete.p-inputwrapper {
+    /* Força a tag do PrimeNG a se comportar como bloco ou ocupar 100% no eixo do flex */
+    display: block !important;
+    width: 100% !important;
+
+    /* Alvo: A div interna (selecionada no seu print com == $0) */
+    > div.p-autocomplete {
+      width: 100% !important;
+      display: flex !important;
+    }
+
+    /* Alvo: O input real dentro da div */
+    input.p-autocomplete-input {
+      width: 100% !important;
+      flex: 1 1 auto !important; /* Garante que ele vai esticar dentro da div flex */
+    }
+  }
 
 }

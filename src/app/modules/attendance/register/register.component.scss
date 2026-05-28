@@ -1,6 +1,10 @@
 @import '../attendance.component.scss';
 
 .attendee-register {
+  .aviso {
+    font-weight: bold;
+    color: #f58634;
+  }
 
   .top-bar {
     display: flex;
@@ -40,7 +44,7 @@
           border-top-right-radius: 3px;
           border-bottom-left-radius: 0;
         }
-        
+
         .ui-button {
           display: flex;
           flex: 1;

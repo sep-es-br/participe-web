@@ -19,6 +19,7 @@ export interface IAttendee {
   authName?: List<string>;
   sub?: string;
   isAuthority?: boolean;
+  isTeam?: boolean;
   isAnnounced?: boolean;
   toAnnounce?: boolean;
   organization?: string;

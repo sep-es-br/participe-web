@@ -15,7 +15,7 @@ $inputSwitchSliderPadding: .25rem;
 }
 
 .p-inputswitch .p-inputswitch-slider:before {
-  
+
   width: 1rem !important;
   height: 1rem !important;
   left:0rem !important;
@@ -160,7 +160,7 @@ div.search {
 
     @media screen and (max-width: 576px) {
       flex-direction: column;
-    } 
+    }
   }
 
   img {
@@ -318,10 +318,10 @@ span.icon{
   text-align: justify !important;
 }
 
-.p-dropdown-items, 
+.p-dropdown-items,
 .p-multiselect-items,
 .p-autocomplete-items,
-.p-element.p-dropdown-label.p-placeholder, 
+.p-element.p-dropdown-label.p-placeholder,
 .p-tieredmenu-root-list{
   padding: 0;
 }
@@ -345,7 +345,7 @@ ul.p-autocomplete-multiple-container{
   .p-dialog{
     width: 95% !important;
   }
-  
+
 }
 
 .p-dialog-content{
@@ -355,7 +355,7 @@ ul.p-autocomplete-multiple-container{
 .img-icon{
   width: 25px;
   height: 25px;
-}	
+}
 
 .btn-icon{
   padding: 0.5rem 0.75rem;
@@ -377,5 +377,11 @@ ul.p-autocomplete-multiple-container{
   .p-column-title{
     display: block;
   }
-  
+
+}
+p-autocomplete,
+p-autocomplete > .p-autocomplete,
+p-autocomplete .p-autocomplete-input {
+  width: 100% !important;
+  display: block !important;
 }

@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren} from '@angular/core';
 import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
-import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
+import {faCheckCircle, faCircle, faIdBadge} from '@fortawesome/free-regular-svg-icons';
 import {faBullhorn, faCheck, faHourglass, faHourglassStart, faQrcode, faTimes, faUserTie, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 
 import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
@@ -12,6 +12,7 @@ import {AuthService} from '@app/shared/services/auth.service';
 import { IAttendee } from '@app/shared/interface/IAttendee';
 import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
+import {ParticipationService} from '@app/shared/services/participation.service';
 
 @Component({
   selector: 'app-edit',
@@ -20,47 +21,56 @@ import { AuthorityCredentialService } from '@app/shared/services/authority-crede
 })
 export class EditComponent extends AttendanceModel implements OnInit, OnDestroy {
 
-  @ViewChildren('toAnnounceToggle', {read: ElementRef}) toAnnounceToggleElems! : QueryList<ElementRef>;
+  @ViewChildren('toAnnounceToggle', {read: ElementRef}) toAnnounceToggleElems!: QueryList<ElementRef>;
 
   iconChecked = faCheckCircle;
   iconCircle = faCircle;
   iconRemove = faTimes;
   iconAuthority = faUserTie;
+  iconTeam = faIdBadge;
   iconToAnnounce = faBullhorn;
   iconScreening = faHourglass;
   iconAnnounced = faIconAnnounced;
   iconAllowAnnouce = faIconAllowAnnounce;
 
-
+// Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
   // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
     {label: 'name', value: 'name'},
     {label: 'attendance.arrival', value: 'checkedInDate'},
-    {label: 'attendance.status', value: 'status'},
+    {label: 'attendance.participationType', value: 'participationType'},
+    {label: 'attendance.credentialPresence', value: 'credentialPresence'},
+    {label: 'attendance.namingStatus', value: 'namingStatus'},
+    {label: 'attendance.organization', value: 'organization'},
   ];
   resultSearchCounty: Locality[];
+
+  optionsParticipantes: SelectItem[] = [
+    {label: 'Todos', value: 'all'},
+    {label: 'Representantes', value: 'repr'},
+    {label: 'Representantes não equipe de governo', value: 'repr-not-equipe'},
+    {label: 'Representantes equipe de governo', value: 'repr-equipe'},
+    {label: 'Público', value: 'pub'}
+  ];
 
   optionsFilterBy: SelectItem[] = [
     {label: 'Presentes', value: 'pres'},
     {label: 'Pré-credenciados', value: 'prereg'},
-    {label: 'Pré-credenciados e Presentes', value: 'prereg_pres'},
-    {label: 'Pré-credenciados e Ausentes', value: 'prereg_notpres'},
-    {label: 'Presentes não Pré-credenciados', value: 'notprereg_pres'},
-  ]
-
-  optionsFilterByIsAuthority: SelectItem[] = [
-    {label: 'Representantes ou não', value: 'all'},
-    {label: 'Apenas representantes', value: true},
-    {label: 'Exceto representantes', value: false}
-  ]
-
+    {label: 'Pré-credenciados presentes', value: 'prereg_pres'},
+    {label: 'Pré-credenciados ausentes', value: 'prereg_notpres'},
+    {label: 'Presentes não pré-credenciados', value: 'notprereg_pres'},
+  ];
   optionsFilterByStatus: SelectItem[] = [
     // value = [toAnnounce, announced]
     {label: 'Todos', value: 'all'},
     {label: 'Em Triagem', value: 'screening'},
     {label: 'Anunciar', value: 'toAnnounce'},
     {label: 'Anunciado', value: 'announced'}
-  ]
+  ];
+
+  filteredOrganizations = signal(this.meetingSrv.organizationList()) ;
+
+
 
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
@@ -71,7 +81,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     protected formBuilder: UntypedFormBuilder,
     public authSrv: AuthService,
     @Inject(Injector) injector: Injector,
-    private authcSrv : AuthorityCredentialService
+    private authcSrv: AuthorityCredentialService
   ) {
     super(injector, true);
   }
@@ -79,18 +89,18 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   ngOnInit(): void {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
-    
+
     this.form.get('toAnnounce').valueChanges.subscribe(
       value => {
-        if(!value) {
+        if (!value) {
           this.form.get('announced').patchValue(false);
         }
       }
     );
-    
+
     this.form.get('announced').valueChanges.subscribe(
       value => {
-        if(value) {
+        if (value) {
           this.form.get('toAnnounce').patchValue(true);
         }
       }
@@ -98,16 +108,18 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
 
     setTimeout( () => {
       this.searchByName();
-    }, 300)
+    }, 300);
   }
 
   selectAttendeeWithFilter(attendee: IAttendee, evt: MouseEvent, isEdit?: boolean): Promise<void> {
-      
-    if(this.toAnnounceToggleElems.some(
-      (el) => el.nativeElement.contains(evt.target)
-    ) ) return;
 
-    return super.selectAttendee(attendee, isEdit)
+    if (this.toAnnounceToggleElems.some(
+      (el) => el.nativeElement.contains(evt.target)
+    ) ) { return; }
+
+    this.meetingSrv.getCanEditIsTeam().then(val => val ? this.form.get('isTeam').enable() : this.form.get('isTeam').disable());
+
+    return super.selectAttendee(attendee, isEdit);
   }
 
   ngOnDestroy(): void {
@@ -119,24 +131,30 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   }
 
   async saveEdit() {
-    const isAuthority: boolean = this.form.get('isAuthority')?.value;
-    const organization: string = this.form.get('organization')?.value;
-    const role: string = this.form.get('role')?.value;
-    const toAnnounce: boolean = this.form.get('toAnnounce').value;
-    const announced: boolean = this.form.get('announced').value;
+
+    const {
+      isAuthority,
+      isTeam,
+      organization,
+      role,
+      toAnnounce,
+      announced
+    } = this.form.value;
+
     const {success} = await this.save();
     if (success) {
       if (this.authorityTouched) {
-        var now = new Date();
-        var timeZone = now.toString().split(' ')[5];
-  
+        const now = new Date();
+        const timeZone = now.toString().split(' ')[5];
+
         const params: any = {
           meetingId: this.idMeeting,
           personId: this.selectedAttende?.personId,
           timeZone,
           isAuthority: isAuthority ?? false,
         };
-        if(isAuthority){
+        if (isAuthority){
+          params.isTeam = isTeam;
           params.organization = organization;
           params.role = role;
           params.toAnnounce = toAnnounce;
@@ -151,39 +169,39 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
         detail: this.translate.instant('attendance.successDetail.saveAccount')
       });
       this.toggleSelectedAttendee();
-      this.searchByName()
+      this.searchByName();
     }
     return;
   }
 
-  getAuthStatus(attendee : IAttendee) : string {
-    if(attendee.isAuthority && !attendee.toAnnounce) {
+  getAuthStatus(attendee: IAttendee): string {
+    if (attendee.isAuthority && !attendee.toAnnounce) {
       return 'screening';
-    } else if(attendee.toAnnounce && !attendee.isAnnounced) {
-      return 'announce'
-    } else if(attendee.isAuthority && attendee.isAnnounced) {
-      return 'announced'
-    } else return undefined
+    } else if (attendee.toAnnounce && !attendee.isAnnounced) {
+      return 'announce';
+    } else if (attendee.isAuthority && attendee.isAnnounced) {
+      return 'announced';
+    } else { return undefined; }
   }
 
-  getAuthIcon(attendee : IAttendee) : IconDefinition {
-    if(attendee.isAuthority && !attendee.toAnnounce) {
+  getAuthIcon(attendee: IAttendee): IconDefinition {
+    if (attendee.isAuthority && !attendee.toAnnounce) {
       return faIconScreening;
-    } else if(attendee.toAnnounce && !attendee.isAnnounced) {
-      return faBullhorn
-    } else if(attendee.isAuthority && attendee.isAnnounced) {
-      return faIconAnnounced
-    } else return undefined
+    } else if (attendee.toAnnounce && !attendee.isAnnounced) {
+      return faBullhorn;
+    } else if (attendee.isAuthority && attendee.isAnnounced) {
+      return faIconAnnounced;
+    } else { return undefined; }
   }
 
-  getAuthLabel(attendee : IAttendee) : string {
-    if(attendee.isAuthority && !attendee.toAnnounce) {
+  getAuthLabel(attendee: IAttendee): string {
+    if (attendee.isAuthority && !attendee.toAnnounce) {
       return 'Triagem';
-    } else if(attendee.toAnnounce && !attendee.isAnnounced) {
+    } else if (attendee.toAnnounce && !attendee.isAnnounced) {
       return 'Anunciar';
-    } else if(attendee.isAuthority && attendee.isAnnounced) {
+    } else if (attendee.isAuthority && attendee.isAnnounced) {
       return 'Anunciado';
-    } else return undefined;
+    } else { return undefined; }
   }
 
   async uncheckIn() {
@@ -209,7 +227,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
   }
 
   async toggleToAnnounce(attendee: IAttendee) {
-        
+
       const {
         toAnnounce
       } = await this.authcSrv.toggleToAnnounce(attendee.checkInId);
@@ -237,4 +255,18 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     const customName = names.length > 2 ? `${names[0]} ${names[names.length - 1]}` : names.join(' ');
     return this.translate.instant('attendance.tooltipLabelUnchecking') + customName;
   }
+
+  onOrganizationSelected(event:any) {
+    this.selectedOrganization = event.value;
+    this.searchByName();
+  }
+
+  filterOrganization(evt: any) {
+    const query = evt.query.toLowerCase();
+
+    this.filteredOrganizations.set(this.meetingSrv.organizationList()
+      .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query)));
+
+  }
+
 }

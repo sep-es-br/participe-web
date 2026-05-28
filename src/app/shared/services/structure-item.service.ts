@@ -23,9 +23,9 @@ export class StructureItemService {
   save(structureItem, edit) {
     if (edit) {
       const editUrl = `${this.url}/${structureItem.id}`;
-      return this.http.put<StructureItem>(editUrl, JSON.stringify(structureItem), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.put<StructureItem>(editUrl, structureItem, { headers: Common.buildHeaders() }).toPromise();
     } else {
-      return this.http.post<StructureItem>(this.url, JSON.stringify(structureItem), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.post<StructureItem>(this.url, structureItem, { headers: Common.buildHeaders() }).toPromise();
     }
   }
 

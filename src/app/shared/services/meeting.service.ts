@@ -1,4 +1,4 @@
-import { Inject, Injectable, Injector } from '@angular/core';
+import {Inject, Injectable, Injector, signal} from '@angular/core';
 import { BaseService } from '../base/base.service';
 import { Meeting } from '../models/Meeting';
 import { MeetingFilterModel } from './../models/MeetingFilterModel';
@@ -14,14 +14,21 @@ import { catchError } from 'rxjs/operators';
 import { IAttendeeAuthority } from '../interface/IAttendeeAuthority';
 import { IHttpResult } from '../interface/IHttpResult';
 import { ICheckedInAt } from '../interface/CheckedInAt.interface';
+import {any} from 'codelyzer/util/function';
+import {SelectItem} from 'primeng/api';
+import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
+import {$} from 'protractor';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
+
+  public readonly organizationList = signal<IOptionOrganization[]>([]);
 
   constructor(
     @Inject(Injector) injector: Injector
   ) {
     super('meetings', injector);
+    this.getOrganizationList().then((orgList) => this.organizationList.set(orgList));
   }
 
   getMeetingById(meetingId: number) {
@@ -116,6 +123,14 @@ export class MeetingService extends BaseService<Meeting> {
 
   getTotalParticipantsInMeeting(idMeeting: number, query: IQueryOptions): Promise<{checkedIn: number, preRegistered: number}> {
     return this.http.get<{checkedIn: number, preRegistered: number}>(`${this.urlBase}/${idMeeting}/total${PrepareHttpQuery(query)}`, {headers: Common.buildHeaders()}).toPromise();
+  }
+
+  getOrganizationList() {
+    return this.http.get<IOptionOrganization[]>(`${this.urlBase}/organizationList`).toPromise();
+  }
+
+  getCanEditIsTeam() {
+    return this.http.get<boolean>(`${this.urlBase}/canEditIsTeam`).toPromise();
   }
 
   generateLinkPreRegistration(idMeeting: number): Promise<any> {
