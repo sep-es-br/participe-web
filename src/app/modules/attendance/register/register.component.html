@@ -181,10 +181,10 @@
           </div>
           <div class="action">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
-              <fa-icon size="2x" [icon]="iconChecked" (click)="selectAttendee(attendee)"></fa-icon>
+              <fa-icon class="checkin-button" size="2x" [icon]="iconChecked" (click)="selectAttendee(attendee)"></fa-icon>
             </ng-container>
             <ng-template #canCheckIn>
-              <fa-icon size="2x" (click)="selectAttendee(attendee)" [icon]="iconUnchecked"
+              <fa-icon class="checkin-button" size="2x" (click)="selectAttendee(attendee)" [icon]="iconUnchecked"
                        [class.disabled]="attendee.checkingIn"
                        tooltipPosition="left" [pTooltip]="getToolTipText(attendee)"
                        tooltipStyleClass="tooltip-uncheck"></fa-icon>

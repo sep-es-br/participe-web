@@ -250,7 +250,7 @@
                 {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
               </div>
             </div>
-            <div class="primary-info col">
+            <div class="primary-info text-center text-md-start col-12 col-md-3" style="max-width: 25%; min-width: 200px;">
               <div class="name">{{ attendee.name }}</div>
               <div class="contact">
                 <span>{{ attendee.email }}</span>
@@ -295,8 +295,8 @@
                   </div>
                 </ng-container>
               </div>
-              
-              <div class="info-preregister col-12 col-md d-flex justify-content-center">
+
+              <div class="info-preregister flex-column-reverse col col-md  justify-content-center">
                 <ng-container *ngIf="attendee.preRegistered">
                   <div
                     class="how-long-ago"
@@ -313,8 +313,8 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-checkin col-12 col-md-1 p-0 m-0 flex-column flex-md-row justify-content-center">
-                <div class="how-long-ago" [pTooltip]="attendee.checkedInDate">
+              <div class="info-checkin mt-0 flex-column-reverse col-5 col-md-3 justify-content-end">
+                <div class="how-long-ago rem075" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
                 <div class="action">
@@ -326,7 +326,6 @@
                       [pTooltip]="getToolTipText(attendee)"
                       tooltipStyleClass="tooltip-uncheck"
                     ></fa-icon>
-                    <span>{{ 'update' | translate }}</span>
                   </div>
                 </div>
               </div>

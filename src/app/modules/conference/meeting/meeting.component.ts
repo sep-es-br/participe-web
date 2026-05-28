@@ -727,7 +727,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   async generateLinkMeetingPrecadastro(meeting: Meeting){
-    this.meetingUrl = await this.meetingSrv.generateLinkPreRegistration(meeting.id);
+    this.meetingUrl = { url : `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl( `/registration/${this.conferenceId}/meeting/${meeting.id}`)}`};
     this.modalData = {title: meeting.name};
     this.ModalService.open('geraLink');
     this.meetingDataSelected = meeting;
