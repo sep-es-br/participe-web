@@ -20,9 +20,9 @@ export class StructureService {
   save(structure, edit) {
     if (edit) {
       const url = `${this.url}/${structure.id}`;
-      return this.http.put<Structure>(url, JSON.stringify(structure), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.put<Structure>(url, structure, { headers: Common.buildHeaders() }).toPromise();
     } else {
-      return this.http.post<Structure>(this.url, JSON.stringify(structure), { headers: Common.buildHeaders() }).toPromise();
+      return this.http.post<Structure>(this.url, structure, { headers: Common.buildHeaders() }).toPromise();
     }
   }
 

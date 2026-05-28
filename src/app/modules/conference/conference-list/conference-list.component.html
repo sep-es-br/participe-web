@@ -87,7 +87,8 @@
                     <div style="vertical-align: middle">{{conference.endDate?.toLocaleString('pt-BR')}}</div>
                   </div>
                 </td>
-                <td class="justify-content-center">
+                <td class="justify-content-center d-flex gap-2">
+                  <a class="icon-wrapper pointer d-flex align-items-center justify-content-center" [routerLink]="goToMetting(conference)"><span class="icon"><i class="fa fa-users" ></i></span></a>
                   <div class="dropdown">
                     <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <i class="fa-solid fa-ellipsis"></i>

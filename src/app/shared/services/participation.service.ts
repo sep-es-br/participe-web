@@ -18,4 +18,8 @@ export class ParticipationService extends BaseService<any> {
     ).toPromise();
   }
 
+  getOrganizations(idMeeting: number) {
+    return this.http.get<string[]>(`${this.urlBase}/${idMeeting}/organizations`).toPromise();
+  }
+
 }
