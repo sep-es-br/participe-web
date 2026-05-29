@@ -8,7 +8,8 @@
   flex-wrap: wrap;
 
   .breadcrumb {
-    float: left;
+    width: auto;
+    flex: 0 0 auto;
     padding: 20px 0;
 
     .route-bar-breadcrumb {
@@ -17,7 +18,7 @@
       padding: 0;
 
       li {
-        
+
         color: $breadcrumbItemTextColor;
         font-size: 15px;
         font-weight: 700;
