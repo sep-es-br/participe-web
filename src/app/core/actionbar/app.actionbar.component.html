@@ -1,5 +1,5 @@
-<div class="layout-actionbar d-flex flex-row">
-  <div class="breadcrumb mb-0 col">
+<div class="layout-actionbar">
+  <div class="breadcrumb mb-0">
     <div class="route-bar-breadcrumb d-flex gap-2 flex-wrap">
       <ng-template ngFor let-item [ngForOf]="items">
         <li class="">
@@ -10,7 +10,7 @@
       </ng-template>
     </div>
   </div>
-  <div class="actions-container col-2 flex-md-1 col-md">
+  <div class="actions-container">
     <div class="actions-left">
       <div class="action-item" *ngFor="let action of actionsButtonLeft" [ngClass]="{'clickable': isClickable(action) }"
            (click)="handleEvent(action)">

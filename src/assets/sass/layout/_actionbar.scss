@@ -5,11 +5,15 @@
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
 
   .breadcrumb {
     width: auto;
-    flex: 0 0 auto;
+    min-width: 0;
+    white-space: nowrap;
+    flex: 0 1 auto;
     padding: 20px 0;
 
     .route-bar-breadcrumb {
@@ -92,6 +96,10 @@
 
   .actions-container {
     // flex: 1;
+
+    flex: 1 1 auto;
+    display: flex;
+    min-width: auto;
     @media screen and (max-width: 687px) {
       justify-content: space-around;
     }
