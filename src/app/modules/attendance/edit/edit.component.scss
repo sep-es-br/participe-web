@@ -116,6 +116,22 @@
 
 }
 
+::ng-deep .attendee-filter-row {
+  p-autocomplete {
+
+    .p-overlay.p-component {
+      right: 0 !important;
+      left: auto !important;
+    }
+  }
+}
+
+
+
+.p-overlay.p-component {
+  right: 0 !important;
+  left: auto !important;
+}
 ::ng-deep .edit-attendees {
   .ui-inputtext {
     flex: 1;
@@ -271,6 +287,7 @@ div[role="button"] {
       width: 100% !important;
       flex: 1 1 auto !important; /* Garante que ele vai esticar dentro da div flex */
     }
+
   }
 
 }

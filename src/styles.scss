@@ -145,20 +145,23 @@ div.search {
   .action-item {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     margin-left: 15px;
     > * {
       margin: 3px;
     }
+
   }
 
   .actions-right {
     display: flex;
     flex-direction: row;
     color: silver;
+    flex-wrap: wrap;
     font-weight: 700;
     font-size: 13px;
 
-    @media screen and (max-width: 576px) {
+    @media screen and (max-width: 675px) {
       flex-direction: column;
     }
   }
