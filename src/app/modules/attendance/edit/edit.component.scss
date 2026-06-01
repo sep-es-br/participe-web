@@ -291,3 +291,15 @@ div[role="button"] {
   }
 
 }
+
+
+::ng-deep {
+  p-autocomplete {
+    p-overlay  {
+      > .p-overlay{
+        left: auto !important;
+        right: 0 !important;
+      }
+    }
+  }
+}
