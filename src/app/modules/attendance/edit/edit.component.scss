@@ -297,8 +297,14 @@ div[role="button"] {
   p-autocomplete {
     p-overlay  {
       > .p-overlay{
-        left: auto !important;
+        min-width: unset !important;
         right: 0 !important;
+        left: 0 !important;
+
+        @media screen and (min-width: 768px ) {
+          left: auto !important;
+          min-width: var(--bs-breakpoint-md) !important;
+        }
       }
     }
   }

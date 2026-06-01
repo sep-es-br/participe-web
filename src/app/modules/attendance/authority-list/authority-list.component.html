@@ -85,7 +85,7 @@
         <div class="w-100" *ngIf="noResult">
           <div class="no-result">{{ "attendance.noResult" | translate }}</div>
         </div>
-        <div class="result d-flex flex-column flex-md-row align-items-center" *ngFor="let attendee of listAttendeesAuthority">
+        <div class="result d-flex flex-column flex-lg-row align-items-center" *ngFor="let attendee of listAttendeesAuthority">
           <div class="info-announced d-flex col-12 col-lg-2 justify-content-center cursor-pointer" (click)="toggleAnnounced(attendee)">
             <div class="action">
               <p-inputSwitch [(ngModel)]="attendee.announced"></p-inputSwitch>
@@ -110,7 +110,7 @@
               <span>{{ attendee.role }}</span>
             </div>
           </div>
-          <div class="secondary-info col-12 col-lg-5">
+          <div class="secondary-info col-12 col-lg-5 flex-column flex-lg-row">
             <div class="info-place d-flex flex-column gap-1 justify-content-center mb-4 mb-sm-0 w-100">
               <p class="organization m-0">{{ attendee.organization }}</p>
               <p class="locality m-0">{{ attendee.localityName }}</p>
