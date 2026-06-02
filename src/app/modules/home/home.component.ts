@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
       await this.proposalEvaluationService.checkIsPersonEvaluator(user.id)
       .then(
         (response) => {
-          sessionStorage.setItem("evaluatorOrgGuid", response);
+          if (response) sessionStorage.setItem("evaluatorOrgGuid", response);
         }
       ).finally(() => {
         this.SetStartPage(user);
