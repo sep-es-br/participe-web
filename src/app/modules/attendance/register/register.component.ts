@@ -21,6 +21,7 @@ import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
 import { LoadingService } from '@app/shared/services/loading.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
+import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
 
 @Component({
   selector: 'app-register',
@@ -215,7 +216,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           isAuthority,
           ...(isAuthority && {
             isTeam,
-            organization,
+            organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
             role
           })
         };

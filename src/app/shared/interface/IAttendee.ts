@@ -1,4 +1,5 @@
 import { List } from "lodash";
+import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
 
 export interface IAttendee {
   personId: number;
@@ -22,7 +23,7 @@ export interface IAttendee {
   isTeam?: boolean;
   isAnnounced?: boolean;
   toAnnounce?: boolean;
-  organization?: string;
+  organization?: IOptionOrganization;
   role?: string;
 }
 
