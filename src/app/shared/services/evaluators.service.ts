@@ -55,6 +55,16 @@ export class EvaluatorsService {
     this._organizationsGuidNameMapObject = value;
   }
 
+  private _organizationsGuidShortNameMapObject: { [key: string]: string } = {};
+
+  public get organizationsGuidShortNameMapObject(): { [key: string]: string } {
+    return this._organizationsGuidShortNameMapObject;
+  }
+
+  private set organizationsGuidShortNameMapObject(value: { [key: string]: string }) {
+    this._organizationsGuidShortNameMapObject = value;
+  }
+
   private _url = `${environment.apiEndpoint}/evaluators`;
 
   private headers: HttpHeaders = Common.buildHeaders();
@@ -65,7 +75,7 @@ export class EvaluatorsService {
     }
 
     this.translateService.getTranslation(this.translateService.currentLang ?? this.translateService.defaultLang).subscribe(
-      (translationsJSON) => {  
+      (translationsJSON) => {
         this._rolesGuidNullValue = {
           guid: null,
           name: translationsJSON["all"],
@@ -171,6 +181,18 @@ export class EvaluatorsService {
     this.organizationsList = value;
   }
 
+  private populateOrganizationsGuidShortNameMapObject(
+    value: Array<IEvaluatorOrganization>
+  ): void {
+    let tempObject = {};
+
+    value.forEach((item) => {
+      tempObject[item.guid] = item.shortName;
+    });
+
+    this.organizationsGuidShortNameMapObject = tempObject;
+  }
+
   private populateOrganizationsGuidNameMapObject(
     value: Array<IEvaluatorOrganization>
   ): void {
@@ -195,6 +217,7 @@ export class EvaluatorsService {
     await this.getOrganizationsList().then((response) => {
       this.populateOrganizationsList(response);
       this.populateOrganizationsGuidNameMapObject(response);
+      this.populateOrganizationsGuidShortNameMapObject(response);
       this.populateOrganizationsSelectItemArray(response);
     });
   }

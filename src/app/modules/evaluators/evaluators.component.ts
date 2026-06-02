@@ -104,7 +104,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       }
-    )    
+    )
   }
 
   public async lazyLoadEvaluatorsList(event: TableLazyLoadEvent) {
@@ -255,7 +255,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const formValue = form.getRawValue();
     const selectedOrganizationGuid = formValue.organizationGuid;
-    
+
     const selectedOrganization = this.organizationsList
     .find(org => org.guid === selectedOrganizationGuid);
 
@@ -278,6 +278,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       organization: {
         guid: selectedOrganizationGuid,
         name: selectedOrganization ? selectedOrganization.name : null,
+        shortName: selectedOrganization ? selectedOrganization.shortName : null,
       },
       sections: this.transformSections(formValue.sectionsGuid),
       roles: formValue.rolesGuid
@@ -285,7 +286,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     const reqBody = new EvaluatorCreateFormModel(payload);
-    
+
 
     if (this.editEvaluatorSection && this.evaluationSectionId) {
       await this.putEvaluatorsForm(this.evaluationSectionId, reqBody);
@@ -452,7 +453,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("warn"),
-        detail: this.translateService.instant("evaluator.error.fetchData", 
+        detail: this.translateService.instant("evaluator.error.fetchData",
           { name: this.translateService.instant('evaluator.sections') }
         ),
       });
@@ -482,7 +483,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.messageService.add({
         severity: "warn",
         summary: this.translateService.instant("warn"),
-        detail: this.translateService.instant("evaluator.error.fetchData", 
+        detail: this.translateService.instant("evaluator.error.fetchData",
           { name: this.translateService.instant('evaluator.roles') }
         ),
       });
@@ -495,7 +496,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
     await this.getRolesList(unitGuid)
       .then((response) => {
         if (response) {
-          const rolesToAdd = response.filter((role) => { 
+          const rolesToAdd = response.filter((role) => {
             if(!this.rolesList.some((item) => item.guid == role.guid)){
               return role
             }
@@ -571,7 +572,7 @@ export class EvaluatorsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.organizationsList = this.evaluatorsService.organizationsList
           this.organizationsGuidNameMapObject = this.evaluatorsService.organizationsGuidNameMapObject
         }
-      );  
+      );
   }
 
   private prepareRolesGuidFormControl(rolesGuid: Array<string>) {

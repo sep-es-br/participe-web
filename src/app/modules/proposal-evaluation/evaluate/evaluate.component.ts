@@ -66,6 +66,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   public domainConfigNamesObj: Object = {};
   public organizationsGuidNameMapObject: { [key: string]: string } = {};
+  public organizationsGuidShortNameMapObject: { [key: string]: string } = {};
   public showSelectConference: boolean;
 
   public budgetUnitOptions: Array<IBudgetUnit> = [];
@@ -121,6 +122,9 @@ export class EvaluateComponent implements OnInit, OnDestroy {
     this.organizationsGuidNameMapObject =
       this.evaluatorsService.organizationsGuidNameMapObject;
 
+    this.organizationsGuidShortNameMapObject =
+      this.evaluatorsService.organizationsGuidShortNameMapObject;
+
     this.modalData = new ModalData(
       translateService.instant("proposal_evaluation.modalTitle"),
       {
@@ -154,14 +158,14 @@ export class EvaluateComponent implements OnInit, OnDestroy {
 
   updateActionPlanControlRequire() {
         this.budgetActionVisible = this.formHaveCost;
-        
+
         if(this.budgetActionVisible) {
           this.proposalEvaluationForm.controls.budgetAction.addValidators(Validators.required);
         } else {
           this.proposalEvaluationForm.controls.budgetAction.patchValue(undefined);
           this.proposalEvaluationForm.controls.budgetAction.clearValidators();
         }
-        
+
         this.proposalEvaluationForm.controls.budgetAction.updateValueAndValidity();
   }
 
@@ -170,22 +174,15 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       const guid =  this.evaluatorOrgGuid;
       if (!this.readOnlyProposalEvaluation) {
         if (!this.orgNameList) {
-          this.orgNameTag = this.organizationsGuidNameMapObject[guid]
-            .split("-")[1]
-            .trim();
-          this.orgName = this.organizationsGuidNameMapObject[guid]
-            .split("-")[0]
-            .trim();
+          this.orgNameTag = this.organizationsGuidShortNameMapObject[guid].trim();
+          this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim();
         }
       } else {
-        this.orgNameTag = this.organizationsGuidNameMapObject[guid]
-          .split("-")[1]
-          .trim();
-        this.orgName = this.organizationsGuidNameMapObject[guid]
-          .split("-")[0]
-          .trim();
+        this.orgNameTag = this.organizationsGuidShortNameMapObject[guid].trim();
+        this.orgName = this.organizationsGuidNameMapObject[guid].split("-")[0].trim();
       }
     } catch (error) {
+      console.error(error);
       this.router.navigate(["proposal-evaluation"]);
     }
   }
@@ -453,7 +450,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
       reasonDetailControl.patchValue(null);
 
       costTypeControl.patchValue(false);
-      newRequestControl.patchValue(false);      
+      newRequestControl.patchValue(false);
 
       reasonControl.addValidators(Validators.required);
     } else {
@@ -492,7 +489,7 @@ export class EvaluateComponent implements OnInit, OnDestroy {
   }
 
   get budgetPlanOptionsFiltered() {
-    return this.formCostType === "Investimento" ? 
+    return this.formCostType === "Investimento" ?
             this.budgetPlanOptions.filter(value => value.budgetPlanId !== "000001") :
             this.budgetPlanOptions
   }
