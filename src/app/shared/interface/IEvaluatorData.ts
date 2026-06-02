@@ -3,7 +3,9 @@ interface IEvaluatorData {
     name: string;
 }
 
-export interface IEvaluatorOrganization extends IEvaluatorData {}
+export interface IEvaluatorOrganization extends IEvaluatorData {
+  shortName: string;
+}
 
 export interface IEvaluatorSection extends IEvaluatorData {}
 

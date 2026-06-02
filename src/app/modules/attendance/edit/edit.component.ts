@@ -13,6 +13,7 @@ import { IAttendee } from '@app/shared/interface/IAttendee';
 import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
 import {ParticipationService} from '@app/shared/services/participation.service';
+import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
 
 @Component({
   selector: 'app-edit',
@@ -155,7 +156,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
         };
         if (isAuthority){
           params.isTeam = isTeam;
-          params.organization = organization;
+          params.organization = (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization;
           params.role = role;
           params.toAnnounce = toAnnounce;
           params.announced = announced;
