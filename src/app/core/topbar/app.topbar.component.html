@@ -1,4 +1,4 @@
-<div class="layout-topbar d-flex justify-content-md-between gap-2">
+<div class="layout-topbar d-flex justify-content-lg-between gap-2">
   <div href="#" class="layout-topbar-logo">
     <a href="#">
       <img class="logo" src="assets/layout/images/logotype.png" alt="Ministério Público do" />
@@ -27,10 +27,10 @@
                 <span class="user-profile-name">{{ person?.name }}</span>
                 <span class="user-profile-role"> {{ person?.defaultRole ? ('roles.' + person.defaultRole | translate) : '' }}</span>
                 <div class="p-grid ui-fluid language-container">
-                  <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('en')}" (click)="changeLanguage('en')">
+                  <div class="p-lg-6" [ngClass]="{'selected': isSelectLanguage('en')}" (click)="changeLanguage('en')">
                     <img src="assets/layout/images/icons/flag-usa.png"  alt=""/>
                     <span>{{'topbar.language.en'|translate}}</span></div>
-                  <div class="p-md-6" [ngClass]="{'selected': isSelectLanguage('pt')}" (click)="changeLanguage('pt')">
+                  <div class="p-lg-6" [ngClass]="{'selected': isSelectLanguage('pt')}" (click)="changeLanguage('pt')">
                     <img src="assets/layout/images/icons/flag-brazil.png"  alt=""/>
                     <span>{{'topbar.language.ptbr'|translate}}</span>
                   </div>

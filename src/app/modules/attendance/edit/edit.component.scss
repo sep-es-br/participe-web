@@ -301,9 +301,9 @@ div[role="button"] {
         right: 0 !important;
         left: 0 !important;
 
-        @media screen and (min-width: 768px ) {
+        @media screen and (min-width: 992px ) {
           left: auto !important;
-          min-width: var(--bs-breakpoint-md) !important;
+          min-width: var(--bs-breakpoint-lg) !important;
         }
       }
     }

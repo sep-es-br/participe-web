@@ -2,22 +2,22 @@
   <div class="row ui-fluid moderate-screen">
     <div class="col-12 col-lg-12">
       <h2 class="title-screen">{{ 'moderation.moderate.title' | translate }}</h2>
-      <div class="col-12 col-md-12 info">
+      <div class="col-12 col-lg-12 info">
         {{ comment?.citizenName }} | {{ timesAgo(comment?.time) }} | {{ 'moderation.label.' + comment?.type?.toLowerCase() | translate }} |
         {{comment?.localityName}}
       </div>
-      <div class="col-12 col-md-12 description">
+      <div class="col-12 col-lg-12 description">
         <textarea class="form-control" [maxlength]="280" rows="4" [(ngModel)]="comment.text"></textarea>
         <span class="count-characters">Caracteres restantes {{comment.text?.length || 0}}/280</span>
       </div>
-      <div class="col-12 col-md-12">
+      <div class="col-12 col-lg-12">
         <div class="d-flex">
           <div>{{'moderation.moderate.duplicated' | translate}}</div>
           <p-inputSwitch class="input-switch-duplicated" [(ngModel)]="comment.duplicated">
           </p-inputSwitch>
         </div>
         </div>
-      <div class="col-12 col-md-12 margin-item">
+      <div class="col-12 col-lg-12 margin-item">
         <p-radioButton [(ngModel)]="comment.type" name="optionModeration" value="Proposal"
           [label]="'moderation.label.proposal' | translate">
         </p-radioButton>
@@ -25,12 +25,12 @@
           [label]="'moderation.label.comment'| translate ">
         </p-radioButton>
       </div>
-      <div class="col-12 col-md-3 form-group" *ngIf="regionalization">
+      <div class="col-12 col-lg-3 form-group" *ngIf="regionalization">
         <label>{{ labelMicroregion }}</label>
         <p-dropdown [styleClass]="'d-flex form-control'" [options]="microregion" [(ngModel)]="comment.localityId"
                     [placeholder]="'placeholder.select'|translate"></p-dropdown>
       </div>
-      <div class="col-12 col-md-12 steps-container">
+      <div class="col-12 col-lg-12 steps-container">
         <label>{{ 'moderation.moderate.about' | translate }}</label>
         <div class="step-item-container" *ngFor="let item of comment.commentStructure; let i = index; let last = last">
           <div class="context-container">
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6" *ngIf="moving">
+      <div class="col-12 col-lg-6" *ngIf="moving">
         <p-tree [value]="strategyArea" [filter]="true" selectionMode="single" [propagateSelectionUp]="true"
           [propagateSelectionDown]="true" [(selection)]="selectedStrategyArea"
           [filterPlaceholder]="'moderation.moderate.placeholder.moveFilter' | translate"></p-tree>

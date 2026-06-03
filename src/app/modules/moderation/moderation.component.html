@@ -17,22 +17,22 @@
            (click)="toggleSearch()">{{ (search ? 'hide' : 'search') | translate }}</a>
         </div>
       </div>
-      <div class="col-12 col-md-12" *ngIf="search">
+      <div class="col-12 col-lg-12" *ngIf="search">
         <div class="row ui-fluid search-complete">
-          <div class="col-md-3 col-12 col-md-3 form-group">
+          <div class="col-lg-3 col-12 col-lg-3 form-group">
             <label class="form-label">{{ 'moderation.filters.status' | translate }}</label>
             <p-dropdown [styleClass]="'d-flex form-control'" [options]="statusOptions" [(ngModel)]="filter.status">
             </p-dropdown>
           </div>
-          <div class="col-12 col-md-3 form-group">
+          <div class="col-12 col-lg-3 form-group">
             <label>{{ 'moderation.filters.from' | translate }}</label>
             <p-dropdown [styleClass]="'d-flex form-control'" [options]="fromOptions" [(ngModel)]="filter.from"></p-dropdown>
           </div>
-          <div class="col-12 col-md-3 form-group" *ngIf="regionalization">
+          <div class="col-12 col-lg-3 form-group" *ngIf="regionalization">
             <label>{{ labelMicroregion }}</label>
             <p-dropdown [styleClass]="'d-flex form-control'" [options]="microregion" [(ngModel)]="filter.localityId"></p-dropdown>
           </div>
-          <div class="col-12 col-md-3 form-group">
+          <div class="col-12 col-lg-3 form-group">
             <label>{{ labelPlanItem }}</label>
             <p-dropdown
               [styleClass]="'d-flex form-control'"
@@ -45,22 +45,22 @@
               </ng-template>
             </p-dropdown>
           </div>
-          <div class="col-12 col-md-3 form-group">
+          <div class="col-12 col-lg-3 form-group">
             <label>{{ 'moderation.filters.text' | translate }}</label>
             <input pInputText class="form-control" [(ngModel)]="filter.text"/>
           </div>
-          <div class="col-12 col-md-3 form-group">
+          <div class="col-12 col-lg-3 form-group">
             <label>{{ 'moderation.filters.startAt' | translate }}</label>
             <p-calendar [styleClass]="'w-100'" [inputStyleClass]="'form-control'" dateFormat="dd/mm/yy" (onSelect)="changeDate('initialDate',$event)"
                         [locale]="calendarTranslate">
             </p-calendar>
           </div>
-          <div class="col-12 col-md-3 form-group">
+          <div class="col-12 col-lg-3 form-group">
             <label>{{ 'moderation.filters.endAt' | translate }}</label>
             <p-calendar [styleClass]="'w-100'" [inputStyleClass]="'form-control'" dateFormat="dd/mm/yy" (onSelect)="changeDate('endDate',$event)" [locale]="calendarTranslate">
             </p-calendar>
           </div>
-          <div class="col-12 col-md-3 mt-auto">
+          <div class="col-12 col-lg-3 mt-auto">
             <button pButton [icon]="getIcon('pi pi-search')" class="me-2" [disabled]="loading" (click)="searchHandle();"
                     [label]="'search' | translate"></button>
             <button pButton icon="pi pi-ban" type="button" [label]="'clean.search'|translate"
@@ -84,7 +84,7 @@
       </div>
       <div class="card card-w-title moderation-item" *ngFor="let comment of conferenceComments">
         <div class="row ui-fluid">
-          <div class="col-12 col-md-5">
+          <div class="col-12 col-lg-5">
             <div class="row">
               <span [class]="comment?.status.toLowerCase()">{{  comment?.status.toLowerCase() | translate  }}</span>
               <span
@@ -103,11 +103,11 @@
               {{ comment.localityName }}
             </div>
           </div>
-          <div class="col-12 col-md-3 align-content-center">
+          <div class="col-12 col-lg-3 align-content-center">
             <div class="info">{{ comment.structureItemName }}</div>
             <div>{{ comment.planItemName }}</div>
           </div>
-          <div class="col-12 col-md-1 align-content-center ">
+          <div class="col-12 col-lg-1 align-content-center ">
             <div class="col-12">
               <p-radioButton [name]="'optionModeration_' + comment.commentId"
                              (onClick)="selectCommentType(comment)" [(ngModel)]="comment.type"
@@ -121,14 +121,14 @@
               </p-radioButton>
             </div>
           </div>
-          <div class="col-12 col-md-2 align-content-center">
+          <div class="col-12 col-lg-2 align-content-center">
           <div class="col-12 d-flex">
             <div>{{'moderation.moderate.duplicated' | translate}}</div>
             <p-inputSwitch class="input-switch-duplicated" [(ngModel)]="comment.duplicated" (onChange)="selectCommentDuplicated(comment)">
             </p-inputSwitch>
           </div>
           </div>
-          <div class="col-12 col-md-1 align-content-center actions">
+          <div class="col-12 col-lg-1 align-content-center actions">
             <!-- <div class="row actions"> -->
               <button pButton class="btn align-content-center btn-sm btn-primary" [disabled]="comment.disableModerate"
                       [pTooltip]="'moderation.label.btnPublish' | translate" (click)="publish(comment)">

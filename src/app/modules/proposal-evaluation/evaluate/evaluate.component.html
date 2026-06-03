@@ -191,7 +191,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="col-12 d-flex flex-column" *ngIf="budgetActionVisible">
               <label for="budgetAction">{{
                 "proposal_evaluation.budgetAction" | translate
@@ -230,7 +230,7 @@
 
             <div class="col-12 d-flex flex-row" *ngIf="showNewRequest">
               <p-inputSwitch inputId="input-switch-new-request" formControlName="newRequest"></p-inputSwitch>
-              <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label> 
+              <label class="form-check-label ml-2" for="input-switch-new-request">{{'proposal_evaluation.newRequest'|translate}}</label>
             </div>
 
             <div class="col-12 flex-column" [ngClass]="requireBudgetPlan ? 'd-flex' : ''" [hidden]="!requireBudgetPlan">
@@ -249,7 +249,7 @@
                 styleClass="d-flex form-control my-1"
                 class="ng-dirty ng-invalid"
               >
-                <ng-template let-value pTemplate="selectedItems">                  
+                <ng-template let-value pTemplate="selectedItems">
                   {{ formatBudgetPlanValue(value) }}
                 </ng-template>
 
@@ -262,7 +262,7 @@
                 field="budgetPlan"
               ></tt-input-message>
             </div>
-            <div class="col col-xxl-5 d-flex flex-column">
+            <div class="col col-lg-5 d-flex flex-column">
               <label for="reasonDetail">
                 {{ "proposal_evaluation.reasonIncludedDetail" | translate }}? <i>({{"proposal_evaluation.optional" | translate}})</i>
               </label>
@@ -300,7 +300,7 @@
             <label for="reasonDetail"
               >{{ "proposal_evaluation.reasonNotIncludedDetail" | translate }}? <i>({{"proposal_evaluation.optional" | translate}})</i></label
             >
-            <div class="col col-xxl-5 d-flex flex-column">
+            <div class="col col-lg-5 d-flex flex-column">
               <textarea [rows]="5" [cols]="30" pInputTextarea class="form-control" placeholder="" formControlName="reasonDetail"
                           autoResize="autoResize" maxlength="280">
                         </textarea>
@@ -375,11 +375,11 @@
           <div class="col-8">
             <label>{{ "proposal_evaluation.budgetPlan" | translate }}</label>
             <p *ngIf="!formBudgetPlan || formBudgetPlan.length === 0; else budgetPlanList">{{ 'proposal_evaluation.budgetPlan_nullValue' | translate }}</p>
-            
+
             <ng-template #budgetPlanList>
               <p *ngFor="let planItem of formBudgetPlan">{{ formatBudgetPlanItem(planItem) }}</p>
             </ng-template>
-            
+
           </div>
         </div>
         <div class="row">
