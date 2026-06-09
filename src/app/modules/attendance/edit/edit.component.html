@@ -248,7 +248,7 @@
           </div>
           <div class="col-12 flex-wrap result" *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
             <div class="primary-info-icon row align-items-lg-center gap-lg-3 col-12 col-lg-4">
-              <div class="name-icon col-12 col-lg-1 justify-content-center justify-content-lg-start">
+              <div class="name-icon col-12 col-lg-auto justify-content-center pr-0 justify-content-lg-start">
                 <div *ngIf="!attendee.isAuthority"
                   class="letter-icon"
                   [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }"
@@ -267,7 +267,7 @@
 
 
               </div>
-              <div class="primary-info text-center text-lg-start col-12 col-lg" style="min-width: 200px;">
+              <div class="primary-info text-center text-lg-start col-12 col-lg pl-0" style="min-width: 200px;">
                 <div class="name">{{ attendee.name }}</div>
                 <div class="contact col-12 col-lg p-0 justify-content-center justify-content-lg-start">
                   <span>{{ attendee.email }}</span>
