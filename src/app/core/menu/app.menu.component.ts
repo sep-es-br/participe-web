@@ -102,7 +102,8 @@ export class AppMenuComponent implements OnInit {
           {
             label: 'attendance.label', icon: faUserCheck, items: [
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']},
+              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
             ]
           }
           );
@@ -111,7 +112,8 @@ export class AppMenuComponent implements OnInit {
           {
             label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
               {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']}
+              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']},
+              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
             ]
           }
         );
