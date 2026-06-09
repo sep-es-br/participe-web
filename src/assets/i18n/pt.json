@@ -71,6 +71,7 @@
 	"change": "Trocar",
 	"citizen": {
 		"representative": "Representante Oficial",
+    "present": "Presente",
     "team": "Equipe de Governo",
 		"organization": "Órgão/Entidade Representada",
 		"role": "Cargo do Representante",
