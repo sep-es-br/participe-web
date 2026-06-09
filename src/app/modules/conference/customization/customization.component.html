@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <h3 class="fw-bolder text-center">{{"conference.cssTab.config" | translate}}</h3>
         <form [formGroup]="customStylesheet"   *ngIf="dataForm">
             <table class="table table-striped">
@@ -19,7 +19,7 @@
                             <div *ngIf="formLoaded === true">
                                 <app-gradient (BackgroudDefined)="updateBackground($event)" [formLoaded]="formLoaded" [initialBackground]="backgroundColor" ></app-gradient>
                             </div>
-                        </ng-template>                             
+                        </ng-template>
                     </div>
                 </td>
                 </tr>
@@ -99,15 +99,15 @@
             </table>
         </form>
       </div>
-      <div class="col-md-4 bg-dark-subtle p-3">
+      <div class="col-lg-4 bg-dark-subtle p-3">
         <h3 class="fw-bolder text-center">{{"conference.cssTab.preview.titleSection" | translate}}</h3>
         <div class="container p-3" [ngStyle]="{'background': backgroundColor,'color':colorText}">
             <label>{{"conference.cssTab.preview.background" | translate}}</label>
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <div class="text-center m-2" [ngStyle]="{'border': '0.3rem solid '+borderColor ,'border-radius':'25px'}" >{{"conference.cssTab.preview.border" | translate}}</div>
                 <div class="text-center m-2 p-2 shadow" [ngStyle]="{'background-color': colorAccent,'border-radius':'25px'}" >{{"conference.cssTab.preview.accent" | translate}}</div>
             </div>
-            <div class="col-md-12">
+            <div class="col-lg-12">
                 <h1>{{"conference.cssTab.preview.titles" | translate}}</h1>
                 <h6>{{"conference.cssTab.preview.subtitles" | translate}}</h6>
                 <p>{{"conference.cssTab.preview.text" | translate}}</p>

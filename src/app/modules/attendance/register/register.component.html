@@ -1,7 +1,7 @@
 <app-template>
   <div class="attendee-register">
     <ng-container *ngIf="(newAccount || isAttendeeSelected); else list">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-lg-6">
         <form class="row form-new-account" [formGroup]="form" (submit)="saveAccount()">
           <div class="col-12 title">
             {{ 'attendance.registerAttendance' | translate }}
@@ -92,28 +92,28 @@
     <ng-template #list>
       <div class=" row">
         <div class="col-12">
-          <div class="col-md-4 text-center m-auto">
+          <div class="col-lg-4 text-center m-auto">
             <button type="button" class="btn btn-lg btn-orange" (click)="readQRCode()" value="" ><span class="icon" ><i class="fa fa-qrcode" ></i></span>Ler QR Code</button>
           </div>
         </div>
-        <div class="col-12 col-md-8 mt-3">
+        <div class="col-12 col-lg-8 mt-3">
           <div class="row">
-            <div class="col-12 col-md-8 ">
+            <div class="col-12 col-lg-8 ">
               <input type="text" class="form-control mt-1" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-lg-4">
               <button id="btnSearchRegister" class="xs-w-100 mt-1" pButton [disabled]="!this.idMeeting" icon="pi pi-search"
                       [label]="'search' | translate" (click)="searchByName()"></button>
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-4 mt-3 new " [hidden]="true" >
+        <div class="col-12 col-lg-4 mt-3 new " [hidden]="true" >
           <button pButton icon="pi pi-plus" class="xs-w-100 mt-1" [label]="'new' | translate" (click)="toggleNewAccount()"></button>
         </div>
       </div>
       <app-modal id="QRCodeReader"  [modalData]="modalData" (closed)="closeQRCodeReader()" >
         <div class="row"  >
-          <div class="col-12 col-md-6  text-center">
+          <div class="col-12 col-lg-6  text-center">
             <!-- <label>Dispositivos</label> -->
             <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
               <!-- <option value="" [selected]="!deviceCurrent">{{ 'qrcode.noDevice' | translate }}</option> -->
@@ -122,7 +122,7 @@
             </select>
             <!-- <p-dropdown   [options]="availableDevices" ></p-dropdown> -->
           </div>
-          <div class="col-md-6 col-12 text-center">
+          <div class="col-lg-6 col-12 text-center">
             <a *ngIf="torchAvailable$?.value" (click)="toggleTorch()" class="btn btn-sm {{classFlash}}" >
               <span class="m-2"><i class="fas fa-bolt" ></i></span>
               {{actionFlash}}
@@ -160,25 +160,28 @@
         <div class="col-12" *ngIf="noResult">
           <div class="no-result">{{ 'attendance.noResult' | translate }}</div>
         </div>
-        <div class="col-12 result" *ngFor="let attendee of listAttendees">
-          <div class="name-icon">
-            <div class="letter-icon" [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name)}">
-              {{ attendee.name[0].toUpperCase() }}
+        <div class="col-12 flex-wrap result justify-content-center justify-content-lg-start" *ngFor="let attendee of listAttendees">
+          <div class="icon-primary-info col-12 col-lg-6 row flex-column flex-lg-row">
+            <div class="name-icon col-12 col-lg-1 justify-content-center">
+              <div class="letter-icon" [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name)}">
+                {{ attendee.name[0].toUpperCase() }}
+              </div>
+            </div>
+            <div class="primary-info col-12 col-lg text-center text-lg-start">
+              <div class="name">{{ attendee.name }}</div>
+              <div class="contact justify-content-center justify-content-lg-start">
+                <span>{{ attendee.email }}</span>
+                <span *ngIf="attendee.telephone"> - {{ attendee.telephone }}</span>
+              </div>
             </div>
           </div>
-          <div class="primary-info">
-            <div class="name">{{ attendee.name }}</div>
-            <div class="contact">
-              <span>{{ attendee.email }}</span>
-              <span *ngIf="attendee.telephone"> - {{ attendee.telephone }}</span>
-            </div>
-          </div>
-          <div class="secondary-info">
-            <div class="info-place">
+
+          <div class="secondary-info flex-column flex-lg-row col-12 col-lg text-center text-lg-start align-items-center align-items-lg-start">
+            <div class="info-place col">
               <div class="locality">{{ attendee.locality }}</div>
               <div class="region">{{ attendee.superLocality }}</div>
             </div>
-            <div class="authNameIcon" >
+            <div class="authNameIcon my-3" >
               <img *ngFor="let auth of attendee.authName" [src]="authSrv.getAuthenticationIcon(auth)" class="mx-1">
             </div>
             <div class="info-checkin" *ngIf="attendee?.checkedIn">
@@ -188,7 +191,7 @@
             </div>
             <div class="info-checkin" *ngIf="!attendee?.checkedIn"></div>
           </div>
-          <div class="action">
+          <div class="action col-12 col-lg-1 justify-content-center">
             <ng-container *ngIf="attendee?.checkedIn; else canCheckIn">
               <fa-icon class="checkin-button" size="2x" [icon]="iconChecked" (click)="selectAttendee(attendee)"></fa-icon>
             </ng-container>
@@ -255,7 +258,7 @@
   <div class="form-group">
     <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'"  [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
   </div>
-  <div class=" col-12 col-md-6 col-lg-3 m-auto">
+  <div class=" col-12 col-lg-6 col-lg-3 m-auto">
     <div class="d-grid gap-2 mt-3">
       <button pButton class=" btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
     </div>

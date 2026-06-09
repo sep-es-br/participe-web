@@ -137,6 +137,22 @@ export class AttendanceModel {
       announced: false
     });
 
+
+    const search = JSON.parse(localStorage.getItem('filter')) ;
+
+    if (search){
+      this.nameSearch = search.name;
+      this.pageSize = search.size;
+      this.currentPage = search.page;
+      this.selectedOrderBy = search.sort;
+      this.selectedFilterBy = search.filterBy;
+      this.selectedCounty  = this.localities?.find(loc => loc.id === search.localities);
+      this.selectedParticipante = search.tipoParticipante ?? 'all';
+      this.selectedFilterByStatus = search.filterByStatus;
+      this.selectedOrganization = this.meetingSrv.organizationList()?.find(org => org.name === search.filterByOrganization)
+        ?? ( search.filterByOrganization && { name: search.filterByOrganization } as IOptionOrganization ) ;
+    }
+
     this.configureAuthorityValidation();
 
     this.getConferencesAndMeetings().then();
@@ -567,19 +583,23 @@ export class AttendanceModel {
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
 
-    return { search: {
-        name: this.nameSearch,
-        size: this.pageSize,
-        page: nextPage ? ++this.currentPage : this.currentPage,
-        sort: this.selectedOrderBy,
-        filterBy: this.selectedFilterBy,
-        ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
-        ...this.selectedParticipante !== 'all' ? { tipoParticipante: this.selectedParticipante } : {},
-        ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
-        ...(this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0)
-                              ? { filterByOrganization: this.selectedOrganization.name } : {},
+    const search = {
+      name: this.nameSearch,
+      size: this.pageSize,
+      page: nextPage ? ++this.currentPage : this.currentPage,
+      sort: this.selectedOrderBy,
+      filterBy: this.selectedFilterBy,
+      ...this.selectedCounty ? { localities: this.selectedCounty.id } : {},
+      ...this.selectedParticipante !== 'all' ? { tipoParticipante: this.selectedParticipante } : {},
+      ...this.selectedFilterByStatus ? { filterByStatus: this.selectedFilterByStatus } : {},
+      ...(this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0)
+        ? { filterByOrganization: this.selectedOrganization.name } : {},
 
-      } };
+    };
+
+    localStorage.setItem('filter', JSON.stringify(search));
+
+    return { search };
   }
 
   getHowLongAgo(when: string): string {

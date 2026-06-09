@@ -115,10 +115,10 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
       this.nameSearch = '';
       this.noResult = false;
       this.breadcrumbSrv.setItems([
-        { label: 'attendance.authorities' },
+        { label: 'attendance.label' },
         {
           label: `${this.translate.instant("attendance.authorities") } ${this.currentMeeting.name}`,
-          routerLink: [`/attendance/${this.routerLinkItem}`]
+          routerLink: [`/attendance/authority-list`]
         },
       ]);
     }

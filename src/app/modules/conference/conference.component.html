@@ -7,12 +7,12 @@
         <section class="row ">
           <form [formGroup]="conferenceForm" *ngIf="conferenceForm">
             <div class="row">
-              <div class="col-12 col-md-12">
+              <div class="col-12 col-lg-12">
                 <span *ngIf="idConference">{{'update' | translate }}</span>
                 <span *ngIf="!idConference">{{'new' | translate }}</span>
                 {{'administration.conference'|translate}}
               </div>
-              <div class="col-12  col-md-6">
+              <div class="col-12  col-lg-6">
                 <div class="form-floating mb-3">
                   <input pInputText class="form-control" (change)="validateName($event)" (input)="onInput($event)" (blur)="onBlur($event)"
                   formControlName="name">
@@ -20,7 +20,7 @@
                   <tt-input-message [form]="conferenceForm" field="name"></tt-input-message>
                 </div>
               </div>
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-lg-6">
                 <div class="form-floating mb-3">
                   <textarea [rows]="1" [cols]="30" class="form-control" pInputTextarea formControlName="description" autoResize="autoResize">
                   </textarea>
@@ -28,7 +28,7 @@
                   <tt-input-message [form]="conferenceForm" field="description"></tt-input-message>
                 </div>
               </div>
-              <div class="col-12 col-md-6 mt-2">
+              <div class="col-12 col-lg-6 mt-2">
                 <span class="p-float-label">
                   <p-dropdown [options]="plans" [styleClass]="'d-flex form-control'" formControlName="plan" [placeholder]="'placeholder.select'|translate"
                   class="ng-dirty w-100"  (onChange)="onChangePlans($event.value); loadStructureItens($event.value)"
@@ -38,7 +38,7 @@
                   <tt-input-message [form]="conferenceForm" field="plan"></tt-input-message>
               </span>
               </div>
-              <div class="col-12 col-md-6 ">
+              <div class="col-12 col-lg-6 ">
                 <div class="form-floating mb-3">
                   <input pInputText class="form-control" formControlName="serverName" (blur)="validateDefaultConferenceServer()"
                   placeholder="https://my.domain.com/">
@@ -46,32 +46,32 @@
                   <tt-input-message [form]="conferenceForm" field="serverName"></tt-input-message>
                 </div>
               </div>
-              <div class="col-12 col-md-6 mb-5">             
+              <div class="col-12 col-lg-6 mb-5">
                   <p-inputSwitch inputId="input-switch-default-conference" formControlName="defaultServerConference"
                   (onChange)="validateDefaultConferenceServer()"
                   [readonly]="conferenceForm.controls.serverName.invalid">
                   </p-inputSwitch>
-                  <label class="form-check-label ml-2" for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>                
+                  <label class="form-check-label ml-2" for="input-switch-default-conference">{{'conference.defaultServerConference'|translate}}</label>
               </div>
             </div>
             <p-accordion [multiple]="true">
               <p-accordionTab header="{{'conference.moderators' | translate}}">
                 <form [formGroup]="searchModeratorsForm" (submit)="searchModerators(searchModeratorsForm.value)">
                   <div class="row ">
-                    <div class="col-12 col-md-5 col-lg-5">
+                    <div class="col-12 col-lg-5 col-lg-5">
                       <div class="form-floating mb-3">
                         <input pInputText formControlName="nameModerator" placeholder="" class="form-control">
                         <label class="form-label" for="nameModerator">{{'conference.name'|translate}}</label>
                       </div>
                     </div>
-                    <div class="col-12 col-md-5 col-lg-5">
+                    <div class="col-12 col-lg-5 col-lg-5">
                       <div class="form-floating mb-3">
                         <input pInputText formControlName="emailModerator" class="form-control" placeholder="">
                         <label class="form-label" for="email">{{'conference.email'|translate}}</label>
                       </div>
                     </div>
 
-                    <div class="col-12 col-md-2 m-auto  text-center">
+                    <div class="col-12 col-lg-2 m-auto  text-center">
                       <button pButton icon="pi pi-search" class="" type="submit" [label]="'search'|translate"></button>
                     </div>
                   </div>
@@ -135,7 +135,7 @@
                 </div>
               </p-accordionTab>
               <p-accordionTab header="{{'conference.segmentation' | translate}}" class="segmentation-accordion">
-                <div class="col-12 col-md-6 switch-segmentation">
+                <div class="col-12 col-lg-6 switch-segmentation">
                   <p-inputSwitch id="input-switch-segmentation" formControlName="segmentation"
                     (onChange)="showTargetedByItems=!showTargetedByItems"
                     [readonly]="conferenceForm.controls.plan.invalid">
@@ -167,7 +167,7 @@
                     <fa-icon size="6x" [icon]="reportIcon"></fa-icon>
                     <label>{{'conference.proposeReport' | translate}}</label>
                   </div>
-                
+
                 </div>
 
               </p-accordionTab>
@@ -180,7 +180,7 @@
                 <p-accordion [multiple]="true" class="accordion-citizen-portal">
                   <p-accordionTab header="{{'conference.display' | translate}}">
                     <div class="row ">
-                      <div class="col-12 col-md-6 col-lg-6">
+                      <div class="col-12 col-lg-6 col-lg-6">
                         <div class="col-12">
                           <label class="clearfix">{{'conference.mode'| translate}}</label>
                         </div>
@@ -198,7 +198,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                      <div class="col-12 col-lg-6 col-lg-6 col-lg-6">
                         <div class="col-12">
                           <label class="clearfix">&nbsp;</label>
                         </div>
@@ -210,7 +210,7 @@
                       </div>
                     </div>
                     <div class="row ">
-                      <div class="col-12 col-md-6 col-lg-6 begin-date">
+                      <div class="col-12 col-lg-6 col-lg-6 begin-date">
                         <label class="clearfix" for="beginDate">{{'conference.opening'|translate}}</label>
                         <p-calendar dateFormat="dd/mm/yy"
                           (onSelect)="changeBeginDate($event);  setStatusDisplayConference()"  [styleClass]="'w-100'" [showTime]="true"
@@ -218,7 +218,7 @@
                         </p-calendar>
                         <tt-input-message [form]="conferenceForm" field="beginDate"></tt-input-message>
                       </div>
-                      <div class="col-12 col-md-6 col-lg-6 end-date">
+                      <div class="col-12 col-lg-6 col-lg-6 end-date">
                         <label for="endDate">{{'conference.closure'|translate}}</label>
                         <p-calendar (onClose)="changeEndDate()" [minDate]="minDate" [locale]="calendarTranslate"
                           dateFormat="dd/mm/yy" (onSelect)="setStatusDisplayConference()"  [styleClass]="'w-100'" formControlName="endDate"
@@ -231,7 +231,7 @@
                   <p-accordionTab header="{{'conference.evaluation' |translate}}">
                     <form [formGroup]="conferenceEvaluationForm" *ngIf="conferenceForm">
                       <div class="row ">
-                        <div class="col-12 col-md-6 col-lg-6">
+                        <div class="col-12 col-lg-6 col-lg-6">
                           <div class="col-12">
                             <label class="clearfix">{{'conference.mode'| translate}}</label>
                           </div>
@@ -249,7 +249,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="col-12 col-lg-6 col-lg-6 col-lg-6">
                           <div class="col-12">
                             <label class="clearfix">&nbsp;</label>
                           </div>
@@ -261,7 +261,7 @@
                         </div>
                       </div>
                       <div class="row ">
-                        <div class="col-12 col-md-6 col-lg-6 begin-date">
+                        <div class="col-12 col-lg-6 col-lg-6 begin-date">
                           <label class="clearfix" for="evaluationBeginDate">{{'conference.opening'|translate}}</label>
                           <p-calendar dateFormat="dd/mm/yy"
                             (onSelect)="changeEvaluationBeginDate($event);  setEvaluationDisplayStatus()"  [styleClass]="'w-100'" [showTime]="true"
@@ -269,7 +269,7 @@
                           </p-calendar>
                           <tt-input-message [form]="conferenceEvaluationForm" field="evaluationBeginDate"></tt-input-message>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-6 end-date">
+                        <div class="col-12 col-lg-6 col-lg-6 end-date">
                           <label for="evaluationEndDate">{{'conference.closure'|translate}}</label>
                           <p-calendar (onClose)="changeEvaluationEndDate()" [minDate]="minDate" [locale]="calendarTranslate"
                             dateFormat="dd/mm/yy" (onSelect)="setEvaluationDisplayStatus()"  [styleClass]="'w-100'" formControlName="evaluationEndDate"
@@ -282,7 +282,7 @@
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.citizen-Authentication' | translate}}"
                     styleClass="tabStyleClass">
-                    <div class="col-12 col-md-12" *ngIf="noSavedImages2Show(authenticationImages)">
+                    <div class="col-12 col-lg-12" *ngIf="noSavedImages2Show(authenticationImages)">
                       <h3>{{'file.label'|translate}}</h3>
                       <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                         (onSelect)="syncFiles2Upload($event, 'authentication')"
@@ -291,7 +291,7 @@
                       </p-fileUpload>
                     </div>
                     <div *ngFor="let image of authenticationImages">
-                      <div class="col-12 col-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                      <div class="col-12 col-lg-2" *ngIf="image.file.id != null && !image.toDelete">
                         <h3>{{'conference.image'|translate}}</h3>
                         <img [src]="getUrlFile(image.file.id)" class="img-thumbnail img-fluid mb-2" alt="Imagem Autenticação" width="120px"
                           style="padding: 20px;">
@@ -300,14 +300,14 @@
                       </div>
                     </div>
 
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="titleAuthentication">
                         <label class="form-label" for="titleAuthentication">{{'conference.title'|translate}}</label>
                         <tt-input-message [form]="conferenceForm" field="titleAuthentication"></tt-input-message>
                       </div>
                     </div>
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="subtitleAuthentication">
                         <label class="form-label" for="subtitleAuthentication">{{'conference.sub-title'|translate}}</label>
@@ -315,19 +315,19 @@
                       </div>
                     </div>
 
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <label for="localityType">{{'conference.locality-citizen'|translate}}</label>
                       <p-dropdown [options]="locales" formControlName="localityType"
                         [placeholder]="'placeholder.select'|translate"  [styleClass]="'w-100'" class="ng-dirty"
                         [readonly]="!localitycitizenSelected || selfdeclarations > 0">
                       </p-dropdown>
-                      <div class="col-12 col-md-12 switch-show-statistics">
+                      <div class="col-12 col-lg-12 switch-show-statistics">
                         <p-inputSwitch id="input-switch-show-statistics" formControlName="showStatistics">
                         </p-inputSwitch>
                         <label class="targeted-label"
                           for="input-switch-show-statistics">{{'conference.showStatistics'|translate}}</label>
                       </div>
-                      <div class="col-12 col-md-12 switch-show-calendar">
+                      <div class="col-12 col-lg-12 switch-show-calendar">
                         <p-inputSwitch id="input-switch-show-calendar" formControlName="showCalendar">
                         </p-inputSwitch>
                         <label class="targeted-label"
@@ -336,7 +336,7 @@
                       <tt-input-message [form]="conferenceForm" field="localityType"></tt-input-message>
                     </div>
 
-                    <div class="col-12 col-md-12" [hidden]="conferenceForm.controls['showCalendar'].value">
+                    <div class="col-12 col-lg-12" [hidden]="conferenceForm.controls['showCalendar'].value">
                       <div class="col-12 fileupload-container">
                         <h3>{{'conference.mobile'|translate}}</h3>
                         <p-fileUpload name="files"  accept="image/*" maxFileSize="5000000"
@@ -346,7 +346,7 @@
                         </p-fileUpload>
                       </div>
                       <div *ngFor="let image of calendarImages"
-                        class="col-12 col-md-4 col-lg-3 col-xl-2 list-images-container">
+                        class="col-12 col-lg-4 col-lg-3 col-lg-2 list-images-container">
                         <div class="list-image-item"
                           *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
                           <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
@@ -357,20 +357,20 @@
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.participation-Pages' | translate}}">
-                      <div class="col-12 col-md-12" *ngIf="noSavedImages2Show(participationImages)">
+                      <div class="col-12 col-lg-12" *ngIf="noSavedImages2Show(participationImages)">
                         <h3>{{'conference.header-image'|translate}}</h3>
                         <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                         (onSelect)="syncFiles2Upload($event, 'participation')"
                         (onRemove)="removeUnsavedFile($event, 'participation')" [chooseLabel]="'file.browse'|translate"
                         [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate">
                           <ng-template pTemplate="content">
-              
+
                           </ng-template>
-                        
+
                       </p-fileUpload>
                       </div>
                       <div *ngFor="let image of participationImages">
-                        <div class="col-12 col-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                        <div class="col-12 col-lg-2" *ngIf="image.file.id != null && !image.toDelete">
                           <h3>{{'conference.header-image'|translate}}</h3>
                           <img [src]="getUrlFile(image.file.id)" class="img-thumbnail img-fluid mb-2" alt="Imagem Participação" width="120px"
                             style="padding: 20px;">
@@ -378,20 +378,20 @@
                             (click)="prepare2RemoveSavedImage(image, 'participation')"></button>
                         </div>
                       </div>
-                      <div class="col-12 col-md-12" *ngIf="noSavedImages2Show(footerImages)">
+                      <div class="col-12 col-lg-12" *ngIf="noSavedImages2Show(footerImages)">
                         <h3>{{'conference.footer-image'|translate}}</h3>
                         <p-fileUpload name="file" accept="image/*" maxFileSize="5000000" auto="auto" customUpload="true"
                         (onSelect)="syncFiles2Upload($event, 'footer')"
                         (onRemove)="removeUnsavedFile($event, 'footer')" [chooseLabel]="'file.browse'|translate"
                         [uploadLabel]="'file.send'|translate" [cancelLabel]="'cancel'|translate">
                           <ng-template pTemplate="content">
-              
+
                           </ng-template>
-                        
+
                       </p-fileUpload>
                       </div>
                       <div *ngFor="let image of footerImages">
-                        <div class="col-12 col-md-2" *ngIf="image.file.id != null && !image.toDelete">
+                        <div class="col-12 col-lg-2" *ngIf="image.file.id != null && !image.toDelete">
                           <h3>{{'conference.footer-image'|translate}}</h3>
                           <img [src]="getUrlFile(image.file.id)" class="img-thumbnail img-fluid mb-2" alt="Imagem Rodapé" width="120px"
                             style="padding: 20px;">
@@ -399,7 +399,7 @@
                             (click)="prepare2RemoveSavedImage(image, 'footer')"></button>
                         </div>
                       </div>
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="titleParticipation">
                         <label class="form-label" for="titleParticipation">{{'conference.title'|translate}}</label>
@@ -407,20 +407,20 @@
                       </div>
                     </div>
 
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="subtitleParticipation">
                         <label class="form-label" for="subtitleParticipation">{{'conference.sub-title'|translate}}</label>
                         <tt-input-message [form]="conferenceForm" field="subtitleParticipation"></tt-input-message>
                       </div>
                     </div>
-                    <div class="col-12 col-md-12 switch-show-statistics-panel">
+                    <div class="col-12 col-lg-12 switch-show-statistics-panel">
                       <p-inputSwitch id="input-switch-show-statistics-panel" formControlName="showStatisticsPanel">
                       </p-inputSwitch>
                       <label class="targeted-label"
                         for="input-switch-show-statistics-panel">{{'conference.showStatisticsPanel'|translate}}</label>
                     </div>
-                    <div class="col-12 col-md-12 switch-show-proposals-panel">
+                    <div class="col-12 col-lg-12 switch-show-proposals-panel">
                       <p-inputSwitch id="input-switch-show-proposals-panel" formControlName="showProposalsPanel">
                       </p-inputSwitch>
                       <label class="targeted-label"
@@ -432,7 +432,7 @@
 
                   <p-accordionTab header="{{'conference.regionalization-Pages' | translate}}"
                     *ngIf="structureRegionalization">
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="titleRegionalization">
                         <label class="form-label" for="titleRegionalization">{{'conference.title'|translate}}</label>
@@ -440,7 +440,7 @@
                       </div>
                     </div>
 
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="subtitleRegionalization">
                         <label class="form-label" for="subtitleRegionalization">{{'conference.sub-title'|translate}}</label>
@@ -449,7 +449,7 @@
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.preOpening' | translate}}">
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                           <textarea [rows]="4" [cols]="30" pInputTextarea class="form-control" placeholder="" formControlName="preOpeningText"
                           autoResize="autoResize">
@@ -460,7 +460,7 @@
                     </div>
                   </p-accordionTab>
                   <p-accordionTab header="{{'conference.postClosure' | translate}}">
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <textarea class="form-control" placeholder="" [rows]="4" [cols]="30" pInputTextarea formControlName="postClosureText"
                         autoResize="autoResize">
@@ -474,32 +474,32 @@
               </div>
             </div>
           </form>
-          <div class="col-12 col-md-12 accordion-citizen-container">
+          <div class="col-12 col-lg-12 accordion-citizen-container">
             <p-accordion [multiple]="true" class="accordion-citizen-portal">
               <p-accordionTab header="{{'conference.howWork' | translate}}">
                 <form [formGroup]="howItWorksForm" *ngIf="howItWorksForm">
                   <div class="row" *ngIf="newStep">
-                    <div class="col-12 col-md-2">
+                    <div class="col-12 col-lg-2">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="order" type="number" [min]="0">
                         <label class="form-label" >{{'conference.step'|translate}}</label>
                       </div>
                     </div>
-                    <div class="col-12 col-md-3">
-                      <div class="form-floating mb-3">  
+                    <div class="col-12 col-lg-3">
+                      <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="title">
                         <label class="form-label" for="title">{{'conference.title'|translate}}</label>
                         <tt-input-message [form]="howItWorksForm" field="title"></tt-input-message>
                       </div>
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-lg-6">
                       <div class="form-floating mb-3">
                         <textarea [rows]="1" class="form-control" placeholder="" [cols]="30" pInputTextarea formControlName="text"
                         ></textarea>
                         <label class="form-label" for="text">{{'conference.text'|translate}}</label>
                       </div>
                     </div>
-                    <div class="col-12 col-md-1 m-auto text-centers">
+                    <div class="col-12 col-lg-1 m-auto text-centers">
                       <button pButton icon="pi pi-plus" (click)="addHowItWorkStep()"></button>
                     </div>
                   </div>
@@ -574,7 +574,7 @@
               <p-accordionTab header="{{'conference.externalLinks' | translate}}">
                 <form [formGroup]="menuLabelForm" *ngIf="menuLabelForm">
                   <div class="row ">
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input class="form-control" pInputText placeholder="" formControlName="menuLabel">
                         <label class="form-label" >{{'conference.menuLabel'|translate}}</label>
@@ -585,17 +585,17 @@
                 </form>
                 <form [formGroup]="externalLinksForm" *ngIf="externalLinksForm">
                   <div class="row  form-external-links-content">
-                    <div class="col-12 col-md-12 col-lg-12 external-links-form-title">
+                    <div class="col-12 col-lg-12 col-lg-12 external-links-form-title">
                       <span>Links</span>
                     </div>
-                    <div class="col-12 col-md-3 col-lg-3">
+                    <div class="col-12 col-lg-3 col-lg-3">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="label">
                         <label class="form-label" for="label">{{'conference.label'|translate}}</label>
                         <tt-input-message [form]="externalLinksForm" field="label"></tt-input-message>
                       </div>
                     </div>
-                    <div class="col-12 col-md-8 col-lg-8">
+                    <div class="col-12 col-lg-8 col-lg-8">
                       <div class="form-floating mb-3">
                         <textarea [rows]="1" [cols]="30" class="form-control" placeholder="" pInputTextarea formControlName="url" autoResize="autoResize">
                         </textarea>
@@ -603,7 +603,7 @@
                         <tt-input-message [form]="externalLinksForm" field="url"></tt-input-message>
                       </div>
                     </div>
-                    <div class="col-12 col-md-1 col-lg-1 button-plus-external-link">
+                    <div class="col-12 col-lg-1 col-lg-1 button-plus-external-link">
                       <button pButton icon="pi pi-plus" (click)="addExternalLink()"></button>
                     </div>
                   </div>
@@ -661,7 +661,7 @@
                   </p-table>
                 </div>
                 <form [formGroup]="conferenceForm" *ngIf="conferenceForm">
-                  <div class="col-12 col-md-6 switch-show-external-links">
+                  <div class="col-12 col-lg-6 switch-show-external-links">
                     <p-inputSwitch id="input-switch-show-external-links" formControlName="showExternalLinks">
                     </p-inputSwitch>
                     <label class="targeted-label"
@@ -672,10 +672,10 @@
               <p-accordionTab header="{{'conference.research' | translate}}">
                 <form [formGroup]="conferenceResearchForm" *ngIf="conferenceResearchForm">
                   <div class="row ">
-                    <div class="col-12 col-md-12 col-lg-12 container-label-display-mode">
+                    <div class="col-12 col-lg-12 col-lg-12 container-label-display-mode">
                       <label class="label-display-mode">{{'conference.displayOfTheCitizenPortal'| translate}}</label>
                     </div>
-                    <div class="col-6 col-md-6 col-lg-6 diplay-mode">
+                    <div class="col-6 col-lg-6 col-lg-6 diplay-mode">
                       <div class="options-container">
                         <div class="display-item">
                           <p-radioButton name="displayModeResearch" value="AUTOMATIC" [label]="'automatic'|translate"
@@ -689,7 +689,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="col-12 col-lg-6 col-lg-6 col-lg-6">
                       <p-dropdown [options]="optionsStatusResearchConference" formControlName="researchDisplayStatus"
                         [placeholder]="'placeholder.select'|translate"  [styleClass]="'w-100'" name="researchDisplayStatus" class="ng-dirty ng-invalid"
                         [readonly]="conferenceResearchForm.controls.displayModeResearch.value === 'AUTOMATIC'">
@@ -699,7 +699,7 @@
                     </div>
                   </div>
                   <div class="row ">
-                    <div class="col-12 col-md-6 col-lg-6 begin-date">
+                    <div class="col-12 col-lg-6 col-lg-6 begin-date">
                       <label for="beginDate">{{'begin'|translate}}</label>
                       <p-calendar dateFormat="dd/mm/yy" showTime="true" hourFormat="24" formControlName="beginDate"
                         [locale]="calendarTranslate"
@@ -707,7 +707,7 @@
                       </p-calendar>
                       <tt-input-message [form]="conferenceResearchForm" field="beginDate"></tt-input-message>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-6 end-date">
+                    <div class="col-12 col-lg-6 col-lg-6 end-date">
                       <label for="endDate">{{'conference.closure'|translate}}</label>
                       <p-calendar dateFormat="dd/mm/yy" [minDate]="researchMinDate && researchMinDate"
                         (onSelect)="setResearchDisplayStatus()"  [styleClass]="'w-100'" formControlName="endDate" showTime="true"
@@ -715,15 +715,15 @@
                       </p-calendar>
                       <tt-input-message [form]="conferenceResearchForm" field="endDate"></tt-input-message>
                     </div>
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-lg-12">
                       <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="researchLink">
                         <label class="form-label" for="researchLink">Link</label>
                         <tt-input-message [form]="conferenceResearchForm" field="researchLink"></tt-input-message>
                       </div>
                     </div>
-                    <div class="col-12 col-md-12">
-                      <div class="form-floating mb-3">  
+                    <div class="col-12 col-lg-12">
+                      <div class="form-floating mb-3">
                         <input pInputText class="form-control" placeholder="" formControlName="estimatedTimeResearch">
                         <label class="form-label" for="estimatedTimeResearch">{{'conference.estimatedTime'|translate}}</label>
                         <tt-input-message [form]="conferenceResearchForm" field="estimatedTimeResearch"></tt-input-message>
@@ -743,7 +743,7 @@
                     </p-fileUpload>
                   </div>
                   <div *ngFor="let image of backgroundImages"
-                    class="col-12 col-md-4 col-lg-3 col-xl-2 list-images-container">
+                    class="col-12 col-lg-4 col-lg-3 col-lg-2 list-images-container">
                     <div class="list-image-item"
                       *ngIf="image.file.id !== null && image.file.id !== undefined && !image.toDelete">
                       <img class="list-image" width="100%" [src]="getUrlFile(image.file.id)"
@@ -751,7 +751,7 @@
                       <i class="pi pi-times" (click)="prepare2RemoveSavedImage(image, 'background')"></i>
                     </div>
                   </div>
-                 
+
                 </div>
               </p-accordionTab>
               <p-accordionTab header="{{ 'conference.cssTab.title' | translate }}" >
@@ -759,7 +759,7 @@
               </p-accordionTab>
             </p-accordion>
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-lg-6">
             <div class="form-actions">
               <button pButton icon="pi pi-check" type="button" [label]="'save'|translate"
                 (click)="saveConference(conferenceForm.value)"></button>

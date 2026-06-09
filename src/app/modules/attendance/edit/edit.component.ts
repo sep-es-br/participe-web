@@ -20,7 +20,7 @@ import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent extends AttendanceModel implements OnInit, OnDestroy {
+export class EditComponent extends AttendanceModel implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren('toAnnounceToggle', {read: ElementRef}) toAnnounceToggleElems!: QueryList<ElementRef>;
 
@@ -107,9 +107,12 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
       }
     );
 
-    setTimeout( () => {
-      this.searchByName();
-    }, 300);
+  }
+
+  ngAfterViewInit() {
+
+
+    this.searchByName();
   }
 
   selectAttendeeWithFilter(attendee: IAttendee, evt: MouseEvent, isEdit?: boolean): Promise<void> {
@@ -257,7 +260,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy 
     return this.translate.instant('attendance.tooltipLabelUnchecking') + customName;
   }
 
-  onOrganizationSelected(event:any) {
+  onOrganizationSelected(event: any) {
     this.selectedOrganization = event.value;
     this.searchByName();
   }

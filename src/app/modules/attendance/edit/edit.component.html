@@ -2,7 +2,7 @@
   <div class="edit-attendees">
     <section id="attendee-selected">
       <ng-container *ngIf="isAttendeeSelected; else list">
-        <div class="col-12 col-md-6 m-a">
+        <div class="col-12 col-lg-6 m-a">
           <form
             class="row form-edit-account"
             [formGroup]="form"
@@ -142,7 +142,7 @@
     <ng-template #list>
       <section id="attendee-filter-row">
         <div class="row gap-2">
-          <div class="col-12 col-md p-0 d-flex flex-column">
+          <div class="col-12 col-lg-2 p-0 d-flex flex-column">
             <label for="optsOrderBy">Ordenar por:</label>
             <p-dropdown
                 id="optsOrderBy"
@@ -161,7 +161,7 @@
                 </ng-template>
               </p-dropdown>
             </div>
-            <div class="col-12 col-md p-0">
+            <div class="col-12 col-lg-2 p-0">
               <label for="optsParticipantes">{{ 'attendance.participationType' | translate }}:</label>
               <p-dropdown
                 id="optsParticipantes"
@@ -171,7 +171,7 @@
               >
               </p-dropdown>
             </div>
-          <div class="col-12 col-md p-0">
+          <div class="col-12 col-lg-2 p-0">
             <label for="optTeam">{{ 'attendance.credentialPresence' | translate }}:</label>
             <p-dropdown
               id="optTeam"
@@ -187,7 +187,7 @@
               </ng-template>
             </p-dropdown>
           </div>
-            <div class="col-12 col-md p-0">
+            <div class="col-12 col-lg-2 p-0">
               <label for="optStatus">{{ 'attendance.namingStatus' | translate }}:</label>
               <p-dropdown
                 id="optStatus"
@@ -203,7 +203,7 @@
                 </ng-template>
               </p-dropdown>
             </div>
-              <div class="col-12 col-md p-0">
+              <div class="col-12 col-lg p-0">
                 <label for="optOrganization">{{ 'attendance.organization' | translate }}:</label>
                 <p-autoComplete
                   class="d-flex"
@@ -214,7 +214,7 @@
                   (onSelect)="onOrganizationSelected($event)"></p-autoComplete>
 
               </div>
-              <div class="col-12 col-md p-0">
+              <div class="col-12 col-lg p-0">
                 <label for="search-name">Busca:</label>
                 <div class="search">
                   <div class="input-group mb-3">
@@ -246,58 +246,56 @@
           <div class="col-12" *ngIf="noResult">
             <div class="no-result">{{ "attendance.noResult" | translate }}</div>
           </div>
-          <div class="col-12 result" *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
-            <div class="name-icon">
-              <div *ngIf="!attendee.isAuthority"
-                class="letter-icon"
-                [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }"
-              >
-                {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
+          <div class="col-12 flex-wrap result" *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
+            <div class="primary-info-icon row align-items-lg-center gap-lg-3 col-12 col-lg-4">
+              <div class="name-icon col-12 col-lg-auto justify-content-center pr-0 justify-content-lg-start">
+                <div *ngIf="!attendee.isAuthority"
+                  class="letter-icon"
+                  [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }"
+                >
+                  {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
+                </div>
+                <ng-container *ngIf="attendee.isAuthority">
+                    <fa-icon *ngIf="!attendee.isTeam; else iconTeam" title="{{('attendance.authority') | translate}}"
+                           [ngStyle]="{color: 'black'}"
+                           [icon]="iconAuthority"
+                           aria-label="icone Autoridade" size="2x"></fa-icon>
+                  <ng-template #iconTeam>
+                    <img src="assets/layout/images/icons/EquipeGov.svg"  [ngStyle]="{height: '64px'}" >
+                  </ng-template>
+                </ng-container>
+
+
               </div>
-              <ng-container *ngIf="attendee.isAuthority">
-                  <fa-icon *ngIf="!attendee.isTeam; else iconTeam" title="{{('attendance.authority') | translate}}"
-                         [ngStyle]="{color: 'black'}"
-                         [icon]="iconAuthority"
-                         aria-label="icone Autoridade" size="2x"></fa-icon>
-
-                <ng-template #iconTeam>
-                  <img src="assets/layout/images/icons/EquipeGov.svg"  [ngStyle]="{height: '64px'}" >
-                </ng-template>
-
-              </ng-container>
-
-
-
-
-            </div>
-            <div class="primary-info text-center text-md-start col-12 col-md-3" style="max-width: 25%; min-width: 200px;">
-              <div class="name">{{ attendee.name }}</div>
-              <div class="contact">
-                <span>{{ attendee.email }}</span>
-                <span *ngIf="attendee.telephone">{{
-                  " - " + attendee.telephone
-                }}</span>
+              <div class="primary-info text-center text-lg-start col-12 col-lg pl-0" style="min-width: 200px;">
+                <div class="name">{{ attendee.name }}</div>
+                <div class="contact col-12 col-lg p-0 justify-content-center justify-content-lg-start">
+                  <span>{{ attendee.email }}</span>
+                  <span *ngIf="attendee.telephone">{{
+                    " - " + attendee.telephone
+                  }}</span>
+                </div>
               </div>
             </div>
-            <div class="secondary-info d-flex flex-row flex-wrap flex-md-nowrap align-items-center col-12 col-md-9">
-              <div class="info-place col-12 col-md-3">
+            <div class="secondary-info d-flex flex-row flex-wrap flex-lg-nowrap align-items-center col-12 col-lg-9">
+              <div class="info-place col-12 col-lg-3 text-center text-lg-start">
                 <div class="locality">{{ attendee.locality }}</div>
                 <div class="region">{{ attendee.superLocality }}</div>
               </div>
-              <div class="authorityInfo-wrapper flex-wrap flex-md-nowrap col-12 col-md-6 d-flex align-items-center">
+              <div class="authorityInfo-wrapper flex-wrap flex-lg-nowrap col-12 col-lg-6 d-flex align-items-center">
                 <ng-container *ngIf="attendee.isAuthority">
 
-                  <div class="authorityInfo col-md-7  col-12 col-md">
-                    <div class="role text-center text-md-start">{{attendee.role}}</div>
-                    <div class="organization text-center text-md-start">{{attendee.organization}}</div>
+                  <div class="authorityInfo col-lg-7  col-12 col-lg">
+                    <div class="role text-center text-lg-start">{{attendee.role}}</div>
+                    <div class="organization text-center text-lg-start">{{attendee.organization}}</div>
                   </div>
-                  <div class="d-flex col-6 col-md p-0 flex-column align-items-center justify-content-center" [ngClass]="'auth-' + getAuthStatus(attendee)">
+                  <div class="d-flex col-6 col-lg p-0 flex-column align-items-center justify-content-center" [ngClass]="'auth-' + getAuthStatus(attendee)">
                     <fa-icon class=""
                       [icon]="getAuthIcon(attendee)"
                     ></fa-icon>
                     <span [ngClass]="'auth-' + getAuthStatus(attendee) + ' rem075'">{{getAuthLabel(attendee)}}</span>
                   </div>
-                  <div class="allow-announce-wrapper col-6 col-md p-0 align-items-center">
+                  <div class="allow-announce-wrapper col-6 col-lg p-0 align-items-center">
                     <ng-container *ngIf="!attendee.toAnnounce">
                         <div role="button" class="d-flex flex-column align-items-center justify-content-center" (click)="toggleToAnnounce(attendee)"
                           #toAnnounceToggle>
@@ -311,7 +309,7 @@
                 </ng-container>
               </div>
 
-              <div class="info-preregister flex-column-reverse col col-md  justify-content-center">
+              <div class="info-preregister flex-column-reverse col col-lg  justify-content-center">
                 <ng-container *ngIf="attendee.preRegistered">
                   <div
                     class="how-long-ago rem075"
@@ -328,7 +326,7 @@
                   </div>
                 </ng-container>
               </div>
-              <div class="info-checkin mt-0 flex-column-reverse col-5 col-md-3 justify-content-end">
+              <div class="info-checkin mt-0 flex-column-reverse col-5 col-lg-3 justify-content-end">
                 <div class="how-long-ago rem075" [pTooltip]="attendee.checkedInDate">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
@@ -408,7 +406,7 @@
   <div class="form-group">
     <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
   </div>
-  <div class="col-12 col-md-6 col-lg-3 m-auto">
+  <div class="col-12 col-lg-6 col-lg-3 m-auto">
     <div class="d-grid gap-2 mt-3">
       <button pButton class="btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
     </div>
