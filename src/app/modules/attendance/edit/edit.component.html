@@ -8,18 +8,6 @@
             [formGroup]="form"
             (submit)="saveEdit()"
           >
-            <div class="col-12 title">
-              <span>{{ "attendance.editAttendanceIn" | translate }}</span>
-              <span
-                class="remove-action"
-                (click)="uncheckIn()"
-                [pTooltip]="getTooltipRemoveText()"
-                tooltipStyleClass="tooltip-uncheck"
-              >
-                <fa-icon [icon]="iconRemove"></fa-icon>
-                {{ "attendance.removeAttendee" | translate }}
-              </span>
-            </div>
             <div class="col-12">
               <label class="required form-label">{{
                 "name" | translate
@@ -78,6 +66,10 @@
                 [styleClass]="'form-control'"
               ></p-inputMask>
               <tt-input-message [form]="form" field="phone"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label class="d-block mb-2">{{ 'citizen.present' | translate }}</label>
+              <p-inputSwitch formControlName="isPresent"></p-inputSwitch>
             </div>
             <div class="col-12">
               <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>

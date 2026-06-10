@@ -80,6 +80,16 @@ export class MeetingService extends BaseService<Meeting> {
     ).toPromise();
   }
 
+  getCheckIn(
+    meetingId: number,
+    personId: number
+  ): Promise<ICheckedInAt> {
+    return this.http.get<ICheckedInAt>(
+      `${this.urlBase}/checkIn/${meetingId}/${personId}`,
+      { headers: Common.buildHeaders() }
+    ).toPromise();
+  }
+
   postCheckIn(payload: {
     meetingId: number;
     personId: number;

@@ -137,6 +137,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   async saveEdit() {
 
     const {
+      isPresent,
       isAuthority,
       isTeam,
       organization,
@@ -145,7 +146,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       announced
     } = this.form.value;
 
-    const {success} = await this.save();
+    const {success, result} = await this.save();
     if (success) {
       if (this.authorityTouched) {
         const now = new Date();
@@ -165,6 +166,29 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
           params.announced = announced;
         }
         await this.meetingSrv.editCheckIn(params);
+        if (!this.presentBefore && isPresent) {
+          const newAttendee: IAttendee = {
+            personId: result.id,
+            checkInId: undefined,
+            name: result.name,
+            email: result.email,
+            checkedIn: false,
+            checkingIn: false,
+            authName: result.authName,
+            isAuthority,
+            ...(isAuthority && {
+              isTeam,
+              organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
+              role
+            })
+          };
+          await this.checkIn(newAttendee, true);
+        } else if (this.presentBefore && !isPresent) {
+          await this.uncheckIn();
+
+          this.cleanListAtendees();
+          await this.setActionBar();
+        }
       }
 
       this.messageSrv.add({
@@ -176,6 +200,68 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       this.searchByName();
     }
     return;
+  }
+
+
+
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
+    this.form.markAllAsTouched();
+
+    attendee.checkingIn = true;
+
+    if (!fromSaveAccount){
+      const { isAuthority, organization, role, isTeam } = this.form.controls;
+      attendee.isAuthority = isAuthority.value;
+      if (attendee.isAuthority) {
+        attendee.isTeam = isTeam.value;
+        attendee.organization = organization.value;
+        attendee.role = role.value;
+      } else {
+        attendee.isTeam = null;
+        attendee.organization = null;
+        attendee.role = null;
+      }
+    }
+
+    const now = new Date();
+    const timeZone = now.toString().split(' ')[5];
+
+    const params: any = {
+      meetingId: this.idMeeting,
+      personId: attendee.personId,
+      timeZone,
+      isAuthority: attendee.isAuthority ?? false,
+    };
+
+    if (attendee.isAuthority) {
+      params.organization = attendee.organization;
+      params.role = attendee.role;
+      params.isTeam = attendee.isTeam;
+    }
+
+    const result = await this.meetingSrv.postCheckIn(params);
+
+    if (result) {
+      attendee.checkedIn = true;
+      attendee.checkedInDate = result.time;
+      this.messageSrv.add({
+        severity: 'success',
+        summary: this.translate.instant('success'),
+        detail: this.translate.instant('attendance.successDetail.checkin', {name: result.meeting.name.toUpperCase()}),
+        life: 10000
+      });
+
+      this.cleanListAtendees();
+      await this.setActionBar();
+    } else {
+      this.messageSrv.add({
+        severity: 'warn',
+        summary: this.translate.instant('error'),
+        detail: this.translate.instant('attendance.error.failedToCheckIn')
+      });
+    }
+    this.lastPage = true;
+    attendee.checkingIn = false;
   }
 
   getAuthStatus(attendee: IAttendee): string {
@@ -220,7 +306,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       });
       this.listAttendees.splice(this.listAttendees.findIndex(att => att === attendee), 1);
       await this.setActionBar();
-      this.toggleSelectedAttendee();
     } else {
       this.messageSrv.add({
         severity: 'warn',

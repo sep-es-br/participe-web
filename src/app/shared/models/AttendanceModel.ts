@@ -91,6 +91,8 @@ export class AttendanceModel {
   emailValidators = [Validators.required, Validators.email];
   valueChangeCPFSub: Subscription;
 
+  presentBefore: boolean = false;
+
   protected actionbarSrv: ActionBarService;
   protected breadcrumbSrv: BreadcrumbService;
   protected conferenceSrv: ConferenceService;
@@ -129,6 +131,7 @@ export class AttendanceModel {
       phone: ['', Validators.maxLength(20)],
       resetPassword: false,
       sub: [''],
+      isPresent: false,
       isAuthority: false,
       isTeam: false,
       organization: [''],
@@ -211,8 +214,8 @@ export class AttendanceModel {
       this.toggleNewAccount(attendee);
     }else{
       const {
-        name, locality, authType, cpf, email, phone, password, isAuthority, organization, role,
-        toAnnounce, announced, isTeam
+        name, locality, authType, email, phone, isAuthority, organization, role,
+        toAnnounce, announced, isTeam, isPresent
        } = this.form.controls;
       try {
         this.isAttendeeSelected = true;
@@ -248,6 +251,10 @@ export class AttendanceModel {
           this.readonlyRole = data.role != null;
           organization.setValue(data.organization);
           role.setValue(data.role);
+
+          this.presentBefore = !!(await this.meetingSrv.getCheckIn(this.idMeeting, attendee.personId));
+
+          isPresent.patchValue(this.presentBefore);
 
         }
       } catch (error) {
@@ -639,6 +646,7 @@ export class AttendanceModel {
     this.selectedAttende = null;
     this.authName = [];
     this.form.reset();
+    this.presentBefore = false;
   }
 
   markAuthorityTouched(): void {
