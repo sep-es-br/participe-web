@@ -304,7 +304,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (!this.receptionistsActived) {
       this.receptionistsActived = [];
     }
-    if (!(this.receptionistsActived.find(await ((p) => (p.contactEmail === receptionist.contactEmail))))) {
+    if (!(this.receptionistsActived.find(await ((p) => (p.sub === receptionist.sub))))) {
       this.receptionistsActived.push(receptionist);
     }
     if (this.receptionistsActived) {
