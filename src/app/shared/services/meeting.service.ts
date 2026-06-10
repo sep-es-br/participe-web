@@ -49,6 +49,8 @@ export class MeetingService extends BaseService<Meeting> {
   }
 
   getReceptionistByEmail(email: string) {
+    if (!email) return new Promise<IPerson>((resolve) => resolve(undefined));
+
     return this.http.get<IPerson>(`${this.urlBase}/receptionistByEmail?email=${email}`, { headers: Common.buildHeaders() }).toPromise();
   }
 

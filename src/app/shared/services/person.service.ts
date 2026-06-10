@@ -32,6 +32,10 @@ export class PersonService extends BaseService<any> {
     return this.http.get<PapeisBySubType[]>(`${this.urlBase}/${sub}/papeisBySub`).toPromise();
   }
 
+  findPersonBySub(sub: string) {
+    return this.http.get<IPerson>(`${this.urlBase}/bySub/${sub}`).toPromise();
+  }
+
 }
 
 
