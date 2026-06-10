@@ -6,4 +6,5 @@ export interface IPerson {
   telephone?: string;
   defaultRole?: string;
   roles: string[];
+  sub?: string;
 }

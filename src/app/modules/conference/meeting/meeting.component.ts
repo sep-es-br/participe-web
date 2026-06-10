@@ -304,7 +304,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (!this.receptionistsActived) {
       this.receptionistsActived = [];
     }
-    if (!(this.receptionistsActived.find(await ((p) => (p.contactEmail === receptionist.contactEmail))))) {
+    if (!(this.receptionistsActived.find(((p) => (p.sub === receptionist.sub))))) {
       this.receptionistsActived.push(receptionist);
     }
     if (this.receptionistsActived) {
@@ -594,7 +594,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
         for (let i = 0 ; this.receptionistsActived.length > i ; i++) {
           if (!this.receptionistsActived[i].id) {
             const a = await this.personSrv.postOperator('Recepcionist', this.receptionistsActived[i]);
-            const p = await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail);
+            const p = (this.receptionistsActived[i].contactEmail && this.receptionistsActived[i].contactEmail !== '')
+                        ?  await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail)
+                        : await  this.personSrv.findPersonBySub(this.receptionistsActived[i].sub);
             this.receptionistsActived[i] = p;
           }
         }
