@@ -40,7 +40,7 @@
           <div class="col-12">
             <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
             <p-inputSwitch formControlName="isAuthority"  (mousedown)="markAuthorityTouched()"
-                           (onChange)="loadACRole($event)" [disabled]="form.get('isTeam').value"></p-inputSwitch>
+                           (onChange)="loadACRole($event)" [disabled]="form.get('isTeam').getRawValue()"></p-inputSwitch>
           </div>
           <ng-container *ngIf="form.get('isAuthority').value">
             <div class="col-12">
