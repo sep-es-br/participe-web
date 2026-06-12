@@ -22,7 +22,6 @@ import { BehaviorSubject } from 'rxjs';
 import { LoadingService } from '@app/shared/services/loading.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
-import {control} from 'leaflet';
 
 @Component({
   selector: 'app-register',
