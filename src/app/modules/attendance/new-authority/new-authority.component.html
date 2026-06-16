@@ -1,0 +1,154 @@
+<app-template>
+  <div class="edit-attendees">
+    <section id="attendee-selected">
+        <div class="col-12 col-lg-6 m-a">
+          <form
+            class="row form-edit-account"
+            [formGroup]="form"
+            (submit)="saveEdit()"
+          >
+            <div class="col-12">
+              <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+
+                <p-autoComplete
+                  (completeMethod)="filterOrganization($event)"
+                  formControlName="organization"
+                  [suggestions]="filteredOrganizations()"
+                  optionLabel="name"
+                  placeholder="Digite o órgão ou entidade"
+                  (onSelect)="loadNames($event)"
+                ></p-autoComplete>
+
+
+              <tt-input-message [form]="form" field="organization"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label class="required form-label">{{
+                  "name" | translate
+                }}</label>
+              <div class="d-flex gap-1">
+                <p-autoComplete
+                  #autoComplete
+                  formControlName="name"
+                  [suggestions]="filteredNames()"
+                  (completeMethod)="this.filteredNames.set(this.filteredNames())"
+                  optionLabel="name"
+                  placeholder="Digite o nome do agente"
+                ></p-autoComplete>
+                <button pButton type="button" (click)="filterNames(autoComplete)"><fa-icon class="mr-0" [icon]="iconSearch" title="Procurar"></fa-icon></button>
+              </div>
+              <tt-input-message [form]="form" field="name"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label class="required form-label">{{
+                "name" | translate
+              }}</label>
+              <input pInputText class="form-control" formControlName="name" />
+              <tt-input-message [form]="form" field="name"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label class="required form-label">{{
+                localitySrv.getTranslatedLabelLocality(localityLabel)
+              }}</label>
+              <p-dropdown
+                [options]="optionsLocalities"
+                formControlName="locality"
+                [styleClass]="'d-flex form-control'"
+                [placeholder]="'placeholder.select' | translate"
+              ></p-dropdown>
+              <tt-input-message
+                [form]="form"
+                field="locality"
+              ></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label>{{ "attendance.authentication" | translate }}</label>
+              <div class="auth-type">
+                <!-- <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
+                     src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/> -->
+                <img
+                  *ngFor="let auth of authName"
+                  [src]="authSrv.getAuthenticationIcon(auth)"
+                  [title]="auth"
+                  [alt]="auth"
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <label
+                [class.required]="form.get('authType').value === 'E-Mail'"
+                >{{ "citizen.mail" | translate }}</label
+              >
+              <input
+                pInputText
+                readonly
+                class="form-control"
+                formControlName="email"
+              />
+              <tt-input-message [form]="form" field="email"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label>{{ "citizen.phone" | translate }}</label>
+              <p-inputMask
+                mask="(99) 99999-9999"
+                placeholder="(00) 00000-0000"
+                unmask="true"
+                formControlName="phone"
+                [styleClass]="'form-control'"
+              ></p-inputMask>
+              <tt-input-message [form]="form" field="phone"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label class="d-block mb-2">{{ 'citizen.present' | translate }}</label>
+              <p-inputSwitch formControlName="isPresent"></p-inputSwitch>
+            </div>
+            <div class="col-12">
+              <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
+              <p-inputSwitch formControlName="isAuthority"  (mousedown)="markAuthorityTouched()"
+                (onChange)="loadACRole($event)" [disabled]="form.get('isTeam').value"></p-inputSwitch>
+            </div>
+            <ng-container *ngIf="form.get('isAuthority').value">
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'citizen.team' | translate }}</label>
+                <p-inputSwitch formControlName="isTeam"></p-inputSwitch>
+              </div>
+
+
+              <div class="col-12">
+                <label for="role">{{ 'citizen.role' | translate }}*</label>
+                <input type="text" id="role" class="form-control" formControlName="role" placeholder="Digite o cargo">
+                <tt-input-message [form]="form" field="role"></tt-input-message>
+              </div>
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'Anunciar' | translate }}</label>
+                <p-inputSwitch formControlName="toAnnounce" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+              </div>
+              <div class="col-12">
+                <label class="d-block mb-2">{{ 'Já anunciado' | translate }}</label>
+                <p-inputSwitch formControlName="announced" (mousedown)="markAuthorityTouched()"></p-inputSwitch>
+              </div>
+            </ng-container>
+            <div class="col-12 d-flex flex-column">
+              <div class="form-actions">
+                <button
+                  pButton
+                  icon="pi pi-check"
+                  class="me-3"
+                  type="submit"
+                  [label]="'save' | translate"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-ban"
+                  type="button"
+                  [label]="'cancel' | translate"
+                  (click)="toggleSelectedAttendee()"
+                ></button>
+              </div>
+              <span class="aviso h-100" *ngIf="form.get('isTeam').value">Equipe de governo, encaminhar ao local apropriado.</span>
+            </div>
+          </form>
+        </div>
+    </section>
+  </div>
+</app-template>

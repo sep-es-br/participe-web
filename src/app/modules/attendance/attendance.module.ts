@@ -10,9 +10,16 @@ import { ComponentsModule } from '@app/shared/components/components.module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { AuthorityListComponent } from './authority-list/authority-list.component';
+import {NewAuthorityComponent} from '@app/modules/attendance/new-authority/new-authority.component';
 
 @NgModule({
-  declarations: [AttendanceComponent, RegisterComponent, EditComponent, AuthorityListComponent],
+  declarations: [
+    AttendanceComponent,
+    RegisterComponent,
+    EditComponent,
+    AuthorityListComponent,
+    NewAuthorityComponent
+  ],
   imports: [
     AttendanceRoutingModule,
     CommonModule,
