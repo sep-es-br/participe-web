@@ -22,6 +22,7 @@ import { BehaviorSubject } from 'rxjs';
 import { LoadingService } from '@app/shared/services/loading.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
+import {set} from 'lodash';
 
 @Component({
   selector: 'app-register',
@@ -245,23 +246,27 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.isReadonly = false;
     this.selectedAttende = attendee;
     this.authName = [];
-    this.form.reset();
-    if (this.selectedAttende ){
-      const { name, locality, authType, email, sub } = this.form.controls;
-      if (attendee.name === '<novo usuário>'){
-        name.setValue(null);
-      }else{
-        name.setValue(attendee.name);
-      }
 
-      authType.setValue(AuthTypeEnum.EMAIL);
-      if (attendee.email){
-        this.isReadonly = true;
-      }
-      email.setValue(attendee.email);
-      sub.setValue(attendee.sub);
+    setTimeout(() => { // Timeout força a execução pro final do ciclo de atualização do angular
+      this.form.reset();
+      if (this.selectedAttende ){
+        const { name, locality, authType, email, sub } = this.form.controls;
+        if (attendee.name === '<novo usuário>'){
+          name.setValue(null);
+        }else{
+          name.setValue(attendee.name);
+        }
 
-    }
+        authType.setValue(AuthTypeEnum.EMAIL);
+        if (attendee.email){
+          this.isReadonly = true;
+        }
+        email.setValue(attendee.email);
+        sub.setValue(attendee.sub);
+
+      }
+    });
+
   }
 
   onInput($event) {
