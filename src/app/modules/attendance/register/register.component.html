@@ -1,6 +1,6 @@
 <app-template>
   <div class="attendee-register">
-    <ng-container *ngIf="!(!isAttendeeSelected && !newAccount); else list">
+    <ng-container *ngIf="selectedAttende; else list">
       <div class="col-12 col-lg-6">
         <form class="row form-new-account" [formGroup]="form" (submit)="saveAccount()">
           <div class="col-12 title">
@@ -65,7 +65,7 @@
           </ng-container>
           <div class="col-12">
             <div class="form-actions">
-              <ng-container *ngIf="newAccount; else attendeeSelected">
+              <ng-container *ngIf="Object.keys(selectedAttende).length  <= 2; else attendeeSelected">
                 <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
                         [label]="'attendance.saveAndRegister' | translate" class="me-2" ></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"

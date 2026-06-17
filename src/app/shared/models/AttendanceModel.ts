@@ -68,7 +68,6 @@ export class AttendanceModel {
   currentConference: IConferenceWithMeetings;
   currentMeeting: Meeting;
 
-  isAttendeeSelected = false;
   selectedAttende: IAttendee;
   selectedOrderBy = 'namingStatus';
   selectedFilterBy = 'pres';
@@ -189,6 +188,7 @@ export class AttendanceModel {
   }
 
   toggleNewAccount(attendee?: IAttendee) {
+    this.selectedAttende  = attendee ?? {} as IAttendee;
   }
 
   configureAuthorityValidation(): void {
@@ -218,7 +218,6 @@ export class AttendanceModel {
         toAnnounce, announced, isTeam, isPresent
        } = this.form.controls;
       try {
-        this.isAttendeeSelected = true;
         this.selectedAttende = attendee;
         const {
           success,
@@ -411,7 +410,7 @@ export class AttendanceModel {
         emailControl.clearValidators();
         emailControl.disable();
         this.valueChangeCPFSub = this.form.controls.cpf.valueChanges.subscribe(change => emailControl.setValue(change + '@cpf'));
-        if (this.isAttendeeSelected) {
+        if (this.selectedAttende) {
           if (this.selectedAttende.email.indexOf('@cpf') > 0) {
             cpfControl.setValue(this.getCPFFromEmailField(this.selectedAttende.email));
             passwordControl.setValue(this.selectedAttende.password);
@@ -425,7 +424,7 @@ export class AttendanceModel {
         passwordControl.disable();
         emailControl.setValidators(this.emailValidators);
         emailControl.enable();
-        if (this.isAttendeeSelected && this.selectedAttende.email?.indexOf('@cpf') === -1) {
+        if (this.selectedAttende && this.selectedAttende.email?.indexOf('@cpf') === -1) {
           emailControl.setValue(this.selectedAttende.email);
         }
         break;
@@ -642,7 +641,6 @@ export class AttendanceModel {
   }
 
   toggleSelectedAttendee() {
-    this.isAttendeeSelected = !this.isAttendeeSelected;
     this.selectedAttende = null;
     this.authName = [];
     this.form.reset();
