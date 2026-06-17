@@ -1,6 +1,6 @@
 <app-template>
   <div class="attendee-register">
-    <ng-container *ngIf="(newAccount || isAttendeeSelected); else list">
+    <ng-container *ngIf="!(!isAttendeeSelected && !newAccount); else list">
       <div class="col-12 col-lg-6">
         <form class="row form-new-account" [formGroup]="form" (submit)="saveAccount()">
           <div class="col-12 title">
