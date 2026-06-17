@@ -181,6 +181,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.modalSuceesPresence = false;
       this.selectedAttende = null;
       this.cleanListAtendees();
+      await this.searchByName();
       await this.setActionBar();
     } else {
       this.messageSrv.add({
@@ -189,11 +190,21 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         detail: this.translate.instant('attendance.error.failedToCheckIn')
       });
     }
-    this.lastPage = true
+    this.lastPage = true;
     attendee.checkingIn = false;
   }
 
   async saveAccount() {
+
+    if (this.form.invalid){
+      this.messageSrv.add({
+        severity: 'error',
+        summary: 'Formulário invalido',
+        detail: 'Existe Campo sem preencher'
+      });
+      return false;
+    }
+
     const isAuthority: boolean = this.form.get('isAuthority')?.value;
     const organization: string = this.form.get('organization')?.value;
     const role: string = this.form.get('role')?.value;
@@ -238,7 +249,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.authName = []
     this.form.reset();
     if(this.newAccount){
-      const { name, locality, authType, email, phone, sub } = this.form.controls;
+      const { name, locality, authType, email, sub } = this.form.controls;
       if(attendee.name == "<novo usuário>"){
         name.setValue(null)
       }else{

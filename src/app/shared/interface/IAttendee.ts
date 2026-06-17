@@ -9,6 +9,7 @@ export interface IAttendee {
   telephone?: string;
   password?: string;
   locality?: string;
+  localityId?: number;
   superLocalityId?: number;
   superLocality?: string;
   regionalizable?: string;

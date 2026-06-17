@@ -232,7 +232,7 @@ export class AttendanceModel {
         });
         if (success) {
           name.setValue(data.name);
-          locality.setValue(data.localityId ? data.localityId : attendee.superLocalityId);
+          locality.setValue(data.localityId ? data.localityId : attendee.localityId);
           authType.setValue(AuthTypeEnum.EMAIL);
           this.isReadonly = true;
           email.setValue(data.email);

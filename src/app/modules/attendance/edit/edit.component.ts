@@ -148,47 +148,45 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
     const {success, result} = await this.save();
     if (success) {
-      if (this.authorityTouched) {
-        const now = new Date();
-        const timeZone = now.toString().split(' ')[5];
+      const now = new Date();
+      const timeZone = now.toString().split(' ')[5];
 
-        const params: any = {
-          meetingId: this.idMeeting,
-          personId: this.selectedAttende?.personId,
-          timeZone,
-          isAuthority: isAuthority ?? false,
+      const params: any = {
+        meetingId: this.idMeeting,
+        personId: this.selectedAttende?.personId,
+        timeZone,
+        isAuthority: isAuthority ?? false,
+      };
+      if (isAuthority){
+        params.isTeam = isTeam;
+        params.organization = (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization;
+        params.role = role;
+        params.toAnnounce = toAnnounce;
+        params.announced = announced;
+      }
+      await this.meetingSrv.editCheckIn(params);
+      if (!this.presentBefore && isPresent) {
+        const newAttendee: IAttendee = {
+          personId: result.id,
+          checkInId: undefined,
+          name: result.name,
+          email: result.email,
+          checkedIn: false,
+          checkingIn: false,
+          authName: result.authName,
+          isAuthority,
+          ...(isAuthority && {
+            isTeam,
+            organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
+            role
+          })
         };
-        if (isAuthority){
-          params.isTeam = isTeam;
-          params.organization = (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization;
-          params.role = role;
-          params.toAnnounce = toAnnounce;
-          params.announced = announced;
-        }
-        await this.meetingSrv.editCheckIn(params);
-        if (!this.presentBefore && isPresent) {
-          const newAttendee: IAttendee = {
-            personId: result.id,
-            checkInId: undefined,
-            name: result.name,
-            email: result.email,
-            checkedIn: false,
-            checkingIn: false,
-            authName: result.authName,
-            isAuthority,
-            ...(isAuthority && {
-              isTeam,
-              organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
-              role
-            })
-          };
-          await this.checkIn(newAttendee, true);
-        } else if (this.presentBefore && !isPresent) {
-          await this.uncheckIn();
+        await this.checkIn(newAttendee, true);
+      } else if (this.presentBefore && !isPresent) {
+        await this.uncheckIn();
 
-          this.cleanListAtendees();
-          await this.setActionBar();
-        }
+        this.cleanListAtendees();
+        await this.setActionBar();
       }
 
       this.messageSrv.add({
