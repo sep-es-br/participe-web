@@ -3,7 +3,7 @@
     <div class="route-bar-breadcrumb d-flex gap-2 flex-wrap">
       <ng-template ngFor let-item [ngForOf]="items">
         <li class="">
-          <span class="ui-link ui-widget router-link" *ngIf="item.routerLink"
+          <span class="ui-link ui-widget router-link text-wrap" *ngIf="item.routerLink"
                 [routerLink]="item.routerLink">{{ translateAllLabels(item.label) }}</span>
           <ng-container *ngIf="!item.routerLink">{{ translateAllLabels(item.label) }}</ng-container>
         </li>
