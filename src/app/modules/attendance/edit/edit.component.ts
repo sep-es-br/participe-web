@@ -178,7 +178,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
           ...(isAuthority && {
             isTeam,
             organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
-            role
+            role,
+            toAnnounce,
+            isAnnounced: announced ?? false,
           })
         };
         await this.checkIn(newAttendee, true);
@@ -202,7 +204,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
 
 
-  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ): Promise<void> {
     this.form.markAllAsTouched();
 
     attendee.checkingIn = true;
@@ -235,6 +237,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       params.organization = attendee.organization;
       params.role = attendee.role;
       params.isTeam = attendee.isTeam;
+      params.toAnnounce = attendee.toAnnounce;
+      params.announced = attendee.isAnnounced;
     }
 
     const result = await this.meetingSrv.postCheckIn(params);
