@@ -643,8 +643,8 @@ export class AttendanceModel {
   toggleSelectedAttendee() {
     this.selectedAttende = null;
     this.authName = [];
-    this.form.reset();
     this.presentBefore = false;
+    setTimeout(() => this.form.reset()); // Timeout força a execução pro final do ciclo de atualização do angular
   }
 
   markAuthorityTouched(): void {
