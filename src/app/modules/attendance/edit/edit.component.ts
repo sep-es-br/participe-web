@@ -214,7 +214,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       attendee.isAuthority = isAuthority.value;
       if (attendee.isAuthority) {
         attendee.isTeam = isTeam.value;
-        attendee.organization = organization.value;
+        attendee.organization = (typeof (organization.value) === 'string'
+          ? {name: organization.value} : organization.value) as IOptionOrganization;
         attendee.role = role.value;
       } else {
         attendee.isTeam = null;
