@@ -49,14 +49,14 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     {label: 'Pré-credenciados e Presentes', value: 'prereg_pres'},
     {label: 'Pré-credenciados e Ausentes', value: 'prereg_notpres'},
     {label: 'Presentes não Pré-credenciados', value: 'notprereg_pres'},
-  ]
+  ];
 
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
 
   listAttendeesAuthority: IAttendeeAuthority[];
 
-  selectedAttendeAuthority : IAttendeeAuthority
+  selectedAttendeAuthority: IAttendeeAuthority;
 
   constructor(
     protected messageSrv: MessageService,
@@ -64,7 +64,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     protected formBuilder: UntypedFormBuilder,
     public authSrv: AuthService,
     @Inject(Injector) injector: Injector,
-    private authcSrv : AuthorityCredentialService
+    private authcSrv: AuthorityCredentialService
   ) {
     super(injector, true);
   }
@@ -96,7 +96,6 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
   }
 
   override toggleSelectedAttendee() {
-    this.isAttendeeSelected = !this.isAttendeeSelected;
     this.selectedAttendeAuthority = null;
     this.authName = [];
     this.form.reset();
@@ -117,7 +116,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
       this.breadcrumbSrv.setItems([
         { label: 'attendance.label' },
         {
-          label: `${this.translate.instant("attendance.authorities") } ${this.currentMeeting.name}`,
+          label: `${this.translate.instant('attendance.authorities') } ${this.currentMeeting.name}`,
           routerLink: [`/attendance/authority-list`]
         },
       ]);
@@ -132,17 +131,22 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
   async selectAttendeeAuthority(attendee: IAttendeeAuthority , isEdit: boolean = false) {
     const { name, locality, authType, cpf, email, phone, password, isAuthority, organization, role } = this.form.controls;
     try {
-      this.isAttendeeSelected = true;
       this.selectedAttendeAuthority = attendee;
       const {
         success,
         data
-      } = await this.citizenSrv.GetById(attendee.idPerson, { search: { conferenceId: this.currentConference.id, meetingId: this.idMeeting, isEdit: isEdit } });
+      } = await this.citizenSrv.GetById(attendee.idPerson, {
+                            search: {
+                              conferenceId: this.currentConference.id,
+                              meetingId: this.idMeeting,
+                              isEdit
+                            }
+                        });
       if (success) {
         name.setValue(data.name);
         locality.setValue(data.localityId ?? attendee.idLocality);
         authType.setValue(AuthTypeEnum.EMAIL);
-        this.isReadonly = true
+        this.isReadonly = true;
         email.setValue(data.email);
         phone.setValue(data.telephone);
         this.citizenAutentications = data.autentication || [];
@@ -210,7 +214,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
       const result = await this.meetingSrv.getListAuthority(this.idMeeting, this.getQueryListAttendees());
       this.listAttendeesAuthority = result;
       this.noResult = result.length === 0;
-    } catch(error) {
+    } catch (error) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
@@ -227,7 +231,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     this.handleChangeAuthType(AuthTypeEnum.CPF);
     setTimeout( () => {
       this.searchByName();
-    }, 300)
+    }, 300);
   }
 
   ngOnDestroy(): void {
@@ -251,7 +255,20 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
         return { success: false };
       }
 
-      const { name, locality, phone, authType, cpf, password, email, resetPassword, sub, isAuthority, organization, role } = this.form.value;
+      const {
+        name,
+        locality,
+        phone,
+        authType,
+        cpf,
+        password,
+        email,
+        resetPassword,
+        sub,
+        isAuthority,
+        organization,
+        role
+      } = this.form.value;
 
       const formAPI: CitizenSenderModel = {
         name,
@@ -267,7 +284,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
           locality,
         },
         resetPassword: !!resetPassword,
-        sub: sub
+        sub
       };
 
       const result = await this.citizenSrv.save(formAPI as any, this.selectedAttendeAuthority?.idPerson);
@@ -293,8 +310,8 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     const {success} = await this.save();
     if (success) {
       if (this.authorityTouched) {
-        var now = new Date();
-        var timeZone = now.toString().split(' ')[5];
+        const now = new Date();
+        const timeZone = now.toString().split(' ')[5];
 
         const params: any = {
           meetingId: this.idMeeting,
@@ -302,7 +319,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
           timeZone,
           isAuthority: isAuthority ?? false,
         };
-        if(isAuthority){
+        if (isAuthority){
           params.organization = organization;
           params.role = role;
         }

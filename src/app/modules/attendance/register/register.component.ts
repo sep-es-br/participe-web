@@ -34,7 +34,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   iconUnchecked = faCircle;
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
-  newAccount = false;
   modalData: ModalData;
   readingQRCode: boolean = false;
   scannerEnabled: boolean = false;
@@ -42,15 +41,15 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   deviceCurrent: MediaDeviceInfo = null;
   deviceSelected: string;
   actionFlash: string = this.translate.instant('qrcode.turnOnTorch');
-  classFlash: string = "btn-orange";
+  classFlash: string = 'btn-orange';
   modalSuceesPresence: boolean = false;
   dataPresence = {
-    person:{
-      name:'Nome'
+    person: {
+      name: 'Nome'
     },
     time: '12/03/2024 10:55'
   };
-  timerModalSuccess:number = 5000;
+  timerModalSuccess: number = 5000;
 
 
   formatsEnabled: BarcodeFormat[] = [
@@ -149,8 +148,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
 
-    var now = new Date();
-    var timeZone = now.toString().split(' ')[5];
+    const now = new Date();
+    const timeZone = now.toString().split(' ')[5];
 
     const params: any = {
       meetingId: this.idMeeting,
@@ -177,7 +176,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         life: 10000
       });
 
-      this.isAttendeeSelected = false;
       this.modalSuceesPresence = false;
       this.selectedAttende = null;
       this.cleanListAtendees();
@@ -211,7 +209,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     const isTeam: boolean = this.form.get('isTeam')?.value;
     const {success, result} = await this.save();
     if (success) {
-      if (!this.selectedAttende) {
+      if (Object.keys(this.selectedAttende).length <= 2) {
         const newAttendee: IAttendee = {
           personId: result.id,
           checkInId: undefined,
@@ -223,7 +221,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           isAuthority,
           ...(isAuthority && {
             isTeam,
-            organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
+            organization: (typeof (organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
             role
           })
         };
@@ -237,31 +235,31 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         });
       }
     }
-    this.cleanListAtendees();
-    this.lastPage = true
+    if (!success || Object.keys(this.selectedAttende).length > 2) this.cleanListAtendees();
+    this.lastPage = true;
     return success;
   }
 
   toggleNewAccount(attendee?: IAttendee) {
     this.modalSuceesPresence = false;
-    this.newAccount = !this.newAccount;
-    this.isReadonly = false
-    this.authName = []
+    this.isReadonly = false;
+    this.selectedAttende = attendee;
+    this.authName = [];
     this.form.reset();
-    if(this.newAccount){
+    if (this.selectedAttende ){
       const { name, locality, authType, email, sub } = this.form.controls;
-      if(attendee.name == "<novo usuário>"){
-        name.setValue(null)
+      if (attendee.name === '<novo usuário>'){
+        name.setValue(null);
       }else{
-        name.setValue(attendee.name)
+        name.setValue(attendee.name);
       }
 
-      authType.setValue(AuthTypeEnum.EMAIL)
-      if(attendee.email){
-        this.isReadonly = true
+      authType.setValue(AuthTypeEnum.EMAIL);
+      if (attendee.email){
+        this.isReadonly = true;
       }
-      email.setValue(attendee.email)
-      sub.setValue(attendee.sub)
+      email.setValue(attendee.email);
+      sub.setValue(attendee.sub);
 
     }
   }
@@ -281,12 +279,12 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   readQRCode(){
     this.modalSuceesPresence = false;
-    if(!this.availableDevices){
+    if (!this.availableDevices){
       return this.messageSrv.add({
         severity: 'error',
         summary: this.translate.instant('error'),
         detail: this.translate.instant('qrcode.notAllowed'),
-        life:5000
+        life: 5000
       });
     }
     this.scannerEnabled = true;
@@ -321,7 +319,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.qrResultString = resultString;
     const regex = /PersonId:(\d+)/;
     const match = this.qrResultString.match(regex);
-    if(!isNaN(Number(resultString)) || Number(match[1])){
+    if (!isNaN(Number(resultString)) || Number(match[1])){
       this.closeQRCodeReader();
       this.modalService.close('QRCodeReader');
       this.loadingService.loading(true);
@@ -353,13 +351,13 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         this.preRegistrationService.GetById(Number(this.qrResultString)).then(
           result => {
             const {data, success} = result;
-            if(success) {
+            if (success) {
               this.selectAttendee({personId: data.person.id} as IAttendee);
             }
 
 
           }
-        )
+        );
 
 
         // this.preRegistrationService.checkIn(Number(this.qrResultString),this.idMeeting)
@@ -419,8 +417,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   toggleTorch(): void {
-    this.actionFlash = !this.torchEnabled == true ? this.translate.instant('qrcode.turnoffTorch'): this.translate.instant('qrcode.turnOnTorch');
-    this.classFlash = !this.torchEnabled == true ? "btn-dark" : "btn-orange" ;
+    this.actionFlash = !this.torchEnabled === true ? this.translate.instant('qrcode.turnoffTorch') : this.translate.instant('qrcode.turnOnTorch');
+    this.classFlash = !this.torchEnabled === true ? 'btn-dark' : 'btn-orange' ;
     this.torchEnabled = !this.torchEnabled;
   }
 
@@ -430,8 +428,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   readAnother(){
     this.modalSuceesPresence = false;
     this.dataPresence = {
-      person:{
-        name:'Nome'
+      person: {
+        name: 'Nome'
       },
       time: '00/00/0000 00:00'
     };
@@ -443,7 +441,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   playSoundNotification(type: string){
-    let audio = new Audio();
+    const audio = new Audio();
     audio.src = type === 'success' ? 'assets/sounds/success.mp3' : 'assets/sounds/error.mp3';
     audio.load();
     audio.play();
@@ -459,4 +457,6 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         org.shortName.toLowerCase().includes(query)));
 
   }
+
+  protected readonly Object = Object;
 }
