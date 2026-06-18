@@ -84,6 +84,7 @@ export class MeetPanelComponent implements OnInit {
       this.meetingSubtitle = this.composeSubtitle();
       this.conference = await this.conferenceSrv.getById(+id);
       this.timer = window.setInterval(this.loadValues, this.refreshTime, this);
+      this.loadValues(this);
     }));
   }
 

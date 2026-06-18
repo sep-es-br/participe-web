@@ -11,8 +11,8 @@
         </div>
         <div class="general-card col-6">
           <div class="row">
-            <div class="general-card-number col-12">{{confComments}}</div>
-            <div class="general-card-title col-12">PROPOSTAS</div>
+            <div class="general-card-number col-12">{{confLocalities}}</div>
+            <div class="general-card-title col-12">MUNICÍPIOS</div>
           </div>
         </div>
       </div>
@@ -21,21 +21,13 @@
       <img *ngIf="header" class="conf-logo-img print-visible" [src]="header" alt="">
     </div>
     <div class="col-4 header-slot">
-      <div class="row">
-        <div class="general-card col-6">
-          <div class="row">
-            <div class="general-card-number col-12">{{confHighlights}}</div>
-            <div class="general-card-title col-12">DESTAQUES</div>
-          </div>
-        </div>
-        <div class="general-card col-6">
-          <div class="row">
-            <div class="general-card-number col-12">{{confLocalities}}</div>
-            <div class="general-card-title col-12">MUNICÍPIOS</div>
-          </div>
-        </div>
 
-      </div>
+        <div class="general-card col-6">
+          <div class="row">
+            <div class="general-card-number col-12">{{confComments}}</div>
+            <div class="general-card-title col-12">PROPOSTAS</div>
+          </div>
+        </div>
     </div>
   </div>
 
@@ -54,9 +46,9 @@
       <div class="meet-card col-6">
         <div class="row">
           <div class="meet-card-number col-12"
-            [style.color]="mcColor"
-            [style.text-shadow]="textShadow + ' 0px 0px ' + mcShadow + 'vh'">{{meetingComments}}</div>
-          <div class="meet-card-title col-12">PROPOSTAS</div>
+               [style.color]="mlColor"
+               [style.text-shadow]="textShadow + ' 0px 0px ' + mlShadow + 'vh'">{{meetingLocalities}}</div>
+          <div class="meet-card-title col-12">MUNICÍPIOS</div>
         </div>
       </div>
     </div>
@@ -64,19 +56,13 @@
       <div class="meet-card col-6">
         <div class="row">
           <div class="meet-card-number col-12"
-            [style.color]="mhColor"
-            [style.text-shadow]="textShadow + ' 0px 0px ' + mhShadow + 'vh'">{{meetingHighlights}}</div>
-          <div class="meet-card-title col-12">DESTAQUES</div>
+               [style.color]="mcColor"
+               [style.text-shadow]="textShadow + ' 0px 0px ' + mcShadow + 'vh'">{{meetingComments}}</div>
+          <div class="meet-card-title col-12">PROPOSTAS</div>
         </div>
       </div>
-      <div class="meet-card col-6">
-        <div class="row">
-          <div class="meet-card-number col-12"
-            [style.color]="mlColor"
-            [style.text-shadow]="textShadow + ' 0px 0px ' + mlShadow + 'vh'">{{meetingLocalities}}</div>
-          <div class="meet-card-title col-12">MUNICÍPIOS</div>
-        </div>
-      </div>
+
+
     </div>
   </div>
 </div>
