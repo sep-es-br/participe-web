@@ -31,7 +31,7 @@
                   #autoComplete
                   formControlName="name"
                   [suggestions]="filteredNames()"
-                  (completeMethod)="this.filteredNames.set(this.filteredNames())"
+                  (completeMethod)="onTyping()"
                   optionLabel="name"
                   placeholder="Digite o nome do agente"
                 ></p-autoComplete>

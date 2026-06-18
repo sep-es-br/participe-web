@@ -301,6 +301,10 @@ div[role="button"] {
 
 
   p-autocomplete {
+    .p-icon-wrapper {
+      display: none !important;
+    }
+
     p-overlay  {
       > .p-overlay{
         min-width: unset !important;

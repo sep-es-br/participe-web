@@ -379,7 +379,9 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     }
   }
 
-
+  onTyping() {
+    this.filteredNames.set(this.filteredNames())
+  }
 
   filterOrganization(evt: any) {
     const query = evt.query.toLowerCase();
