@@ -51,7 +51,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
           : this.handleLoading(event);
       }),
       catchError((error: HttpErrorResponse) => {
-        if ([422, 404, 400].indexOf(error.status) > -1) {
+        if ([422, 400].indexOf(error.status) > -1) {
           const message = _.get(error, 'error.message') || _.get(error, 'message') || this.translateSrv.instant('generic.error');
           this.messageSrv.add({
             severity: 'warn',

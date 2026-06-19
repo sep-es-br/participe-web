@@ -114,9 +114,19 @@ export class CustomValidators {
     return { custom: { invalid: true, message: 'conference.meeting.error.doesNotContainChannel' } };
   }
 
-  static noWhitespaceValidator(control: UntypedFormControl) {
-    const isWhitespace = control.value ? control.value.match(/^ *$/) !== null : true;
-    return !isWhitespace ? null : {custom: {invalid: true, message: 'erro.field-cannot-be-empty'}};
+  static noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+    // 1. Checa se tem valor e se é uma string de verdade
+    if (control.value && typeof control.value === 'string') {
+
+      // Agora sim vc pode usar o .match() ou .trim() de boa 😎
+      const isWhitespace = control.value.trim().length === 0;
+      // Ou se vc usa regex: const isWhitespace = control.value.match(/^\s*$/);
+
+      return isWhitespace ? { whitespace: true } : null;
+    }
+
+    // Se for null, undefined ou um objeto (do autocomplete), ignora a validação de texto
+    return null;
   }
 
   static isStructureRegionalizationValidator(isStructureRegionalizable: boolean) {

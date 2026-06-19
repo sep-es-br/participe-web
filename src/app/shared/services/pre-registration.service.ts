@@ -1,6 +1,7 @@
 import { Injectable, Inject, Injector } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import Common from '../util/Common';
+import {IPreRegistration} from '@app/shared/interface/IPreRegistration';
 // import { IPreRegistration } from '../interfaces/IPreRegistration';
 
 interface IItem {
@@ -30,7 +31,11 @@ export class PreRegistrationService extends BaseService<any> {
         personId: personId,
         meetingId: meetingId
     };
-    return this.http.post<any>(`${this.urlBase}/accreditation-check-in`,sender,{ headers: Common.buildHeaders() }).toPromise();
+    return this.http.post<any>(`${this.urlBase}/accreditation-check-in`, sender, { headers: Common.buildHeaders() }).toPromise();
+  }
+
+  preRegistrationConfirmed(meetingId: number,personId: number){
+    return this.http.get<IPreRegistration>(`${this.urlBase}/${meetingId}/${personId}`).toPromise();
   }
 
 }

@@ -480,11 +480,12 @@ export class AttendanceModel {
       this.lastPage = true;
       this.nameSearch = '';
       this.noResult = false;
+
       this.breadcrumbSrv.setItems([
         { label: 'attendance.label' },
         {
-          label: `Nova Autoridade`,
-          routerLink: [`/attendance/edit/new-authority`]
+          label: `${this.labelBreadCrumb} ${this.currentMeeting.name}`,
+          routerLink: [`/attendance/${this.routerLinkItem}`]
         },
       ]);
     }
