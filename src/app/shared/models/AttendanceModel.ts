@@ -25,6 +25,7 @@ import { concat } from 'lodash';
 import { PersonService } from '../services/person.service';
 import {ParticipationService} from '@app/shared/services/participation.service';
 import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
+import {ActivatedRoute, Router} from '@angular/router';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -103,6 +104,8 @@ export class AttendanceModel {
   protected localitySrv: LocalityService;
   protected personSrv: PersonService;
   protected participationSrv: ParticipationService;
+  protected router: Router;
+  protected thisRoute: ActivatedRoute;
 
   constructor(
     @Inject(Injector) injector: Injector,
@@ -119,6 +122,8 @@ export class AttendanceModel {
     this.localitySrv = injector.get(LocalityService);
     this.personSrv = injector.get(PersonService);
     this.participationSrv = injector.get(ParticipationService);
+    this.router = injector.get(Router);
+    this.thisRoute = injector.get(ActivatedRoute);
 
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, CustomValidators.noWhitespaceValidator]],
@@ -474,6 +479,7 @@ export class AttendanceModel {
       this.lastPage = true;
       this.nameSearch = '';
       this.noResult = false;
+
       this.breadcrumbSrv.setItems([
         { label: 'attendance.label' },
         {
@@ -507,9 +513,10 @@ export class AttendanceModel {
 
     this.actionbarSrv.setItems([
       {
-        position: 'LEFT',
-        handle: () => this.showSelectMeeting = !this.showSelectMeeting,
-        icon: 'change.svg',
+        position: 'RIGHT',
+        handle: () => this.router.navigate(['new-authority'], {relativeTo: this.thisRoute}),
+        icon: 'user-plus-solid.svg',
+        label: `Nova Autoridade`
       },
       {
         position: 'RIGHT',

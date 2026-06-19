@@ -1,0 +1,322 @@
+@import '../attendance.component.scss';
+
+.rem075 {
+  font-size: 0.75rem;
+}
+
+.edit-attendees {
+  .aviso {
+    font-weight: bold;
+    color: #f58634;
+  }
+
+  .top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-bottom: 30px;
+    width: 100%;
+
+    > div,
+    p-dropdown {
+      margin: 0 10px;
+    }
+
+    .county.p-float-label {
+      .p-inputtext,
+      label {
+        padding-left: 15px;
+      }
+    }
+
+    .search {
+      display: flex;
+      flex: 1;
+      flex-wrap: nowrap;
+      flex-direction: row !important;
+
+      .ui-float-label {
+        .ui-inputtext {
+          flex: 1;
+          border-radius: 15px 0 0 15px;
+          padding-left: 15px;
+          color: $textFilterColor;
+          border-right: none;
+        }
+
+        label {
+          padding-left: 15px;
+        }
+      }
+
+      .ui-button {
+        border-radius: 0 15px 15px 0;
+        background: #f5f5f5;
+        border: 1px solid #E0E0E0;
+        border-left: none;
+      }
+    }
+
+    @media screen and (max-width: 786px) {
+      > div,
+      p-dropdown {
+        margin: 5px 10px;
+      }
+
+      .new {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  .form-edit-account {
+    margin: 0;
+
+    .p-col-12 {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 500;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .remove-action {
+        font-size: .8rem;
+        color: red;
+        cursor: pointer;
+      }
+    }
+
+    .auth-type {
+      display: flex;
+      flex-wrap: wrap;
+
+      img {
+        width: 40px;
+        margin-right: 5px;
+
+        &:last-of-type {
+          margin-right: 10px;
+        }
+      }
+
+      p-radioButton {
+        margin-right: 10px;
+      }
+
+      label {
+        float: none;
+      }
+    }
+  }
+
+}
+
+
+
+
+
+.p-overlay.p-component {
+  right: 0 !important;
+  left: auto !important;
+}
+::ng-deep .edit-attendees {
+  .ui-inputtext {
+    flex: 1;
+  }
+
+  .form-edit-account {
+    .ui-inputtext {
+      width: 100%;
+      flex: 0;
+    }
+  }
+
+  .ui-autocomplete,
+  .ui-autocomplete-input {
+    flex: 1;
+  }
+
+  form.form-edit-account .auth-type label {
+    float: none;
+  }
+
+  .top-bar .search {
+    input.ng-valid.ng-touched.ng-dirty:focus {
+      box-shadow: none !important;
+    }
+
+    input.ng-valid.ng-touched.ng-dirty {
+      border: 1px solid #E0E0E0 !important;
+    }
+
+    .ui-button .ui-button-icon-left {
+      color: $textFilterColor;
+    }
+  }
+
+  .search {
+    cursor: auto !important;
+  }
+
+  .p-dropdown.p-component.p-inputwrapper, .p-autocomplete.p-component.p-inputwrapper {
+    width: 100%;
+  }
+
+  .top-bar {
+
+    margin: 0 15px;
+
+
+    input.ng-valid.ng-touched.ng-dirty:focus,
+    p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
+    p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
+      box-shadow: none !important;
+    }
+
+    input.ng-valid.ng-touched.ng-dirty,
+    p-dropdown.ng-valid.ng-touched.ng-dirty > div,
+    p-autoComplete.ng-valid.ng-touched.ng-dirty > span > input {
+      border: 1px solid #E0E0E0 !important;
+    }
+
+    .ui-dropdown {
+      border-radius: 15px;
+
+      .ui-dropdown-label-container {
+        border-radius: 15px;
+
+        .ui-dropdown-label.ui-inputtext {
+          color: $textFilterColor;
+          border-radius: 15px;
+          padding-left: 15px;
+        }
+      }
+
+      .ui-dropdown-trigger {
+        border-radius: 15px;
+      }
+    }
+
+    .ui-autocomplete .ui-inputtext {
+      border-radius: 15px;
+      padding-left: 15px;
+    }
+  }
+}
+
+.preregister-icon {
+  height: 100%;
+  width: 20px;
+  margin-left: 8%;
+  margin-right: 5%;
+}
+
+
+.auth- {
+  &screening {
+    color: gray;
+  }
+
+  &announce {
+    color: #f58634;
+  }
+
+  &announced {
+    color: #34659e;
+  }
+
+}
+
+div[role="button"] {
+  cursor: pointer;
+}
+
+.authorityInfo-wrapper {
+  fa-icon{
+    font-size: x-large;
+  }
+}
+
+.secondary-info {
+
+  .authorityInfo {
+
+
+    .role {
+      font-size: smaller;
+    }
+
+    .organization {
+      font-size: small;
+      font-weight: bolder;
+    }
+
+
+  }
+
+  .allow-announce-wrapper {
+      color: #008000
+    }
+
+  ::ng-deep p-autocomplete.p-inputwrapper {
+    /* Força a tag do PrimeNG a se comportar como bloco ou ocupar 100% no eixo do flex */
+    display: block !important;
+    width: 100% !important;
+
+    /* Alvo: A div interna (selecionada no seu print com == $0) */
+    > div.p-autocomplete {
+      width: 100% !important;
+      display: flex !important;
+    }
+
+    /* Alvo: O input real dentro da div */
+    input.p-autocomplete-input {
+      width: 100% !important;
+      flex: 1 1 auto !important; /* Garante que ele vai esticar dentro da div flex */
+    }
+
+  }
+
+}
+
+
+
+::ng-deep {
+
+  p-dropdown {
+    max-width: 100% !important;
+
+    .p-dropdown-label {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      display: block !important;
+    }
+  }
+
+
+  p-autocomplete {
+    .p-icon-wrapper {
+      display: none !important;
+    }
+
+    p-overlay  {
+      > .p-overlay{
+        min-width: unset !important;
+        right: 0 !important;
+        left: 0 !important;
+
+        @media screen and (min-width: 992px ) {
+          left: auto !important;
+          min-width: 100% !important;
+          max-width: 90vw !important;
+        }
+      }
+    }
+  }
+}

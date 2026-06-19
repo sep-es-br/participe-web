@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EditComponent } from './edit.component';
 
-describe('EditComponent', () => {
+describe('NewAuthorityComponent', () => {
   let component: EditComponent;
   let fixture: ComponentFixture<EditComponent>;
 
