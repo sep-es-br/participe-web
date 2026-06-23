@@ -47,7 +47,10 @@ export class HomeComponent implements OnInit {
         user = this.authSrv.getUserInfo;
       }
 
-      if (!await this.authSrv.isAuthenticated() && !isLoginProcess) {
+      const isAuthenticated = await this.authSrv.isAuthenticated();
+
+
+      if (!isAuthenticated && !isLoginProcess) {
         await this.router.navigate(['/login']);
       }
 
@@ -58,14 +61,19 @@ export class HomeComponent implements OnInit {
   }
 
   private async setInfo(user: IPerson){
+    if (user.roles.length === 1 && user.roles[0] === 'Support') {
+      this.SetStartPage(user);
+    } else {
       await this.proposalEvaluationService.checkIsPersonEvaluator(user.id)
-      .then(
-        (response) => {
-          if (response) sessionStorage.setItem("evaluatorOrgGuid", response);
-        }
-      ).finally(() => {
-        this.SetStartPage(user);
-      })
+        .then(
+          (response) => {
+            if (response) sessionStorage.setItem('evaluatorOrgGuid', response);
+          }
+        ).finally(() => {
+          this.SetStartPage(user);
+        })
+    }
+
   }
 
   private async SetStartPage(user: IPerson) {
@@ -78,7 +86,7 @@ export class HomeComponent implements OnInit {
 
     } else if (sessionStorage.getItem("evaluatorOrgGuid")) {
       this.router.navigate(['/proposal-evaluation']);
-    } else if (user.roles.find(r => (r === 'Recepcionist'))) {
+    } else if (user.roles.find(r => (r === 'Recepcionist' || r === 'Support'))) {
       if (await this.HaveMeetingsForReceptionist()) {
         this.breadcrumbService.setItems([
           { label: 'attendance', routerLink: ['/attendance'] }

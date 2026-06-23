@@ -35,12 +35,13 @@ export class AttendanceComponent implements OnInit {
     const {roles} = this.userAuth.getUserInfo;
     this.actions = [];
     const date = moment().format('DD/MM/YYYY HH:mm:ss');
-    if (roles.includes('Recepcionist') || roles.includes('Presenter') || roles.includes('Administrator')) {
+    if (roles.includes('Recepcionist') || roles.includes('Presenter') || roles.includes('Administrator')
+      || roles.includes('Support')) {
       this.conferenceService.getConferencesWithPresentialMeetings(date).then((confs) => {
         // We have any conference with presential meetings?
         if (confs.length > 0) {
           // Only administrators can edit
-          if (roles.includes('Administrator')) {
+          if (roles.includes('Administrator') || roles.includes('Support')) {
             this.actions.push({name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus});
             this.actions.push({name: 'attendance.edit', url: 'edit', icon: faEdit});
             this.actions.push({name: 'attendance.authorities', url: 'authority-list', icon: faUserTie});

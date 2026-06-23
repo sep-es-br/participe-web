@@ -514,12 +514,6 @@ export class AttendanceModel {
     this.actionbarSrv.setItems([
       {
         position: 'RIGHT',
-        handle: () => this.router.navigate(['new-authority'], {relativeTo: this.thisRoute}),
-        icon: 'user-plus-solid.svg',
-        label: `Nova Autoridade`
-      },
-      {
-        position: 'RIGHT',
         handle: () => {},
         icon: 'user-solid.svg',
         label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,

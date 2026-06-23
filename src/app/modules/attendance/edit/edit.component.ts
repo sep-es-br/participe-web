@@ -115,6 +115,31 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.searchByName();
   }
 
+  override async setActionBar() {
+    await super.setActionBar();
+
+    this.actionbarSrv.setItems([
+      {
+        position: 'RIGHT',
+        handle: () => this.router.navigate(['new-authority'], {relativeTo: this.thisRoute}),
+        icon: 'user-plus-solid.svg',
+        label: `Nova Autoridade`
+      },
+      {
+        position: 'RIGHT',
+        handle: () => {},
+        icon: 'user-solid.svg',
+        label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
+      },
+      {
+        position: 'RIGHT',
+        handle: () => {},
+        icon: 'preregister_phone.svg',
+        label: `${this.totalPreRegistered} Pré-credenciados`
+      }
+    ]);
+  }
+
   selectAttendeeWithFilter(attendee: IAttendee, evt: MouseEvent, isEdit?: boolean): Promise<void> {
 
     if (this.toAnnounceToggleElems.some(
@@ -144,7 +169,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       role,
       toAnnounce,
       announced
-    } = this.form.value;
+    } = this.form.getRawValue();
 
     const {success, result} = await this.save();
     if (success) {
