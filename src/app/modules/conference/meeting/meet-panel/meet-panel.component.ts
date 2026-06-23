@@ -43,11 +43,13 @@ export class MeetPanelComponent implements OnInit {
   confComments: number = 0;
   confHighlights: number = 0;
   confLocalities: number = 0;
+  confPlanItems: number = 0;
 
   meetingParticipants: number = 0;
   meetingComments: number = 0;
   meetingHighlights: number = 0;
   meetingLocalities: number = 0;
+  meetingPlanItems: number = 0;
 
   // Transitions
   textShadow: string;
@@ -90,7 +92,7 @@ export class MeetPanelComponent implements OnInit {
 
   async loadParticipationHeader() {
     const data = await this.participationSrv.getHeader(this.route.snapshot.params['id']);
-    this.header = data["image"];
+    this.header = data['image'];
   }
 
   composeSubtitle(): String {
@@ -125,6 +127,7 @@ export class MeetPanelComponent implements OnInit {
           this.confComments = returnData.proposals;
           this.confHighlights = returnData.highlights;
           this.confLocalities = returnData.counties;
+          this.confPlanItems = returnData.planItems;
         })
         .catch((error) => {
           console.log("Promise rejected with " + JSON.stringify(error));
@@ -144,6 +147,7 @@ export class MeetPanelComponent implements OnInit {
           this.updateComments(returnData.proposals);
           this.updateHighlights(returnData.highlights);
           this.updateLocalities(returnData.counties);
+          this.updatePlanItems(returnData.planItems);
         })
         .catch((error) => {
           console.log("Promise rejected with " + JSON.stringify(error));
@@ -196,6 +200,19 @@ export class MeetPanelComponent implements OnInit {
     this.mlColor = this.transitionColor;
     this.mlShadow = this.transitionShadow;
     this.meetingLocalities = newValue;
+    setTimeout(() => {
+      this.mlColor = this.meetNumberColor;
+      this.mlShadow = this.noShadow;
+    }, this.transitionTimeMs, this);
+  }
+
+  updatePlanItems(newValue: any) {
+    if (this.meetingPlanItems === newValue) {
+      return;
+    }
+    this.mlColor = this.transitionColor;
+    this.mlShadow = this.transitionShadow;
+    this.meetingPlanItems = newValue;
     setTimeout(() => {
       this.mlColor = this.meetNumberColor;
       this.mlShadow = this.noShadow;

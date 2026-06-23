@@ -28,6 +28,12 @@
             <div class="general-card-title col-12">PROPOSTAS</div>
           </div>
         </div>
+        <div class="general-card col-6">
+          <div class="row">
+            <div class="general-card-number col-12">{{confPlanItems}}</div>
+            <div class="general-card-title col-12">ÁREAS TEMÁTICAS</div>
+          </div>
+        </div>
     </div>
   </div>
 
@@ -59,6 +65,14 @@
                [style.color]="mcColor"
                [style.text-shadow]="textShadow + ' 0px 0px ' + mcShadow + 'vh'">{{meetingComments}}</div>
           <div class="meet-card-title col-12">PROPOSTAS</div>
+        </div>
+      </div>
+      <div class="meet-card col-6">
+        <div class="row">
+          <div class="meet-card-number col-12"
+               [style.color]="mcColor"
+               [style.text-shadow]="textShadow + ' 0px 0px ' + mcShadow + 'vh'">{{meetingPlanItems}}</div>
+          <div class="meet-card-title col-12">ÁREAS TEMÁTICAS</div>
         </div>
       </div>
 
