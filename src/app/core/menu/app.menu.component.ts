@@ -22,6 +22,8 @@ import {AuthService} from '@app/shared/services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
 import { IPerson } from '@app/shared/interface/IPerson';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+import {ConferenceService} from '@app/shared/services/conference.service';
 
 @Component({
   selector: 'app-menu',
@@ -34,7 +36,13 @@ export class AppMenuComponent implements OnInit {
   model: any[];
   person: IPerson;
 
-  constructor(public template: AppTemplateComponent, private userAuth: AuthService, private translateSrv: TranslateService, private router: Router) {
+  constructor(
+    public template: AppTemplateComponent,
+    private userAuth: AuthService,
+    private translateSrv: TranslateService,
+    private router: Router,
+    private conferenceService: ConferenceService
+  ) {
   }
 
   ngOnInit() {
@@ -43,7 +51,7 @@ export class AppMenuComponent implements OnInit {
     }
   }
 
-  updateMenu(){
+  async updateMenu(){
     this.person = this.userAuth.getUserInfo;
 
     this.model = [];
@@ -98,24 +106,26 @@ export class AppMenuComponent implements OnInit {
       this.model.push({label: 'proposal_evaluation.title', icon: faClipboardCheck, routerLink: ['/proposal-evaluation']});
     }
     if (this.person.roles.includes('Administrator') || this.person.roles.includes('Support')) {
+      const date = moment().format('DD/MM/YYYY HH:mm:ss');
+
+      const confs = await this.conferenceService.getConferencesWithPresentialMeetings(date);
+
+      const items = confs.length === 0 ? [] : [
+        {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
+        {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']},
+        {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+      ];
+
       if (window.location.href.endsWith('#/attendance')) {
         this.model.push(
           {
-            label: 'attendance.label', icon: faUserCheck, items: [
-              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']},
-              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
-            ]
+            label: 'attendance.label', icon: faUserCheck, items
           }
-          );
+        );
       } else {
         this.model.push(
           {
-            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
-              {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
-              {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']},
-              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
-            ]
+            label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items
           }
         );
       }
