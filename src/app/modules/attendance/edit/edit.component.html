@@ -169,7 +169,6 @@
           <div class="row w-100 m-0 result premium-list-item align-items-center p-3"
             *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
 
-            <!-- Informações do Participante (Original col-5) -->
             <div class="col-5 d-flex align-items-center gap-2 justify-content-start px-1">
               <div class="attendee-avatar">
                 <div *ngIf="!attendee.isAuthority" class="letter-icon"
@@ -185,7 +184,8 @@
                 </ng-container>
               </div>
               <div class="attendee-info min-w-0">
-                <div class="fw-bold text-uppercase text-truncate name-attendee" [pTooltip]="attendee.name" tooltipPosition="top">{{ attendee.name }}</div>
+                <div class="fw-bold text-uppercase text-truncate name-attendee" [pTooltip]="attendee.name"
+                  tooltipPosition="top">{{ attendee.name }}</div>
                 <div class="text-uppercase text-truncate role-attendee" *ngIf="attendee.isAuthority"
                   style="color: #607d8b;" [pTooltip]="attendee.role" tooltipPosition="top">
                   {{ attendee.role }}
@@ -193,37 +193,33 @@
               </div>
             </div>
 
-            <!-- Organização / Órgão (Original col-4) -->
             <div class="col-3 d-flex flex-column justify-content-center align-items-center px-1 text-center min-w-0">
               <ng-container *ngIf="attendee.isAuthority">
-                <div class="organization-name fw-bold text-uppercase text-truncate w-100" [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">
+                <div class="organization-name fw-bold text-uppercase text-truncate w-100"
+                  [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">
                   <span class="d-xl-none">{{ getOrganizationShortName(attendee) }}</span>
                   <span class="d-none d-xl-block">{{ getOrganizationDisplay(attendee) }}</span>
                 </div>
               </ng-container>
             </div>
 
-            <!-- Ações na direita: Triagem, Pré-credenciamento e Check de Presença (Original col-3) -->
-            <div class="col-4 d-flex align-items-center justify-content-end pe-md-3 gap-2 gap-md-4 text-center position-relative">
+            <div
+              class="col-4 d-flex align-items-center justify-content-end pe-md-3 gap-2 gap-md-4 text-center position-relative">
 
-              <!-- 1. Triagem -->
-              <div class="action-item" (click)="$event.stopPropagation(); openTriagem(attendee, $event)" pTooltip="Triagem" tooltipPosition="top">
+              <div class="action-item" (click)="$event.stopPropagation(); openTriagem(attendee, $event)"
+                pTooltip="Triagem" tooltipPosition="top">
                 <fa-icon [icon]="iconScreening" class="action-icon" style="color: #607d8b;"></fa-icon>
-                <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block" style="font-size: 0.7rem;">Triagem</span>
+                <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block"
+                  style="font-size: 0.7rem;">Triagem</span>
               </div>
-
-              <!-- 2. Pré-credenciamento (com ícone e data dinâmica 'há X dias' embaixo) -->
               <div class="action-item" (click)="$event.stopPropagation(); openPreCredenciamento(attendee, $event)"
                 [pTooltip]="'Pré-credenciamento: ' + (attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente')"
                 tooltipPosition="top">
-                <!-- Pode usar a imagem original 'assets/layout/images/icons/...' ou o primeicon correspondente -->
                 <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
                 <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block" style="font-size: 0.7rem;">
                   {{ attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente' }}
                 </span>
               </div>
-
-              <!-- 3. Check de Presença (original) -->
               <div class="checkin-status text-center"
                 [pTooltip]="'Presença: ' + (attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente')"
                 tooltipPosition="top">

@@ -120,9 +120,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
     if (!attendee) return;
 
-    const status = this.getAuthStatus(attendee);
-    const label = this.getAuthLabel(attendee);
-
     this.menuItems = [
       {
         label: `${attendee.locality} - ${attendee.superLocality}`,
@@ -183,8 +180,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   }
 
   authorizeLocality(attendee: IAttendee) {
-    // Implementação da autorização de localidade
-    // Por enquanto, abre a edição que já contém a localidade
     this.selectAttendeeWithFilter(attendee, null, true);
     this.messageSrv.add({
       severity: 'info',
@@ -478,7 +473,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     } = await this.authcSrv.toggleToAnnounce(attendee.checkInId);
     attendee.toAnnounce = toAnnounce;
 
-    // Atualiza o menu instantaneamente
     this.initializeMenu();
 
     this.searchByName();
