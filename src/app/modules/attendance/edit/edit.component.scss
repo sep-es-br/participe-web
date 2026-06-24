@@ -508,7 +508,7 @@ div[role="button"] {
     font-weight: 600;
     color: #34495e;
     font-size: 0.70rem;
-    text-align: center;
+    // text-align: center;
     width: 100%;
     display: block;
 
@@ -676,7 +676,8 @@ div[role="button"] {
   }
 }
 
-.action-item, .checkin-status {
+.action-item,
+.checkin-status {
   width: 40px;
   display: flex;
   flex-direction: column;
@@ -719,6 +720,13 @@ div[role="button"] {
     }
   }
 }
+
+.list-container {
+  padding-top: 0.75rem;
+  background-color: white;
+  padding-bottom: 0.75rem;
+}
+
 
 ::ng-deep .p-tooltip {
   .p-tooltip-text {
