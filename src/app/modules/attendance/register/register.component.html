@@ -92,10 +92,8 @@
         </div>
         <div class="col-12 col-lg-8 mt-3">
           <div class="row">
-            <div class="col-12 col-lg-8 ">
-              <label>Buscar Por:</label>
-            </div>
-            <div class="col-12 col-lg-8 justify-content-around d-flex">
+            <div class="col-12 col-lg-8 gap-3 d-flex align-items-center">
+              <label>Buscar por:</label>
               <p-radioButton value="text" name="tipoBusca" label="Nome" [(ngModel)]="tipoBotao" (ngModelChange)="searchField.control.patchValue('')" />
               <p-radioButton value="number" name="tipoBusca" label="CPF" [(ngModel)]="tipoBotao" (ngModelChange)="searchField.control.patchValue('')" />
             </div>
