@@ -198,6 +198,11 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
     this.actionbarSrv.setItems([
       {
+        position: 'LEFT',
+        handle: () => this.showSelectMeeting = !this.showSelectMeeting,
+        icon: 'change.svg',
+      },
+      {
         position: 'RIGHT',
         handle: () => this.router.navigate(['new-authority'], {relativeTo: this.thisRoute}),
         icon: 'user-plus-solid.svg',
