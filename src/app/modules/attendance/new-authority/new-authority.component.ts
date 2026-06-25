@@ -199,7 +199,10 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     );
 
     if (autoComplete) {
-      setTimeout(() => autoComplete.show());
+      setTimeout(() => {
+        autoComplete.show();
+        this.selectedName = undefined;
+      });
     }
   }
   override toggleSelectedAttendee() {

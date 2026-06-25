@@ -14,6 +14,7 @@
                   (completeMethod)="filterOrganization($event)"
                   formControlName="organization"
                   [suggestions]="filteredOrganizations()"
+                  [forceSelection]="true"
                   optionLabel="name"
                   placeholder="Digite o órgão ou entidade"
                   (onSelect)="loadNames($event)"
@@ -31,6 +32,7 @@
                   #autoComplete
                   formControlName="name"
                   [suggestions]="filteredNames()"
+                  [forceSelection]="true"
                   (completeMethod)="onTyping()"
                   (onSelect)="applyValue($event.value)"
                   optionLabel="name"
