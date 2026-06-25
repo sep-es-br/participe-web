@@ -91,73 +91,132 @@
 
     <ng-template #list>
       <section id="attendee-filter-row">
-        <div class="row gap-2 mx-0">
-          <div class="col-12 col-lg-2 p-0 d-flex flex-column">
-            <label for="optsOrderBy">Ordenar por:</label>
-            <p-dropdown id="optsOrderBy" [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" [styleClass]="''"
-              (onChange)="searchByName()">
-              <ng-template let-option pTemplate="selectedItem">
-                {{
-                (option.label | translate)
-                }}
-              </ng-template>
-              <ng-template let-option pTemplate="item">
-                {{ option.label | translate }}
-              </ng-template>
-            </p-dropdown>
-          </div>
-          <div class="col-12 col-lg-2 p-0">
-            <label for="optsParticipantes">{{ 'attendance.participationType' | translate }}:</label>
-            <p-dropdown id="optsParticipantes" [options]="optionsParticipantes" (onChange)="searchByName()"
-              [(ngModel)]="selectedParticipante">
-            </p-dropdown>
-          </div>
-          <div class="col-12 col-lg-2 p-0">
-            <label for="optTeam">{{ 'attendance.credentialPresence' | translate }}:</label>
-            <p-dropdown id="optTeam" [options]="optionsFilterBy" [(ngModel)]="selectedFilterBy"
-              (onChange)="searchByName()">
-              <ng-template let-option pTemplate="selectedItem">
-                <span>{{ option.label }}</span>
-              </ng-template>
-              <ng-template let-option pTemplate="item">
-                {{ option.label }}
-              </ng-template>
-            </p-dropdown>
-          </div>
-          <div class="col-12 col-lg-2 p-0">
-            <label for="optStatus">{{ 'attendance.namingStatus' | translate }}:</label>
-            <p-dropdown id="optStatus" [options]="optionsFilterByStatus" [(ngModel)]="selectedFilterByStatus"
-              (onChange)="searchByName()">
-              <ng-template let-option pTemplate="selectedItem">
-                <span>{{ option.label }}</span>
-              </ng-template>
-              <ng-template let-option pTemplate="item">
-                {{ option.label }}
-              </ng-template>
-            </p-dropdown>
-          </div>
-          <div class="col-12 col-lg p-0">
-            <label for="optOrganization">{{ 'attendance.organization' | translate }}:</label>
-            <p-autoComplete class="d-flex" optionLabel="name" [suggestions]="filteredOrganizations()"
-              [(ngModel)]="selectedOrganization" (completeMethod)="filterOrganization($event);"
-              (onSelect)="onOrganizationSelected($event)"></p-autoComplete>
+        <div class="filter-container mb-3">
+          <div class="filter-wrapper" [class.is-sticky]="isScrolled">
+            <div class="filter-button px-2 d-flex align-items-center justify-content-between flex-wrap gap-2 w-100">
+              
+              <!-- Filter Tags -->
+              <div class="filter-tags d-flex flex-wrap gap-2 align-items-center" [class.is-sticky]="isScrolled">
+                <!-- Search bar inside the row for direct use -->
+                <div class="search-input-wrapper" style="min-width: 200px;">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" id="search-name" placeholder="Buscar por nome..." [(ngModel)]="nameSearch" (keydown.enter)="searchByName()" />
+                    <label class="input-group-text cursor-pointer" (click)="searchByName()" for="search-name">
+                      <i class="fa fa-search"></i>
+                    </label>
+                  </div>
+                </div>
 
+                <div *ngFor="let tag of activeFilters; let i = index">
+                  <div class="filter-tag d-flex align-items-center gap-1 px-2 py-1 bg-light border rounded" [class.is-sticky]="isScrolled">
+                    <div class="filter-tag-inner" [ngClass]="{ 'invisible-tag': showFilters }">
+                      <div class="d-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                        <span class="tag-label fw-bold text-muted">{{ tag.label }}:</span>
+                        <span class="tag-value text-dark">
+                          <ng-container *ngFor="let valueDisplay of tag.displayValue; let index = index">
+                            <ng-container *ngIf="valueDisplay.name?.length <= 20; else spanWithTooltip">
+                              <span>
+                                {{ (index > 0 ? " " : "") + (tag.displayValue.length > 1 ? valueDisplay.name + ";" : valueDisplay.name) }}
+                              </span>
+                            </ng-container>
+                            <ng-template #spanWithTooltip>
+                              <span [pTooltip]="valueDisplay.fullName ? valueDisplay.fullName : valueDisplay.name" tooltipPosition="top">
+                                {{ (index > 0 ? " " : "") + (valueDisplay.name.length > 17 ? (valueDisplay.name.substring(0, 17) + '...') : valueDisplay.name) }}
+                              </span>
+                            </ng-template>
+                          </ng-container>
+                        </span>
+                      </div>
+                    </div>
+                    <button *ngIf="tag.key !== 'portfolio' && tag.key !== 'dataInicio' && tag.key !== 'dataFim'" class="remove-button btn btn-link p-0 text-danger border-0 ms-1" style="line-height: 1; font-size: 0.9rem;" (click)="removeFilter(tag.key)">
+                      x
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filter Trigger Button -->
+              <div class="filter-button" [class.is-sticky]="isScrolled">
+                <button class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1" type="button" data-bs-toggle="modal" data-bs-target="#filtrosModal">
+                  <span>Filtros</span>
+                  <i class="pi pi-filter"></i>
+                </button>
+              </div>
+
+            </div>
           </div>
-          <div class="col-12 col-lg p-0">
-            <label for="search-name">Busca:</label>
-            <div class="search">
-              <div class="input-group mb-3">
-                <input type="text" class="d-flex form-control" id="search-name" pInputText [(ngModel)]="nameSearch"
-                  (keydown.enter)="searchByName()" />
-                <label class="input-group-text cursor-pointer" (click)="searchByName()" for="search-name">
-                  <i class="ps-1 fa fa-search"></i>
-                  <!-- <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> -->
-                </label>
+
+          <!-- Bootstrap Modal for Filters -->
+          <div class="modal fade" id="filtrosModal" tabindex="-1" aria-labelledby="filtrosModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                  <h5 class="modal-title" id="filtrosModalLabel">Filtrar Participantes</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #modalCloseButton (click)="closeFilterModal()"></button>
+                </div>
+                <div class="modal-body">
+                  <form class="w-100">
+                    <div class="row g-3 w-100 m-0">
+
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                        <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Ordenar por</span>
+                        <p-dropdown [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" name="orderBy" [style]="{'width': '100%'}">
+                          <ng-template let-option pTemplate="selectedItem">
+                            {{ option.label | translate }}
+                          </ng-template>
+                          <ng-template let-option pTemplate="item">
+                            {{ option.label | translate }}
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
+
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                        <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Tipo de Participante</span>
+                        <p-dropdown [options]="optionsParticipantes" [(ngModel)]="selectedParticipante" name="participante" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                      </div>
+
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                        <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Credenciamento e Presença</span>
+                        <p-dropdown [options]="optionsFilterBy" [(ngModel)]="selectedFilterBy" name="filterBy" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                      </div>
+
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                        <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Situação da nominata</span>
+                        <p-dropdown [options]="optionsFilterByStatus" [(ngModel)]="selectedFilterByStatus" name="filterByStatus" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                      </div>
+
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                        <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Município / Localidade</span>
+                        <p-dropdown [options]="localities" optionLabel="name" [(ngModel)]="selectedCounty" name="county" placeholder="Selecionar" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                      </div>
+
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                        <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Órgão / Organização</span>
+                        <p-autoComplete optionLabel="name" [suggestions]="filteredOrganizations()"
+                          [(ngModel)]="selectedOrganization" (completeMethod)="filterOrganization($event);"
+                          (onSelect)="onOrganizationSelected($event)" placeholder="Digite o órgão ou entidade" [style]="{'width': '100%'}" name="organization"></p-autoComplete>
+                      </div>
+
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-end gap-2">
+                  <button class="btn btn-outline-warning btn-sm" (click)="resetFilters()">
+                    Restaurar Filtros
+                  </button>
+                  <button class="btn btn-success btn-sm" data-bs-dismiss="modal" (click)="filtrar($event)">
+                    Filtrar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </section>
 
       <section id="attendee-list">
