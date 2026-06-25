@@ -161,15 +161,15 @@
       </section>
 
       <section id="attendee-list">
-        <div class="list-result">
+        <div class="list-result list-container">
           <div class="w-100" *ngIf="noResult">
             <div class="no-result text-center p-3">{{ "attendance.noResult" | translate }}</div>
           </div>
 
-          <div class="row w-100 m-0 result premium-list-item align-items-center p-3"
+          <div class="row w-100 m-0 result premium-list-item align-items-center p-1"
             *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
 
-            <div class="col-5 d-flex align-items-center gap-2 justify-content-start px-1">
+            <div class="col-7 col-sm-6   col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
               <div class="attendee-avatar">
                 <div *ngIf="!attendee.isAuthority" class="letter-icon"
                   [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }">
@@ -193,18 +193,18 @@
               </div>
             </div>
 
-            <div class="col-3 d-flex flex-column justify-content-center align-items-center px-1 text-center min-w-0">
+            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 ">
               <ng-container *ngIf="attendee.isAuthority">
                 <div class="organization-name fw-bold text-uppercase text-truncate w-100"
                   [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">
-                  <span class="d-xl-none">{{ getOrganizationShortName(attendee) }}</span>
-                  <span class="d-none d-xl-block">{{ getOrganizationDisplay(attendee) }}</span>
+                  <span class="d-lg-none ">{{ getOrganizationShortName(attendee) }}</span>
+                  <span class="d-none d-lg-block">{{ getOrganizationDisplay(attendee) }}</span>
                 </div>
               </ng-container>
             </div>
 
             <div
-              class="col-4 d-flex align-items-center justify-content-end pe-md-3 gap-2 gap-md-4 text-center position-relative">
+              class="col-3 d-flex align-items-center justify-content-end pe-md-3 gap-2 gap-md-4 text-center position-relative">
 
               <div class="action-item" (click)="$event.stopPropagation(); openTriagem(attendee, $event)"
                 pTooltip="Triagem" tooltipPosition="top">

@@ -204,19 +204,19 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       },
       {
         position: 'RIGHT',
-        handle: () => this.router.navigate(['new-authority'], {relativeTo: this.thisRoute}),
+        handle: () => this.router.navigate(['new-authority'], { relativeTo: this.thisRoute }),
         icon: 'user-plus-solid.svg',
-        label: `Nova Autoridade`
+        label: `Novo`
       },
       {
         position: 'RIGHT',
-        handle: () => {},
+        handle: () => { },
         icon: 'user-solid.svg',
         label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
       },
       {
         position: 'RIGHT',
-        handle: () => {},
+        handle: () => { },
         icon: 'preregister_phone.svg',
         label: `${this.totalPreRegistered} Pré-credenciados`
       }
