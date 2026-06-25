@@ -12,7 +12,6 @@ import { AuthService } from '@app/shared/services/auth.service';
 import { IAttendee } from '@app/shared/interface/IAttendee';
 import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
-import { ParticipationService } from '@app/shared/services/participation.service';
 import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
 
 @Component({
