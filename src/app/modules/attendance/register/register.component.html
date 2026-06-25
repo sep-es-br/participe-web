@@ -98,7 +98,7 @@
               <p-radioButton value="number" name="tipoBusca" label="CPF" [(ngModel)]="tipoBotao" (ngModelChange)="searchField.control.patchValue('')" />
             </div>
             <div class="col-12 col-lg-8 ">
-              <input [type]="tipoBotao" #searchField="ngModel" class="form-control mt-1" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
+              <input type="text" [pKeyFilter]="tipoBotao === 'number' ? 'num' : undefined" #searchField="ngModel" class="form-control mt-1" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
             </div>
             <div class="col-12 col-lg-4">
               <button id="btnSearchRegister" class="xs-w-100 mt-1" pButton [disabled]="!this.idMeeting" icon="pi pi-search"
