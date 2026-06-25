@@ -68,12 +68,14 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.form.addControl("keepConfirmation", new FormControl(true));
   }
 
-  async applyValue(evt: PersonsListItems) {
+  async applyValue(evt: PersonsListItems, btnSalvar?: HTMLButtonElement) {
     this.selectedName = evt;
     if (evt)
       this.form.controls.role.setValue(evt.role + ' - ' + evt.lotacao);
     else
       this.form.controls.role.setValue(undefined);
+
+    btnSalvar.focus();
 
     this.personSrv.findPersonBySub(this.form.controls.name.value.sub).then(
       async person => {
@@ -249,6 +251,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
 
     setTimeout(() => {
       let filtered = this.meetingSrv.organizationList()
+        .map(organization => ({...organization, label: organization.shortName + ' - ' + organization.name}))
         .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query));
 
       this.filteredOrganizations.set(filtered);

@@ -19,7 +19,7 @@
                   (completeMethod)="filterOrganization($event)"
                   formControlName="organization"
                   [suggestions]="filteredOrganizations()"
-                  optionLabel="name"
+                  optionLabel="label"
                   placeholder="Digite o órgão ou entidade"
                   (onSelect)="loadNames($event)"
                 ></p-autoComplete>
@@ -36,8 +36,8 @@
                   #autoComplete
                   formControlName="name"
                   [suggestions]="filteredNames()"
-                  (completeMethod)="onTyping()"
-                  (onSelect)="applyValue($event.value)"
+                  (completeMethod)="filterNames(autoComplete)"
+                  (onSelect)="applyValue($event.value, btnSalvar);"
                   optionLabel="name"
                   placeholder="Digite o nome do agente"
                 ></p-autoComplete>
@@ -66,6 +66,7 @@
                   class="me-3"
                   type="button"
                   (click)="saveEdit()"
+                  #btnSalvar
                   [label]="'save' | translate"
                 ></button>
                 <button
