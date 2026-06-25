@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren, HostListener } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MenuItem, MessageService, SelectItem } from 'primeng/api';
@@ -560,6 +560,116 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       this.form.get('toAnnounce').patchValue(false);
       this.form.get('announced').patchValue(false);
     }
+  }
+
+  isScrolled = false;
+  showFilters = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+  }
+
+  closeFilterModal() {
+    this.showFilters = false;
+  }
+
+  resetFilters() {
+    this.selectedParticipante = 'all';
+    this.selectedFilterBy = 'pres';
+    this.selectedFilterByStatus = 'all';
+    this.selectedOrganization = undefined;
+    this.nameSearch = '';
+    this.selectedCounty = undefined;
+    this.selectedOrderBy = 'namingStatus';
+    this.searchByName();
+  }
+
+  filtrar(event?: any) {
+    if (event) {
+      event.preventDefault();
+    }
+    this.searchByName();
+  }
+
+  removeFilter(key: string) {
+    if (key === 'participante') {
+      this.selectedParticipante = 'all';
+    } else if (key === 'filterBy') {
+      this.selectedFilterBy = 'pres';
+    } else if (key === 'filterByStatus') {
+      this.selectedFilterByStatus = 'all';
+    } else if (key === 'organization') {
+      this.selectedOrganization = undefined;
+    } else if (key === 'nameSearch') {
+      this.nameSearch = '';
+    } else if (key === 'county') {
+      this.selectedCounty = undefined;
+    }
+    this.searchByName();
+  }
+
+  get activeFilters(): any[] {
+    const tags: any[] = [];
+
+    if (this.selectedParticipante && this.selectedParticipante !== 'all') {
+      const found = this.optionsParticipantes.find(opt => opt.value === this.selectedParticipante);
+      if (found) {
+        tags.push({
+          key: 'participante',
+          label: 'Participante',
+          displayValue: [{ name: found.label }]
+        });
+      }
+    }
+
+    if (this.selectedFilterBy && this.selectedFilterBy !== 'pres') {
+      const found = this.optionsFilterBy.find(opt => opt.value === this.selectedFilterBy);
+      if (found) {
+        tags.push({
+          key: 'filterBy',
+          label: 'Presença',
+          displayValue: [{ name: found.label }]
+        });
+      }
+    }
+
+    if (this.selectedFilterByStatus && this.selectedFilterByStatus !== 'all') {
+      const found = this.optionsFilterByStatus.find(opt => opt.value === this.selectedFilterByStatus);
+      if (found) {
+        tags.push({
+          key: 'filterByStatus',
+          label: 'Nominata',
+          displayValue: [{ name: found.label }]
+        });
+      }
+    }
+
+    if (this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0) {
+      tags.push({
+        key: 'organization',
+        label: 'Organização',
+        displayValue: [{ name: this.selectedOrganization.name }]
+      });
+    }
+
+    if (this.nameSearch && this.nameSearch.trim().length > 0) {
+      tags.push({
+        key: 'nameSearch',
+        label: 'Busca',
+        displayValue: [{ name: this.nameSearch }]
+      });
+    }
+
+    if (this.selectedCounty) {
+      tags.push({
+        key: 'county',
+        label: 'Município',
+        displayValue: [{ name: this.selectedCounty.name }]
+      });
+    }
+
+    return tags;
   }
 
 }
