@@ -11,6 +11,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { AuthorityListComponent } from './authority-list/authority-list.component';
 import {NewAuthorityComponent} from '@app/modules/attendance/new-authority/new-authority.component';
+import {KeyFilterModule} from 'primeng/keyfilter';
 
 @NgModule({
   declarations: [
@@ -20,14 +21,15 @@ import {NewAuthorityComponent} from '@app/modules/attendance/new-authority/new-a
     AuthorityListComponent,
     NewAuthorityComponent
   ],
-  imports: [
-    AttendanceRoutingModule,
-    CommonModule,
-    CoreModule,
-    TranslateModule,
-    ComponentsModule,
-    ZXingScannerModule,
-    SweetAlert2Module.forRoot()
-  ],
+    imports: [
+        AttendanceRoutingModule,
+        CommonModule,
+        CoreModule,
+        TranslateModule,
+        ComponentsModule,
+        ZXingScannerModule,
+        SweetAlert2Module.forRoot(),
+        KeyFilterModule
+    ],
 })
 export class AttendanceModule { }
