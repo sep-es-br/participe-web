@@ -1,32 +1,31 @@
-import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren} from '@angular/core';
-import {FormControl, UntypedFormBuilder} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {MessageService, SelectItem} from 'primeng/api';
-import {faCheckCircle, faCircle, faIdBadge} from '@fortawesome/free-regular-svg-icons';
+import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
+import { FormControl, UntypedFormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { MessageService, SelectItem } from 'primeng/api';
+import { faCheckCircle, faCircle, faIdBadge } from '@fortawesome/free-regular-svg-icons';
 import {
   faBullhorn,
   faCheck,
   faHourglass,
   faHourglassStart,
+  faLayerGroup,
   faQrcode,
   faSearch,
+  faSpinner,
   faTimes,
   faUserTie,
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
 
-import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
-import {Locality} from '@app/shared/models/locality';
-import {LocalityService} from '@app/shared/services/locality.service';
-import {AuthService} from '@app/shared/services/auth.service';
-import { IAttendee } from '@app/shared/interface/IAttendee';
-import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
+import { AttendanceModel } from '@app/shared/models/AttendanceModel';
+import { LocalityService } from '@app/shared/services/locality.service';
+import { AuthService } from '@app/shared/services/auth.service';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
-import {ParticipationService} from '@app/shared/services/participation.service';
-import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
-import {AutoComplete, AutoCompleteSelectEvent} from 'primeng/autocomplete';
-import {PersonsListItems} from '@app/shared/services/person.service';
-import {PreRegistrationService} from '@app/shared/services/pre-registration.service';
+import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
+import { AutoComplete, AutoCompleteSelectEvent } from 'primeng/autocomplete';
+import { PersonsListItems } from '@app/shared/services/person.service';
+import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
+import { RequestStatus } from '@app/shared/interface/IRequestStataus';
 
 @Component({
   selector: 'app-edit',
@@ -37,8 +36,8 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
 
   iconSearch = faSearch;
 
-  filteredOrganizations = signal(this.meetingSrv.organizationList()) ;
-  filteredNames = signal<PersonsListItems[]>([]) ;
+  filteredOrganizations = signal(this.meetingSrv.organizationList());
+  filteredNames = signal<PersonsListItems[]>([]);
   selectedName: PersonsListItems = undefined;
 
 
@@ -46,6 +45,12 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   valueChangeCPFSub: Subscription;
 
   idPrecredential: number;
+  isLoadingNames = false;
+
+  requestStatus: { status: string } = { status: RequestStatus.EMPTY };
+
+  faLayerGroup = faLayerGroup;
+  faSpinner = faSpinner
 
   constructor(
     protected messageSrv: MessageService,
@@ -111,9 +116,9 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       keepConfirmation: boolean
     };
 
-    if(!this.idPrecredential || !keepConfirmation) {
-      if(!this.idPrecredential) {
-        await  this.authcSrv.registerAuthority (
+    if (!this.idPrecredential || !keepConfirmation) {
+      if (!this.idPrecredential) {
+        await this.authcSrv.registerAuthority(
           this.authSrv.getUserInfo.id,
           "",
           undefined,
@@ -165,8 +170,9 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   }
 
 
-  loadNames(evt: AutoCompleteSelectEvent){
-    const {value} = evt as {value: IOptionOrganization};
+  loadNames(evt: AutoCompleteSelectEvent) {
+    const { value } = evt as { value: IOptionOrganization };
+    this.isLoadingNames = true;
 
     this.personSrv.findPersonsOrganization(value.guid).then(names => {
       this.personSrv.allNames = names;
@@ -175,6 +181,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       this.form.controls.name.patchValue(undefined);
       this.form.controls.name.markAsPristine();
       this.form.controls.name.markAsUntouched();
+      this.isLoadingNames = false;
     });
 
   }
@@ -206,7 +213,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     super.toggleSelectedAttendee();
     this.selectedName = undefined;
     this.idPrecredential = undefined;
-    this.router.navigate(['..'], {relativeTo: this.thisRoute})
+    this.router.navigate(['..'], { relativeTo: this.thisRoute })
   }
 
   onTyping() {
@@ -216,10 +223,15 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   filterOrganization(evt: any) {
     const query = evt.query.toLowerCase();
 
+    this.requestStatus.status = RequestStatus.LOADING;
 
-    this.filteredOrganizations.set(this.meetingSrv.organizationList()
-      .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query)));
+    setTimeout(() => {
+      let filtered = this.meetingSrv.organizationList()
+        .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query));
 
+      this.filteredOrganizations.set(filtered);
+      this.requestStatus.status = RequestStatus.SUCCESS;
+    }, 200);
   }
 
 }
