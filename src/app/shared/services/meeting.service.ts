@@ -1,4 +1,4 @@
-import {Inject, Injectable, Injector, signal} from '@angular/core';
+import { Inject, Injectable, Injector, signal } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import { Meeting } from '../models/Meeting';
 import { MeetingFilterModel } from './../models/MeetingFilterModel';
@@ -14,10 +14,10 @@ import { catchError } from 'rxjs/operators';
 import { IAttendeeAuthority } from '../interface/IAttendeeAuthority';
 import { IHttpResult } from '../interface/IHttpResult';
 import { ICheckedInAt } from '../interface/CheckedInAt.interface';
-import {any} from 'codelyzer/util/function';
-import {SelectItem} from 'primeng/api';
-import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
-import {$} from 'protractor';
+import { any } from 'codelyzer/util/function';
+import { SelectItem } from 'primeng/api';
+import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
+import { $ } from 'protractor';
 
 @Injectable()
 export class MeetingService extends BaseService<Meeting> {
@@ -56,7 +56,7 @@ export class MeetingService extends BaseService<Meeting> {
 
   getPlanItemsTargetedByConference(conferenceId: number) {
     return this.http.get<IResultPlanItemByConference[]>(`${this.urlBase}/${conferenceId}/targeted-by/plan-items`,
-    { headers: Common.buildHeaders() }).toPromise();
+      { headers: Common.buildHeaders() }).toPromise();
   }
 
 
@@ -133,8 +133,8 @@ export class MeetingService extends BaseService<Meeting> {
     ).toPromise();
   }
 
-  getTotalParticipantsInMeeting(idMeeting: number, query: IQueryOptions): Promise<{checkedIn: number, preRegistered: number}> {
-    return this.http.get<{checkedIn: number, preRegistered: number}>(`${this.urlBase}/${idMeeting}/total${PrepareHttpQuery(query)}`, {headers: Common.buildHeaders()}).toPromise();
+  getTotalParticipantsInMeeting(idMeeting: number, query: IQueryOptions): Promise<{ checkedIn: number, preRegistered: number }> {
+    return this.http.get<{ checkedIn: number, preRegistered: number }>(`${this.urlBase}/${idMeeting}/total${PrepareHttpQuery(query)}`, { headers: Common.buildHeaders() }).toPromise();
   }
 
   getOrganizationList() {
@@ -149,7 +149,7 @@ export class MeetingService extends BaseService<Meeting> {
     return this.http.get<string>(`${this.urlBase}/${idMeeting}/generate-link-pre-registration`).toPromise();
   }
 
-  generateQRCodeAutoCheckIn(idMeeting:number): Promise<any> {
+  generateQRCodeAutoCheckIn(idMeeting: number): Promise<any> {
     return new Promise<string>((resolve, reject) => {
       this.http.get(`${this.urlBase}/${idMeeting}/generate-qr-code-check-in`, { responseType: 'blob' })
         .subscribe(blob => {

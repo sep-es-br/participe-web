@@ -1,5 +1,10 @@
 <app-template>
   <div class="edit-attendees">
+    <div class="loading-overlay" *ngIf="isLoadingNames">
+      <p-progressSpinner strokeWidth="4" animationDuration=".8s"></p-progressSpinner>
+      <span class="mt-2 text-muted fw-bold" style="font-size: 0.9rem;">Carregando agentes do órgão...</span>
+    </div>
+
     <section id="attendee-selected">
         <div class="col-12 col-lg-6 m-a">
           <form
