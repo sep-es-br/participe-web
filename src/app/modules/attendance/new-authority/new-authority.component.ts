@@ -168,7 +168,14 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   loadNames(evt: AutoCompleteSelectEvent){
     const {value} = evt as {value: IOptionOrganization};
 
-    this.personSrv.findPersonsOrganization(value.guid).then(names => this.personSrv.allNames = names);
+    this.personSrv.findPersonsOrganization(value.guid).then(names => {
+      this.personSrv.allNames = names;
+    }).finally(() => {
+      this.selectedName = undefined;
+      this.form.controls.name.patchValue(undefined);
+      this.form.controls.name.markAsPristine();
+      this.form.controls.name.markAsUntouched();
+    });
 
   }
 
@@ -223,7 +230,7 @@ function escapeRegExp(str: string) {
 
 function clean(text: string): string {
   return text
-    .toLowerCase()
+    ?.toLowerCase()
     .normalize('NFD')                 // separa acentos
     .replace(/[\u0300-\u036f]/g, '')  // remove acentos
     .replace(/[^a-z0-9]/g, '');       // remove tudo que não é alfanumérico

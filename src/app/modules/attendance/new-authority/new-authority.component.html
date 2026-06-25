@@ -5,7 +5,7 @@
           <form
             class="row form-edit-account"
             [formGroup]="form"
-            (submit)="saveEdit()"
+            (submit)="filterNames(autoComplete)"
           >
             <div class="col-12">
               <label for="organization">{{ 'citizen.organization' | translate }}*</label>
