@@ -650,6 +650,11 @@ div[role="button"] {
   }
 }
 
+.list-content {
+  padding: 0.2rem 2rem 2rem 2rem !important;
+  background-color: #008000 !important;
+}
+
 /* Estilos Finais do Menu de Ações Sanitizados */
 ::ng-deep :host .actions-menu {
   .p-menu {
@@ -801,7 +806,7 @@ div[role="button"] {
       scrollbar-color: #005c99 transparent;
 
       .filter-tag {
-        background-color: #222b45 !important;
+        background-color: #34679F !important;
         border: none !important;
         padding: 6px 14px !important;
         border-radius: 18px !important;
@@ -971,6 +976,7 @@ div[role="button"] {
   width: 100%;
   padding: 6px 0px;
   transition: top 0.3s ease-in-out;
+  margin-top: -1.5rem;
 
   @media screen and (max-width: 768px) {
     top: 0px;
