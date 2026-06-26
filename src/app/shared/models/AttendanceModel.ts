@@ -145,20 +145,7 @@ export class AttendanceModel {
     });
 
 
-    const search = JSON.parse(localStorage.getItem('filter')) ;
-
-    if (search){
-      this.nameSearch = search.name;
-      this.pageSize = search.size;
-      this.currentPage = search.page;
-      this.selectedOrderBy = search.sort;
-      this.selectedFilterBy = search.filterBy;
-      this.selectedCounty  = this.localities?.find(loc => loc.id === search.localities);
-      this.selectedParticipante = search.tipoParticipante ?? 'all';
-      this.selectedFilterByStatus = search.filterByStatus;
-      this.selectedOrganization = this.meetingSrv.organizationList()?.find(org => org.name === search.filterByOrganization)
-        ?? ( search.filterByOrganization && { name: search.filterByOrganization } as IOptionOrganization ) ;
-    }
+    // Removido o uso de localStorage para iniciar com os valores padrão pré-selecionados
 
     this.configureAuthorityValidation();
 
@@ -608,7 +595,7 @@ export class AttendanceModel {
 
     };
 
-    localStorage.setItem('filter', JSON.stringify(search));
+    // Removido salvamento em localStorage
 
     return { search };
   }

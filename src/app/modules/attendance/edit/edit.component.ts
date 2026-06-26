@@ -77,7 +77,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   filteredNames = signal<string[]>([]);
 
   tempParticipante = 'all';
-  tempFilterBy = 'pres';
+  tempFilterBy = 'all';
   tempFilterByStatus = 'all';
   tempOrganization: any = undefined;
   tempNameSearch = '';
@@ -562,7 +562,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
   filterNames(evt: any) {
     const query = evt.query;
-    console.log('filterNames query:', query);
 
     const search: any = {
       name: query,
@@ -577,10 +576,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
         ? { filterByOrganization: this.tempOrganization.name } : {},
     };
 
-    console.log('filterNames search params:', search);
-
     this.meetingSrv.getListAttendees(this.idMeeting, { search }).then(res => {
-      console.log('filterNames response:', res);
       if (res && res.content) {
         const names = res.content.map(att => att.name).filter(Boolean);
         this.filteredNames.set([...new Set(names)]);
