@@ -26,12 +26,12 @@
         font-weight: 700;
         margin: 20px;
         margin-bottom: 10px;
-        box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
         flex-direction: column;
 
         fa-icon {
-            margin-bottom: 5px;
-            margin-right: 0;
+          margin-bottom: 5px;
+          margin-right: 0;
         }
       }
     }
@@ -50,6 +50,7 @@ $textFilterColor: #666;
 
   .list-result {
     margin: 0;
+
     .result {
       display: flex;
       flex-direction: row;
@@ -57,12 +58,15 @@ $textFilterColor: #666;
       padding: 10px;
       margin: 1px 0;
       background-color: white;
+
       &:hover {
-        background-color: rgba(0,0,0,0.05);
+        background-color: rgba(0, 0, 0, 0.05);
       }
-      > div {
+
+      >div {
         padding: 0 15px;
       }
+
       .name-icon {
         display: flex;
         align-items: center;
@@ -76,6 +80,7 @@ $textFilterColor: #666;
           border-radius: 30px;
         }
       }
+
       .primary-info {
         display: flex;
         flex-direction: column;
@@ -86,6 +91,7 @@ $textFilterColor: #666;
           font-weight: 500;
           margin: 1px;
         }
+
         .contact {
           display: flex;
           flex-wrap: wrap;
@@ -95,12 +101,14 @@ $textFilterColor: #666;
           white-space: nowrap;
         }
       }
+
       .secondary-info {
         display: flex;
         flex: 1;
 
-        .authNameIcon{
+        .authNameIcon {
           display: flex;
+
           img {
             width: 20px;
           }
@@ -115,13 +123,16 @@ $textFilterColor: #666;
             margin: 1px;
             font-weight: 500;
           }
+
           .region {
             margin: 1px;
             font-size: .75rem;
             color: $grey;
           }
         }
-        .info-checkin, .info-announced {
+
+        .info-checkin,
+        .info-announced {
           display: flex;
           text-align: right;
           justify-content: flex-end;
@@ -132,6 +143,7 @@ $textFilterColor: #666;
             color: $grey;
           }
         }
+
         .info-preregister {
           display: flex;
           text-align: right;
@@ -144,46 +156,51 @@ $textFilterColor: #666;
           }
         }
       }
+
       .action {
         display: flex;
         align-items: center;
         color: $blue;
+
         fa-icon {
           cursor: pointer;
+
           &:active {
             animation: bounce 150ms;
           }
         }
+
         .disabled {
           color: $grey;
           cursor: auto;
         }
       }
 
-      @media screen and (max-width: 687px) {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 5px 0;
+      // @media screen and (max-width: 687px) {
+      //   flex-direction: column;
+      //   justify-content: center;
+      //   align-items: center;
+      //   margin: 5px 0;
 
-        > div {
-          padding: 5px 0;
-          justify-content: center;
-          align-items: center;
-        }
-        .secondary-info {
-          flex-direction: column;
-          .info-place {
-            justify-content: center;
-            align-items: center;
-          }
-          .info-checkin {
-            margin-top: 10px;
-            gap: 5%;
-          }
-        }
-      }
+      //   > div {
+      //     padding: 5px 0;
+      //     justify-content: center;
+      //     align-items: center;
+      //   }
+      //   .secondary-info {
+      //     flex-direction: column;
+      //     .info-place {
+      //       justify-content: center;
+      //       align-items: center;
+      //     }
+      //     .info-checkin {
+      //       margin-top: 10px;
+      //       gap: 5%;
+      //     }
+      //   }
+      // }
     }
+
     .result.loading {
       filter: grayscale(.8);
 
@@ -195,30 +212,37 @@ $textFilterColor: #666;
         background-color: $loadingBG;
         margin: 1px;
         border-radius: 10px;
+
         .loading {
           background-color: $loadingLineBG;
           border-radius: 10px;
           animation: growing 1s infinite;
         }
       }
+
       .info-checkin .how-long-ago {
         flex-basis: 25%;
       }
+
       @media screen and (max-width: 687px) {
         align-items: stretch;
-        > div,
+
+        >div,
         .info-place,
         .info-checkin {
           align-items: stretch !important;
         }
+
         .info-checkin {
           justify-content: center !important;
         }
+
         .loading {
           animation: growing 1.5s infinite !important;
         }
       }
     }
+
     .no-result {
       color: #888;
       font-size: 1.25rem;
@@ -228,6 +252,7 @@ $textFilterColor: #666;
       align-items: center;
     }
   }
+
   .load-more {
     overflow-anchor: none;
     display: flex;
@@ -236,6 +261,7 @@ $textFilterColor: #666;
     align-items: center;
     padding: 15px;
   }
+
   .required::after {
     content: "*";
   }
@@ -251,6 +277,7 @@ $textFilterColor: #666;
     font-weight: 500;
     font-size: 1.1rem;
   }
+
   .ui-button {
     margin-top: 30px;
     display: flex;
@@ -265,31 +292,39 @@ $textFilterColor: #666;
       max-width: 500px;
       width: 100%;
     }
+
     .ui-dropdown {
       display: flex;
       flex: 1;
       margin-bottom: 10px;
       width: 100%;
     }
+
     .ui-button .ui-button-text {
       flex: 1;
     }
-    .change-button .pi.pi-sort-alt{
+
+    .change-button .pi.pi-sort-alt {
       transform: rotate(90deg);
     }
-    p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div {
+
+    p-dropdown.ng-valid.ng-touched.ng-dirty:focus>div {
       box-shadow: none !important;
     }
-    p-dropdown.ng-valid.ng-touched.ng-dirty > div {
+
+    p-dropdown.ng-valid.ng-touched.ng-dirty>div {
       border: 1px solid #E0E0E0 !important;
     }
   }
+
   .tooltip-uncheck {
     text-transform: capitalize;
   }
+
   .ui-link.ui-widget.router-link {
     cursor: pointer;
   }
+
   .checkbox-reset {
     padding: 10px 0;
 
@@ -303,11 +338,14 @@ $textFilterColor: #666;
   from {
     width: 5%;
   }
+
   to {
     width: 100%;
   }
 }
 
 @keyframes bounce {
-  to { transform: scale(.8); }
+  to {
+    transform: scale(.8);
+  }
 }

@@ -1,19 +1,18 @@
-import {AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren} from '@angular/core';
-import {UntypedFormBuilder} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {MessageService, SelectItem} from 'primeng/api';
-import {faCheckCircle, faCircle, faIdBadge} from '@fortawesome/free-regular-svg-icons';
-import {faBullhorn, faCheck, faHourglass, faHourglassStart, faQrcode, faTimes, faUserTie, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren, HostListener } from '@angular/core';
+import { UntypedFormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { MenuItem, MessageService, SelectItem } from 'primeng/api';
+import { faCheckCircle, faCircle, faIdBadge } from '@fortawesome/free-regular-svg-icons';
+import { faBullhorn, faCheck, faEllipsisV, faHourglass, faHourglassStart, faQrcode, faSitemap, faTimes, faUserCheck, faUserTie, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
-import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
-import {Locality} from '@app/shared/models/locality';
-import {LocalityService} from '@app/shared/services/locality.service';
-import {AuthService} from '@app/shared/services/auth.service';
+import { AttendanceModel, AuthTypeEnum } from '@app/shared/models/AttendanceModel';
+import { Locality } from '@app/shared/models/locality';
+import { LocalityService } from '@app/shared/services/locality.service';
+import { AuthService } from '@app/shared/services/auth.service';
 import { IAttendee } from '@app/shared/interface/IAttendee';
 import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
-import {ParticipationService} from '@app/shared/services/participation.service';
-import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
+import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
 
 @Component({
   selector: 'app-edit',
@@ -22,7 +21,7 @@ import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
 })
 export class EditComponent extends AttendanceModel implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChildren('toAnnounceToggle', {read: ElementRef}) toAnnounceToggleElems!: QueryList<ElementRef>;
+  @ViewChildren('toAnnounceToggle', { read: ElementRef }) toAnnounceToggleElems!: QueryList<ElementRef>;
 
   iconChecked = faCheckCircle;
   iconCircle = faCircle;
@@ -30,46 +29,51 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   iconAuthority = faUserTie;
   iconTeam = faIdBadge;
   iconToAnnounce = faBullhorn;
-  iconScreening = faHourglass;
+  iconScreening = faIconScreening;
   iconAnnounced = faIconAnnounced;
   iconAllowAnnouce = faIconAllowAnnounce;
+  iconEllipsis = faEllipsisV;
+  iconOrg = faSitemap;
 
-// Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
+  menuItems: MenuItem[] = [];
+  selectedAttendeeForMenu: IAttendee;
+
+  // Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
   // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
-    {label: 'name', value: 'name'},
-    {label: 'attendance.arrival', value: 'checkedInDate'},
-    {label: 'attendance.participationType', value: 'participationType'},
-    {label: 'attendance.credentialPresence', value: 'credentialPresence'},
-    {label: 'attendance.namingStatus', value: 'namingStatus'},
-    {label: 'attendance.organization', value: 'organization'},
+    { label: 'name', value: 'name' },
+    { label: 'attendance.arrival', value: 'checkedInDate' },
+    { label: 'attendance.participationType', value: 'participationType' },
+    { label: 'attendance.credentialPresence', value: 'credentialPresence' },
+    { label: 'attendance.namingStatus', value: 'namingStatus' },
+    { label: 'attendance.organization', value: 'organization' },
   ];
   resultSearchCounty: Locality[];
 
   optionsParticipantes: SelectItem[] = [
-    {label: 'Todos', value: 'all'},
-    {label: 'Representantes', value: 'repr'},
-    {label: 'Representantes não equipe de governo', value: 'repr-not-equipe'},
-    {label: 'Representantes equipe de governo', value: 'repr-equipe'},
-    {label: 'Público', value: 'pub'}
+    { label: 'Todos', value: 'all' },
+    { label: 'Representantes', value: 'repr' },
+    { label: 'Representantes não equipe de governo', value: 'repr-not-equipe' },
+    { label: 'Representantes equipe de governo', value: 'repr-equipe' },
+    { label: 'Público', value: 'pub' }
   ];
 
   optionsFilterBy: SelectItem[] = [
-    {label: 'Presentes', value: 'pres'},
-    {label: 'Pré-credenciados', value: 'prereg'},
-    {label: 'Pré-credenciados presentes', value: 'prereg_pres'},
-    {label: 'Pré-credenciados ausentes', value: 'prereg_notpres'},
-    {label: 'Presentes não pré-credenciados', value: 'notprereg_pres'},
+    { label: 'Presentes', value: 'pres' },
+    { label: 'Pré-credenciados', value: 'prereg' },
+    { label: 'Pré-credenciados presentes', value: 'prereg_pres' },
+    { label: 'Pré-credenciados ausentes', value: 'prereg_notpres' },
+    { label: 'Presentes não pré-credenciados', value: 'notprereg_pres' },
   ];
   optionsFilterByStatus: SelectItem[] = [
     // value = [toAnnounce, announced]
-    {label: 'Todos', value: 'all'},
-    {label: 'Em Triagem', value: 'screening'},
-    {label: 'Anunciar', value: 'toAnnounce'},
-    {label: 'Anunciado', value: 'announced'}
+    { label: 'Todos', value: 'all' },
+    { label: 'Em Triagem', value: 'screening' },
+    { label: 'Anunciar', value: 'toAnnounce' },
+    { label: 'Anunciado', value: 'announced' }
   ];
 
-  filteredOrganizations = signal(this.meetingSrv.organizationList()) ;
+  filteredOrganizations = signal(this.meetingSrv.organizationList());
 
 
 
@@ -107,19 +111,122 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       }
     );
 
+    this.initializeMenu();
+  }
+
+  initializeMenu() {
+    const attendee = this.selectedAttendeeForMenu;
+
+    if (!attendee) return;
+
+    this.menuItems = [
+      {
+        label: `${attendee.locality} - ${attendee.superLocality}`,
+        icon: 'pi pi-map-marker',
+        disabled: true
+      },
+      {
+        separator: true
+      },
+      {
+        label: 'Triagem',
+        icon: 'pi pi-search',
+        visible: !attendee.toAnnounce,
+        command: () => this.toggleToAnnounce(attendee)
+      },
+      {
+        label: !attendee.toAnnounce ? 'Autorizar' : (attendee.isAnnounced ? 'Anunciado' : 'Anunciar'),
+        icon: 'custom-allow-announce',
+        command: () => this.toggleToAnnounce(attendee)
+      },
+      {
+        label: 'Pré-credenciamento',
+        icon: 'assets/layout/images/icons/preregister_phone.svg',
+        visible: !!attendee.preRegistered,
+        command: () => {
+          this.messageSrv.add({
+            severity: 'info',
+            summary: 'Pré-credenciamento',
+            detail: `Participante pré-credenciado em ${attendee.preRegisteredDate}`
+          });
+        }
+      }
+    ];
+  }
+
+  openMenu(event: Event, attendee: IAttendee, menu: any) {
+    event.stopPropagation();
+    this.selectedAttendeeForMenu = attendee;
+    this.initializeMenu();
+    menu.toggle(event);
+  }
+
+  openTriagem(attendee: IAttendee, event?: Event) {
+    if (event) { event.stopPropagation(); }
+    // Reaproveita a ação de 'Triagem' do menu
+    this.toggleToAnnounce(attendee);
+  }
+
+  openPreCredenciamento(attendee: IAttendee, event?: Event) {
+    if (event) { event.stopPropagation(); }
+    if (attendee && attendee.preRegistered) {
+      this.messageSrv.add({
+        severity: 'info',
+        summary: 'Pré-credenciamento',
+        detail: `Participante pré-credenciado em ${attendee.preRegisteredDate}`
+      });
+    }
+  }
+
+  authorizeLocality(attendee: IAttendee) {
+    this.selectAttendeeWithFilter(attendee, null, true);
+    this.messageSrv.add({
+      severity: 'info',
+      summary: 'Localidade',
+      detail: `Autorizando localidade para ${attendee.name}`
+    });
   }
 
   ngAfterViewInit() {
 
-
     this.searchByName();
+  }
+
+  override async setActionBar() {
+    await super.setActionBar();
+
+    this.actionbarSrv.setItems([
+      {
+        position: 'LEFT',
+        handle: () => this.showSelectMeeting = !this.showSelectMeeting,
+        icon: 'change.svg',
+      },
+      {
+        position: 'RIGHT',
+        handle: () => this.router.navigate(['new-authority'], { relativeTo: this.thisRoute }),
+        icon: 'user-plus-solid.svg',
+        label: `Novo`
+      },
+      {
+        position: 'RIGHT',
+        handle: () => { },
+        icon: 'user-solid.svg',
+        label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
+      },
+      {
+        position: 'RIGHT',
+        handle: () => { },
+        icon: 'preregister_phone.svg',
+        label: `${this.totalPreRegistered} Pré-credenciados`
+      }
+    ]);
   }
 
   selectAttendeeWithFilter(attendee: IAttendee, evt: MouseEvent, isEdit?: boolean): Promise<void> {
 
     if (this.toAnnounceToggleElems.some(
       (el) => el.nativeElement.contains(evt.target)
-    ) ) { return; }
+    )) { return; }
 
     this.meetingSrv.getCanEditIsTeam().then(val => val ? this.form.get('isTeam').enable() : this.form.get('isTeam').disable());
 
@@ -144,9 +251,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       role,
       toAnnounce,
       announced
-    } = this.form.value;
+    } = this.form.getRawValue();
 
-    const {success, result} = await this.save();
+    const { success, result } = await this.save();
     if (success) {
       const now = new Date();
       const timeZone = now.toString().split(' ')[5];
@@ -157,9 +264,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
         timeZone,
         isAuthority: isAuthority ?? false,
       };
-      if (isAuthority){
+      if (isAuthority) {
         params.isTeam = isTeam;
-        params.organization = (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization;
+        params.organization = (typeof (organization) === 'string' ? { name: organization } : organization) as IOptionOrganization;
         params.role = role;
         params.toAnnounce = toAnnounce;
         params.announced = announced;
@@ -177,7 +284,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
           isAuthority,
           ...(isAuthority && {
             isTeam,
-            organization: (typeof(organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
+            organization: (typeof (organization) === 'string' ? { name: organization } : organization) as IOptionOrganization,
             role,
             toAnnounce,
             isAnnounced: announced ?? false,
@@ -204,18 +311,18 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
 
 
-  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ): Promise<void> {
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false): Promise<void> {
     this.form.markAllAsTouched();
 
     attendee.checkingIn = true;
 
-    if (!fromSaveAccount){
+    if (!fromSaveAccount) {
       const { isAuthority, organization, role, isTeam } = this.form.controls;
       attendee.isAuthority = isAuthority.value;
       if (attendee.isAuthority) {
         attendee.isTeam = isTeam.value;
         attendee.organization = (typeof (organization.value) === 'string'
-          ? {name: organization.value} : organization.value) as IOptionOrganization;
+          ? { name: organization.value } : organization.value) as IOptionOrganization;
         attendee.role = role.value;
       } else {
         attendee.isTeam = null;
@@ -250,7 +357,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('attendance.successDetail.checkin', {name: result.meeting.name.toUpperCase()}),
+        detail: this.translate.instant('attendance.successDetail.checkin', { name: result.meeting.name.toUpperCase() }),
         life: 10000
       });
 
@@ -268,11 +375,11 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   }
 
   getAuthStatus(attendee: IAttendee): string {
-    if (attendee.isAuthority && !attendee.toAnnounce) {
+    if (!attendee?.toAnnounce) {
       return 'screening';
-    } else if (attendee.toAnnounce && !attendee.isAnnounced) {
+    } else if (attendee?.toAnnounce && !attendee?.isAnnounced) {
       return 'announce';
-    } else if (attendee.isAuthority && attendee.isAnnounced) {
+    } else if (attendee?.isAnnounced) {
       return 'announced';
     } else { return undefined; }
   }
@@ -288,13 +395,84 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   }
 
   getAuthLabel(attendee: IAttendee): string {
-    if (attendee.isAuthority && !attendee.toAnnounce) {
+    if (!attendee?.toAnnounce) {
       return 'Triagem';
-    } else if (attendee.toAnnounce && !attendee.isAnnounced) {
-      return 'Anunciar';
-    } else if (attendee.isAuthority && attendee.isAnnounced) {
+    } else if (attendee?.toAnnounce && !attendee?.isAnnounced) {
+      return 'Autorizar';
+    } else if (attendee?.isAnnounced) {
       return 'Anunciado';
     } else { return undefined; }
+  }
+
+  getOrganizationShortName(attendee: IAttendee): string {
+    if (!attendee || !attendee.organization) return '';
+    const org = attendee.organization;
+    const orgList = this.meetingSrv.organizationList() || [];
+
+    if (typeof org === 'object' && org.shortName?.trim()) {
+      return org.shortName;
+    }
+
+    const found = this.findOrganization(org, orgList);
+    if (found && found.shortName?.trim()) {
+      return found.shortName;
+    }
+
+    const displayName = this.getOrganizationDisplay(attendee);
+    return displayName.split(' - ')[0].trim();
+  }
+
+  getOrganizationDisplay(attendee: IAttendee): string {
+    const org = attendee?.organization;
+    if (!org) return '';
+
+    if (typeof org === 'object' && org.shortName?.trim()) {
+      return `${org.shortName} - ${org.name}`;
+    }
+    const orgList = this.meetingSrv.organizationList() || [];
+    const found = this.findOrganization(org, orgList);
+
+    if (found) {
+      return this.formatOrganizationDisplay(found);
+    }
+
+    if (typeof org === 'object') {
+      return org.shortName ? `${org.shortName} - ${org.name}` : (org.name || '');
+    }
+
+    return String(org);
+  }
+
+  private findOrganization(org: any, orgList: any[]): any | undefined {
+    const searchVal = (typeof org === 'object' ? (org.guid || org.name || '') : org)
+      .toString().trim().toLowerCase();
+
+    if (!searchVal) return undefined;
+
+    return orgList.find(o => {
+      const name = o.name?.toLowerCase().trim();
+      const short = o.shortName?.toLowerCase().trim();
+      const guid = o.guid?.toLowerCase();
+
+      return (guid === searchVal) ||
+        (name === searchVal) ||
+        (short === searchVal) ||
+        (name && searchVal.includes(name)) ||
+        (short && searchVal.includes(short) && searchVal.length < 10);
+    });
+  }
+
+  private formatOrganizationDisplay(org: { name?: string; shortName?: string }): string {
+    let displayName = org.name || '';
+    const sigla = org.shortName || '';
+
+    if (sigla && displayName.toUpperCase().endsWith(sigla.toUpperCase())) {
+      const lastIndex = displayName.toUpperCase().lastIndexOf(sigla.toUpperCase());
+      displayName = displayName.substring(0, lastIndex).trim();
+      displayName = displayName.replace(/[\/\-\s]+$/, '').trim();
+    }
+
+    return sigla ? `${sigla} - ${displayName}` : displayName;
   }
 
   async uncheckIn() {
@@ -319,16 +497,24 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   }
 
   async toggleToAnnounce(attendee: IAttendee) {
+    const {
+      toAnnounce
+    } = await this.authcSrv.toggleToAnnounce(attendee.checkInId);
+    attendee.toAnnounce = toAnnounce;
 
-      const {
-        toAnnounce
-      } = await this.authcSrv.toggleToAnnounce(attendee.checkInId);
-      attendee.toAnnounce = toAnnounce;
-      this.searchByName();
+    this.initializeMenu();
 
+    this.searchByName();
   }
 
-  handleSearchCounty({query}) {
+  executarComando(event: Event, item: any, menu: any) {
+    if (item.command) {
+      item.command({ originalEvent: event, item: item });
+    }
+    menu.hide();
+  }
+
+  handleSearchCounty({ query }) {
     // const result = await this.localitySrv.listAllByNameType(query, 1020);
     const search = this.toStandardText(query);
     this.resultSearchCounty = this.localities.filter(l => this.toStandardText(l.name).indexOf(search) !== -1);
@@ -358,7 +544,131 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
     this.filteredOrganizations.set(this.meetingSrv.organizationList()
       .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query)));
+  }
 
+  markAuthorityTouched() {
+    this.form.get('isAuthority').markAsTouched();
+    this.form.get('organization').markAsTouched();
+    this.form.get('role').markAsTouched();
+  }
+
+  async loadACRole(event: any) {
+    if (!event.checked) {
+      this.form.get('organization').patchValue(null);
+      this.form.get('role').patchValue(null);
+      this.form.get('toAnnounce').patchValue(false);
+      this.form.get('announced').patchValue(false);
+    }
+  }
+
+  isScrolled = false;
+  showFilters = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+  }
+
+  closeFilterModal() {
+    this.showFilters = false;
+  }
+
+  resetFilters() {
+    this.selectedParticipante = 'all';
+    this.selectedFilterBy = 'pres';
+    this.selectedFilterByStatus = 'all';
+    this.selectedOrganization = undefined;
+    this.nameSearch = '';
+    this.selectedCounty = undefined;
+    this.selectedOrderBy = 'namingStatus';
+    this.searchByName();
+  }
+
+  filtrar(event?: any) {
+    if (event) {
+      event.preventDefault();
+    }
+    this.searchByName();
+  }
+
+  removeFilter(key: string) {
+    if (key === 'participante') {
+      this.selectedParticipante = 'all';
+    } else if (key === 'filterBy') {
+      this.selectedFilterBy = 'pres';
+    } else if (key === 'filterByStatus') {
+      this.selectedFilterByStatus = 'all';
+    } else if (key === 'organization') {
+      this.selectedOrganization = undefined;
+    } else if (key === 'nameSearch') {
+      this.nameSearch = '';
+    } else if (key === 'county') {
+      this.selectedCounty = undefined;
+    }
+    this.searchByName();
+  }
+
+  get activeFilters(): any[] {
+    const tags: any[] = [];
+
+    if (this.selectedParticipante && this.selectedParticipante !== 'all') {
+      const found = this.optionsParticipantes.find(opt => opt.value === this.selectedParticipante);
+      if (found) {
+        tags.push({
+          key: 'participante',
+          label: 'Participante',
+          displayValue: [{ name: found.label }]
+        });
+      }
+    }
+
+    if (this.selectedFilterBy && this.selectedFilterBy !== 'pres') {
+      const found = this.optionsFilterBy.find(opt => opt.value === this.selectedFilterBy);
+      if (found) {
+        tags.push({
+          key: 'filterBy',
+          label: 'Presença',
+          displayValue: [{ name: found.label }]
+        });
+      }
+    }
+
+    if (this.selectedFilterByStatus && this.selectedFilterByStatus !== 'all') {
+      const found = this.optionsFilterByStatus.find(opt => opt.value === this.selectedFilterByStatus);
+      if (found) {
+        tags.push({
+          key: 'filterByStatus',
+          label: 'Nominata',
+          displayValue: [{ name: found.label }]
+        });
+      }
+    }
+
+    if (this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0) {
+      tags.push({
+        key: 'organization',
+        label: 'Organização',
+        displayValue: [{ name: this.selectedOrganization.name }]
+      });
+    }
+
+    if (this.nameSearch && this.nameSearch.trim().length > 0) {
+      tags.push({
+        key: 'nameSearch',
+        label: 'Busca',
+        displayValue: [{ name: this.nameSearch }]
+      });
+    }
+
+    if (this.selectedCounty) {
+      tags.push({
+        key: 'county',
+        label: 'Município',
+        displayValue: [{ name: this.selectedCounty.name }]
+      });
+    }
+
+    return tags;
   }
 
 }

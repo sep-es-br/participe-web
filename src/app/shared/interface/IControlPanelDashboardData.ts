@@ -3,6 +3,7 @@ export interface IControlPanelDashboardData {
   proposals: number;
   highlights: number;
   counties: number;
+  planItems: number;
   microregionChart?: IHorizontalBarChartItem[];
   heatMapChart?: IHeatMapLocation[];
   strategicAreaChart?: IHorizontalBarChartItem[];

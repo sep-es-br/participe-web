@@ -1,0 +1,85 @@
+<app-template>
+  <div class="edit-attendees">
+    <div class="loading-overlay" *ngIf="isLoadingNames">
+      <p-progressSpinner strokeWidth="4" animationDuration=".8s"></p-progressSpinner>
+      <span class="mt-2 text-muted fw-bold" style="font-size: 0.9rem;">Carregando agentes do órgão...</span>
+    </div>
+
+    <section id="attendee-selected">
+        <div class="col-12 col-lg-6 m-a">
+          <form
+            class="row form-edit-account"
+            [formGroup]="form"
+            (submit)="enterKey(autoComplete)"
+          >
+            <div class="col-12">
+              <label for="organization">{{ 'citizen.organization' | translate }}*</label>
+
+                <p-autoComplete
+                  (completeMethod)="filterOrganization($event)"
+                  formControlName="organization"
+                  [suggestions]="filteredOrganizations()"
+                  optionLabel="label"
+                  placeholder="Digite o órgão ou entidade"
+                  (onSelect)="loadNames($event)"
+                ></p-autoComplete>
+
+
+              <tt-input-message [form]="form" field="organization"></tt-input-message>
+            </div>
+            <div class="col-12">
+              <label class="required form-label">{{
+                  "name" | translate
+                }}</label>
+              <div class="d-flex gap-1">
+                <p-autoComplete
+                  #autoComplete
+                  formControlName="name"
+                  [suggestions]="filteredNames()"
+                  (completeMethod)="filterNames(autoComplete)"
+                  (onSelect)="applyValue($event.value, btnSalvar);"
+                  optionLabel="name"
+                  placeholder="Digite o nome do agente"
+                ></p-autoComplete>
+                <button pButton type="button" (click)="filterNames(autoComplete)"><fa-icon class="mr-0" [icon]="iconSearch" title="Procurar"></fa-icon></button>
+              </div>
+              <tt-input-message [form]="form" field="name"></tt-input-message>
+            </div>
+            <ng-container *ngIf="idPrecredential">
+              <div class="d-flex flex-column ml-5 gap-2">
+                <p-radioButton [value]="true" name="keepConfirmation" formControlName="keepConfirmation" label="Manter Confirmação" />
+                <p-radioButton [value]="false" name="keepConfirmation" formControlName="keepConfirmation" label="Retirar Confirmação" />
+              </div>
+            </ng-container>
+            <div class="col-12">
+              <label for="role">{{ 'citizen.role' | translate }}*</label>
+              <input type="text" id="role" class="form-control"
+                     readonly formControlName="role"
+              >
+              <tt-input-message [form]="form" field="role"></tt-input-message>
+            </div>
+            <div class="col-12 d-flex flex-column">
+              <div class="form-actions">
+                <button
+                  pButton
+                  icon="pi pi-check"
+                  class="me-3"
+                  type="button"
+                  (click)="saveEdit()"
+                  #btnSalvar
+                  [label]="'save' | translate"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-ban"
+                  type="button"
+                  [label]="'cancel' | translate"
+                  (click)="toggleSelectedAttendee()"
+                ></button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </section>
+  </div>
+</app-template>

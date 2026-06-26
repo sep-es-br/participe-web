@@ -5,6 +5,8 @@ import { AttendanceComponent } from './attendance.component';
 import { RegisterComponent } from './register/register.component';
 import { EditComponent } from './edit/edit.component';
 import { AuthorityListComponent } from './authority-list/authority-list.component';
+import * as path from 'path';
+import {NewAuthorityComponent} from '@app/modules/attendance/new-authority/new-authority.component';
 
 const routes: Routes = [
   {
@@ -21,7 +23,17 @@ const routes: Routes = [
       },
       {
         path: 'edit',
-        component: EditComponent
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: EditComponent
+          },
+          {
+            path: 'new-authority',
+            component: NewAuthorityComponent
+          }
+        ]
       },
       {
         path: 'authority-list',

@@ -92,8 +92,16 @@
         </div>
         <div class="col-12 col-lg-8 mt-3">
           <div class="row">
+            <div class="col-12 col-lg-8 gap-3 d-flex align-items-center">
+              <label>Buscar por:</label>
+              <p-radioButton value="text" name="tipoBusca" label="Nome" [(ngModel)]="tipoBotao" (ngModelChange)="searchField.control.patchValue('')" />
+              <p-radioButton value="number" name="tipoBusca" label="CPF" [(ngModel)]="tipoBotao" (ngModelChange)="searchField.control.patchValue('')" />
+            </div>
             <div class="col-12 col-lg-8 ">
-              <input type="text" class="form-control mt-1" pInputText (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"/>
+              <input type="text" [pKeyFilter]="tipoBotao === 'number' ? 'num' : undefined"
+                     #searchField="ngModel" class="form-control mt-1" pInputText
+                     (keydown.enter)="searchByName()" [(ngModel)]="nameSearch"
+                      [attr.inputmode]="tipoBotao === 'number' ? 'numeric' : null" />
             </div>
             <div class="col-12 col-lg-4">
               <button id="btnSearchRegister" class="xs-w-100 mt-1" pButton [disabled]="!this.idMeeting" icon="pi pi-search"

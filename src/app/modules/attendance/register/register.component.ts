@@ -23,6 +23,7 @@ import { LoadingService } from '@app/shared/services/loading.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
 import {set} from 'lodash';
+import {text} from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-register',
@@ -59,6 +60,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   hasDevices: boolean = false;
   hasPermission: boolean;
+  tipoBotao: string = 'text';
 
 
   filteredOrganizations = signal(this.meetingSrv.organizationList());

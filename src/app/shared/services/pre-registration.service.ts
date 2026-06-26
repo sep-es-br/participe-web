@@ -1,6 +1,8 @@
 import { Injectable, Inject, Injector } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import Common from '../util/Common';
+import { IPreRegistration } from '../interface/IPreRegistration';
+// import {IPreRegistration} from '@app/shared/interface/IPreRegistration';
 // import { IPreRegistration } from '../interfaces/IPreRegistration';
 
 interface IItem {
@@ -17,20 +19,24 @@ export class PreRegistrationService extends BaseService<any> {
     super('pre-registration', injector);
   }
 
-  checkIn(preRegistrationId: number,meetingId: number){
+  checkIn(preRegistrationId: number, meetingId: number) {
     const sender = {
-        preRegistrationId: preRegistrationId,
-        meetingId: meetingId
+      preRegistrationId: preRegistrationId,
+      meetingId: meetingId
     };
-    return this.http.post<any>(`${this.urlBase}/check-in`,sender,{ headers: Common.buildHeaders() }).toPromise();
+    return this.http.post<any>(`${this.urlBase}/check-in`, sender, { headers: Common.buildHeaders() }).toPromise();
   }
 
-  accreditationCheckin(personId: number,meetingId: number){
+  accreditationCheckin(personId: number, meetingId: number) {
     const sender = {
-        personId: personId,
-        meetingId: meetingId
+      personId: personId,
+      meetingId: meetingId
     };
-    return this.http.post<any>(`${this.urlBase}/accreditation-check-in`,sender,{ headers: Common.buildHeaders() }).toPromise();
+    return this.http.post<any>(`${this.urlBase}/accreditation-check-in`, sender, { headers: Common.buildHeaders() }).toPromise();
+  }
+
+  preRegistrationConfirmed(meetingId: number, personId: number) {
+    return this.http.get<IPreRegistration>(`${this.urlBase}/${meetingId}/${personId}`).toPromise();
   }
 
 }

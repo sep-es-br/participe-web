@@ -3,68 +3,40 @@
     <section id="attendee-selected">
       <ng-container *ngIf="selectedAttende; else list">
         <div class="col-12 col-lg-6 m-a">
-          <form
-            class="row form-edit-account"
-            [formGroup]="form"
-            (submit)="saveEdit()"
-          >
+          <form class="row form-edit-account" [formGroup]="form" (submit)="saveEdit()">
             <div class="col-12">
               <label class="required form-label">{{
                 "name" | translate
-              }}</label>
+                }}</label>
               <input pInputText class="form-control" formControlName="name" />
               <tt-input-message [form]="form" field="name"></tt-input-message>
             </div>
             <div class="col-12">
               <label class="required form-label">{{
                 localitySrv.getTranslatedLabelLocality(localityLabel)
-              }}</label>
-              <p-dropdown
-                [options]="optionsLocalities"
-                formControlName="locality"
-                [styleClass]="'d-flex form-control'"
-                [placeholder]="'placeholder.select' | translate"
-              ></p-dropdown>
-              <tt-input-message
-                [form]="form"
-                field="locality"
-              ></tt-input-message>
+                }}</label>
+              <p-dropdown [options]="optionsLocalities" formControlName="locality" [styleClass]="'d-flex form-control'"
+                [placeholder]="'placeholder.select' | translate"></p-dropdown>
+              <tt-input-message [form]="form" field="locality"></tt-input-message>
             </div>
             <div class="col-12">
               <label>{{ "attendance.authentication" | translate }}</label>
               <div class="auth-type">
                 <!-- <img *ngIf="form.get('resetPassword').value && !citizenHasNativeAuth"
                      src="/assets/layout/images/icons/participe.svg" title="Participe" alt=""/> -->
-                <img
-                  *ngFor="let auth of authName"
-                  [src]="authSrv.getAuthenticationIcon(auth)"
-                  [title]="auth"
-                  [alt]="auth"
-                />
+                <img *ngFor="let auth of authName" [src]="authSrv.getAuthenticationIcon(auth)" [title]="auth"
+                  [alt]="auth" />
               </div>
             </div>
             <div class="col-12">
-              <label
-                [class.required]="form.get('authType').value === 'E-Mail'"
-                >{{ "citizen.mail" | translate }}</label
-              >
-              <input
-                pInputText
-                readonly
-                class="form-control"
-                formControlName="email"
-              />
+              <label [class.required]="form.get('authType').value === 'E-Mail'">{{ "citizen.mail" | translate }}</label>
+              <input pInputText readonly class="form-control" formControlName="email" />
               <tt-input-message [form]="form" field="email"></tt-input-message>
             </div>
             <div class="col-12">
               <label>{{ "citizen.phone" | translate }}</label>
-              <p-inputMask
-                mask="(99) 99999-9999"
-                placeholder="(00) 00000-0000"
-                unmask="true"
-                formControlName="phone"
-                [styleClass]="'form-control'"
-              ></p-inputMask>
+              <p-inputMask mask="(99) 99999-9999" placeholder="(00) 00000-0000" unmask="true" formControlName="phone"
+                [styleClass]="'form-control'"></p-inputMask>
               <tt-input-message [form]="form" field="phone"></tt-input-message>
             </div>
             <div class="col-12">
@@ -73,7 +45,7 @@
             </div>
             <div class="col-12">
               <label class="d-block mb-2">{{ 'citizen.representative' | translate }}</label>
-              <p-inputSwitch formControlName="isAuthority"  (mousedown)="markAuthorityTouched()"
+              <p-inputSwitch formControlName="isAuthority" (mousedown)="markAuthorityTouched()"
                 (onChange)="loadACRole($event)" [disabled]="form.get('isTeam').value"></p-inputSwitch>
             </div>
             <ng-container *ngIf="form.get('isAuthority').value">
@@ -83,13 +55,9 @@
               </div>
               <div class="col-12">
                 <label for="organization">{{ 'citizen.organization' | translate }}*</label>
-                <p-autoComplete
-                  formControlName="organization"
-                  [suggestions]="filteredOrganizations()"
-                  optionLabel="name"
-                  placeholder="Digite o órgão ou entidade"
-                  (completeMethod)="filterOrganization($event)"
-                ></p-autoComplete>
+                <p-autoComplete formControlName="organization" [suggestions]="filteredOrganizations()"
+                  optionLabel="name" placeholder="Digite o órgão ou entidade"
+                  (completeMethod)="filterOrganization($event)"></p-autoComplete>
                 <tt-input-message [form]="form" field="organization"></tt-input-message>
               </div>
 
@@ -109,22 +77,12 @@
             </ng-container>
             <div class="col-12 d-flex flex-column">
               <div class="form-actions">
-                <button
-                  pButton
-                  icon="pi pi-check"
-                  class="me-3"
-                  type="submit"
-                  [label]="'save' | translate"
-                ></button>
-                <button
-                  pButton
-                  icon="pi pi-ban"
-                  type="button"
-                  [label]="'cancel' | translate"
-                  (click)="toggleSelectedAttendee()"
-                ></button>
+                <button pButton icon="pi pi-check" class="me-3" type="submit" [label]="'save' | translate"></button>
+                <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
+                  (click)="toggleSelectedAttendee()"></button>
               </div>
-              <span class="aviso h-100" *ngIf="form.get('isTeam').value">Equipe de governo, encaminhar ao local apropriado.</span>
+              <span class="aviso h-100" *ngIf="form.get('isTeam').value">Equipe de governo, encaminhar ao local
+                apropriado.</span>
             </div>
           </form>
         </div>
@@ -133,44 +91,31 @@
 
     <ng-template #list>
       <section id="attendee-filter-row">
-        <div class="row gap-2">
+        <div class="row gap-2 mx-0">
           <div class="col-12 col-lg-2 p-0 d-flex flex-column">
             <label for="optsOrderBy">Ordenar por:</label>
-            <p-dropdown
-                id="optsOrderBy"
-                [options]="optionsOrderBy"
-                [(ngModel)]="selectedOrderBy"
-                [styleClass]="''"
-                (onChange)="searchByName()"
-              >
-                <ng-template let-option pTemplate="selectedItem">
-                  {{
-                    (option.label | translate)
-                  }}
-                </ng-template>
-                <ng-template let-option pTemplate="item">
-                  {{ option.label | translate }}
-                </ng-template>
-              </p-dropdown>
-            </div>
-            <div class="col-12 col-lg-2 p-0">
-              <label for="optsParticipantes">{{ 'attendance.participationType' | translate }}:</label>
-              <p-dropdown
-                id="optsParticipantes"
-                [options]="optionsParticipantes"
-                (onChange)="searchByName()"
-                [(ngModel)]="selectedParticipante"
-              >
-              </p-dropdown>
-            </div>
+            <p-dropdown id="optsOrderBy" [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" [styleClass]="''"
+              (onChange)="searchByName()">
+              <ng-template let-option pTemplate="selectedItem">
+                {{
+                (option.label | translate)
+                }}
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label | translate }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-lg-2 p-0">
+            <label for="optsParticipantes">{{ 'attendance.participationType' | translate }}:</label>
+            <p-dropdown id="optsParticipantes" [options]="optionsParticipantes" (onChange)="searchByName()"
+              [(ngModel)]="selectedParticipante">
+            </p-dropdown>
+          </div>
           <div class="col-12 col-lg-2 p-0">
             <label for="optTeam">{{ 'attendance.credentialPresence' | translate }}:</label>
-            <p-dropdown
-              id="optTeam"
-              [options]="optionsFilterBy"
-              [(ngModel)]="selectedFilterBy"
-              (onChange)="searchByName()"
-            >
+            <p-dropdown id="optTeam" [options]="optionsFilterBy" [(ngModel)]="selectedFilterBy"
+              (onChange)="searchByName()">
               <ng-template let-option pTemplate="selectedItem">
                 <span>{{ option.label }}</span>
               </ng-template>
@@ -179,177 +124,156 @@
               </ng-template>
             </p-dropdown>
           </div>
-            <div class="col-12 col-lg-2 p-0">
-              <label for="optStatus">{{ 'attendance.namingStatus' | translate }}:</label>
-              <p-dropdown
-                id="optStatus"
-                [options]="optionsFilterByStatus"
-                [(ngModel)]="selectedFilterByStatus"
-                (onChange)="searchByName()"
-              >
-                <ng-template let-option pTemplate="selectedItem">
-                  <span>{{ option.label }}</span>
-                </ng-template>
-                <ng-template let-option pTemplate="item">
-                  {{ option.label }}
-                </ng-template>
-              </p-dropdown>
-            </div>
-              <div class="col-12 col-lg p-0">
-                <label for="optOrganization">{{ 'attendance.organization' | translate }}:</label>
-                <p-autoComplete
-                  class="d-flex"
-                  optionLabel="name"
-                  [suggestions]="filteredOrganizations()"
-                  [(ngModel)]="selectedOrganization"
-                  (completeMethod)="filterOrganization($event);"
-                  (onSelect)="onOrganizationSelected($event)"></p-autoComplete>
+          <div class="col-12 col-lg-2 p-0">
+            <label for="optStatus">{{ 'attendance.namingStatus' | translate }}:</label>
+            <p-dropdown id="optStatus" [options]="optionsFilterByStatus" [(ngModel)]="selectedFilterByStatus"
+              (onChange)="searchByName()">
+              <ng-template let-option pTemplate="selectedItem">
+                <span>{{ option.label }}</span>
+              </ng-template>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-12 col-lg p-0">
+            <label for="optOrganization">{{ 'attendance.organization' | translate }}:</label>
+            <p-autoComplete class="d-flex" optionLabel="name" [suggestions]="filteredOrganizations()"
+              [(ngModel)]="selectedOrganization" (completeMethod)="filterOrganization($event);"
+              (onSelect)="onOrganizationSelected($event)"></p-autoComplete>
 
-              </div>
-              <div class="col-12 col-lg p-0">
-                <label for="search-name">Busca:</label>
-                <div class="search">
-                  <div class="input-group mb-3">
-                    <input
-                      type="text"
-                      class="d-flex form-control"
-                      id="search-name"
-                      pInputText
-                      [(ngModel)]="nameSearch"
-                      (keydown.enter)="searchByName()"
-                    />
-                    <label
-                      class="input-group-text cursor-pointer"
-                      (click)="searchByName()"
-                      for="search-name"
-                    >
-                      <i class="ps-1 fa fa-search"></i>
-                      <!-- <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> -->
-                    </label>
-                  </div>
-                </div>
+          </div>
+          <div class="col-12 col-lg p-0">
+            <label for="search-name">Busca:</label>
+            <div class="search">
+              <div class="input-group mb-3">
+                <input type="text" class="d-flex form-control" id="search-name" pInputText [(ngModel)]="nameSearch"
+                  (keydown.enter)="searchByName()" />
+                <label class="input-group-text cursor-pointer" (click)="searchByName()" for="search-name">
+                  <i class="ps-1 fa fa-search"></i>
+                  <!-- <button pButton icon="pi pi-search" class="for" (click)="searchByName()"></button> -->
+                </label>
               </div>
             </div>
+          </div>
+        </div>
 
       </section>
 
       <section id="attendee-list">
-        <div class="p-grid list-result">
-          <div class="col-12" *ngIf="noResult">
-            <div class="no-result">{{ "attendance.noResult" | translate }}</div>
+        <div class="list-result list-container">
+          <div class="w-100" *ngIf="noResult">
+            <div class="no-result text-center p-3">{{ "attendance.noResult" | translate }}</div>
           </div>
-          <div class="col-12 flex-wrap result" *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
-            <div class="primary-info-icon row align-items-lg-center gap-lg-3 col-12 col-lg-4">
-              <div class="name-icon col-12 col-lg-auto justify-content-center pr-0 justify-content-lg-start">
-                <div *ngIf="!attendee.isAuthority"
-                  class="letter-icon"
-                  [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }"
-                >
+
+          <div class="row w-100 m-0 result premium-list-item align-items-center p-1"
+            *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
+
+            <div class="col-7 col-sm-6   col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
+              <div class="attendee-avatar">
+                <div *ngIf="!attendee.isAuthority" class="letter-icon"
+                  [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }">
                   {{ attendee.name ? attendee.name[0].toUpperCase() : "A" }}
                 </div>
                 <ng-container *ngIf="attendee.isAuthority">
-                    <fa-icon *ngIf="!attendee.isTeam; else iconTeam" title="{{('attendance.authority') | translate}}"
-                           [ngStyle]="{color: 'black'}"
-                           [icon]="iconAuthority"
-                           aria-label="icone Autoridade" size="2x"></fa-icon>
+                  <fa-icon *ngIf="!attendee.isTeam; else iconTeam" [ngStyle]="{color: '#34495e'}" [icon]="iconAuthority"
+                    class="authority-icon"></fa-icon>
                   <ng-template #iconTeam>
-                    <img src="assets/layout/images/icons/EquipeGov.svg"  [ngStyle]="{height: '64px'}" >
+                    <img src="assets/layout/images/icons/EquipeGov.svg" class="team-icon">
                   </ng-template>
                 </ng-container>
-
-
               </div>
-              <div class="primary-info text-center text-lg-start col-12 col-lg pl-0" style="min-width: 200px;">
-                <div class="name">{{ attendee.name }}</div>
-                <div class="contact col-12 col-lg p-0 justify-content-center justify-content-lg-start">
-                  <span>{{ attendee.email }}</span>
-                  <span *ngIf="attendee.telephone">{{
-                    " - " + attendee.telephone
-                  }}</span>
+              <div class="attendee-info min-w-0">
+                <div class="fw-bold text-uppercase text-truncate name-attendee" [pTooltip]="attendee.name"
+                  tooltipPosition="top">{{ attendee.name }}</div>
+                <div class="text-uppercase text-truncate role-attendee" *ngIf="attendee.isAuthority"
+                  style="color: #607d8b;" [pTooltip]="attendee.role" tooltipPosition="top">
+                  {{ attendee.role }}
                 </div>
               </div>
             </div>
-            <div class="secondary-info d-flex flex-row flex-wrap flex-lg-nowrap align-items-center col-12 col-lg-9">
-              <div class="info-place col-12 col-lg-3 text-center text-lg-start">
-                <div class="locality">{{ attendee.locality }}</div>
-                <div class="region">{{ attendee.superLocality }}</div>
-              </div>
-              <div class="authorityInfo-wrapper flex-wrap flex-lg-nowrap col-12 col-lg-6 d-flex align-items-center">
-                <ng-container *ngIf="attendee.isAuthority">
 
-                  <div class="authorityInfo col-lg-7  col-12 col-lg">
-                    <div class="role text-center text-lg-start">{{attendee.role}}</div>
-                    <div class="organization text-center text-lg-start">{{attendee.organization}}</div>
-                  </div>
-                  <div class="d-flex col-6 col-lg p-0 flex-column align-items-center justify-content-center" [ngClass]="'auth-' + getAuthStatus(attendee)">
-                    <fa-icon class=""
-                      [icon]="getAuthIcon(attendee)"
-                    ></fa-icon>
-                    <span [ngClass]="'auth-' + getAuthStatus(attendee) + ' rem075'">{{getAuthLabel(attendee)}}</span>
-                  </div>
-                  <div class="allow-announce-wrapper col-6 col-lg p-0 align-items-center">
-                    <ng-container *ngIf="!attendee.toAnnounce">
-                        <div role="button" class="d-flex flex-column align-items-center justify-content-center" (click)="toggleToAnnounce(attendee)"
-                          #toAnnounceToggle>
-                          <fa-icon class="m-0"
-                            [icon]="iconAllowAnnouce"
-                          ></fa-icon>
-                          <span class="rem075">{{ 'attendance.allow' | translate }}</span>
-                        </div>
-                    </ng-container>
+            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 ">
+              <ng-container *ngIf="attendee.isAuthority">
+                <div class="organization-name fw-bold text-uppercase text-truncate w-100"
+                  [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">
+                  <span class="d-lg-none ">{{ getOrganizationShortName(attendee) }}</span>
+                  <span class="d-none d-lg-block">{{ getOrganizationDisplay(attendee) }}</span>
+                </div>
+              </ng-container>
+            </div>
+
+            <div
+              class="col-3 d-flex align-items-center justify-content-end pe-md-3 gap-2 gap-md-4 text-center position-relative">
+
+              <div class="allow-announce-wrapper align-items-center">
+                <!-- tiragem -->
+                <ng-container *ngIf="attendee.isAuthority && !attendee.toAnnounce && !attendee.isAnnounced">
+                  <div class="action-item">
+                    <fa-icon [icon]="iconScreening" class="action-icon" style="color: #607d8b;"></fa-icon>
+                    <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Triagem</span>
                   </div>
                 </ng-container>
-              </div>
 
-              <div class="info-preregister flex-column-reverse col col-lg  justify-content-center">
-                <ng-container *ngIf="attendee.preRegistered">
-                  <div
-                    class="how-long-ago rem075"
-                    [pTooltip]="attendee.preRegisteredDate"
-                  >
-                    {{ getHowLongAgo(attendee.preRegisteredDate) }}
-                  </div>
-                  <div class="preregister-icon action">
-                    <img
-                      src="assets/layout/images/icons/preregister_phone.svg"
-                      class="img-fluid"
-                      alt=""
-                    />
+
+                <!-- Anunciado -->
+                <ng-container *ngIf="attendee.isAuthority && attendee.toAnnounce && attendee.isAnnounced">
+                  <div class="action-item">
+                    <fa-icon [icon]="iconAnnounced" class="action-icon" style="color: #F58634;"></fa-icon>
+                    <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Anunciado</span>
                   </div>
                 </ng-container>
+
+                <!-- Anunciar -->
+                <ng-container *ngIf="attendee.isAuthority && attendee.toAnnounce && !attendee.isAnnounced">
+                  <div class="action-item">
+                    <fa-icon [icon]="iconAllowAnnouce" class="action-icon" style="color: #F58634;"></fa-icon>
+                    <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Anunciar</span>
+                  </div>
+                </ng-container>
+
+
+
+                <ng-container *ngIf="!attendee.isAuthority">
+                  <div class="action-item" hidden>
+                  </div>
+                </ng-container>
+
               </div>
-              <div class="info-checkin mt-0 flex-column-reverse col-5 col-lg-3 justify-content-end">
-                <div class="how-long-ago rem075" [pTooltip]="attendee.checkedInDate">
+              <!-- <div class="action-item" (click)="$event.stopPropagation(); openTriagem(attendee, $event)"
+                pTooltip="Triagem" tooltipPosition="top">
+                <fa-icon [icon]="iconScreening" class="action-icon" style="color: #607d8b;"></fa-icon>
+                <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block"
+                  style="font-size: 0.7rem;">Triagem</span>
+              </div> -->
+              <div class="action-item" (click)="$event.stopPropagation(); openPreCredenciamento(attendee, $event)"
+                [pTooltip]="'Pré-credenciamento: ' + (attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente')"
+                tooltipPosition="top">
+                <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
+                <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
+                  {{ attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente' }}
+                </span>
+              </div>
+              <div class="checkin-status text-center"
+                [pTooltip]="'Presença: ' + (attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente')"
+                tooltipPosition="top">
+                <fa-icon [icon]="attendee.checkedIn ? iconChecked : iconCircle" class="icone-icon-circle action-icon"
+                  [ngClass]="{ 'status-present': attendee.checkedIn, 'status-absent': !attendee.checkedIn }"></fa-icon>
+                <div class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
-                <div class="action">
-                  <div role="button" class="d-flex flex-column align-items-center justify-content-center">
-                    <fa-icon
-                      class="m-0" [ngStyle]="{fontSize: 'x-large'}"
-                      [icon]="attendee.checkedIn ? iconChecked : iconCircle"
-                      tooltipPosition="left"
-                      [pTooltip]="getToolTipText(attendee)"
-                      tooltipStyleClass="tooltip-uncheck"
-                    ></fa-icon>
-                  </div>
-                </div>
               </div>
+
             </div>
+
           </div>
+
           <ng-container *ngIf="isSearching">
             <ng-container
-              *ngTemplateOutlet="
-                loadingList;
-                context: { $implicit: getListOfLettersForLoading() }
-              "
-            ></ng-container>
+              *ngTemplateOutlet="loadingList; context: { $implicit: getListOfLettersForLoading() }"></ng-container>
           </ng-container>
-          <div *ngIf="!lastPage" class="load-more">
-            <button
-              pButton
-              [label]="'attendance.loadMore' | translate"
-              (click)="loadNextPageEdit()"
-            ></button>
+          <div *ngIf="!lastPage" class="load-more text-center mt-3">
+            <button pButton [label]="'attendance.loadMore' | translate" (click)="loadNextPageEdit()"></button>
           </div>
         </div>
       </section>
@@ -358,7 +282,7 @@
 </app-template>
 
 <ng-template #loadingList let-letters>
-  <div class="col-12 result loading" *ngFor="let letter of letters">
+  <div class="col-12 result loading premium-list-item" *ngFor="let letter of letters">
     <div class="name-icon">
       <div class="letter-icon">{{ letter }}</div>
     </div>
@@ -391,16 +315,20 @@
   </div>
 </ng-template>
 
-<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false" [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
+<p-dialog class="modal-change-meeting" modal="true" [draggable]="false" [resizable]="false"
+  [(visible)]="showSelectMeeting" (onHide)="callbackHideModal()">
   <div class="label">{{ "administration.conference" | translate }}</div>
-  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [styleClass]="'d-flex form-control'" [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
+  <p-dropdown [options]="optionsConference" (onChange)="handleChangeConference()" [styleClass]="'d-flex form-control'"
+    [(ngModel)]="selectedConference" optionLabel="name"></p-dropdown>
   <div class="label">{{ "meeting" | translate }}</div>
   <div class="form-group">
-    <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'" [styleClass]="'d-flex w-100 form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
+    <p-dropdown [options]="optionsMeeting" appendTo="body" [ngClass]="'d-flex w-100'"
+      [styleClass]="'d-flex w-100 form-control'" [(ngModel)]="selectedMeeting" optionLabel="name"></p-dropdown>
   </div>
   <div class="col-12 col-lg-6 col-lg-3 m-auto">
     <div class="d-grid gap-2 mt-3">
-      <button pButton class="btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt" (click)="setCurrentMeeting()"></button>
+      <button pButton class="btn btn-primary" [autofocus]="false" [label]="'change' | translate" icon="pi pi-sort-alt"
+        (click)="setCurrentMeeting()"></button>
     </div>
   </div>
 </p-dialog>

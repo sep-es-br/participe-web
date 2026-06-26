@@ -633,7 +633,8 @@
 	"roles": {
 		"Administrator": "Administrador",
 		"Moderator": "Moderador",
-		"Recepcionist": "Recepcionista"
+		"Recepcionist": "Recepcionista",
+    "Support": "Apoio"
 	},
 	"rowPerPage": "Linhas por página",
 	"save": "Salvar",
