@@ -23,9 +23,9 @@ import { LocalityService } from '../services/locality.service';
 import * as moment from 'moment';
 import { concat } from 'lodash';
 import { PersonService } from '../services/person.service';
-import {ParticipationService} from '@app/shared/services/participation.service';
-import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ParticipationService } from '@app/shared/services/participation.service';
+import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -180,7 +180,7 @@ export class AttendanceModel {
   }
 
   toggleNewAccount(attendee?: IAttendee) {
-    this.selectedAttende  = attendee ?? {} as IAttendee;
+    this.selectedAttende = attendee ?? {} as IAttendee;
   }
 
   configureAuthorityValidation(): void {
@@ -201,14 +201,14 @@ export class AttendanceModel {
     });
   }
 
-  async selectAttendee(attendee: IAttendee , isEdit: boolean = false) {
-    if (!attendee.personId){
+  async selectAttendee(attendee: IAttendee, isEdit: boolean = false) {
+    if (!attendee.personId) {
       this.toggleNewAccount(attendee);
-    }else{
+    } else {
       const {
         name, locality, authType, email, phone, isAuthority, organization, role,
         toAnnounce, announced, isTeam, isPresent
-       } = this.form.controls;
+      } = this.form.controls;
       try {
         this.selectedAttende = attendee;
         const {
@@ -249,13 +249,13 @@ export class AttendanceModel {
 
         }
       } catch (error) {
-      this.messageSrv.add({
-        severity: 'warn',
-        summary: this.translate.instant('error'),
-        detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
-      });
-      this.toggleSelectedAttendee();
-     }
+        this.messageSrv.add({
+          severity: 'warn',
+          summary: this.translate.instant('error'),
+          detail: this.translate.instant('attendance.error.couldNotGetCitizenInfo'),
+        });
+        this.toggleSelectedAttendee();
+      }
     }
   }
 
@@ -356,7 +356,7 @@ export class AttendanceModel {
       const result = await this.meetingSrv.getListPerson(this.idMeeting, this.getQueryListAttendees(true));
       this.lastPage = result.last;
       this.listAttendees = this.listAttendees.concat(result.content);
-    } catch (error){
+    } catch (error) {
       this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
@@ -424,10 +424,10 @@ export class AttendanceModel {
   }
 
   handleChangeConference(item?: IConferenceWithMeetings) {
-    if (!item){
+    if (!item) {
       this.openListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'open');
       this.closedListMeetings = this.getRunningMeeting(this.selectedConference.meeting, 'closed');
-    }else{
+    } else {
       this.openListMeetings = this.getRunningMeeting(item.meeting, 'open');
       this.closedListMeetings = this.getRunningMeeting(item.meeting, 'closed');
       this.selectedConference = item;
@@ -501,13 +501,13 @@ export class AttendanceModel {
     this.actionbarSrv.setItems([
       {
         position: 'RIGHT',
-        handle: () => {},
+        handle: () => { },
         icon: 'user-solid.svg',
         label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
       },
       {
         position: 'RIGHT',
-        handle: () => {},
+        handle: () => { },
         icon: 'preregister_phone.svg',
         label: `${this.totalPreRegistered} Pré-credenciados`
       }
@@ -578,8 +578,8 @@ export class AttendanceModel {
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
 
     this.nameSearch = this.nameSearch
-                          ?.split('.').join('')
-                          .split('-').join('');
+      ?.split('.').join('')
+      .split('-').join('');
 
     const search = {
       name: this.nameSearch,
@@ -656,9 +656,10 @@ export class AttendanceModel {
           this.form.get('role').setValue(acRole.role);
           this.form.get('organization').setValue(acRole.organization);
         }
-      }} catch (error) {
-        console.error('Erro ao buscar o AC Role:', error);
       }
+    } catch (error) {
+      console.error('Erro ao buscar o AC Role:', error);
+    }
 
   }
 
