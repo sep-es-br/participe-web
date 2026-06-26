@@ -800,6 +800,8 @@ div[role="button"] {
       overflow-x: auto !important;
       flex-wrap: nowrap !important;
       white-space: nowrap;
+      padding-bottom: 0.5rem;
+
       gap: 8px;
       // padding: 6px 0;
       scrollbar-width: thin;
@@ -974,9 +976,9 @@ div[role="button"] {
   top: 0px;
   z-index: 1000;
   width: 100%;
-  padding: 6px 0px;
+  padding: 6px 0px 6px 0px;
   transition: top 0.3s ease-in-out;
-  margin-top: -1.5rem;
+  margin-top: -0.5rem;
 
   @media screen and (max-width: 768px) {
     top: 0px;
