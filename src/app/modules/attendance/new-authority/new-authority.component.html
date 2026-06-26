@@ -10,7 +10,7 @@
           <form
             class="row form-edit-account"
             [formGroup]="form"
-            (submit)="enterKey(autoComplete)"
+            (submit)="filterNames(autoComplete)"
           >
             <div class="col-12">
               <label for="organization">{{ 'citizen.organization' | translate }}*</label>
@@ -22,6 +22,7 @@
                   optionLabel="label"
                   placeholder="Digite o órgão ou entidade"
                   (onSelect)="loadNames($event)"
+                  (keydown.enter)="filterNames(autoComplete)"
                 ></p-autoComplete>
 
 
@@ -67,6 +68,7 @@
                   type="button"
                   (click)="saveEdit()"
                   #btnSalvar
+
                   [label]="'save' | translate"
                 ></button>
                 <button
