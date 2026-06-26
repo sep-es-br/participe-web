@@ -419,30 +419,41 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     } else { return undefined; }
   }
 
+  private isValidShortName(shortName: string | undefined): boolean {
+    if (!shortName) return false;
+    const trimmed = shortName.trim();
+    if (!trimmed || trimmed === '-' || trimmed === '--' || trimmed === '.') return false;
+    return true;
+  }
+
   getOrganizationShortName(attendee: IAttendee): string {
     if (!attendee || !attendee.organization) return '';
     const org = attendee.organization;
     const orgList = this.meetingSrv.organizationList() || [];
 
-    if (typeof org === 'object' && org.shortName?.trim()) {
-      return org.shortName;
+    if (typeof org === 'object' && this.isValidShortName(org.shortName)) {
+      return org.shortName.trim();
     }
 
     const found = this.findOrganization(org, orgList);
-    if (found && found.shortName?.trim()) {
-      return found.shortName;
+    if (found && this.isValidShortName(found.shortName)) {
+      return found.shortName.trim();
     }
 
     const displayName = this.getOrganizationDisplay(attendee);
-    return displayName.split(' - ')[0].trim();
+    let shortName = displayName.split(' - ')[0].trim();
+    if (shortName.startsWith('-')) {
+      shortName = shortName.substring(1).trim();
+    }
+    return shortName;
   }
 
   getOrganizationDisplay(attendee: IAttendee): string {
     const org = attendee?.organization;
     if (!org) return '';
 
-    if (typeof org === 'object' && org.shortName?.trim()) {
-      return `${org.shortName} - ${org.name}`;
+    if (typeof org === 'object' && this.isValidShortName(org.shortName)) {
+      return `${org.shortName.trim()} - ${org.name}`;
     }
     const orgList = this.meetingSrv.organizationList() || [];
     const found = this.findOrganization(org, orgList);
@@ -452,10 +463,15 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     }
 
     if (typeof org === 'object') {
-      return org.shortName ? `${org.shortName} - ${org.name}` : (org.name || '');
+      const sigla = org.shortName?.trim() || '';
+      return this.isValidShortName(sigla) ? `${sigla} - ${org.name}` : (org.name || '');
     }
 
-    return String(org);
+    let display = String(org).trim();
+    if (display.startsWith('-')) {
+      display = display.substring(1).trim();
+    }
+    return display;
   }
 
   private findOrganization(org: any, orgList: any[]): any | undefined {
@@ -478,16 +494,16 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   }
 
   private formatOrganizationDisplay(org: { name?: string; shortName?: string }): string {
-    let displayName = org.name || '';
-    const sigla = org.shortName || '';
+    let displayName = org.name?.trim() || '';
+    const sigla = org.shortName?.trim() || '';
 
-    if (sigla && displayName.toUpperCase().endsWith(sigla.toUpperCase())) {
+    if (this.isValidShortName(sigla) && displayName.toUpperCase().endsWith(sigla.toUpperCase())) {
       const lastIndex = displayName.toUpperCase().lastIndexOf(sigla.toUpperCase());
       displayName = displayName.substring(0, lastIndex).trim();
       displayName = displayName.replace(/[\/\-\s]+$/, '').trim();
     }
 
-    return sigla ? `${sigla} - ${displayName}` : displayName;
+    return this.isValidShortName(sigla) ? `${sigla} - ${displayName}` : displayName;
   }
 
   async uncheckIn() {
