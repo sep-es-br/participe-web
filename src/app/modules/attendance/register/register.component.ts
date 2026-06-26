@@ -60,7 +60,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   hasDevices: boolean = false;
   hasPermission: boolean;
-  tipoBotao: string = 'text';
+  tipoBotao: string = 'number';
 
 
   filteredOrganizations = signal(this.meetingSrv.organizationList());
