@@ -328,7 +328,7 @@ div[role="button"] {
 
 
 
-::ng-deep {
+:host ::ng-deep {
 
   p-dropdown {
     max-width: 100% !important;

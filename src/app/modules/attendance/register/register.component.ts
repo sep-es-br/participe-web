@@ -124,7 +124,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   }
 
-  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false ) {
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false, skipSaveAccount = false ) {
     this.form.markAllAsTouched();
 
     attendee.checkingIn = true;
@@ -144,11 +144,14 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
 
-    const saved = await this.saveAccount();
-    if (!saved) {
-      attendee.checkingIn = false;
-      return;
+    if (!skipSaveAccount){
+      const saved = await this.saveAccount();
+      if (!saved) {
+        attendee.checkingIn = false;
+        return;
+      }
     }
+
 
     const now = new Date();
     const timeZone = now.toString().split(' ')[5];
@@ -194,7 +197,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     attendee.checkingIn = false;
   }
 
-  async saveAccount() {
+  async saveAccount(skipSaveAccount: boolean = false) {
 
     if (this.form.invalid){
       this.messageSrv.add({
@@ -227,7 +230,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
             role
           })
         };
-        await this.checkIn(newAttendee, true);
+        await this.checkIn(newAttendee, true, !skipSaveAccount);
         this.toggleNewAccount();
       } else {
         this.messageSrv.add({
