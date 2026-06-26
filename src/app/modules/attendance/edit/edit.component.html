@@ -112,7 +112,7 @@
                   [class.is-sticky]="isScrolled">
                   <div class="filter-tag-inner" [ngClass]="{ 'invisible-tag': showFilters }">
                     <div class="d-flex flex-column align-items-start text-start">
-                      <span class="tag-label">{{ tag.label }}</span>
+                      <!-- <span class="tag-label">{{ tag.label }}</span> -->
                       <span class="tag-value">
                         <ng-container *ngFor="let valueDisplay of tag.displayValue; let index = index">
                           <ng-container *ngIf="valueDisplay.name?.length <= 20; else spanWithTooltip">
@@ -164,6 +164,20 @@
                 <div class="modal-body">
                   <form class="w-100">
                     <div class="row g-3 w-100 m-0">
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3 ">
+                        <span class="mb-1 fw-bold text-muted title-filter">Ordenar por:</span>
+                        <p-dropdown [options]="optionsOrderBy" name="odernar" [(ngModel)]="selectedOrderBy"
+                          (onChange)="searchByName()">
+                          <ng-template let-option pTemplate="selectedItem">
+                            {{ option.label | translate }}
+                          </ng-template>
+                          <ng-template let-option pTemplate="item">
+                            {{ option.label | translate }}
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
+
+
                       <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted title-filter">Tipo de Participante</span>
                         <p-dropdown [options]="optionsParticipantes" [(ngModel)]="tempParticipante" name="participante"
@@ -224,20 +238,6 @@
               </div>
             </div>
           </div>
-
-          <div class="filter-entity d-flex flex-column col-12 col-sm-4 col-md-4 col-lg-2 p-0 pb-1">
-            <span class="mb-1 fw-bold text-muted">Ordenar por:</span>
-            <p-dropdown id="optsOrderBy" [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy"
-              (onChange)="searchByName()">
-              <ng-template let-option pTemplate="selectedItem">
-                {{ option.label | translate }}
-              </ng-template>
-              <ng-template let-option pTemplate="item">
-                {{ option.label | translate }}
-              </ng-template>
-            </p-dropdown>
-          </div>
-
         </div>
       </section>
 
