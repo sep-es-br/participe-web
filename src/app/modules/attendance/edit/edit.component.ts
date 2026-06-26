@@ -457,8 +457,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       return (guid === searchVal) ||
         (name === searchVal) ||
         (short === searchVal) ||
-        (name && searchVal.includes(name)) ||
-        (short && searchVal.includes(short) && searchVal.length < 10);
+        (name && name.includes(searchVal)) ||
+        (short && short.includes(searchVal) && searchVal.length < 10);
     });
   }
 
