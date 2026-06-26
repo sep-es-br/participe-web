@@ -18,7 +18,7 @@ $inputSwitchSliderPadding: .25rem;
 
   width: 1rem !important;
   height: 1rem !important;
-  left:0rem !important;
+  left: 0rem !important;
   margin-top: -0.5rem !important;
 }
 
@@ -32,30 +32,30 @@ button:focus {
 }
 
 input.ng-invalid.ng-touched,
-p-dropdown.ng-invalid.ng-touched > div,
-p-multiSelect.ng-invalid.ng-touched > div,
-p-autoComplete.ng-invalid.ng-touched > span > input {
+p-dropdown.ng-invalid.ng-touched>div,
+p-multiSelect.ng-invalid.ng-touched>div,
+p-autoComplete.ng-invalid.ng-touched>span>input {
   border: 1.3px solid #f44336 !important;
 }
 
 input.ng-invalid.ng-touched:focus,
-p-dropdown.ng-invalid.ng-touched:focus > div,
-p-multiSelect.ng-invalid.ng-touched:focus > div,
-p-autoComplete.ng-invalid.ng-touched:focus > span > input {
+p-dropdown.ng-invalid.ng-touched:focus>div,
+p-multiSelect.ng-invalid.ng-touched:focus>div,
+p-autoComplete.ng-invalid.ng-touched:focus>span>input {
   box-shadow: 0 1px 0 0 #f47f6a !important;
 }
 
 input.ng-valid.ng-touched.ng-dirty,
-p-dropdown.ng-valid.ng-touched.ng-dirty > div,
-p-multiSelect.ng-valid.ng-touched.ng-dirty > div,
-p-autoComplete.ng-valid.ng-touched.ng-dirty > span > input {
+p-dropdown.ng-valid.ng-touched.ng-dirty>div,
+p-multiSelect.ng-valid.ng-touched.ng-dirty>div,
+p-autoComplete.ng-valid.ng-touched.ng-dirty>span>input {
   border: 1.3px solid #549c3d !important;
 }
 
 input.ng-valid.ng-touched.ng-dirty:focus,
-p-dropdown.ng-valid.ng-touched.ng-dirty:focus > div,
-p-multiSelect.ng-valid.ng-touched.ng-dirty:focus > div,
-p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
+p-dropdown.ng-valid.ng-touched.ng-dirty:focus>div,
+p-multiSelect.ng-valid.ng-touched.ng-dirty:focus>div,
+p-autoComplete.ng-valid.ng-touched.ng-dirty:focus>span>input {
   box-shadow: 0 1px 0 0 #6d9c5f !important;
 }
 
@@ -65,9 +65,11 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
 
 .tree-column table {
   border-bottom: 1px solid #e0e0e0 !important;
-  th:last-child{
+
+  th:last-child {
     width: 20% !important;
   }
+
   td {
     border: 0 !important;
     border-left: 1px solid #e0e0e0 !important;
@@ -77,9 +79,11 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
 
 .data-column table {
   border-bottom: 1px solid #e0e0e0 !important;
-  th:last-child{
+
+  th:last-child {
     width: 20% !important;
   }
+
   td {
     border: 0 !important;
     border-left: 1px solid #e0e0e0 !important;
@@ -91,12 +95,15 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
   padding-top: 10px;
   padding-bottom: 0;
   margin-left: -6px;
+
   .p-lg-6 {
     display: flex;
     cursor: pointer;
+
     &.selected {
       font-weight: 700;
     }
+
     img {
       max-width: 20px;
       max-height: 20px;
@@ -104,8 +111,8 @@ p-autoComplete.ng-valid.ng-touched.ng-dirty:focus > span > input {
     }
   }
 }
-.p-accordion-tab-active
-a.p-accordion-header-link{
+
+.p-accordion-tab-active a.p-accordion-header-link {
   color: #e0e0e0 !important;
 }
 
@@ -121,7 +128,8 @@ a.p-accordion-header-link{
 .form-group {
   display: flex;
   flex-direction: column;
-  > label {
+
+  >label {
     padding-bottom: 5px;
   }
 }
@@ -147,7 +155,8 @@ div.search {
     align-items: center;
     justify-content: flex-end;
     margin-left: 15px;
-    > * {
+
+    >* {
       margin: 3px;
     }
 
@@ -190,21 +199,26 @@ div.search {
 .conferences-item-select-modal {
   padding: 5px 2px;
   cursor: pointer;
+
   &:hover {
     background: #f2f2f2;
   }
+
   h4 {
     font-size: 1rem;
     margin-block-start: 0;
     margin-block-end: 0;
   }
+
   .date-container {
     display: flex;
     justify-content: space-between;
     margin-top: 5px;
+
     .date {
       display: flex;
       align-items: center;
+
       i {
         font-size: 1.3rem;
         color: #ef8533;
@@ -219,20 +233,22 @@ section.pagesize-section {
   align-items: center;
   padding-top: 5px;
   justify-content: flex-end;
+
   label:first-child {
     margin-right: 10px;
   }
 }
+
 :root {
 
-  --background: rgba(21,57,97,1);
-  --accent-color:#00a198;
+  --background: rgba(21, 57, 97, 1);
+  --accent-color: #00a198;
   --font-color: white;
-  --card-font-color:black;
-  --card-font-color-hover:white;
-  --card-color:white;
-  --card-color-hover:#00a198;
-  --card-border-color:white;
+  --card-font-color: black;
+  --card-font-color-hover: white;
+  --card-color: white;
+  --card-color-hover: #00a198;
+  --card-border-color: white;
   --border-color: white;
   --card-login-color: white;
 
@@ -241,12 +257,13 @@ section.pagesize-section {
 .loading-overlay {
   width: 100%;
   height: 5px;
-  background-color: rgba(0,0,0,.3);
+  background-color: rgba(0, 0, 0, .3);
   z-index: 99999;
   position: fixed;
   top: 0;
   display: flex;
   color: white;
+
   .loader {
     max-width: 100%;
     height: 5px;
@@ -261,23 +278,24 @@ section.pagesize-section {
   }
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
-span.icon{
+span.icon {
   margin-right: 0.6rem;
 }
-.dropdown-item:hover{
+
+.dropdown-item:hover {
   color: #fff !important;
   background-color: #1976D2 !important;
 }
 
-.bg-light{
-  background-color: var(--bs-body-color) ;
+.bg-light {
+  background-color: var(--bs-body-color);
 }
 
-.g-10{
+.g-10 {
   gap: 10px;
 }
 
@@ -291,33 +309,35 @@ span.icon{
 }
 
 ::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(5deg, rgba(55,150,188,1) 0%, rgba(48,38,119,1) 100%);
+  background-image: linear-gradient(5deg, rgba(55, 150, 188, 1) 0%, rgba(48, 38, 119, 1) 100%);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-image: linear-gradient(5deg, rgba(75,202,252,1) 0%, rgba(68,90,183,1) 100%);
+  background-image: linear-gradient(5deg, rgba(75, 202, 252, 1) 0%, rgba(68, 90, 183, 1) 100%);
 }
 
-.btn-orange{
+.btn-orange {
   background-color: #f59a23;
   color: #fff;
 }
-.btn-orange:hover{
+
+.btn-orange:hover {
   background-color: #fd7e14;
   color: #fff;
 }
-.btn-orange:focus-visible{
+
+.btn-orange:focus-visible {
   background-color: #fd7e14;
 }
 
 
-@media screen and (max-width: 786px){
+@media screen and (max-width: 786px) {
   .xs-w-100 {
     width: 100%;
   }
 }
 
-.text-justify{
+.text-justify {
   text-align: justify !important;
 }
 
@@ -325,66 +345,107 @@ span.icon{
 .p-multiselect-items,
 .p-autocomplete-items,
 .p-element.p-dropdown-label.p-placeholder,
-.p-tieredmenu-root-list{
+.p-tieredmenu-root-list {
   padding: 0;
 }
 
-ul.p-autocomplete-multiple-container{
+ul.p-autocomplete-multiple-container {
   padding: 0 !important;
 }
 
-.p-dialog{
+.p-dialog {
   width: 60% !important;
   max-height: 95% !important;
   z-index: 1000 !important;
   overflow: auto !important;
-  .p-dialog-content{
+
+  .p-dialog-content {
     overflow: unset !important;
   }
 
 }
 
-@media screen and (max-width: 768px){
-  .p-dialog{
+@media screen and (max-width: 768px) {
+  .p-dialog {
     width: 95% !important;
   }
 
 }
 
-.p-dialog-content{
+.p-dialog-content {
   overflow: unset !important;
 }
 
-.img-icon{
+.img-icon {
   width: 25px;
   height: 25px;
 }
 
-.btn-icon{
+.btn-icon {
   padding: 0.5rem 0.75rem;
-  img{
+
+  img {
     width: 21px;
     height: 21px;
   }
-  i{
+
+  i {
     font-size: 20px;
   }
 }
 
-.p-column-title{
+.p-column-title {
   font-weight: 700;
   display: none;
 }
 
-@media screen and (max-width: 640px){
-  .p-column-title{
+@media screen and (max-width: 640px) {
+  .p-column-title {
     display: block;
   }
 
 }
+
 p-autocomplete,
-p-autocomplete > .p-autocomplete,
+p-autocomplete>.p-autocomplete,
 p-autocomplete .p-autocomplete-input {
   width: 100% !important;
   display: block !important;
+}
+
+.p-overlay-container {
+  position: fixed !important;
+  z-index: 99999999 !important;
+}
+
+.p-dropdown-panel,
+.p-autocomplete-panel,
+.p-dropdown-items-wrapper,
+.ui-dropdown-panel,
+.ui-autocomplete-panel,
+.front-of-modal {
+  z-index: 99999999 !important;
+}
+
+.p-dropdown-items-wrapper {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+.modal-backdrop {
+  z-index: 1030 !important;
+}
+
+.p-dropdown-panel,
+.p-autocomplete-panel {
+  min-width: 100% !important;
+  max-width: 90vw !important;
+}
+
+.p-dropdown-item,
+.p-autocomplete-item {
+  white-space: normal !important; // Permite que o texto quebre linhas
+  word-break: break-word !important; // Quebra a palavra se for gigante
+  line-height: 1.4 !important; // Dá um espaçamento bacana entre as linhas do mesmo item
+  padding: 10px 12px !important; // Melhora a área de clique no mobile
 }
