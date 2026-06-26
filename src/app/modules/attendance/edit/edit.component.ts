@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren, HostListener } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MenuItem, MessageService, SelectItem } from 'primeng/api';
+import { MenuItem, MessageService, SelectItem, PrimeNGConfig } from 'primeng/api';
 import { faCheckCircle, faCircle, faIdBadge } from '@fortawesome/free-regular-svg-icons';
 import { faBullhorn, faCheck, faEllipsisV, faHourglass, faHourglassStart, faQrcode, faSitemap, faTimes, faUserCheck, faUserTie, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
@@ -75,6 +75,14 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   ];
 
   filteredOrganizations = signal(this.meetingSrv.organizationList());
+  filteredNames = signal<string[]>([]);
+
+  tempParticipante = 'all';
+  tempFilterBy = 'pres';
+  tempFilterByStatus = 'all';
+  tempOrganization: any = undefined;
+  tempNameSearch = '';
+  tempCounty: any = undefined;
 
 
 
@@ -87,12 +95,19 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     protected formBuilder: UntypedFormBuilder,
     public authSrv: AuthService,
     @Inject(Injector) injector: Injector,
-    private authcSrv: AuthorityCredentialService
+    private authcSrv: AuthorityCredentialService,
+    private primengConfig: PrimeNGConfig
   ) {
     super(injector, true);
   }
 
   ngOnInit(): void {
+    this.primengConfig.zIndex = {
+      modal: 1100,
+      overlay: 99999999,
+      menu: 1000,
+      tooltip: 1100
+    };
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
 
@@ -536,8 +551,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   }
 
   onOrganizationSelected(event: any) {
-    this.selectedOrganization = event.value;
-    this.searchByName();
+    this.tempOrganization = event.value;
   }
 
   filterOrganization(evt: any) {
@@ -545,6 +559,39 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
     this.filteredOrganizations.set(this.meetingSrv.organizationList()
       .filter(org => org.name.toLowerCase().includes(query) || org.shortName.toLowerCase().includes(query)));
+  }
+
+  filterNames(evt: any) {
+    const query = evt.query;
+    console.log('filterNames query:', query);
+    
+    const search: any = {
+      name: query,
+      size: 10,
+      page: 0,
+      sort: this.selectedOrderBy || 'namingStatus',
+      filterBy: this.tempFilterBy || 'pres',
+      ...this.tempCounty ? { localities: this.tempCounty.id } : {},
+      ...this.tempParticipante !== 'all' ? { tipoParticipante: this.tempParticipante } : {},
+      ...this.tempFilterByStatus ? { filterByStatus: this.tempFilterByStatus } : {},
+      ...(this.tempOrganization && this.tempOrganization.name?.trim().length > 0)
+        ? { filterByOrganization: this.tempOrganization.name } : {},
+    };
+
+    console.log('filterNames search params:', search);
+
+    this.meetingSrv.getListAttendees(this.idMeeting, { search }).then(res => {
+      console.log('filterNames response:', res);
+      if (res && res.content) {
+        const names = res.content.map(att => att.name).filter(Boolean);
+        this.filteredNames.set([...new Set(names)]);
+      } else {
+        this.filteredNames.set([]);
+      }
+    }).catch(err => {
+      console.error('filterNames error:', err);
+      this.filteredNames.set([]);
+    });
   }
 
   markAuthorityTouched() {
@@ -574,6 +621,16 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.showFilters = false;
   }
 
+  openFilterModal() {
+    this.showFilters = true;
+    this.tempParticipante = this.selectedParticipante;
+    this.tempFilterBy = this.selectedFilterBy;
+    this.tempFilterByStatus = this.selectedFilterByStatus;
+    this.tempOrganization = this.selectedOrganization;
+    this.tempNameSearch = this.nameSearch;
+    this.tempCounty = this.selectedCounty;
+  }
+
   resetFilters() {
     this.selectedParticipante = 'all';
     this.selectedFilterBy = 'pres';
@@ -582,6 +639,14 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.nameSearch = '';
     this.selectedCounty = undefined;
     this.selectedOrderBy = 'namingStatus';
+
+    this.tempParticipante = 'all';
+    this.tempFilterBy = 'pres';
+    this.tempFilterByStatus = 'all';
+    this.tempOrganization = undefined;
+    this.tempNameSearch = '';
+    this.tempCounty = undefined;
+
     this.searchByName();
   }
 
@@ -589,22 +654,35 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     if (event) {
       event.preventDefault();
     }
+    this.selectedParticipante = this.tempParticipante;
+    this.selectedFilterBy = this.tempFilterBy;
+    this.selectedFilterByStatus = this.tempFilterByStatus;
+    this.selectedOrganization = this.tempOrganization;
+    this.nameSearch = this.tempNameSearch;
+    this.selectedCounty = this.tempCounty;
+
     this.searchByName();
   }
 
   removeFilter(key: string) {
     if (key === 'participante') {
       this.selectedParticipante = 'all';
+      this.tempParticipante = 'all';
     } else if (key === 'filterBy') {
       this.selectedFilterBy = 'pres';
+      this.tempFilterBy = 'pres';
     } else if (key === 'filterByStatus') {
       this.selectedFilterByStatus = 'all';
+      this.tempFilterByStatus = 'all';
     } else if (key === 'organization') {
       this.selectedOrganization = undefined;
+      this.tempOrganization = undefined;
     } else if (key === 'nameSearch') {
       this.nameSearch = '';
+      this.tempNameSearch = '';
     } else if (key === 'county') {
       this.selectedCounty = undefined;
+      this.tempCounty = undefined;
     }
     this.searchByName();
   }

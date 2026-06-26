@@ -1,5 +1,7 @@
 @import '../attendance.component.scss';
 
+
+
 .rem075 {
   font-size: 0.75rem;
 }
@@ -253,6 +255,7 @@
 
 }
 
+
 div[role="button"] {
   cursor: pointer;
 }
@@ -308,7 +311,7 @@ div[role="button"] {
 
 
 
-::ng-deep {
+:host ::ng-deep {
 
   p-dropdown {
     max-width: 100% !important;
@@ -322,7 +325,7 @@ div[role="button"] {
   }
 
 
-  p-autocomplete {
+  .form-edit-account p-autocomplete {
     p-overlay {
       >.p-overlay {
         min-width: unset !important;
@@ -336,6 +339,23 @@ div[role="button"] {
         }
       }
     }
+  }
+
+  .p-dropdown-panel,
+  .p-autocomplete-panel,
+  .p-dropdown-items-wrapper,
+  .ui-dropdown-panel,
+  .ui-autocomplete-panel {
+    z-index: 99999999 !important;
+  }
+
+  .p-dropdown-items-wrapper {
+    max-height: 300px !important;
+    overflow-y: auto !important;
+  }
+
+  .hide-loader .p-autocomplete-loader {
+    display: none !important;
   }
 }
 
@@ -678,6 +698,15 @@ div[role="button"] {
   }
 }
 
+.filter-tag.is-sticky {
+  background-color: rgba(21, 26, 48, 0.85) !important;
+  border: 1px solid rgb(255, 255, 255) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 2px 3px 10px lightgray;
+}
+
+
 .action-item,
 .checkin-status {
   // width: 40px;
@@ -750,56 +779,69 @@ div[role="button"] {
     padding: 0px !important;
 
     .filter-tags {
-      display: flex;
+      display: flex !important;
       flex: 1;
       min-width: 0;
-      overflow-x: auto;
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
       white-space: nowrap;
       gap: 8px;
       // padding: 6px 0;
       scrollbar-width: thin;
       scrollbar-color: #005c99 transparent;
-      // flex-wrap: wrap;
 
       .filter-tag {
-        background-color: #222b45;
-        // border: 1px solid #ced4da;
-        color: white;
-        padding: 0px 10px;
-        border-radius: 15px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        font-size: 9px;
-        white-space: nowrap;
-        border: 1px solid #ced4da;
+        background-color: #222b45 !important;
+        border: none !important;
+        padding: 6px 14px !important;
+        border-radius: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        color: white !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
 
-        @media screen and (max-width: 576px) {
-          padding: 2px 12px;
-          font-size: 9px;
+        .filter-tag-inner {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
         }
 
         .tag-label {
-          font-weight: normal;
+          color: #8f9bb3 !important;
+          font-size: 10px !important;
+          font-weight: 400 !important;
+          line-height: 1.2 !important;
+          text-transform: capitalize !important;
         }
 
         .tag-value {
-          margin-top: -6px;
+          color: #ffffff !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          line-height: 1.3 !important;
+          margin-top: 2px !important;
         }
 
         button {
-          background: none;
-          border: none;
-          font-weight: bold;
-          margin-left: 4px;
-          font-size: 17px;
-          cursor: pointer;
-          color: #005c99;
+          background: none !important;
+          border: none !important;
+          font-weight: 700 !important;
+          margin-left: 6px !important;
+          font-size: 14px !important;
+          cursor: pointer !important;
+          color: #8f9bb3 !important;
+          line-height: 1 !important;
+          padding: 0 !important;
+          text-decoration: none !important;
+          box-shadow: none !important;
+          align-self: center !important;
 
-          transition: color 0.35s ease;
+          transition: color 0.2s ease !important;
 
           &:hover {
-            color: #dc3545;
+            color: #ef4444 !important;
           }
         }
       }
@@ -846,16 +888,29 @@ div[role="button"] {
   }
 
   .modal {
+    z-index: 1040 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
     .modal-dialog {
       max-width: 70vw;
-      justify-self: center;
+      margin: 1.75rem auto;
+      overflow: visible !important;
+
+      @media screen and (max-width: 768px) {
+        max-width: 95vw;
+        margin: 0.5rem auto;
+      }
 
       .modal-content {
-        width: 70vw;
+        width: 100%;
         // background-color: var(--card-background-color);
         color: var(--card-text-color);
+        overflow: visible !important;
 
         .modal-body {
+          overflow: visible !important;
+
           .close-filter-button {
             color: var(--card-text-color);
           }
@@ -895,17 +950,55 @@ div[role="button"] {
   }
 }
 
+#attendee-filter-row {
+  display: contents;
+}
+
 .filter-wrapper {
   position: sticky;
-  flex-wrap: wrap;
   top: 84px;
   z-index: 1000;
   width: 100%;
-  background-color: transparent;
-  padding: 6px 6px;
+  padding: 6px 0px;
   transition: top 0.3s ease-in-out;
 
   @media screen and (max-width: 768px) {
-    top: 90px; // Header + tags no mobile
+    top: 0px;
   }
+}
+
+.filter-tag.is-sticky {
+  background-color: rgba(21, 26, 48, 0.85) !important;
+  border: 1px solid rgb(255, 255, 255) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 2px 3px 10px lightgray;
+  color: white !important;
+}
+
+.filter-button-box.is-sticky .filter-toggle {
+  background-color: rgba(21, 26, 48, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 2px 3px 10px lightgray;
+  color: white !important;
+}
+
+.filter-button.is-sticky {
+  background: rgba(10, 15, 30, 0.85);
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 2px 3px 10px lightgray;
+  color: white !important;
+}
+
+
+.title-filter {
+  font-size: 0.79rem;
+}
+
+.button-modal-filter {
+  border-radius: 8px;
 }
