@@ -591,8 +591,8 @@ export class AttendanceModel {
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
 
     this.nameSearch = this.nameSearch
-                          ?.replace('.', '')
-                          ?.replace('-', '');
+                          ?.split('.').join('')
+                          .split('-').join('');
 
     const search = {
       name: this.nameSearch,
