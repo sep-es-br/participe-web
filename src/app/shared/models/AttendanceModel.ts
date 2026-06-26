@@ -595,12 +595,6 @@ export class AttendanceModel {
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
 
-    const formatoCpf = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-
-    if (formatoCpf.test(this.nameSearch)) {
-      this.nameSearch = this.nameSearch.replace(/\D/g, '');
-    }
-
     const search = {
       name: this.nameSearch,
       size: this.pageSize,
