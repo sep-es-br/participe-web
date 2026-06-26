@@ -71,7 +71,7 @@ export class AttendanceModel {
 
   selectedAttende: IAttendee;
   selectedOrderBy = 'namingStatus';
-  selectedFilterBy = 'pres';
+  selectedFilterBy = 'prereg';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;
   selectedParticipante = 'all';

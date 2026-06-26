@@ -10,9 +10,9 @@ import { ComponentsModule } from '@app/shared/components/components.module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { AuthorityListComponent } from './authority-list/authority-list.component';
-import { NewAuthorityComponent } from '@app/modules/attendance/new-authority/new-authority.component';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { NewAuthorityComponent } from './new-authority/new-authority.component';
 
 @NgModule({
   declarations: [
