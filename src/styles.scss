@@ -354,10 +354,10 @@ ul.p-autocomplete-multiple-container {
 }
 
 .p-dialog {
-  width: 60% !important;
+  // width: 60% !important;
   max-height: 95% !important;
   z-index: 1000 !important;
-  overflow: auto !important;
+  // overflow: auto !important;
 
   .p-dialog-content {
     overflow: unset !important;

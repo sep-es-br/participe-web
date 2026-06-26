@@ -726,7 +726,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       }
     }
 
-    if (this.selectedFilterBy && this.selectedFilterBy !== 'pres') {
+    if (this.selectedFilterBy) {
       const found = this.optionsFilterBy.find(opt => opt.value === this.selectedFilterBy);
       if (found) {
         tags.push({
