@@ -167,14 +167,14 @@
                 <div class="modal-body">
                   <form class="w-100">
                     <div class="row g-3 w-100 m-0">
-                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Tipo de Participante</span>
                         <p-dropdown [options]="optionsParticipantes" [(ngModel)]="selectedParticipante"
                           name="participante" [style]="{'width': '100%'}">
                         </p-dropdown>
                       </div>
 
-                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Credenciamento e
                           Presença</span>
                         <p-dropdown [options]="optionsFilterBy" [(ngModel)]="selectedFilterBy" name="filterBy"
@@ -182,21 +182,21 @@
                         </p-dropdown>
                       </div>
 
-                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Situação da nominata</span>
                         <p-dropdown [options]="optionsFilterByStatus" [(ngModel)]="selectedFilterByStatus"
                           name="filterByStatus" [style]="{'width': '100%'}">
                         </p-dropdown>
                       </div>
-
-                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                      <!-- 
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Município / Localidade</span>
                         <p-dropdown [options]="localities" optionLabel="name" [(ngModel)]="selectedCounty" name="county"
                           placeholder="Selecionar" [style]="{'width': '100%'}">
                         </p-dropdown>
-                      </div>
+                      </div> -->
 
-                      <div class="filter-entity d-flex flex-column col-12 col-md-6">
+                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Órgão / Organização</span>
                         <p-autoComplete optionLabel="name" [suggestions]="filteredOrganizations()"
                           [(ngModel)]="selectedOrganization" (completeMethod)="filterOrganization($event);"
@@ -230,10 +230,10 @@
             </div>
           </div>
 
-          <div class="filter-entity d-flex flex-column col-12 col-md-6">
-            <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Ordenar por</span>
-            <p-dropdown [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" name="orderBy"
-              [style]="{'width': '100%'}">
+          <div class="filter-entity d-flex flex-column col-2 p-0 pb-1">
+            <span class="mb-1 fw-bold text-muted" style="font-size: 0.85rem;">Ordenar por:</span>
+            <p-dropdown id="optsOrderBy" [options]="optionsOrderBy" [(ngModel)]="selectedOrderBy" [styleClass]="''"
+              (onChange)="searchByName()" [style]="{'width': '100%'}">
               <ng-template let-option pTemplate="selectedItem">
                 {{ option.label | translate }}
               </ng-template>
@@ -255,7 +255,7 @@
           <div class="row w-100 m-0 result premium-list-item align-items-center p-1"
             *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
 
-            <div class="col-7 col-sm-6   col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
+            <div class="col-7 col-sm-6 col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
               <div class="attendee-avatar">
                 <div *ngIf="!attendee.isAuthority" class="letter-icon"
                   [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }">

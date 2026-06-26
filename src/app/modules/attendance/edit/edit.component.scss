@@ -762,9 +762,9 @@ div[role="button"] {
       // flex-wrap: wrap;
 
       .filter-tag {
-        background-color: var(--card-background-color);
+        background-color: #222b45;
         // border: 1px solid #ced4da;
-        color: var(--card-text-color);
+        color: white;
         padding: 0px 10px;
         border-radius: 15px;
         font-weight: bold;
@@ -852,7 +852,7 @@ div[role="button"] {
 
       .modal-content {
         width: 70vw;
-        background-color: var(--card-background-color);
+        // background-color: var(--card-background-color);
         color: var(--card-text-color);
 
         .modal-body {
