@@ -248,7 +248,7 @@
           </div>
 
           <div class="row w-100 m-0 result premium-list-item align-items-center p-1"
-            *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
+            *ngFor="let attendee of listAttendees">
 
             <div class="col-7 col-sm-6 col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
               <div class="attendee-avatar">
@@ -274,7 +274,8 @@
               </div>
             </div>
 
-            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 ">
+            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 "
+              (click)="selectAttendeeWithFilter(attendee, $event, true)">
               <ng-container *ngIf="attendee.isAuthority">
                 <div class="organization-name fw-bold text-uppercase text-truncate w-100"
                   [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">
@@ -287,17 +288,51 @@
             <div
               class="col-3 d-flex align-items-center justify-content-end pe-md-3 gap-2 gap-md-4 text-center position-relative">
 
-              <div class="action-item" (click)="$event.stopPropagation(); openTriagem(attendee, $event)"
+              <div class="allow-announce-wrapper align-items-center">
+                <!-- tiragem -->
+                <ng-container *ngIf="attendee.isAuthority && !attendee.toAnnounce && !attendee.isAnnounced">
+                  <div class="action-item">
+                    <fa-icon [icon]="iconScreening" class="action-icon" style="color: #607d8b;"></fa-icon>
+                    <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Triagem</span>
+                  </div>
+                </ng-container>
+
+
+                <!-- Anunciado -->
+                <ng-container *ngIf="attendee.isAuthority && attendee.toAnnounce && attendee.isAnnounced">
+                  <div class="action-item">
+                    <fa-icon [icon]="iconAnnounced" class="action-icon" style="color: #F58634;"></fa-icon>
+                    <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Anunciado</span>
+                  </div>
+                </ng-container>
+
+                <!-- Anunciar -->
+                <ng-container *ngIf="attendee.isAuthority && attendee.toAnnounce && !attendee.isAnnounced">
+                  <div class="action-item">
+                    <fa-icon [icon]="iconAllowAnnouce" class="action-icon" style="color: #F58634;"></fa-icon>
+                    <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Anunciar</span>
+                  </div>
+                </ng-container>
+
+
+
+                <ng-container *ngIf="!attendee.isAuthority">
+                  <div class="action-item" hidden>
+                  </div>
+                </ng-container>
+
+              </div>
+              <!-- <div class="action-item" (click)="$event.stopPropagation(); openTriagem(attendee, $event)"
                 pTooltip="Triagem" tooltipPosition="top">
                 <fa-icon [icon]="iconScreening" class="action-icon" style="color: #607d8b;"></fa-icon>
                 <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block"
                   style="font-size: 0.7rem;">Triagem</span>
-              </div>
-              <div class="action-item" (click)="$event.stopPropagation(); openPreCredenciamento(attendee, $event)"
-                [pTooltip]="'Pré-credenciamento: ' + (attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente')"
+              </div> -->
+              <div class="action-item"
+                [pTooltip]="attendee.preRegistered ? 'Participante pré-credenciado em ' + attendee.preRegisteredDate : 'Pré-credenciamento: Ausente'"
                 tooltipPosition="top">
                 <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
-                <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block" style="font-size: 0.7rem;">
+                <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
                   {{ attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente' }}
                 </span>
               </div>
@@ -306,7 +341,7 @@
                 tooltipPosition="top">
                 <fa-icon [icon]="attendee.checkedIn ? iconChecked : iconCircle" class="icone-icon-circle action-icon"
                   [ngClass]="{ 'status-present': attendee.checkedIn, 'status-absent': !attendee.checkedIn }"></fa-icon>
-                <div class="rem075 text-muted text-truncate mt-1 d-none d-md-block" style="font-size: 0.7rem;">
+                <div class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
                   {{ attendee.checkedIn ? getHowLongAgo(attendee.checkedInDate) : 'Ausente' }}
                 </div>
               </div>

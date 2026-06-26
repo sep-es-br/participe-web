@@ -60,7 +60,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   hasDevices: boolean = false;
   hasPermission: boolean;
-  tipoBotao: string = 'text';
+  tipoBotao: string = 'number';
 
 
   filteredOrganizations = signal(this.meetingSrv.organizationList());
@@ -144,12 +144,10 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
 
-    if (this.form.dirty) {
-      const saved = await this.saveAccount();
-      if (!saved) {
-        attendee.checkingIn = false;
-        return;
-      }
+    const saved = await this.saveAccount();
+    if (!saved) {
+      attendee.checkingIn = false;
+      return;
     }
 
     const now = new Date();

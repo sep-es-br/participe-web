@@ -1,11 +1,16 @@
 <app-template>
   <div class="edit-attendees">
+    <div class="loading-overlay" *ngIf="isLoadingNames">
+      <p-progressSpinner strokeWidth="4" animationDuration=".8s"></p-progressSpinner>
+      <span class="mt-2 text-muted fw-bold" style="font-size: 0.9rem;">Carregando agentes do órgão...</span>
+    </div>
+
     <section id="attendee-selected">
         <div class="col-12 col-lg-6 m-a">
           <form
             class="row form-edit-account"
             [formGroup]="form"
-            (submit)="saveEdit()"
+            (submit)="filterNames(autoComplete)"
           >
             <div class="col-12">
               <label for="organization">{{ 'citizen.organization' | translate }}*</label>
@@ -14,9 +19,10 @@
                   (completeMethod)="filterOrganization($event)"
                   formControlName="organization"
                   [suggestions]="filteredOrganizations()"
-                  optionLabel="name"
+                  optionLabel="label"
                   placeholder="Digite o órgão ou entidade"
                   (onSelect)="loadNames($event)"
+                  (keydown.enter)="filterNames(autoComplete)"
                 ></p-autoComplete>
 
 
@@ -31,8 +37,8 @@
                   #autoComplete
                   formControlName="name"
                   [suggestions]="filteredNames()"
-                  (completeMethod)="onTyping()"
-                  (onSelect)="applyValue($event.value)"
+                  (completeMethod)="filterNames(autoComplete)"
+                  (onSelect)="applyValue($event.value, btnSalvar);"
                   optionLabel="name"
                   placeholder="Digite o nome do agente"
                 ></p-autoComplete>
@@ -48,7 +54,9 @@
             </ng-container>
             <div class="col-12">
               <label for="role">{{ 'citizen.role' | translate }}*</label>
-              <input type="text" id="role" class="form-control" readonly [value]="selectedName ? (selectedName.role + ' - ' + selectedName.lotacao) : ''">
+              <input type="text" id="role" class="form-control"
+                     readonly formControlName="role"
+              >
               <tt-input-message [form]="form" field="role"></tt-input-message>
             </div>
             <div class="col-12 d-flex flex-column">
@@ -57,7 +65,10 @@
                   pButton
                   icon="pi pi-check"
                   class="me-3"
-                  type="submit"
+                  type="button"
+                  (click)="saveEdit()"
+                  #btnSalvar
+
                   [label]="'save' | translate"
                 ></button>
                 <button

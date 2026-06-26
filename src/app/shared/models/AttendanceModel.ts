@@ -513,11 +513,6 @@ export class AttendanceModel {
 
     this.actionbarSrv.setItems([
       {
-        position: 'LEFT',
-        handle: () => this.showSelectMeeting = !this.showSelectMeeting,
-        icon: 'change.svg',
-      },
-      {
         position: 'RIGHT',
         handle: () => {},
         icon: 'user-solid.svg',
@@ -594,6 +589,10 @@ export class AttendanceModel {
   }
 
   getQueryListAttendees(nextPage?: boolean): IQueryOptions {
+
+    this.nameSearch = this.nameSearch
+                          ?.split('.').join('')
+                          .split('-').join('');
 
     const search = {
       name: this.nameSearch,

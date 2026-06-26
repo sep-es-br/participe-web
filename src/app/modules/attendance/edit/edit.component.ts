@@ -12,7 +12,6 @@ import { AuthService } from '@app/shared/services/auth.service';
 import { IAttendee } from '@app/shared/interface/IAttendee';
 import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
-import { ParticipationService } from '@app/shared/services/participation.service';
 import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
 
 @Component({
@@ -473,8 +472,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       return (guid === searchVal) ||
         (name === searchVal) ||
         (short === searchVal) ||
-        (name && searchVal.includes(name)) ||
-        (short && searchVal.includes(short) && searchVal.length < 10);
+        (name && name.includes(searchVal)) ||
+        (short && short.includes(searchVal) && searchVal.length < 10);
     });
   }
 
@@ -564,7 +563,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   filterNames(evt: any) {
     const query = evt.query;
     console.log('filterNames query:', query);
-    
+
     const search: any = {
       name: query,
       size: 10,
