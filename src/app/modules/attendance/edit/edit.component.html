@@ -167,9 +167,10 @@
           </div>
 
           <div class="row w-100 m-0 result premium-list-item align-items-center p-1"
-            *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
+            *ngFor="let attendee of listAttendees">
 
-            <div class="col-7 col-sm-6   col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
+            <div class="col-7 col-sm-6   col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1"
+              (click)="selectAttendeeWithFilter(attendee, $event, true)">
               <div class="attendee-avatar">
                 <div *ngIf="!attendee.isAuthority" class="letter-icon"
                   [ngStyle]="{ backgroundColor: getNameIconColor(attendee.name) }">
@@ -193,7 +194,8 @@
               </div>
             </div>
 
-            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 ">
+            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 "
+              (click)="selectAttendeeWithFilter(attendee, $event, true)">
               <ng-container *ngIf="attendee.isAuthority">
                 <div class="organization-name fw-bold text-uppercase text-truncate w-100"
                   [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">
@@ -246,8 +248,8 @@
                 <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block"
                   style="font-size: 0.7rem;">Triagem</span>
               </div> -->
-              <div class="action-item" (click)="$event.stopPropagation(); openPreCredenciamento(attendee, $event)"
-                [pTooltip]="'Pré-credenciamento: ' + (attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente')"
+              <div class="action-item"
+                [pTooltip]="attendee.preRegistered ? 'Participante pré-credenciado em ' + attendee.preRegisteredDate : 'Pré-credenciamento: Ausente'"
                 tooltipPosition="top">
                 <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
                 <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
