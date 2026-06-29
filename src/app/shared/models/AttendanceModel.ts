@@ -564,25 +564,34 @@ export class AttendanceModel {
 
   getNextMeeting(meetings: Meeting[]): Meeting {
 
-    const now = Date.now() + (24 * 60 * 60 * 1000);
-    const runningMeeting = meetings.filter((m) => {
-      const start = new Date(
-        +m.beginDate.toString().substring(6, 10), // Year
-        +m.beginDate.toString().substring(3, 5) - 1, // Month
-        +m.beginDate.toString().substring(0, 2), // Day
-        0, 0, 0, 0);
-      const end = new Date(
-        +m.endDate.toString().substring(6, 10), // Year
-        +m.endDate.toString().substring(3, 5) - 1, // Month
-        +m.endDate.toString().substring(0, 2), // Day
-        23, 59, 59, 999);
+    const now = Date.now();
+    const runningMeeting = meetings
+      .filter(m => {
+        const start = new Date(
+          +m.beginDate.toString().substring(6, 10), // Year
+          +m.beginDate.toString().substring(3, 5) - 1, // Month
+          +m.beginDate.toString().substring(0, 2), // Day
+          0, 0, 0, 0);
 
-      const openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf());
-      const closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()));
+        return start.valueOf() > now.valueOf();
+      }).sort((m1, m2) => {
+        const startM1 = new Date(
+          +m1.beginDate.toString().substring(6, 10), // Year
+          +m1.beginDate.toString().substring(3, 5) - 1, // Month
+          +m1.beginDate.toString().substring(0, 2), // Day
+          0, 0, 0, 0);
 
-      return openMeeting;
+        const startM2 = new Date(
+          +m2.beginDate.toString().substring(6, 10), // Year
+          +m2.beginDate.toString().substring(3, 5) - 1, // Month
+          +m2.beginDate.toString().substring(0, 2), // Day
+          0, 0, 0, 0);
 
-    });
+
+        return startM1.valueOf() - startM2.valueOf();
+      });
+
+
     return runningMeeting[0];
   }
 
