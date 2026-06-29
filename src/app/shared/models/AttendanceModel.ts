@@ -70,7 +70,7 @@ export class AttendanceModel {
   currentMeeting: Meeting;
 
   selectedAttende: IAttendee;
-  selectedOrderBy = 'namingStatus';
+  selectedOrderBy = 'nome';
   selectedFilterBy = 'prereg';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;
@@ -151,7 +151,17 @@ export class AttendanceModel {
       this.nameSearch = search.name;
       this.pageSize = search.size;
       this.currentPage = search.page;
-      this.selectedOrderBy = search.sort;
+      
+      const sortMap: Record<string, string> = {
+        nome: 'name',
+        participante: 'participationType',
+        ordemChegada: 'checkedInDate',
+        credPresence: 'credentialPresence',
+        status: 'namingStatus',
+        orgao: 'organization'
+      };
+      this.selectedOrderBy = sortMap[search.sort] ?? search.sort;
+
       this.selectedFilterBy = search.filterBy;
       this.selectedCounty = search.localities ? { id: search.localities } as Locality : undefined;
       this.selectedParticipante = search.tipoParticipante ?? 'all';

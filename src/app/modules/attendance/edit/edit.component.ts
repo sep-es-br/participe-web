@@ -41,12 +41,12 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   // Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
   // iconPreRegister = faQrcode;
   optionsOrderBy: SelectItem[] = [
-    { label: 'Nome', value: 'nome' },
-    { label: 'Tipo de participante', value: 'participante' },
-    { label: 'Ordem de Chegada', value: 'ordemChegada' },
-    { label: 'Cred. e presença', value: 'credPresence' },
-    { label: 'Status da nominata', value: 'status' },
-    { label: 'Órgão', value: 'orgao' }
+    { label: 'name', value: 'name' },
+    { label: 'attendance.participationType', value: 'participationType' },
+    { label: 'attendance.arrival', value: 'checkedInDate' },
+    { label: 'attendance.credentialPresence', value: 'credentialPresence' },
+    { label: 'attendance.namingStatus', value: 'namingStatus' },
+    { label: 'attendance.organization', value: 'organization' }
   ];
   resultSearchCounty: Locality[];
 
@@ -81,8 +81,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   tempFilterByStatus = 'all';
   tempOrganization: any = undefined;
   tempNameSearch = '';
-  selectedOrderBy: string = 'nome';
+  selectedOrderBy: string = 'name';
   tempCounty: any = undefined;
+  tempOrderBy: string = 'name';
 
 
 
@@ -133,6 +134,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.tempOrganization = this.selectedOrganization;
     this.tempNameSearch = this.nameSearch;
     this.tempCounty = this.selectedCounty;
+    this.tempOrderBy = this.selectedOrderBy;
 
     this.initializeMenu();
   }
@@ -648,7 +650,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.tempOrganization = this.selectedOrganization;
     this.tempNameSearch = this.nameSearch;
     this.tempCounty = this.selectedCounty;
-    this.selectedOrderBy = this.selectedOrderBy;
+    this.tempOrderBy = this.selectedOrderBy;
   }
 
   resetFilters() {
@@ -658,7 +660,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.selectedOrganization = undefined;
     this.nameSearch = '';
     this.selectedCounty = undefined;
-    this.selectedOrderBy = 'nome';
+    this.selectedOrderBy = 'name';
 
     this.tempParticipante = 'all';
     this.tempFilterBy = 'prereg';
@@ -666,6 +668,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.tempOrganization = undefined;
     this.tempNameSearch = '';
     this.tempCounty = undefined;
+    this.tempOrderBy = 'name';
 
     this.searchByName();
   }
@@ -680,7 +683,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.selectedOrganization = this.tempOrganization;
     this.nameSearch = this.tempNameSearch;
     this.selectedCounty = this.tempCounty;
-    this.selectedOrderBy = this.selectedOrderBy;
+    this.selectedOrderBy = this.tempOrderBy;
 
     this.searchByName();
   }
@@ -704,6 +707,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     } else if (key === 'county') {
       this.selectedCounty = undefined;
       this.tempCounty = undefined;
+    } else if (key === 'ordenar') {
+      this.selectedOrderBy = 'name';
+      this.tempOrderBy = 'name';
     }
     this.searchByName();
   }
@@ -717,7 +723,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
         tags.push({
           key: 'ordenar',
           label: 'Ordenar',
-          displayValue: [{ name: "Ordenado por: " + found.label }]
+          displayValue: [{ name: "Ordenado por: " + this.translate.instant(found.label) }]
         });
       }
     }

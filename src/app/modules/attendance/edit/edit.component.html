@@ -166,8 +166,7 @@
                     <div class="row g-3 w-100 m-0">
                       <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3 ">
                         <span class="mb-1 fw-bold text-muted title-filter">Ordenar por:</span>
-                        <p-dropdown [options]="optionsOrderBy" name="odernar" [(ngModel)]="selectedOrderBy"
-                          (onChange)="searchByName()">
+                        <p-dropdown [options]="optionsOrderBy" name="odernar" [(ngModel)]="tempOrderBy">
                           <ng-template let-option pTemplate="selectedItem">
                             {{ option.label | translate }}
                           </ng-template>
