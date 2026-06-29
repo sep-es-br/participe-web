@@ -461,6 +461,7 @@ export class AttendanceModel {
     }
     if (this.currentMeeting !== this.selectedMeeting) {
       this.currentMeeting = this.selectedMeeting;
+      localStorage.setItem('selectedMeeting', JSON.stringify(this.selectedMeeting));
       this.idMeeting = this.currentMeeting.id;
       this.listAttendees = [];
       this.lastPage = true;

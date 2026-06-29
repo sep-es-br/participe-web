@@ -26,6 +26,7 @@ import { AutoComplete, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { PersonsListItems } from '@app/shared/services/person.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import { RequestStatus } from '@app/shared/interface/IRequestStataus';
+import {local} from '@app/modules/plan/plan.component';
 
 @Component({
   selector: 'app-edit',
@@ -93,6 +94,19 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.searchByName();
   }
 
+  override async getConferencesAndMeetings() {
+
+    const selectedMeeting = localStorage.getItem('selectedMeeting');
+
+    if (selectedMeeting) {
+      this.selectedMeeting = JSON.parse(selectedMeeting);
+    } else {
+      super.getConferencesAndMeetings();
+    }
+
+    await this.setCurrentMeeting();
+  }
+
   override async setCurrentMeeting(): Promise<void> {
     await super.setCurrentMeeting();
     this.breadcrumbSrv.setItems([
@@ -101,7 +115,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
         label: `Nova Autoridade`,
         routerLink: [`/attendance/edit/new-authority`]
       },
-    ])
+    ]);
   }
 
 
