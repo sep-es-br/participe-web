@@ -263,7 +263,7 @@
                   </ng-template>
                 </ng-container>
               </div>
-              <div class="attendee-info min-w-0">
+              <div class="attendee-info min-w-0" (click)="selectAttendeeWithFilter(attendee, $event, true)">
                 <div class="fw-bold text-uppercase text-truncate name-attendee" [pTooltip]="attendee.name"
                   tooltipPosition="top">{{ attendee.name }}</div>
                 <div class="text-uppercase text-truncate role-attendee" *ngIf="attendee.isAuthority"
