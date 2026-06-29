@@ -151,7 +151,7 @@ export class AttendanceModel {
       this.nameSearch = search.name;
       this.pageSize = search.size;
       this.currentPage = search.page;
-      
+
       const sortMap: Record<string, string> = {
         nome: 'name',
         participante: 'participationType',
@@ -463,6 +463,10 @@ export class AttendanceModel {
       this.selectedMeeting = this.optionsMeeting[0];
 
     } else {
+      // aplica o proximo meeting como se fosse aberto
+      this.openListMeetings = [this.getNextMeeting(this.closedListMeetings)];
+      this.closedListMeetings = this.closedListMeetings.filter(m => m !== this.openListMeetings[0]);
+
       this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings);
       this.selectedMeeting = this.optionsMeeting[0];
     }
@@ -556,6 +560,39 @@ export class AttendanceModel {
     });
 
     await this.setCurrentMeeting();
+  }
+
+  getNextMeeting(meetings: Meeting[]): Meeting {
+
+    const now = Date.now();
+    const runningMeeting = meetings
+      .filter(m => {
+        const start = new Date(
+          +m.beginDate.toString().substring(6, 10), // Year
+          +m.beginDate.toString().substring(3, 5) - 1, // Month
+          +m.beginDate.toString().substring(0, 2), // Day
+          0, 0, 0, 0);
+
+        return start.valueOf() > now.valueOf();
+      }).sort((m1, m2) => {
+        const startM1 = new Date(
+          +m1.beginDate.toString().substring(6, 10), // Year
+          +m1.beginDate.toString().substring(3, 5) - 1, // Month
+          +m1.beginDate.toString().substring(0, 2), // Day
+          0, 0, 0, 0);
+
+        const startM2 = new Date(
+          +m2.beginDate.toString().substring(6, 10), // Year
+          +m2.beginDate.toString().substring(3, 5) - 1, // Month
+          +m2.beginDate.toString().substring(0, 2), // Day
+          0, 0, 0, 0);
+
+
+        return startM1.valueOf() - startM2.valueOf();
+      });
+
+
+    return runningMeeting[0];
   }
 
   getRunningMeeting(meetings: Meeting[], type: string): Meeting[] {
