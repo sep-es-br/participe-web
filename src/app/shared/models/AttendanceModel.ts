@@ -70,7 +70,7 @@ export class AttendanceModel {
   currentMeeting: Meeting;
 
   selectedAttende: IAttendee;
-  selectedOrderBy = 'namingStatus';
+  selectedOrderBy = 'nome';
   selectedFilterBy = 'prereg';
   selectedFilterByStatus = 'all';
   selectedFilterByIsAuthority: 'all' | boolean = true;
@@ -145,7 +145,31 @@ export class AttendanceModel {
     });
 
 
-    // Removido o uso de localStorage para iniciar com os valores padrão pré-selecionados
+    const search = JSON.parse(localStorage.getItem('filter'));
+
+    if (search) {
+      this.nameSearch = search.name;
+      this.pageSize = search.size;
+      this.currentPage = search.page;
+      
+      const sortMap: Record<string, string> = {
+        nome: 'name',
+        participante: 'participationType',
+        ordemChegada: 'checkedInDate',
+        credPresence: 'credentialPresence',
+        status: 'namingStatus',
+        orgao: 'organization'
+      };
+      this.selectedOrderBy = sortMap[search.sort] ?? search.sort;
+
+      this.selectedFilterBy = search.filterBy;
+      this.selectedCounty = search.localities ? { id: search.localities } as Locality : undefined;
+      this.selectedParticipante = search.tipoParticipante ?? 'all';
+      this.selectedFilterByStatus = search.filterByStatus;
+      this.selectedOrganization = this.meetingSrv.organizationList()?.find(org => org.name === search.filterByOrganization)
+        ?? (search.filterByOrganization && { name: search.filterByOrganization } as IOptionOrganization);
+    }
+
 
     this.configureAuthorityValidation();
 
@@ -567,6 +591,10 @@ export class AttendanceModel {
       this.localityLabel = result.nameType;
       this.localities = result.localities;
       this.optionsLocalities = result.localities.map(({ id, name }) => ({ label: name, value: id }));
+
+      if (this.selectedCounty) {
+        this.selectedCounty = this.localities.find(loc => loc.id === this.selectedCounty.id);
+      }
     } catch (error) {
       this.messageSrv.add({
         severity: 'warn',
@@ -596,7 +624,7 @@ export class AttendanceModel {
 
     };
 
-    // Removido salvamento em localStorage
+    localStorage.setItem('filter', JSON.stringify(search));
 
     return { search };
   }
