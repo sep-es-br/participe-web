@@ -77,7 +77,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   filteredNames = signal<string[]>([]);
 
   tempParticipante = 'all';
-  tempFilterBy = 'all';
+  tempFilterBy = 'prereg';
   tempFilterByStatus = 'all';
   tempOrganization: any = undefined;
   tempNameSearch = '';
@@ -126,6 +126,13 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
         }
       }
     );
+
+    this.tempParticipante = this.selectedParticipante;
+    this.tempFilterBy = this.selectedFilterBy;
+    this.tempFilterByStatus = this.selectedFilterByStatus;
+    this.tempOrganization = this.selectedOrganization;
+    this.tempNameSearch = this.nameSearch;
+    this.tempCounty = this.selectedCounty;
 
     this.initializeMenu();
   }
@@ -646,7 +653,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
   resetFilters() {
     this.selectedParticipante = 'all';
-    this.selectedFilterBy = 'pres';
+    this.selectedFilterBy = 'prereg';
     this.selectedFilterByStatus = 'all';
     this.selectedOrganization = undefined;
     this.nameSearch = '';
@@ -654,7 +661,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.selectedOrderBy = 'nome';
 
     this.tempParticipante = 'all';
-    this.tempFilterBy = 'pres';
+    this.tempFilterBy = 'prereg';
     this.tempFilterByStatus = 'all';
     this.tempOrganization = undefined;
     this.tempNameSearch = '';
