@@ -151,7 +151,7 @@ export class AttendanceModel {
       this.nameSearch = search.name;
       this.pageSize = search.size;
       this.currentPage = search.page;
-      
+
       const sortMap: Record<string, string> = {
         nome: 'name',
         participante: 'participationType',
@@ -463,6 +463,10 @@ export class AttendanceModel {
       this.selectedMeeting = this.optionsMeeting[0];
 
     } else {
+      // aplica o proximo meeting como se fosse aberto
+      this.openListMeetings = [this.getNextMeeting(this.closedListMeetings)];
+      this.closedListMeetings = this.closedListMeetings.filter(m => m !== this.openListMeetings[0]);
+
       this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings);
       this.selectedMeeting = this.optionsMeeting[0];
     }
@@ -556,6 +560,30 @@ export class AttendanceModel {
     });
 
     await this.setCurrentMeeting();
+  }
+
+  getNextMeeting(meetings: Meeting[]): Meeting {
+
+    const now = Date.now() + (24 * 60 * 60 * 1000);
+    const runningMeeting = meetings.filter((m) => {
+      const start = new Date(
+        +m.beginDate.toString().substring(6, 10), // Year
+        +m.beginDate.toString().substring(3, 5) - 1, // Month
+        +m.beginDate.toString().substring(0, 2), // Day
+        0, 0, 0, 0);
+      const end = new Date(
+        +m.endDate.toString().substring(6, 10), // Year
+        +m.endDate.toString().substring(3, 5) - 1, // Month
+        +m.endDate.toString().substring(0, 2), // Day
+        23, 59, 59, 999);
+
+      const openMeeting = (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf());
+      const closedMeeting = !((now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf()));
+
+      return openMeeting;
+
+    });
+    return runningMeeting[0];
   }
 
   getRunningMeeting(meetings: Meeting[], type: string): Meeting[] {
