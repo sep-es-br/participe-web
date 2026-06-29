@@ -48,6 +48,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     { label: 'attendance.namingStatus', value: 'namingStatus' },
     { label: 'attendance.organization', value: 'organization' }
   ];
+
   resultSearchCounty: Locality[];
 
   optionsParticipantes: SelectItem[] = [
@@ -65,10 +66,11 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     { label: 'Pré-credenciados ausentes', value: 'prereg_notpres' },
     { label: 'Presentes não pré-credenciados', value: 'notprereg_pres' },
   ];
+
   optionsFilterByStatus: SelectItem[] = [
     // value = [toAnnounce, announced]
     { label: 'Todos', value: 'all' },
-    { label: 'Em Triagem', value: 'screening' },
+    { label: 'Triagem', value: 'screening' },
     { label: 'Anunciar', value: 'toAnnounce' },
     { label: 'Anunciado', value: 'announced' }
   ];
@@ -81,7 +83,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   tempFilterByStatus = 'all';
   tempOrganization: any = undefined;
   tempNameSearch = '';
-  selectedOrderBy: string = 'name';
   tempCounty: any = undefined;
   tempOrderBy: string = 'name';
 
@@ -100,6 +101,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     private primengConfig: PrimeNGConfig
   ) {
     super(injector, true);
+    if (!this.selectedOrderBy) {
+      this.selectedOrderBy = 'name';
+    }
   }
 
   ngOnInit(): void {
@@ -685,6 +689,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.selectedCounty = this.tempCounty;
     this.selectedOrderBy = this.tempOrderBy;
 
+
+    // console.log("temp: ", this.selectedParticipante)
+    // console.log("ferqwqw", this.selectedFilterByStatus)
     this.searchByName();
   }
 

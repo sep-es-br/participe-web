@@ -488,12 +488,15 @@ export class AttendanceModel {
       await this.getLocalitiesBasedOnConference();
     }
     if (this.currentMeeting !== this.selectedMeeting) {
+      const isInitialLoad = !this.currentMeeting;
       this.currentMeeting = this.selectedMeeting;
       localStorage.setItem('selectedMeeting', JSON.stringify(this.selectedMeeting));
       this.idMeeting = this.currentMeeting.id;
       this.listAttendees = [];
       this.lastPage = true;
-      this.nameSearch = '';
+      if (!isInitialLoad) {
+        this.nameSearch = '';
+      }
       this.noResult = false;
 
       this.breadcrumbSrv.setItems([
@@ -647,6 +650,7 @@ export class AttendanceModel {
       ?.split('.').join('')
       .split('-').join('');
 
+    console.log("nome", this.nameSearch)
     const search = {
       name: this.nameSearch,
       size: this.pageSize,
