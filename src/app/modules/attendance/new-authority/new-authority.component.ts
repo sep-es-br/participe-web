@@ -66,21 +66,21 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   }
 
   ngOnInit() {
-    this.form.addControl("keepConfirmation", new FormControl(true));
+    this.form.addControl('keepConfirmation', new FormControl(true));
   }
 
   async applyValue(evt: PersonsListItems, btnSalvar?: HTMLButtonElement) {
     this.selectedName = evt;
-    if (evt)
-      this.form.controls.role.setValue(evt.role + ' - ' + evt.lotacao);
-    else
-      this.form.controls.role.setValue(undefined);
+    if (evt){
+      const lotacaoName = (await this.personSrv.unitNameByGuid(evt.lotacaoGuid)).value;
 
-    btnSalvar.focus();
+      this.form.controls.role.setValue(evt.role + ' - ' + lotacaoName);
+    } else
+      this.form.controls.role.setValue(undefined);
 
     this.personSrv.findPersonBySub(this.form.controls.name.value.sub).then(
       async person => {
-        this.idPrecredential = (await this.preRegistrationSrv.preRegistrationConfirmed(this.idMeeting, person.id))?.id
+        this.idPrecredential = (await this.preRegistrationSrv.preRegistrationConfirmed(this.idMeeting, person.id))?.id;
       }
     ).catch(e => this.idPrecredential = undefined);
   }
@@ -112,7 +112,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.breadcrumbSrv.setItems([
       { label: 'attendance.label' },
       {
-        label: `Nova Autoridade`,
+        label: `Adicionar a equipe de governo`,
         routerLink: [`/attendance/edit/new-authority`]
       },
     ]);
@@ -129,10 +129,12 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     const {
       organization,
       name,
+      role,
       keepConfirmation
     } = this.form.value as {
       organization: IOptionOrganization,
       name: PersonsListItems,
+      role: string,
       keepConfirmation: boolean
     };
 
@@ -140,13 +142,13 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       if (!this.idPrecredential) {
         await this.authcSrv.registerAuthority(
           this.authSrv.getUserInfo.id,
-          "",
+          '',
           undefined,
           name.name,
           undefined,
           this.idMeeting,
           organization,
-          name.role + ' - ' + name.lotacao,
+          role,
           name.sub,
           true
         );
