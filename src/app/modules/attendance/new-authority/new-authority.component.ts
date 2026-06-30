@@ -26,7 +26,6 @@ import { AutoComplete, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { PersonsListItems } from '@app/shared/services/person.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import { RequestStatus } from '@app/shared/interface/IRequestStataus';
-import {local} from '@app/modules/plan/plan.component';
 
 @Component({
   selector: 'app-edit',
@@ -66,21 +65,21 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   }
 
   ngOnInit() {
-    this.form.addControl('keepConfirmation', new FormControl(true));
+    this.form.addControl("keepConfirmation", new FormControl(true));
   }
 
   async applyValue(evt: PersonsListItems, btnSalvar?: HTMLButtonElement) {
     this.selectedName = evt;
-    if (evt){
-      const lotacaoName = (await this.personSrv.unitNameByGuid(evt.lotacaoGuid)).value;
-
-      this.form.controls.role.setValue(evt.role + ' - ' + lotacaoName);
-    } else
+    if (evt)
+      this.form.controls.role.setValue(evt.role + ' - ' + evt.lotacao);
+    else
       this.form.controls.role.setValue(undefined);
+
+    btnSalvar.focus();
 
     this.personSrv.findPersonBySub(this.form.controls.name.value.sub).then(
       async person => {
-        this.idPrecredential = (await this.preRegistrationSrv.preRegistrationConfirmed(this.idMeeting, person.id))?.id;
+        this.idPrecredential = (await this.preRegistrationSrv.preRegistrationConfirmed(this.idMeeting, person.id))?.id
       }
     ).catch(e => this.idPrecredential = undefined);
   }
@@ -94,28 +93,15 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.searchByName();
   }
 
-  override async getConferencesAndMeetings() {
-
-    const selectedMeeting = localStorage.getItem('selectedMeeting');
-
-    if (selectedMeeting) {
-      this.selectedMeeting = JSON.parse(selectedMeeting);
-    } else {
-      super.getConferencesAndMeetings();
-    }
-
-    await this.setCurrentMeeting();
-  }
-
   override async setCurrentMeeting(): Promise<void> {
     await super.setCurrentMeeting();
     this.breadcrumbSrv.setItems([
       { label: 'attendance.label' },
       {
-        label: `Adicionar a equipe de governo`,
+        label: `Nova Autoridade`,
         routerLink: [`/attendance/edit/new-authority`]
       },
-    ]);
+    ])
   }
 
 
@@ -129,12 +115,10 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     const {
       organization,
       name,
-      role,
       keepConfirmation
     } = this.form.value as {
       organization: IOptionOrganization,
       name: PersonsListItems,
-      role: string,
       keepConfirmation: boolean
     };
 
@@ -142,13 +126,13 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       if (!this.idPrecredential) {
         await this.authcSrv.registerAuthority(
           this.authSrv.getUserInfo.id,
-          '',
+          "",
           undefined,
           name.name,
           undefined,
           this.idMeeting,
           organization,
-          role,
+          name.role + ' - ' + name.lotacao,
           name.sub,
           true
         );
