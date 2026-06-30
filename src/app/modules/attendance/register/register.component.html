@@ -65,7 +65,7 @@
           </ng-container>
           <div class="col-12">
             <div class="form-actions">
-              <ng-container *ngIf="Object.keys(selectedAttende).length  <= 2; else attendeeSelected">
+              <ng-container *ngIf="isNew; else attendeeSelected">
                 <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
                         [label]="'attendance.saveAndRegister' | translate" class="me-2" ></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
