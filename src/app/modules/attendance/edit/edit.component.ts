@@ -40,7 +40,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
   menuItems: MenuItem[] = [];
   selectedAttendeeForMenu: IAttendee;
-  selectedSortLabel: string = 'name';
 
   // Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
   // iconPreRegister = faQrcode;
@@ -90,7 +89,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   tempOrganization: any = undefined;
   tempNameSearch = '';
   tempCounty: any = undefined;
-  tempOrderBy: string = 'name';
+  tempOrderBy: string = '';
 
   $destroy = new Subject<void>();
 
@@ -109,8 +108,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   ) {
     super(injector, true);
     if (!this.selectedOrderBy) {
-      this.selectedOrderBy = 'name';
-      this.selectedSortLabel = 'name';
+      this.selectedOrderBy = '';
+      this.selectedSortLabel = '';
     }
 
 
@@ -154,7 +153,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
     this.translateSrv.stream(labels).pipe(takeUntil(this.$destroy)).subscribe((translations) => {
       this.optionsSort = [
-        {label: '(Não ordenado)', command: () => this.setSelectedOrderBy(undefined, undefined)} as MenuItem,
+        {label: '(Não ordenado)', command: () => this.setSelectedOrderBy('', undefined)} as MenuItem,
         ...this.optionsOrderBy.map(i => ({
           label: translations[i.label],
           command: (event: MenuItemCommandEvent) => {
@@ -708,7 +707,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.selectedOrganization = undefined;
     this.nameSearch = '';
     this.selectedCounty = undefined;
-    this.selectedOrderBy = 'name';
 
     this.tempParticipante = 'all';
     this.tempFilterBy = 'prereg';
@@ -716,7 +714,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.tempOrganization = undefined;
     this.tempNameSearch = '';
     this.tempCounty = undefined;
-    this.tempOrderBy = 'name';
 
     this.searchByName();
   }
@@ -758,9 +755,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     } else if (key === 'county') {
       this.selectedCounty = undefined;
       this.tempCounty = undefined;
-    } else if (key === 'ordenar') {
-      this.selectedOrderBy = 'name';
-      this.tempOrderBy = 'name';
     }
     this.searchByName();
   }

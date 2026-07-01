@@ -92,6 +92,7 @@ export class AttendanceModel {
   valueChangeCPFSub: Subscription;
 
   presentBefore: boolean = false;
+  selectedSortLabel: string = 'name';
 
   protected actionbarSrv: ActionBarService;
   protected breadcrumbSrv: BreadcrumbService;
@@ -160,7 +161,20 @@ export class AttendanceModel {
         status: 'namingStatus',
         orgao: 'organization'
       };
+
+      const sortLabels: Record<string, string> = {
+        name: 'name',
+        participationType: 'attendance.participationType',
+        checkedInDate: 'attendance.arrival',
+        credentialPresence: 'attendance.credentialPresence',
+        namingStatus: 'attendance.namingStatus',
+        organization: 'attendance.organization'
+      };
+
+
+
       this.selectedOrderBy = sortMap[search.sort] ?? search.sort;
+      this.selectedSortLabel = sortLabels[this.selectedOrderBy];
 
       this.selectedFilterBy = search.filterBy;
       this.selectedCounty = search.localities ? { id: search.localities } as Locality : undefined;

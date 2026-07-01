@@ -139,8 +139,8 @@
                 </div>
               </div>
 
-              <div class="sort-button" [class.is-sticky]="isScrolled">
-                <button title="Filtrar" class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+              <div class="sort-button" [class.is-sticky]="isScrolled" >
+                <button title="Ordenar" class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
                         type="button" (click)="menu.toggle($event)" >
                   <span *ngIf="selectedSortLabel">{{selectedSortLabel | translate}}</span>
                   <i class="fa-solid fa-arrow-right-arrow-left fa-rotate-90"></i>
