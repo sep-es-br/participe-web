@@ -233,8 +233,9 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       {
         position: 'RIGHT',
         handle: () => this.router.navigate(['new-authority'], { relativeTo: this.thisRoute }),
-        icon: 'user-plus-solid.svg',
-        label: `Novo`
+        icon: 'Novo_EquipeGov.svg',
+        label: `Adicionar`,
+        tooltip: 'Adicionar à Equipe de Governo',
       },
       {
         position: 'RIGHT',

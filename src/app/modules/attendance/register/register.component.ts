@@ -56,6 +56,8 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   };
   timerModalSuccess: number = 5000;
 
+  isNew: boolean = false;
+
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.QR_CODE,
@@ -232,7 +234,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     const isTeam: boolean = this.form.get('isTeam')?.value;
     const { success, result } = await this.save();
     if (success) {
-      if (Object.keys(this.selectedAttende).length <= 2) {
+      if (this.isNew) {
         const newAttendee: IAttendee = {
           personId: result.id,
           checkInId: undefined,
@@ -273,7 +275,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.form.reset();
       if (this.selectedAttende) {
         const { name, locality, authType, email, sub } = this.form.controls;
-        if (attendee.name === '<novo usuário>') {
+        this.isNew = attendee.name === '<novo usuário>';
+
+        if (this.isNew) {
           name.setValue(null);
         } else {
           name.setValue(attendee.name);
