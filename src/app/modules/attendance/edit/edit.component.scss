@@ -768,6 +768,14 @@ div[role="button"] {
   }
 }
 
+.action-col {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
 .list-container {
   padding-top: 0.75rem;
   background-color: white;
