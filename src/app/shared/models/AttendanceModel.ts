@@ -650,7 +650,6 @@ export class AttendanceModel {
       ?.split('.').join('')
       .split('-').join('');
 
-    console.log("nome", this.nameSearch)
     const search = {
       name: this.nameSearch,
       size: this.pageSize,
