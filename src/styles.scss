@@ -176,11 +176,24 @@ div.search {
   }
 
   img {
-    height: 15px;
-    filter: invert(96%) sepia(0%) saturate(20%) hue-rotate(204deg) brightness(82%) contrast(88%);
+    height: 20px;
+    filter: invert(96%) sepia(0%)  hue-rotate(204deg) brightness(82%) contrast(88%);
   }
 
 }
+
+
+.p-menu {
+  ul, ol {
+    padding-left: unset;
+
+  }
+
+  .p-menu-link {
+    padding: 0.5rem !important;
+  }
+}
+
 
 .clickable {
   cursor: pointer;

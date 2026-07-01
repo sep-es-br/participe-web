@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren, HostListener } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MenuItem, MessageService, SelectItem, PrimeNGConfig } from 'primeng/api';
+import {MenuItem, MessageService, SelectItem, PrimeNGConfig, MenuItemCommandEvent} from 'primeng/api';
 import { faCheckCircle, faCircle, faIdBadge } from '@fortawesome/free-regular-svg-icons';
 import { faBullhorn, faCheck, faEllipsisV, faHourglass, faHourglassStart, faQrcode, faSitemap, faTimes, faUserCheck, faUserTie, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-
+import { TranslateService } from '@ngx-translate/core';
 import { AttendanceModel, AuthTypeEnum } from '@app/shared/models/AttendanceModel';
 import { Locality } from '@app/shared/models/locality';
 import { LocalityService } from '@app/shared/services/locality.service';
@@ -13,6 +13,9 @@ import { IAttendee } from '@app/shared/interface/IAttendee';
 import { faIconAllowAnnounce, faIconAnnounced, faIconScreening } from '@app/shared/util/CustomIconDefenition';
 import { AuthorityCredentialService } from '@app/shared/services/authority-credential.service';
 import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
+import {TranslateChangeService} from '@app/shared/services/translateChange.service';
+import { Subject } from 'rxjs'
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit',
@@ -37,6 +40,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
   menuItems: MenuItem[] = [];
   selectedAttendeeForMenu: IAttendee;
+  selectedSortLabel: string = 'name';
 
   // Nome, Ordem de Chegada, Tipo de Participante, Credenciamento e Presença, Situação da nominata, órgão
   // iconPreRegister = faQrcode;
@@ -48,6 +52,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     { label: 'attendance.namingStatus', value: 'namingStatus' },
     { label: 'attendance.organization', value: 'organization' }
   ];
+
+  optionsSort: MenuItem[];
 
   resultSearchCounty: Locality[];
 
@@ -86,7 +92,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   tempCounty: any = undefined;
   tempOrderBy: string = 'name';
 
-
+  $destroy = new Subject<void>();
 
   authTypeChangeSub: Subscription;
   valueChangeCPFSub: Subscription;
@@ -98,12 +104,16 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     public authSrv: AuthService,
     @Inject(Injector) injector: Injector,
     private authcSrv: AuthorityCredentialService,
-    private primengConfig: PrimeNGConfig
+    private primengConfig: PrimeNGConfig,
+    private translateSrv: TranslateService
   ) {
     super(injector, true);
     if (!this.selectedOrderBy) {
       this.selectedOrderBy = 'name';
+      this.selectedSortLabel = 'name';
     }
+
+
   }
 
   ngOnInit(): void {
@@ -140,7 +150,28 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.tempCounty = this.selectedCounty;
     this.tempOrderBy = this.selectedOrderBy;
 
+    const labels = this.optionsOrderBy.map(i => i.label);
+
+    this.translateSrv.stream(labels).pipe(takeUntil(this.$destroy)).subscribe((translations) => {
+      this.optionsSort = [
+        {label: '(Não ordenado)', command: () => this.setSelectedOrderBy(undefined, undefined)} as MenuItem,
+        ...this.optionsOrderBy.map(i => ({
+          label: translations[i.label],
+          command: (event: MenuItemCommandEvent) => {
+            this.setSelectedOrderBy(i.value, translations[i.label]);
+          }
+        } as MenuItem))];
+    });
+
+
+
     this.initializeMenu();
+  }
+
+  setSelectedOrderBy(orderBy: string, orderBylabel: string) {
+    this.tempOrderBy = orderBy;
+    this.selectedSortLabel = orderBylabel;
+    this.filtrar();
   }
 
   initializeMenu() {
@@ -229,12 +260,12 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
         position: 'LEFT',
         handle: () => this.showSelectMeeting = !this.showSelectMeeting,
         icon: 'change.svg',
+        tooltip: 'Trocar Reunião'
       },
       {
-        position: 'RIGHT',
+        position: 'LEFT',
         handle: () => this.router.navigate(['new-authority'], { relativeTo: this.thisRoute }),
         icon: 'Novo_EquipeGov.svg',
-        label: `Adicionar`,
         tooltip: 'Adicionar à Equipe de Governo',
       },
       {
@@ -647,6 +678,18 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.showFilters = false;
   }
 
+
+  openSortOptions() {
+    // this.showFilters = true;
+    // this.tempParticipante = this.selectedParticipante;
+    // this.tempFilterBy = this.selectedFilterBy;
+    // this.tempFilterByStatus = this.selectedFilterByStatus;
+    // this.tempOrganization = this.selectedOrganization;
+    // this.tempNameSearch = this.nameSearch;
+    // this.tempCounty = this.selectedCounty;
+    // this.tempOrderBy = this.selectedOrderBy;
+  }
+
   openFilterModal() {
     this.showFilters = true;
     this.tempParticipante = this.selectedParticipante;
@@ -724,17 +767,6 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
 
   get activeFilters(): any[] {
     const tags: any[] = [];
-
-    if (this.selectedOrderBy) {
-      const found = this.optionsOrderBy.find(opt => opt.value === this.selectedOrderBy);
-      if (found) {
-        tags.push({
-          key: 'ordenar',
-          label: 'Ordenar',
-          displayValue: [{ name: "Ordenado por: " + this.translate.instant(found.label) }]
-        });
-      }
-    }
 
     if (this.selectedParticipante && this.selectedParticipante !== 'all') {
       const found = this.optionsParticipantes.find(opt => opt.value === this.selectedParticipante);

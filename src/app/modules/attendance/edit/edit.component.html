@@ -139,11 +139,19 @@
                 </div>
               </div>
 
+              <div class="sort-button" [class.is-sticky]="isScrolled">
+                <button title="Filtrar" class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                        type="button" (click)="menu.toggle($event)" >
+                  <span *ngIf="selectedSortLabel">{{selectedSortLabel | translate}}</span>
+                  <i class="fa-solid fa-arrow-right-arrow-left fa-rotate-90"></i>
+                </button>
+                <p-menu #menu [model]="optionsSort" [popup]="true" appendTo="body" styleClass="p-menu"/>
+              </div>
+
               <!-- Filter Trigger Button -->
               <div class="filter-button" [class.is-sticky]="isScrolled">
-                <button class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                <button title="Filtrar" class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
                   type="button" data-bs-toggle="modal" data-bs-target="#filtrosModal" (click)="openFilterModal()">
-                  <span>Filtros</span>
                   <i class="pi pi-filter"></i>
                 </button>
               </div>
@@ -164,19 +172,6 @@
                 <div class="modal-body">
                   <form class="w-100">
                     <div class="row g-3 w-100 m-0">
-                      <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3 ">
-                        <span class="mb-1 fw-bold text-muted title-filter">Ordenar por:</span>
-                        <p-dropdown [options]="optionsOrderBy" name="odernar" [(ngModel)]="tempOrderBy">
-                          <ng-template let-option pTemplate="selectedItem">
-                            {{ option.label | translate }}
-                          </ng-template>
-                          <ng-template let-option pTemplate="item">
-                            {{ option.label | translate }}
-                          </ng-template>
-                        </p-dropdown>
-                      </div>
-
-
                       <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted title-filter">Tipo de Participante</span>
                         <p-dropdown [options]="optionsParticipantes" [(ngModel)]="tempParticipante" name="participante"
