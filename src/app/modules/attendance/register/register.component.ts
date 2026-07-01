@@ -1,17 +1,17 @@
 import { delay } from 'rxjs/operators';
-import {AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit, signal} from '@angular/core';
-import {UntypedFormBuilder} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {Message, MessageService} from 'primeng/api';
-import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
+import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { UntypedFormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { Message, MessageService } from 'primeng/api';
+import { faCheckCircle, faCircle } from '@fortawesome/free-regular-svg-icons';
 
-import {IAttendee} from '@app/shared/interface/IAttendee';
-import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
-import {ActionBarService} from '@app/core/actionbar/app.actionbar.actions.service';
-import {MeetingService} from '@app/shared/services/meeting.service';
-import {TranslateService} from '@ngx-translate/core';
-import {AuthService} from '@app/shared/services/auth.service';
-import {LocalityService} from '@app/shared/services/locality.service';
+import { IAttendee } from '@app/shared/interface/IAttendee';
+import { AttendanceModel, AuthTypeEnum } from '@app/shared/models/AttendanceModel';
+import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
+import { MeetingService } from '@app/shared/services/meeting.service';
+import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '@app/shared/services/auth.service';
+import { LocalityService } from '@app/shared/services/locality.service';
 import * as moment from 'moment';
 import 'moment-timezone';
 import { formatNumber } from '@angular/common';
@@ -21,16 +21,19 @@ import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
 import { LoadingService } from '@app/shared/services/loading.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
-import {IOptionOrganization} from '@app/shared/interface/IOptionOrganization';
-import {set} from 'lodash';
-import {text} from '@fortawesome/fontawesome-svg-core';
+import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
+import { set } from 'lodash';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent extends AttendanceModel implements OnInit, OnDestroy {
+export class RegisterComponent extends AttendanceModel implements OnInit, OnDestroy, AfterViewInit {
+
+
+  @ViewChild('inputSearch') inputSearchElement!: ElementRef<HTMLInputElement>;
 
   iconChecked = faCheckCircle;
   iconUnchecked = faCircle;
@@ -63,6 +66,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   hasDevices: boolean = false;
   hasPermission: boolean;
   tipoBotao: string = 'number';
+  activeMethod: 'cpf' | 'name' | 'qrcode' = 'cpf';
 
 
   filteredOrganizations = signal(this.meetingSrv.organizationList());
@@ -92,10 +96,24 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     super(injector, false);
   }
 
-   ngOnInit() {
+  ngOnInit() {
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
+  }
 
+
+  focusHandle() {
+    if (this.activeMethod == 'cpf') {
+      this.inputSearchElement.nativeElement.focus();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.activeMethod !== 'qrcode') {
+      setTimeout(() => {
+        this.inputSearchElement?.nativeElement?.focus();
+      }, 150);
+    }
   }
 
   ngOnDestroy(): void {
@@ -126,18 +144,18 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   }
 
-  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false, skipSaveAccount = false ) {
+  async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false, skipSaveAccount = false) {
     this.form.markAllAsTouched();
 
     attendee.checkingIn = true;
 
-    if (!fromSaveAccount){
+    if (!fromSaveAccount) {
       const { isAuthority, organization, role, isTeam } = this.form.controls;
       attendee.isAuthority = isAuthority.value;
       if (attendee.isAuthority) {
         attendee.isTeam = isTeam.value;
         attendee.organization = (typeof (organization.value) === 'string'
-          ? {name: organization.value} : organization.value) as IOptionOrganization;
+          ? { name: organization.value } : organization.value) as IOptionOrganization;
         attendee.role = role.value;
       } else {
         attendee.isTeam = null;
@@ -146,7 +164,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       }
     }
 
-    if (!skipSaveAccount){
+    if (!skipSaveAccount) {
       const saved = await this.saveAccount();
       if (!saved) {
         attendee.checkingIn = false;
@@ -179,7 +197,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
       this.messageSrv.add({
         severity: 'success',
         summary: this.translate.instant('success'),
-        detail: this.translate.instant('attendance.successDetail.checkin', {name: result.meeting.name.toUpperCase()}),
+        detail: this.translate.instant('attendance.successDetail.checkin', { name: result.meeting.name.toUpperCase() }),
         life: 10000
       });
 
@@ -201,7 +219,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   async saveAccount(skipSaveAccount: boolean = false) {
 
-    if (this.form.invalid){
+    if (this.form.invalid) {
       this.messageSrv.add({
         severity: 'error',
         summary: 'Formulário invalido',
@@ -214,7 +232,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     const organization: string = this.form.get('organization')?.value;
     const role: string = this.form.get('role')?.value;
     const isTeam: boolean = this.form.get('isTeam')?.value;
-    const {success, result} = await this.save();
+    const { success, result } = await this.save();
     if (success) {
       if (this.isNew) {
         const newAttendee: IAttendee = {
@@ -228,7 +246,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
           isAuthority,
           ...(isAuthority && {
             isTeam,
-            organization: (typeof (organization) === 'string' ? {name: organization} : organization) as IOptionOrganization,
+            organization: (typeof (organization) === 'string' ? { name: organization } : organization) as IOptionOrganization,
             role
           })
         };
@@ -255,18 +273,18 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
     setTimeout(() => { // Timeout força a execução pro final do ciclo de atualização do angular
       this.form.reset();
-      if (this.selectedAttende ){
+      if (this.selectedAttende) {
         const { name, locality, authType, email, sub } = this.form.controls;
         this.isNew = attendee.name === '<novo usuário>';
 
-        if (this.isNew){
+        if (this.isNew) {
           name.setValue(null);
-        }else{
+        } else {
           name.setValue(attendee.name);
         }
 
         authType.setValue(AuthTypeEnum.EMAIL);
-        if (attendee.email){
+        if (attendee.email) {
           this.isReadonly = true;
         }
         email.setValue(attendee.email);
@@ -279,20 +297,20 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   onInput($event) {
     this.form.patchValue(
-      {name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
-      {emitEvent: false}
+      { name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ') },
+      { emitEvent: false }
     );
   }
 
   onBlur($event) {
     this.form.patchValue(
-      {name: $event.target.value.replace(/\s+$/gm, '')},
-      {emitEvent: false});
+      { name: $event.target.value.replace(/\s+$/gm, '') },
+      { emitEvent: false });
   }
 
-  readQRCode(){
+  readQRCode() {
     this.modalSuceesPresence = false;
-    if (!this.availableDevices){
+    if (!this.availableDevices) {
       return this.messageSrv.add({
         severity: 'error',
         summary: this.translate.instant('error'),
@@ -302,11 +320,11 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     }
     this.scannerEnabled = true;
     this.getCamera();
-    this.modalData = {title: this.translate.instant('qrcode.titleModal') };
+    this.modalData = { title: this.translate.instant('qrcode.titleModal') };
     this.modalService.open('QRCodeReader');
   }
 
-  getCamera(){
+  getCamera() {
     this.deviceCurrent = this.availableDevices[0];
     for (const device of this.availableDevices) {
       if (/back|rear|environment/gi.test(device.label)) {
@@ -332,7 +350,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.qrResultString = resultString;
     const regex = /PersonId:(\d+)/;
     const match = this.qrResultString.match(regex);
-    if (!isNaN(Number(resultString)) || Number(match[1])){
+    if (!isNaN(Number(resultString)) || Number(match[1])) {
       this.closeQRCodeReader();
       this.modalService.close('QRCodeReader');
       this.loadingService.loading(true);
@@ -341,31 +359,31 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         const personId = match[1];
 
 
-        this.selectAttendee({personId: Number(personId)} as IAttendee);
-      //   this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
-      //   .then((resp)=>{
-      //     this.modalSuceesPresence = true;
-      //     this.dataPresence = resp;
-      //     this.playSoundNotification('success');
-      //   })
-      // .catch((err)=>{
-      //   this.playSoundNotification('error');
-      //   // setTimeout(() => {
-      //   //   this.readQRCode();
-      //   // }, 2700);
-      // })
-      // .finally(() => {
+        this.selectAttendee({ personId: Number(personId) } as IAttendee);
+        //   this.preRegistrationService.accreditationCheckin(Number(personId),this.idMeeting)
+        //   .then((resp)=>{
+        //     this.modalSuceesPresence = true;
+        //     this.dataPresence = resp;
+        //     this.playSoundNotification('success');
+        //   })
+        // .catch((err)=>{
+        //   this.playSoundNotification('error');
+        //   // setTimeout(() => {
+        //   //   this.readQRCode();
+        //   // }, 2700);
+        // })
+        // .finally(() => {
 
-      //     this.loadingService.loading(false);
-      //   });
+        //     this.loadingService.loading(false);
+        //   });
       } else {
 
 
         this.preRegistrationService.GetById(Number(this.qrResultString)).then(
           result => {
-            const {data, success} = result;
+            const { data, success } = result;
             if (success) {
-              this.selectAttendee({personId: data.person.id} as IAttendee);
+              this.selectAttendee({ personId: data.person.id } as IAttendee);
             }
 
 
@@ -379,16 +397,16 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
         //   this.dataPresence = resp;
         //   this.playSoundNotification('success');
         // })
-      // .catch((err)=>{
-      //   this.playSoundNotification('error');
-      //   // setTimeout(() => {
-      //   //   this.readQRCode();
-      //   // }, 2700);
-      // })
-      // .finally(() => {
+        // .catch((err)=>{
+        //   this.playSoundNotification('error');
+        //   // setTimeout(() => {
+        //   //   this.readQRCode();
+        //   // }, 2700);
+        // })
+        // .finally(() => {
 
-      //     this.loadingService.loading(false);
-      //   });
+        //     this.loadingService.loading(false);
+        //   });
       }
 
     }
@@ -400,7 +418,7 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   onDeviceChange(device: MediaDeviceInfo) {
-    const selectedStr =  device != null ? device.deviceId : '';
+    const selectedStr = device != null ? device.deviceId : '';
     if (this.deviceSelected === selectedStr) { return; }
     this.deviceSelected = selectedStr;
     this.deviceCurrent = device || undefined;
@@ -431,14 +449,15 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
 
   toggleTorch(): void {
     this.actionFlash = !this.torchEnabled === true ? this.translate.instant('qrcode.turnoffTorch') : this.translate.instant('qrcode.turnOnTorch');
-    this.classFlash = !this.torchEnabled === true ? 'btn-dark' : 'btn-orange' ;
+    this.classFlash = !this.torchEnabled === true ? 'btn-dark' : 'btn-orange';
     this.torchEnabled = !this.torchEnabled;
   }
 
   toggleTryHarder(): void {
     this.tryHarder = !this.tryHarder;
   }
-  readAnother(){
+
+  readAnother() {
     this.modalSuceesPresence = false;
     this.dataPresence = {
       person: {
@@ -449,11 +468,41 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
     this.readQRCode();
   }
 
-  closeQRCodeReader(){
+  closeQRCodeReader() {
     this.scannerEnabled = false;
+    this.activeMethod = 'cpf';
+    this.tipoBotao = 'number';
+    setTimeout(() => {
+      this.inputSearchElement?.nativeElement?.focus();
+    }, 150);
   }
 
-  playSoundNotification(type: string){
+  selectMethod(method: 'cpf' | 'name' | 'qrcode') {
+    if (method === 'name') {
+      if (this.activeMethod === 'name') {
+        this.activeMethod = 'cpf';
+        this.tipoBotao = 'number';
+      } else {
+        this.activeMethod = 'name';
+        this.tipoBotao = 'text';
+      }
+    } else if (method === 'cpf') {
+      this.activeMethod = 'cpf';
+      this.tipoBotao = 'number';
+    } else if (method === 'qrcode') {
+      this.activeMethod = 'qrcode';
+      this.readQRCode();
+    }
+    this.nameSearch = '';
+
+    if (this.activeMethod !== 'qrcode') {
+      setTimeout(() => {
+        this.inputSearchElement?.nativeElement?.focus();
+      }, 50);
+    }
+  }
+
+  playSoundNotification(type: string) {
     const audio = new Audio();
     audio.src = type === 'success' ? 'assets/sounds/success.mp3' : 'assets/sounds/error.mp3';
     audio.load();

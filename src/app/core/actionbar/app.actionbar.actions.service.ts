@@ -6,6 +6,7 @@ export interface ActionButtonItem {
   icon?: string;
   label?: string;
   handle?: any;
+  tooltip?: string;
   position: 'LEFT' | 'RIGHT';
 }
 
@@ -26,7 +27,7 @@ export class ActionBarService {
   set recordAmount(recordAmount : IRecordAmount) {
     this.recordAmountSource.next(recordAmount)
   }
-  
+
 
   clear() {
     this.itemsSource = new BehaviorSubject<ActionButtonItem[]>([]);
