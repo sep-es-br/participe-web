@@ -12,6 +12,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { AuthorityListComponent } from './authority-list/authority-list.component';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MenuModule } from 'primeng/menu';
 import { NewAuthorityComponent } from './new-authority/new-authority.component';
 
 @NgModule({
@@ -31,7 +32,8 @@ import { NewAuthorityComponent } from './new-authority/new-authority.component';
     ZXingScannerModule,
     SweetAlert2Module.forRoot(),
     KeyFilterModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    MenuModule
   ],
 })
 export class AttendanceModule { }

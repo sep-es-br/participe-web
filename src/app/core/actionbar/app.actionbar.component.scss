@@ -9,6 +9,23 @@
 }
 
 .actions-left {
+  display: flex;
+  flex-wrap: wrap;
+  justify-self: flex-end;
+  gap: 0.3rem;
+
+  .action-item {
+    flex: 0 0 auto;
+    border: 1px solid var(--bs-gray-500);
+    justify-content: center;
+    align-items: center;
+    padding-inline: 5px;
+    width: 40px;
+    border-radius: 5px;
+
+
+  }
+
 
 }
 

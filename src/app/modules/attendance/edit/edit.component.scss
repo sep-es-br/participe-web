@@ -633,6 +633,10 @@ div[role="button"] {
   }
 }
 
+.sort-button {
+  min-width: 36px;
+}
+
 .locality-box {
   .locality {
     color: #2c3e50;
@@ -655,6 +659,14 @@ div[role="button"] {
   background-color: #008000 !important;
 }
 
+::ng-deep .p-menu .p-menuitem > .p-menuitem-content .p-menuitem-link {
+  color: #333333;
+  padding: 0.6rem !important;
+  -webkit-user-select: none;
+  user-select: none;
+  font-size: 0.9rem !important;
+}
+
 /* Estilos Finais do Menu de Ações Sanitizados */
 ::ng-deep :host .actions-menu {
   .p-menu {
@@ -675,7 +687,7 @@ div[role="button"] {
     }
 
     .p-menuitem-link {
-      padding: 0.4rem 0.75rem !important;
+      padding: 0.4rem 0.4rem !important;
       text-decoration: none !important;
       background: transparent !important;
       display: flex !important;
@@ -901,8 +913,9 @@ div[role="button"] {
 
     .filter-toggle {
       color: var(--card-text-color);
-      min-width: 90px;
-      border: none;
+      display: flex;
+      justify-content: flex-end;
+      border: 1px solid var(--bs-gray-500);
       background-color: transparent;
       padding-bottom: 10px;
       padding-top: 8px;
