@@ -198,7 +198,7 @@
                           name="filterByStatus" [style]="{'width': '100%'}">
                         </p-dropdown>
                       </div>
-                      <!-- 
+                      <!--
                       <div class="filter-entity d-flex flex-column col-12 col-md-6 col-xl-3">
                         <span class="mb-1 fw-bold text-muted">Município / Localidade</span>
                         <p-dropdown [options]="localities" optionLabel="name" [(ngModel)]="selectedCounty" name="county"
@@ -327,12 +327,12 @@
                 <span class="rem075 text-muted text-truncate mt-1 d-none d-md-block"
                   style="font-size: 0.7rem;">Triagem</span>
               </div> -->
-              <div class="action-item"
+              <div class="action-item" *ngIf="!(attendee.isTeam && !attendee.checkedIn)"
                 [pTooltip]="attendee.preRegistered ? 'Participante pré-credenciado em ' + attendee.preRegisteredDate : 'Pré-credenciamento: Ausente'"
                 tooltipPosition="top">
                 <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
                 <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
-                  {{ attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : 'Ausente' }}
+                  {{ attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : '' }}
                 </span>
               </div>
               <div class="checkin-status text-center"
