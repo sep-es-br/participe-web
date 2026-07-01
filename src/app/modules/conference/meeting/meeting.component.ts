@@ -2,34 +2,34 @@ import { attendanceListModeEnum } from './../../../shared/models/Meeting';
 import { PersonService } from '@app/shared/services/person.service';
 import * as _ from 'lodash';
 
-import {ActivatedRoute, Router} from '@angular/router';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {DatePipe, DOCUMENT, Location} from '@angular/common';
-import {take} from 'rxjs/operators';
-import {MessageService, SelectItem} from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { DatePipe, DOCUMENT, Location } from '@angular/common';
+import { take } from 'rxjs/operators';
+import { MessageService, SelectItem } from 'primeng/api';
 
-import {IPerson} from '@app/shared/interface/IPerson';
-import {Locality} from '@app/shared/models/locality';
-import {Meeting, typeMeetingEnum} from '@app/shared/models/Meeting';
-import {Conference} from '@app/shared/models/conference';
-import {MeetingFilterModel} from '@app/shared/models/MeetingFilterModel';
-import {calendar} from '@app/shared/constants';
-import {ActionBarService} from '@app/core/actionbar/app.actionbar.actions.service';
-import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
-import {ConferenceService} from '@app/shared/services/conference.service';
-import {LocalityService} from '@app/shared/services/locality.service';
-import {MeetingService} from '@app/shared/services/meeting.service';
-import {ModerationService} from '@app/shared/services/moderation.service';
-import {PlanService} from '@app/shared/services/plan.service';
-import {TranslateChangeService} from '@app/shared/services/translateChange.service';
-import {TranslateService} from '@ngx-translate/core';
-import {IResultPlanItemByConference} from '@app/shared/interface/IResultPlanItemByConference';
-import {IChannel} from '@app/shared/interface/IChannel';
-import {CustomValidators} from '@app/shared/util/CustomValidators';
+import { IPerson } from '@app/shared/interface/IPerson';
+import { Locality } from '@app/shared/models/locality';
+import { Meeting, typeMeetingEnum } from '@app/shared/models/Meeting';
+import { Conference } from '@app/shared/models/conference';
+import { MeetingFilterModel } from '@app/shared/models/MeetingFilterModel';
+import { calendar } from '@app/shared/constants';
+import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
+import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
+import { ConferenceService } from '@app/shared/services/conference.service';
+import { LocalityService } from '@app/shared/services/locality.service';
+import { MeetingService } from '@app/shared/services/meeting.service';
+import { ModerationService } from '@app/shared/services/moderation.service';
+import { PlanService } from '@app/shared/services/plan.service';
+import { TranslateChangeService } from '@app/shared/services/translateChange.service';
+import { TranslateService } from '@ngx-translate/core';
+import { IResultPlanItemByConference } from '@app/shared/interface/IResultPlanItemByConference';
+import { IChannel } from '@app/shared/interface/IChannel';
+import { CustomValidators } from '@app/shared/util/CustomValidators';
 import { ModalService } from '@app/core/modal/modal.service';
 import { ModalData } from '@app/shared/interface/IModalData';
-import {$} from 'protractor';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-meeting',
@@ -70,19 +70,19 @@ export class MeetingComponent implements OnInit, OnDestroy {
   channels: IChannel[] = [];
   clonedChannels: IChannel[] = [];
 
-  resultBeginDate:any;
-  resultEndDate:any;
-  beginDateLengh1:string;
-  beginDateLengh2:number;
-  endDateLengh1:string;
-  endDateLengh2:number;
-  showModalLink:Boolean = false;
+  resultBeginDate: any;
+  resultEndDate: any;
+  beginDateLengh1: string;
+  beginDateLengh2: number;
+  endDateLengh1: string;
+  endDateLengh2: number;
+  showModalLink: Boolean = false;
   modalData: ModalData;
-  meetingDataSelected?:Meeting;
+  meetingDataSelected?: Meeting;
   meetingUrl: {
     url: string
   };
-  ImageQrCode:any;
+  ImageQrCode: any;
 
   localityPlaceValidators = Validators.required;
   addressValidators = Validators.required;
@@ -115,12 +115,12 @@ export class MeetingComponent implements OnInit, OnDestroy {
       return new Date(str);
     }
 
-    if(str === '') return undefined;
+    if (str === '') return undefined;
     const [dateStr, timeStr] = str.split(' ');
     const args = dateStr.split('/');
     const argsTime = timeStr.split(':');
     return argsTime[2] ?
-        new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1], argsTime[2])
+      new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1], argsTime[2])
       : new Date(args[2], (args[1] - 1), args[0], argsTime[0], argsTime[1]);
   }
 
@@ -133,7 +133,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activeRoute.params.pipe(take(1)).subscribe(async ({id}) => {
+    this.activeRoute.params.pipe(take(1)).subscribe(async ({ id }) => {
       this.conferenceId = +id;
       await this.prepareScreen();
     });
@@ -178,10 +178,10 @@ export class MeetingComponent implements OnInit, OnDestroy {
         localities,
         nameType
       } = await this.localitySrv.getLocalitiesBasedOnConferenceCitizenAuth(this.conferenceId);
-      this.localities = localities.map(({id, name}) => ({value: {id}, label: name}));
+      this.localities = localities.map(({ id, name }) => ({ value: { id }, label: name }));
       this.labelLocality = nameType;
-      const {localities: localitiesCover} = await this.localitySrv.findByConference(this.conferenceId);
-      this.localitiesCover = localitiesCover.map(({id, name}) => ({value: {id}, label: name}));
+      const { localities: localitiesCover } = await this.localitySrv.findByConference(this.conferenceId);
+      this.localitiesCover = localitiesCover.map(({ id, name }) => ({ value: { id }, label: name }));
     } catch (error) {
       this.messageSrv.add({
         severity: 'error', summary: this.translate.instant('error'),
@@ -193,7 +193,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   async loadPlanItemsTargetedBy() {
     try {
       const planItemsData = await this.meetingSrv.getPlanItemsTargetedByConference(this.conferenceId);
-      this.planItems = planItemsData.map(({id, name}) => ({value: {id}, label: name}));
+      this.planItems = planItemsData.map(({ id, name }) => ({ value: { id }, label: name }));
       if (!(this.planItems.length > 0)) {
         this.form.controls.segmentations.clearValidators();
       }
@@ -208,7 +208,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   async populatePlans() {
     try {
       const plans = await this.planSrv.listAll(null);
-      this.plans = plans.map(({id, domain, localitytype, name}) => ({value: {id, domain, localitytype}, label: name}));
+      this.plans = plans.map(({ id, domain, localitytype, name }) => ({ value: { id, domain, localitytype }, label: name }));
     } catch (error) {
       this.messageSrv.add({
         severity: 'error', summary: this.translate.instant('error'),
@@ -240,14 +240,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
       filter.localities = localities.map(l => l.id);
     }
     filter.name = name;
-    const {content} = await this.meetingSrv.getSearch(this.conferenceId, filter, {pageSize: 9999});
+    const { content } = await this.meetingSrv.getSearch(this.conferenceId, filter, { pageSize: 9999 });
     this.meetings = content;
   }
 
   loadOptionsTypesMeeting() {
     this.optionsTypesMeeting = [
-      {value: typeMeetingEnum.PRESENCIAL, label: this.translate.instant('conference.meeting.type.presential')},
-      {value: typeMeetingEnum.VIRTUAL, label: this.translate.instant('conference.meeting.type.virtual')},
+      { value: typeMeetingEnum.PRESENCIAL, label: this.translate.instant('conference.meeting.type.presential') },
+      { value: typeMeetingEnum.VIRTUAL, label: this.translate.instant('conference.meeting.type.virtual') },
       {
         value: typeMeetingEnum.PRESENCIAL_VIRTUAL,
         label: this.translate.instant('conference.meeting.type.presential-virtual')
@@ -257,8 +257,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   loadOptionsAttendanceListModes() {
     this.optionsAttendanceListModes = [
-      {value: attendanceListModeEnum.AUTO, label: this.translate.instant('conference.meeting.attendanceListMode.auto')},
-      {value: attendanceListModeEnum.MANUAL, label: this.translate.instant('conference.meeting.attendanceListMode.manual')},
+      { value: attendanceListModeEnum.AUTO, label: this.translate.instant('conference.meeting.attendanceListMode.auto') },
+      { value: attendanceListModeEnum.MANUAL, label: this.translate.instant('conference.meeting.attendanceListMode.manual') },
     ];
   }
 
@@ -280,25 +280,25 @@ export class MeetingComponent implements OnInit, OnDestroy {
     }
   }
 
-/*
-
-  async addReceptionist(receptionist: IPerson) {
-    let person = await this.meetingSrv.getReceptionistByEmail(receptionist.contactEmail);
-    if (!person) {
-      person = await this.personSrv.postOperator('Recepcionist', receptionist);
-    }
-    if (person) {
-      person.name = receptionist.name;
-      if (!this.receptionistsActived) {
-        this.receptionistsActived = [];
+  /*
+  
+    async addReceptionist(receptionist: IPerson) {
+      let person = await this.meetingSrv.getReceptionistByEmail(receptionist.contactEmail);
+      if (!person) {
+        person = await this.personSrv.postOperator('Recepcionist', receptionist);
       }
-      if (!(this.receptionistsActived.find((p) => (p.contactEmail === person.contactEmail)))) {
-        this.receptionistsActived.push(person);
+      if (person) {
+        person.name = receptionist.name;
+        if (!this.receptionistsActived) {
+          this.receptionistsActived = [];
+        }
+        if (!(this.receptionistsActived.find((p) => (p.contactEmail === person.contactEmail)))) {
+          this.receptionistsActived.push(person);
+        }
+        this.setFormSearchReceptionists();
       }
-      this.setFormSearchReceptionists();
     }
-  }
-*/
+  */
 
   async activateReceptionist(receptionist: IPerson) {
     if (!this.receptionistsActived) {
@@ -314,15 +314,15 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.setFormSearchReceptionists();
   }
 
-  comparePersonName( a, b ) {
+  comparePersonName(a, b) {
     let aName: string = a.name;
     let bName: string = b.name;
     aName = aName.normalize().toUpperCase();
     bName = bName.normalize().toUpperCase();
-    if ( aName < bName ) {
+    if (aName < bName) {
       return -1;
     }
-    if ( aName > bName ) {
+    if (aName > bName) {
       return 1;
     }
     return 0;
@@ -343,11 +343,11 @@ export class MeetingComponent implements OnInit, OnDestroy {
 
   changeTypeMeeting() {
     const typeMeeting = this.form.value.type;
-    const {localityPlace, address, place} = this.form.controls;
-    const {name, url, containsChannel} = this.formChannels.controls;
+    const { localityPlace, address, place } = this.form.controls;
+    const { name, url, containsChannel } = this.formChannels.controls;
 
     this.form.reset();
-    this.setForm({typeMeetingEnum: typeMeeting});
+    this.setForm({ typeMeetingEnum: typeMeeting });
 
 
     if (typeMeeting === typeMeetingEnum.PRESENCIAL) {
@@ -381,7 +381,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.formChannels.controls.containsChannel.clearValidators();
     this.formChannels.controls.containsChannel.updateValueAndValidity();
 
-    const {url, name} = this.formChannels.value;
+    const { url, name } = this.formChannels.value;
 
     const isGreaterThanZero = name.trim().length > 0 && url.trim().length > 0;
     const isUrlValid = this.isUrlValid(url);
@@ -430,7 +430,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   onRowEditChannelInit(channel: IChannel) {
-    this.clonedChannels[channel.tableId] = {...channel};
+    this.clonedChannels[channel.tableId] = { ...channel };
   }
 
   onRowEditChannelSave(channel: IChannel) {
@@ -521,9 +521,9 @@ export class MeetingComponent implements OnInit, OnDestroy {
     if (meetingId) {
       this.typeMeetingAlreadySet = true;
       const meeting = await this.meetingSrv.getMeetingById(meetingId);
-      meeting.localityCovers = _.map(meeting.localityCovers as Locality[], l => ({id: l.id}) as any);
-      meeting.segmentations = _.map(meeting.segmentations as IResultPlanItemByConference[], s => ({id: s.id}) as any);
-      meeting.localityPlace = {id: _.get(meeting, 'localityPlace.id')} as any;
+      meeting.localityCovers = _.map(meeting.localityCovers as Locality[], l => ({ id: l.id }) as any);
+      meeting.segmentations = _.map(meeting.segmentations as IResultPlanItemByConference[], s => ({ id: s.id }) as any);
+      meeting.localityPlace = { id: _.get(meeting, 'localityPlace.id') } as any;
 
       this.receptionistsActived = meeting.receptionists as IPerson[];
       if (this.receptionistsActived) {
@@ -556,8 +556,8 @@ export class MeetingComponent implements OnInit, OnDestroy {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`/administration/conferences/${this.conference.id}/meeting/${meetingId}/panel`]));
 
-      //this.router.navigate(['../', 'meetingId', 'panel', '_blank'], {relativeTo: this.activeRoute})
-      window.open('#' + url, '_blank');
+    //this.router.navigate(['../', 'meetingId', 'panel', '_blank'], {relativeTo: this.activeRoute})
+    window.open('#' + url, '_blank');
   }
 
   changeBeginDate(event) {
@@ -591,35 +591,35 @@ export class MeetingComponent implements OnInit, OnDestroy {
       }
 
       if (this.receptionistsActived) {
-        for (let i = 0 ; this.receptionistsActived.length > i ; i++) {
+        for (let i = 0; this.receptionistsActived.length > i; i++) {
           if (!this.receptionistsActived[i].id) {
             const a = await this.personSrv.postOperator('Recepcionist', this.receptionistsActived[i]);
             const p = (this.receptionistsActived[i].contactEmail && this.receptionistsActived[i].contactEmail !== '')
-                        ?  await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail)
-                        : await  this.personSrv.findPersonBySub(this.receptionistsActived[i].sub);
+              ? await this.meetingSrv.getReceptionistByEmail(this.receptionistsActived[i].contactEmail)
+              : await this.personSrv.findPersonBySub(this.receptionistsActived[i].sub);
             this.receptionistsActived[i] = p;
           }
         }
       }
 
-      const sender = {...form} as Meeting;
+      const sender = { ...form } as Meeting;
       sender.receptionists = this.receptionistsActived ? this.receptionistsActived.map(r => r.id) : [];
       sender.channels = this.channels;
-      this.resultBeginDate=   sender.beginDate;
+      this.resultBeginDate = sender.beginDate;
       this.beginDateLengh1 = this.resultBeginDate;
-      this.beginDateLengh2=   this.beginDateLengh1.length;
-      this.resultEndDate=   sender.endDate;
+      this.beginDateLengh2 = this.beginDateLengh1.length;
+      this.resultEndDate = sender.endDate;
       this.endDateLengh1 = this.resultEndDate;
-      this.endDateLengh2=   this.endDateLengh1.length;
-      if(this.beginDateLengh2 == 16){
+      this.endDateLengh2 = this.endDateLengh1.length;
+      if (this.beginDateLengh2 == 16) {
         sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
-      }else{
+      } else {
         sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate), 'dd/MM/yyyy HH:mm:ss');
         sender.beginDate = this.datePipe.transform(MeetingComponent.getDate(sender.beginDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
       }
-      if(this.endDateLengh2 == 16){
+      if (this.endDateLengh2 == 16) {
         sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
-      }else{
+      } else {
         sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate), 'dd/MM/yyyy HH:mm:ss');
         sender.endDate = this.datePipe.transform(MeetingComponent.getDate(sender.endDate + ':00'), 'dd/MM/yyyy HH:mm:ss');
       }
@@ -635,7 +635,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
         this.messageSrv.add({
           severity: 'success',
           summary: this.translate.instant('success'),
-          detail: this.translate.instant(messageSuccess, {name: result.name}),
+          detail: this.translate.instant(messageSuccess, { name: result.name }),
           life: 8000,
         });
       }, 5000);
@@ -661,14 +661,14 @@ export class MeetingComponent implements OnInit, OnDestroy {
         return this.messageSrv.add({
           severity: 'success',
           summary: this.translate.instant('success'),
-          detail: this.translate.instant('conference.meeting.success.delete', {name: meeting.name}),
+          detail: this.translate.instant('conference.meeting.success.delete', { name: meeting.name }),
         });
       }
     } catch (error) {
       return this.messageSrv.add({
         severity: 'warn',
         summary: this.translate.instant('error'),
-        detail: this.translate.instant('conference.meeting.error.delete', {name: meeting.name}),
+        detail: this.translate.instant('conference.meeting.error.delete', { name: meeting.name }),
       });
     }
   }
@@ -688,7 +688,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     this.loadOptionsTypesMeeting();
     this.loadOptionsAttendanceListModes();
     await this.loadPlanItemsTargetedBy();
-    this.translateChange.getCurrentLang().subscribe(({lang}) => {
+    this.translateChange.getCurrentLang().subscribe(({ lang }) => {
       this.calendarTranslate = calendar[lang];
     });
   }
@@ -699,7 +699,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     };
 
     const conferenceNameItem = {
-      label: this.translate.instant('administration.conference-name', {name: this.conference.name}),
+      label: this.translate.instant('administration.conference-name', { name: this.conference.name }),
       routerLink: ['/administration/conferences/']
     };
 
@@ -728,28 +728,28 @@ export class MeetingComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  async generateLinkMeetingPrecadastro(meeting: Meeting){
-    this.meetingUrl = { url : `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl( `/registration/${this.conferenceId}/meeting/${meeting.id}`)}`};
-    this.modalData = {title: meeting.name};
+  async generateLinkMeetingPrecadastro(meeting: Meeting) {
+    this.meetingUrl = { url: `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/registration/${this.conferenceId}/meeting/${meeting.id}`)}` };
+    this.modalData = { title: meeting.name };
     this.ModalService.open('geraLink');
     this.meetingDataSelected = meeting;
   }
 
-  async generateLinkMeetingCredenciamento(meeting: Meeting){
-    this.meetingUrl = { url : `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/authority-credential/${meeting.id}`)}`};
-    this.modalData = {title: meeting.name};
+  async generateLinkMeetingCredenciamento(meeting: Meeting) {
+    this.meetingUrl = { url: `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/authority-credential/${meeting.id}`)}` };
+    this.modalData = { title: meeting.name };
     this.ModalService.open('geraLink');
     this.meetingDataSelected = meeting;
   }
 
-  async generateLinkTeamCredenciamento(meeting: Meeting){
-    this.meetingUrl = { url : `${this.document.location.origin.replace('4000', '4200')}/${this.location.prepareExternalUrl(`/team-credential/${meeting.id}`)}`};
-    this.modalData = {title: meeting.name};
+  async generateLinkTeamCredenciamento(meeting: Meeting) {
+    this.meetingUrl = { url: `${this.document.location.origin.replace('4200', '4000')}/${this.location.prepareExternalUrl(`/team-credential/${meeting.id}`)}` };
+    this.modalData = { title: meeting.name };
     this.ModalService.open('geraLink');
     this.meetingDataSelected = meeting;
   }
 
-  copyUrl(url: string){
+  copyUrl(url: string) {
     const el = document.createElement('textarea');
     el.value = url;
     document.body.appendChild(el);
@@ -764,13 +764,13 @@ export class MeetingComponent implements OnInit, OnDestroy {
     });
   }
 
-  generateQRCodeAutoChekIn(meeting: Meeting){
+  generateQRCodeAutoChekIn(meeting: Meeting) {
     this.ImageQrCode = '';
     this.meetingSrv.generateQRCodeAutoCheckIn(meeting.id).
-    then(url => {
-      this.ImageQrCode = url;
-    });
-    this.modalData = {title: meeting.name};
+      then(url => {
+        this.ImageQrCode = url;
+      });
+    this.modalData = { title: meeting.name };
     this.ModalService.open('QRCodeImage');
     this.meetingDataSelected = meeting;
   }
