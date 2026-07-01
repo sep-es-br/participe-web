@@ -98,10 +98,10 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.breadcrumbSrv.setItems([
       { label: 'attendance.label' },
       {
-        label: `Nova Autoridade`,
+        label: `Adicionar a Equipe de Governo`,
         routerLink: [`/attendance/edit/new-authority`]
       },
-    ])
+    ]);
   }
 
 
