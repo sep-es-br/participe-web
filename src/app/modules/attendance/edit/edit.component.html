@@ -140,7 +140,7 @@
               </div>
 
               <div class="sort-button" [class.is-sticky]="isScrolled" >
-                <button title="Ordenar" class="filter-toggle btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                <button title="Ordenar" class="filter-toggle btn btn-sm btn-outline-primary d-flex justify-content-center align-items-center gap-1"
                         type="button" (click)="menu.toggle($event)" >
                   <span *ngIf="selectedSortLabel">{{selectedSortLabel | translate}}</span>
                   <i class="fa-solid fa-arrow-right-arrow-left fa-rotate-90"></i>
@@ -286,7 +286,7 @@
               <div class="action-col">
                 <div class="allow-announce-wrapper d-flex justify-content-center align-items-center">
                   <!-- tiragem -->
-                  <ng-container *ngIf="attendee.isAuthority && !attendee.toAnnounce && !attendee.isAnnounced">
+                  <ng-container *ngIf="attendee.checkedIn && attendee.isAuthority && !attendee.toAnnounce && !attendee.isAnnounced">
                     <div class="action-item">
                       <fa-icon [icon]="iconScreening" class="action-icon" style="color: #607d8b;"></fa-icon>
                       <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">Triagem</span>
@@ -322,7 +322,7 @@
 
               <!-- Coluna 2: Pré-credenciamento -->
               <div class="action-col">
-                <div class="action-item" *ngIf="!(attendee.isTeam && !attendee.checkedIn)"
+                <div class="action-item"
                   [pTooltip]="attendee.preRegistered ? 'Participante pré-credenciado em ' + attendee.preRegisteredDate : 'Pré-credenciamento: Ausente'"
                   tooltipPosition="top">
                   <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
