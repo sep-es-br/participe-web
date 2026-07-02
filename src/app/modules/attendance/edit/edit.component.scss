@@ -633,8 +633,22 @@ div[role="button"] {
   }
 }
 
-.sort-button {
-  min-width: 36px;
+.sort-button, .filter-button {
+
+  button {
+    min-width: 34px;
+    min-height: 36px;
+    line-height: 1rem;
+
+    span {
+      max-width: 20vw;
+      text-wrap: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
 }
 
 .locality-box {
