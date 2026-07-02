@@ -65,6 +65,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   ];
 
   optionsFilterBy: SelectItem[] = [
+    { label: 'Todos', value: 'all' },
     { label: 'Presentes', value: 'pres' },
     { label: 'Pré-credenciados', value: 'prereg' },
     { label: 'Pré-credenciados presentes', value: 'prereg_pres' },
@@ -741,8 +742,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       this.selectedParticipante = 'all';
       this.tempParticipante = 'all';
     } else if (key === 'filterBy') {
-      this.selectedFilterBy = 'pres';
-      this.tempFilterBy = 'pres';
+      this.selectedFilterBy = 'all';
+      this.tempFilterBy = 'all';
     } else if (key === 'filterByStatus') {
       this.selectedFilterByStatus = 'all';
       this.tempFilterByStatus = 'all';
@@ -773,7 +774,7 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
       }
     }
 
-    if (this.selectedFilterBy) {
+    if (this.selectedFilterBy && this.selectedFilterBy !== 'all') {
       const found = this.optionsFilterBy.find(opt => opt.value === this.selectedFilterBy);
       if (found) {
         tags.push({
