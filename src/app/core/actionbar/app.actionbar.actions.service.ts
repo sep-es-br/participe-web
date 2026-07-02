@@ -24,8 +24,8 @@ export class ActionBarService {
     this.itemsSource.next(items);
   }
 
-  set recordAmount(recordAmount : IRecordAmount) {
-    this.recordAmountSource.next(recordAmount)
+  set recordAmount(recordAmount: IRecordAmount) {
+    this.recordAmountSource.next(recordAmount);
   }
 
 

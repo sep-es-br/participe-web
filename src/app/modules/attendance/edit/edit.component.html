@@ -324,7 +324,7 @@
               <div class="action-col">
                 <div class="action-item"
                   [pTooltip]="attendee.preRegistered ? 'Participante pré-credenciado em ' + attendee.preRegisteredDate : 'Pré-credenciamento: Ausente'"
-                  tooltipPosition="top">
+                  tooltipPosition="top" *ngIf="attendee.preRegistered">
                   <img src="assets/layout/images/icons/preregister_phone.svg" alt="" class="action-img">
                   <span class="icon-text text-muted text-truncate mt-1 d-none d-md-block">
                     {{ attendee.preRegistered ? getHowLongAgo(attendee.preRegisteredDate) : '' }}
