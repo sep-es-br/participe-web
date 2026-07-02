@@ -635,6 +635,16 @@ div[role="button"] {
 
 .sort-button, .filter-button {
 
+  &.is-sticky {
+    background: rgba(10, 15, 30, 0.85);
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 2px 3px 10px lightgray;
+    color: white !important;
+  }
+
   button {
     min-width: 34px;
     min-height: 36px;
@@ -1037,15 +1047,6 @@ div[role="button"] {
   color: white !important;
 }
 
-.filter-button.is-sticky {
-  background: rgba(10, 15, 30, 0.85);
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 8px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 2px 3px 10px lightgray;
-  color: white !important;
-}
 
 
 .title-filter {

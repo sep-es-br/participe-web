@@ -59,8 +59,8 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
   optionsParticipantes: SelectItem[] = [
     { label: 'Todos', value: 'all' },
     { label: 'Representantes', value: 'repr' },
-    { label: 'Representantes não equipe de governo', value: 'repr-not-equipe' },
-    { label: 'Representantes equipe de governo', value: 'repr-equipe' },
+    { label: 'Rep. Governo', value: 'repr-equipe' },
+    { label: 'Demais Rep.', value: 'repr-not-equipe' },
     { label: 'Público', value: 'pub' }
   ];
 
