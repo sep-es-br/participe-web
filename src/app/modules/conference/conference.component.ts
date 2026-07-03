@@ -139,8 +139,9 @@ export class ConferenceComponent implements OnInit {
   async generateProposeReport() {
     if(this.reportLoadingSignal()) return;
 
-    this.reportLoadingSignal.set('propose')
-    this.reportService.getProposalReport(this.conference.id).finally(() => this.reportLoadingSignal.set(undefined))
+    this.reportLoadingSignal.set('propose');
+    this.reportService.downloadProposeReport(this.idConference).finally(() => this.reportLoadingSignal.set(undefined));
+    //this.reportService.getProposalReport(this.conference.id).finally(() => this.reportLoadingSignal.set(undefined))
   }
 
   async loadPlanOptions() {

@@ -646,8 +646,7 @@ div[role="button"] {
   }
 
   button {
-    min-width: 34px;
-    min-height: 36px;
+    min-width: 36px;
     line-height: 1rem;
 
     span {
@@ -830,12 +829,19 @@ div[role="button"] {
 .filter-container {
   display: contents;
 
+
+  .sort-button {
+    padding: 0 0 0.5em 0 !important;
+  }
+
+
   .filter-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 5px;
-    padding: 0px !important;
+    padding: 0 0 0.5em 0 !important;
+
 
     .filter-tags {
       display: flex !important;
@@ -907,6 +913,7 @@ div[role="button"] {
         }
       }
     }
+
 
     .map-btn {
       background: none;
@@ -1018,15 +1025,17 @@ div[role="button"] {
 
 .filter-wrapper {
   position: sticky;
-  top: 0px;
+  top: 0;
   z-index: 1000;
   width: 100%;
   padding: 6px 0px 6px 0px;
   transition: top 0.3s ease-in-out;
   margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
 
   @media screen and (max-width: 768px) {
     top: 0px;
+    margin-bottom: -0.5em;
   }
 }
 
