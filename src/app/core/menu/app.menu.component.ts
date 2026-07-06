@@ -22,7 +22,7 @@ import {AuthService} from '@app/shared/services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
 import { IPerson } from '@app/shared/interface/IPerson';
 import { Router } from '@angular/router';
-import * as moment from 'moment';
+import moment from 'moment';
 import {ConferenceService} from '@app/shared/services/conference.service';
 
 @Component({

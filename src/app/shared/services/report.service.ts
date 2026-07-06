@@ -2,7 +2,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
 import Common from "../util/Common";
-import * as moment from "moment";
+import moment from 'moment';
 import {catchError, filter, repeat, expand, skipWhile, switchMap, take, takeUntil, takeWhile, tap, timeout} from 'rxjs/operators';
 import {EMPTY, throwError, timer} from 'rxjs';
 

@@ -20,12 +20,13 @@ import { CitizenSenderModel } from './CitizenSenderModel';
 import { CitizenService } from '../services/citizen.service';
 import { CitizenAuthenticationModel } from './CitizenAuthenticationModel';
 import { LocalityService } from '../services/locality.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { concat } from 'lodash';
 import { PersonService } from '../services/person.service';
 import { ParticipationService } from '@app/shared/services/participation.service';
 import { IOptionOrganization } from '@app/shared/interface/IOptionOrganization';
 import { ActivatedRoute, Router } from '@angular/router';
+import {translate} from '@angular/localize/tools';
 
 export enum AuthTypeEnum {
   CPF = 'CPF',
@@ -549,13 +550,15 @@ export class AttendanceModel {
         position: 'RIGHT',
         handle: () => { },
         icon: 'user-solid.svg',
-        label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
+        mainLabel: `${this.totalCheckedIn}`,
+        altLabel: `${this.translate.instant('attendance.attendant')}`,
       },
       {
         position: 'RIGHT',
         handle: () => { },
         icon: 'preregister_phone.svg',
-        label: `${this.totalPreRegistered} Pré-credenciados`
+        mainLabel: `${this.totalPreRegistered}`,
+        altLabel: `Pré-credenciados`
       }
     ]);
   }

@@ -161,7 +161,7 @@ export class ProposalEvaluationService {
     return this._http
       .get(`${this._url}/is-evaluator/${personId}`, {
         headers: Common.buildHeaders(),
-        responseType: "text",
+        responseType: 'text',
       }).pipe(catchError((err) => {
         console.error(err);
         return of(undefined);

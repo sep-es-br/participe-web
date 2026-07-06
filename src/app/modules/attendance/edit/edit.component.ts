@@ -272,13 +272,15 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
         position: 'RIGHT',
         handle: () => { },
         icon: 'user-solid.svg',
-        label: `${this.totalCheckedIn} ${this.translate.instant('attendance.attendant')}`,
+        mainLabel: `${this.totalCheckedIn}`,
+        altLabel: `${this.translate.instant('attendance.attendant')}`
       },
       {
         position: 'RIGHT',
         handle: () => { },
         icon: 'preregister_phone.svg',
-        label: `${this.totalPreRegistered} Pré-credenciados`
+        mainLabel: `${this.totalPreRegistered}`,
+        altLabel: `Pré-credenciados`
       }
     ]);
   }

@@ -10,7 +10,7 @@ import { ISocialLoginResult } from '@app/shared/interface/ISocialLoginResult';
 import { IPerson } from '@app/shared/interface/IPerson';
 import { ConferenceService } from '@app/shared/services/conference.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ProposalEvaluationService } from '@app/shared/services/proposal-evaluation.service';
 
 @Component({
@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
       ]);
       this.router.navigate(['/control-panel-dashboard']);
 
-    } else if (sessionStorage.getItem("evaluatorOrgGuid")) {
+    } else if (sessionStorage.getItem('evaluatorOrgGuid')) {
       this.router.navigate(['/proposal-evaluation']);
     } else if (user.roles.find(r => (r === 'Recepcionist' || r === 'Support'))) {
       if (await this.HaveMeetingsForReceptionist()) {

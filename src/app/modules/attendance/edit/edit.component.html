@@ -93,7 +93,7 @@
       <section id="attendee-filter-row">
         <div class="filter-container mb-3">
           <div class="filter-wrapper" [class.is-sticky]="isScrolled">
-            <div class="filter-button px-2 d-flex pb-0 align-items-center justify-content-between flex-wrap gap-2 w-100">
+            <div class="filter-button px-2 d-flex pb-0 align-items-stretch justify-content-between flex-wrap gap-2 w-100">
 
 
               <div class="sort-button" [class.is-sticky]="isScrolled" >
@@ -120,7 +120,7 @@
                   </div>
                 </div> -->
 
-                <div *ngFor="let tag of activeFilters; let i = index" class="filter-tag d-flex align-items-center gap-1"
+                <div *ngFor="let tag of activeFilters; let i = index" class="filter-tag h-100 d-flex align-items-center gap-1"
                   [class.is-sticky]="isScrolled">
                   <div class="filter-tag-inner" [ngClass]="{ 'invisible-tag': showFilters }">
                     <div class="d-flex flex-column align-items-start text-start">
@@ -244,8 +244,8 @@
             <div class="no-result text-center p-3">{{ "attendance.noResult" | translate }}</div>
           </div>
 
-          <div class="row w-100 m-0 result premium-list-item align-items-center p-1"
-            *ngFor="let attendee of listAttendees">
+          <div class="row w-100 m-0 result premium-list-item cursor-pointer align-items-center px-1 py-3"
+            *ngFor="let attendee of listAttendees" (click)="selectAttendeeWithFilter(attendee, $event, true)">
 
             <div class="col-7 col-sm-6 col-lg-4 d-flex align-items-center gap-2 justify-content-start px-1">
               <div class="attendee-avatar">
@@ -261,7 +261,7 @@
                   </ng-template>
                 </ng-container>
               </div>
-              <div class="attendee-info min-w-0" (click)="selectAttendeeWithFilter(attendee, $event, true)">
+              <div class="attendee-info min-w-0">
                 <div class="fw-bold text-uppercase text-truncate name-attendee" [pTooltip]="attendee.name"
                   tooltipPosition="top">{{ attendee.name }}</div>
                 <div class="text-uppercase text-truncate role-attendee" *ngIf="attendee.isAuthority"
@@ -271,8 +271,7 @@
               </div>
             </div>
 
-            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 "
-              (click)="selectAttendeeWithFilter(attendee, $event, true)">
+            <div class="col-2 col-sm-3 col-lg-5 d-flex flex-column px-1 min-w-0 ">
               <ng-container *ngIf="attendee.isAuthority">
                 <div class="organization-name fw-bold text-uppercase text-truncate w-100"
                   [pTooltip]="getOrganizationDisplay(attendee)" tooltipPosition="top">

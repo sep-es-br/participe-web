@@ -19,7 +19,7 @@ import { environment } from '@environments/environment';
 import { FilesService } from '@app/shared/services/files.service';
 import { File } from '@app/shared/models/file';
 import { StructureItemService } from '@app/shared/services/structure-item.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { IHowItWorkStep } from '@app/shared/interface/IHowItWorkStep';
 import { IExternalLinks } from '@app/shared/interface/IExternalLinks';
 import { CustomValidators } from '@app/shared/util/CustomValidators';

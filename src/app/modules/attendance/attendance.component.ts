@@ -9,7 +9,7 @@ import {AuthService} from '@app/shared/services/auth.service';
 import { ActionBarService, ActionButtonItem } from '@app/core/actionbar/app.actionbar.actions.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
 import { DateProfileGenerator } from '@fullcalendar/core';
-import * as moment from 'moment';
+import moment from 'moment';
 
 
 @Component({
