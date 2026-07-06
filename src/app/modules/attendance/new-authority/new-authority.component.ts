@@ -118,10 +118,12 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     const {
       organization,
       name,
+      role,
       keepConfirmation
     } = this.form.value as {
       organization: IOptionOrganization,
       name: PersonsListItems,
+      role: string,
       keepConfirmation: boolean
     };
 
@@ -135,7 +137,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
           undefined,
           this.idMeeting,
           organization,
-          name.role + ' - ' + name.lotacao,
+          role,
           name.sub,
           true
         );
