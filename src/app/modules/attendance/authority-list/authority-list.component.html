@@ -14,11 +14,11 @@
             <div class="name text-center font-bold text-lg-start d-flex justify-content-center justify-content-lg-start">
               <span>{{ attendee.name | uppercase }}</span>
             </div>
-            <div class="contact d-flex col-lg justify-content-center justify-content-lg-start">
+            <div class="contact text-center d-flex col-lg justify-content-center justify-content-lg-start">
               <span>{{ attendee.role | uppercase }}</span>
             </div>
           </div>
-          <div class="info-place d-flex col-lg flex-column gap-1 justify-content-center mb-4 mb-sm-0">
+          <div class="info-place text-center d-flex col-lg flex-column gap-1 justify-content-center mb-4 mb-sm-0">
             <p class="organization m-0">{{ attendee.organization | uppercase }}</p>
           </div>
           <button pButton class="btnAnunciar d-flex  col-lg-auto justify-content-center" *ngIf="!attendee.announced" (click)="toggleAnnounced(attendee)">Anunciei</button>
