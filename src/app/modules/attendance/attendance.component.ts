@@ -4,7 +4,7 @@ import { ConferenceService } from '@app/shared/services/conference.service';
 import {Component, OnInit} from '@angular/core';
 import {BreadcrumbService} from '@app/core/breadcrumb/breadcrumb.service';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
-import {faEdit, faUserPlus, faUserTie, faList} from '@fortawesome/free-solid-svg-icons';
+import {faEdit, faUserPlus, faUserTie, faList, faMicrophone, faMicrophoneAlt} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from '@app/shared/services/auth.service';
 import { ActionBarService, ActionButtonItem } from '@app/core/actionbar/app.actionbar.actions.service';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
@@ -44,12 +44,12 @@ export class AttendanceComponent implements OnInit {
           if (roles.includes('Administrator') || roles.includes('Support')) {
             this.actions.push({name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus});
             this.actions.push({name: 'attendance.edit', url: 'edit', icon: faList});
-            this.actions.push({name: 'attendance.authorities', url: 'authority-list', icon: faUserTie});
+            this.actions.push({name: 'attendance.authorities', url: 'authority-list', icon: faMicrophoneAlt});
           } else if (roles.includes('Recepcionist') && this.IsAMeetingRunning(confs)) {
           // Administrators and receptionists can register only during the meetings
             this.actions.push({name: 'attendance.registerAttendance', url: 'register', icon: faUserPlus});
           } else if (roles.includes('Presenter') && this.IsAMeetingRunning(confs)) {
-            this.actions.push({name: 'attendance.authorities', url: 'authority-list', icon: faUserTie});
+            this.actions.push({name: 'attendance.authorities', url: 'authority-list', icon: faMicrophoneAlt});
           }
         }
       });
