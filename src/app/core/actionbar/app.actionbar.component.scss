@@ -34,12 +34,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-self: flex-end;
+  justify-content: flex-end;
 
   .action-item {
     flex: 0 0 auto;
   }
 
-  @media screen and (max-width: 500px) {
-    display: none;
-  }
 }

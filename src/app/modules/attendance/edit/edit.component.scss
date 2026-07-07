@@ -635,9 +635,18 @@ div[role="button"] {
 
 .sort-button, .filter-button {
 
+  &.is-sticky {
+    background: rgba(10, 15, 30, 0.85);
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 2px 3px 10px lightgray;
+    color: white !important;
+  }
+
   button {
-    min-width: 34px;
-    min-height: 36px;
+    min-width: 36px;
     line-height: 1rem;
 
     span {
@@ -803,9 +812,7 @@ div[role="button"] {
 }
 
 .list-container {
-  padding-top: 0.75rem;
   background-color: white;
-  padding-bottom: 0.75rem;
 }
 
 
@@ -820,21 +827,26 @@ div[role="button"] {
 .filter-container {
   display: contents;
 
+
+
   .filter-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 5px;
-    padding: 0px !important;
+    overflow-y: visible;
+
 
     .filter-tags {
       display: flex !important;
       flex: 1;
       min-width: 0;
+      align-self: stretch;
       overflow-x: auto !important;
       flex-wrap: nowrap !important;
       white-space: nowrap;
       padding-bottom: 0.5rem;
+      margin-bottom: -0.5rem;
 
       gap: 8px;
       // padding: 6px 0;
@@ -898,6 +910,7 @@ div[role="button"] {
       }
     }
 
+
     .map-btn {
       background: none;
       border: none;
@@ -936,6 +949,7 @@ div[role="button"] {
       cursor: pointer;
       z-index: 1;
       border-radius: 4px;
+      height: 100%;
     }
   }
 
@@ -1008,15 +1022,15 @@ div[role="button"] {
 
 .filter-wrapper {
   position: sticky;
-  top: 0px;
+  top: 0;
   z-index: 1000;
   width: 100%;
-  padding: 6px 0px 6px 0px;
+  padding: 0.8rem 0px;
   transition: top 0.3s ease-in-out;
-  margin-top: -0.5rem;
 
   @media screen and (max-width: 768px) {
     top: 0px;
+    margin-bottom: -0.5em;
   }
 }
 
@@ -1037,15 +1051,6 @@ div[role="button"] {
   color: white !important;
 }
 
-.filter-button.is-sticky {
-  background: rgba(10, 15, 30, 0.85);
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 8px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 2px 3px 10px lightgray;
-  color: white !important;
-}
 
 
 .title-filter {
@@ -1054,4 +1059,10 @@ div[role="button"] {
 
 .button-modal-filter {
   border-radius: 8px;
+}
+
+::ng-deep {
+  .layout-content {
+    padding-top: 0;
+  }
 }

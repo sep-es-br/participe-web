@@ -125,7 +125,11 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   configureActionBar() {
     this.actionbarSrv.setItems([
-      { position: 'RIGHT', label: `${this.totalRecords} Cidadãos`, icon: 'users-solid.svg' },
+      {
+        position: 'RIGHT',
+        mainLabel: `${this.totalRecords}`,
+        altLabel:  `Cidadãos`,
+        icon: 'users-solid.svg' },
       {
         position: 'LEFT', handle: () => {
           this.showSelectConference = !this.showSelectConference;
@@ -183,15 +187,15 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async citizenLoadData(event?: PaginatorState){
 
-    
+
     if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
       await this.loadConferencesActives();
     }
-    
+
     this.search.conferenceId = this.conferenceSelect.id;
-    
+
       await this.loadData(event);
-    
+
     this.buildBreadcrumb();
     this.configureActionBar();
   }
@@ -414,14 +418,14 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   }
 
   filterLocalities({ query }) {
-    if (!query) { 
+    if (!query) {
       return this.filteredLocalities = this.localities;
     }
-    this.filteredLocalities = this.localities.map(item => item).filter( value => this.replaceSpecialChars(value.label).includes(this.replaceSpecialChars(query))); 
+    this.filteredLocalities = this.localities.map(item => item).filter( value => this.replaceSpecialChars(value.label).includes(this.replaceSpecialChars(query)));
   }
 
   replaceSpecialChars(str)	{
-		if (!str) return '';			    
+		if (!str) return '';
 		str = str.toLowerCase();
     str = str.trim();
     str = str.replace(/\s/g, '')
@@ -431,7 +435,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 		str = str.replace(/[oóòõöô]/,'o');
 		str = str.replace(/[uúùüû]/,'u');
     str = str.replace(/[ç]/,'c');
-		return str; 
+		return str;
 	  }
 
   toStandardText(str: string) {

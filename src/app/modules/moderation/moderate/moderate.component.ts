@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HelperUtils } from '@app/shared/util/HelpersUtil';
 import { ModerationComments } from '@app/shared/models/moderationComments';
 import { TranslateChangeService } from '@app/shared/services/translateChange.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as _ from 'lodash';
 import { ProposalEvaluationService } from '@app/shared/services/proposal-evaluation.service';
 import { ProposalEvaluationCreateFormModel } from '@app/shared/models/ProposalEvaluationModel';

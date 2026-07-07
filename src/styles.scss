@@ -172,6 +172,11 @@ div.search {
 
     @media screen and (max-width: 675px) {
       flex-direction: column;
+
+      .action-item {
+        width: 100%;
+        justify-content: flex-start;
+      }
     }
   }
 

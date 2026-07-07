@@ -4,7 +4,8 @@ import { IRecordAmount } from './recordAmmount.interface';
 
 export interface ActionButtonItem {
   icon?: string;
-  label?: string;
+  mainLabel?: string;
+  altLabel?: string;
   handle?: any;
   tooltip?: string;
   position: 'LEFT' | 'RIGHT';

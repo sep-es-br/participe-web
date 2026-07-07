@@ -30,13 +30,13 @@ export class AuthService {
     @Inject(DOCUMENT) private document: Document
   ) { }
 
-  private static getUrlForSocialAuth(origin: string) {
-    return `${environment.apiEndpoint}/oauth2/authorization/${origin}?front_callback_url=${AuthService.getFrontFallbackUrl()}`;
+  private static getUrlForSocialAuth(origin: string, module?: string) {
+    return `${environment.apiEndpoint}/oauth2/authorization/${origin}?front_callback_url=${AuthService.getFrontFallbackUrl()}${ module ? `&front_module=${module}` : `` }`;
   }
 
   signInAcessoCidadao() {
     localStorage.setItem('LogoutURL', environment.logoutURIAcessoCidadao);
-    this.document.location.href = AuthService.getUrlForSocialAuth('idsvr');
+    this.document.location.href = AuthService.getUrlForSocialAuth('idsvr', 'admin');
   }
 
   public async refresh() {

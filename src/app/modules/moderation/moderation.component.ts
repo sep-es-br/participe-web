@@ -11,7 +11,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { calendar } from "@app/shared/constants";
 import { TranslateChangeService } from "@app/shared/services/translateChange.service";
 import * as _ from "lodash";
-import * as moment from "moment";
+import moment from 'moment';
 import { Router } from "@angular/router";
 import { AuthService } from "@app/shared/services/auth.service";
 import { ConferenceService } from "@app/shared/services/conference.service";
@@ -154,16 +154,17 @@ export class ModerationComponent implements OnInit, OnDestroy {
   configureActionBar() {
     this.actionBarSrv.setItems([
       {
-        position: "RIGHT",
-        label: `${this.paginatorTotalRecords} Textos`,
-        icon: "comment.svg",
+        position: 'RIGHT',
+        mainLabel: `${this.paginatorTotalRecords}`,
+        altLabel: `Textos`,
+        icon: 'comment.svg',
       },
       {
-        position: "LEFT",
+        position: 'LEFT',
         handle: () => {
           this.showSelectConference = !this.showSelectConference;
         },
-        icon: "change.svg",
+        icon: 'change.svg',
       },
     ]);
   }
@@ -310,7 +311,7 @@ export class ModerationComponent implements OnInit, OnDestroy {
   }
 
   changeDate(field: string, event) {
-    this.filter[field] = moment(event).format("DD/MM/yyyy");
+    this.filter[field] = moment(event).format('DD/MM/yyyy');
   }
 
   async changeSmallFilter(status: string) {

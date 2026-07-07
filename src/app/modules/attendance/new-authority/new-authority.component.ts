@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
 import { FormControl, UntypedFormBuilder } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import { MessageService, SelectItem } from 'primeng/api';
 import { faCheckCircle, faCircle, faIdBadge } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -26,6 +26,7 @@ import { AutoComplete, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { PersonsListItems } from '@app/shared/services/person.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import { RequestStatus } from '@app/shared/interface/IRequestStataus';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit',
@@ -35,6 +36,7 @@ import { RequestStatus } from '@app/shared/interface/IRequestStataus';
 export class NewAuthorityComponent extends AttendanceModel implements OnInit, OnDestroy, AfterViewInit {
 
   iconSearch = faSearch;
+  private destroy$: Subject<void> = new Subject<void>();
 
   filteredOrganizations = signal(this.meetingSrv.organizationList());
   filteredNames = signal<PersonsListItems[]>([]);
@@ -65,7 +67,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
   }
 
   ngOnInit() {
-    this.form.addControl("keepConfirmation", new FormControl(true));
+    this.form.addControl('keepConfirmation', new FormControl(true));
   }
 
   async applyValue(evt: PersonsListItems, btnSalvar?: HTMLButtonElement) {
@@ -106,7 +108,8 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
 
 
   ngOnDestroy(): void {
-
+    this.destroy$.next();
+    this.destroy$.complete();
     this.actionbarSrv.setItems([]);
   }
 
@@ -115,10 +118,12 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     const {
       organization,
       name,
+      role,
       keepConfirmation
     } = this.form.value as {
       organization: IOptionOrganization,
       name: PersonsListItems,
+      role: string,
       keepConfirmation: boolean
     };
 
@@ -132,7 +137,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
           undefined,
           this.idMeeting,
           organization,
-          name.role + ' - ' + name.lotacao,
+          role,
           name.sub,
           true
         );
@@ -180,15 +185,23 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     const { value } = evt as { value: IOptionOrganization };
     this.isLoadingNames = true;
 
-    this.personSrv.findPersonsOrganization(value.guid).then(names => {
-      this.personSrv.allNames = names;
-    }).finally(() => {
-      this.selectedName = undefined;
-      this.form.controls.name.patchValue(undefined);
-      this.form.controls.name.markAsPristine();
-      this.form.controls.name.markAsUntouched();
-      this.isLoadingNames = false;
-    });
+    this.personSrv.findPersonsOrganizationV2(value.guid)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe( names => {
+        this.personSrv.allNames = names;
+        this.selectedName = undefined;
+        this.form.controls.name.patchValue(undefined);
+        this.form.controls.name.markAsPristine();
+        this.form.controls.name.markAsUntouched();
+        this.isLoadingNames = false;
+      }, (error) => {
+        this.selectedName = undefined;
+        this.form.controls.name.patchValue(undefined);
+        this.form.controls.name.markAsPristine();
+        this.form.controls.name.markAsUntouched();
+        this.isLoadingNames = false;
+      });
+
 
   }
 

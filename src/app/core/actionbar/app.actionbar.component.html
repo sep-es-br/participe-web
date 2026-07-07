@@ -15,14 +15,16 @@
       <div class="action-item" [title]="action?.tooltip ? action.tooltip : ''"  *ngFor="let action of actionsButtonLeft" [ngClass]="{'clickable': isClickable(action) }"
         (click)="handleEvent(action)">
         <img *ngIf="action?.icon" [src]="'assets/layout/images/icons/' + action?.icon" alt="">
-        <span *ngIf="action?.label">{{ action?.label }}</span>
+        <span *ngIf="action?.mainLabel">{{ action?.mainLabel }}</span>
+        <span *ngIf="action?.altLabel">{{ action?.altLabel }}</span>
       </div>
     </div>
     <div class="actions-right">
       <div class="action-item" [title]="action?.tooltip ? action.tooltip : ''"  [ngClass]="{'clickasble': isClickable(action)}" *ngFor="let action of actionsButtonRight"
         (click)="handleEvent(action)">
         <img *ngIf="action?.icon" [src]="'assets/layout/images/icons/' + action?.icon" alt="">
-        <span>{{ action?.label }}</span>
+        <span *ngIf="action?.mainLabel">{{ action?.mainLabel }}</span>
+        <span *ngIf="action?.altLabel" class="d-none d-md-flex">{{ action?.altLabel }}</span>
       </div>
     </div>
   </div>

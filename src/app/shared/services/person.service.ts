@@ -2,6 +2,9 @@ import { IPerson } from '@app/shared/interface/IPerson';
 import { Injectable, Injector, Inject } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import Common from '../util/Common';
+import {expand, switchMap, tap, last, takeUntil} from 'rxjs/operators';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {EMPTY, Observable, of, Subject, throwError} from 'rxjs';
 
 type PapeisBySubType = {
   role: string,
@@ -36,7 +39,7 @@ export class PersonService extends BaseService<any> {
   }
 
   getACRole(idPerson: number, idConference: number): Promise<any> {
-    return this.http.get<any>(`${this.urlBase}/${idPerson}/ACRole/${idConference}`,{ headers: Common.buildHeaders() }).toPromise();
+    return this.http.get<any>(`${this.urlBase}/${idPerson}/ACRole/${idConference}`, { headers: Common.buildHeaders() }).toPromise();
   }
 
   findPapeisBySub(sub: string): Promise<PapeisBySubType[]> {
@@ -50,6 +53,25 @@ export class PersonService extends BaseService<any> {
   findPersonsOrganization(guid: string): Promise<PersonsListItems[]> {
     if (!guid) return Promise.resolve([]);
     return this.http.get<PersonsListItems[]>(`${this.urlBase}/personsByOrganization/${guid}`).toPromise();
+  }
+
+  findPersonsOrganizationV2(guid: string): Observable<PersonsListItems[]> {
+    if (!guid) return of([]);
+    const chamada$ = () =>
+      this.http.get<PersonsListItems[]>(
+        `${this.urlBase}/V2/personsByOrganization/${guid}`,
+        {observe: 'response'});
+
+    return chamada$()
+            .pipe(
+              expand(resp => resp.status === 202 ? chamada$() : EMPTY),
+              switchMap(resp => {
+                if (resp.status === 200 || resp.status === 202)
+                  return of(resp.body);
+
+                return throwError(() => new HttpErrorResponse({error: resp.body, headers: resp.headers, status: resp.status}));
+              })
+            );
   }
 
 }
