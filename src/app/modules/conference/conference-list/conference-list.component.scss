@@ -105,6 +105,35 @@ form {
   .end-date {
     padding-left: 0.5em !important;
   }
+
+  ::ng-deep {
+    .p-datatable {
+      .p-datatable-wrapper {
+        .p-datatable-thead {
+          display: none;
+        }
+
+        .p-datatable-tbody {
+          tr {
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+
+            td {
+              display: flex;
+
+              .row {
+                div:not(.p-column-title) {
+                  padding-left: 1.5rem;
+                }
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
 }
 
 .dropdown-toggle::after {
