@@ -126,6 +126,19 @@ export class EditComponent extends AttendanceModel implements OnInit, OnDestroy,
     this.authTypeChangeSub = this.form.controls.authType.valueChanges.subscribe(change => this.handleChangeAuthType(change));
     this.handleChangeAuthType(AuthTypeEnum.CPF);
 
+    this.form.get('isPresent').valueChanges.subscribe(change => {
+      if (change){
+        this.form.get('announced').enable();
+        this.form.get('toAnnounce').enable();
+      } else {
+        this.form.get('announced').disable();
+        this.form.get('toAnnounce').disable();
+        this.form.get('announced').patchValue(false);
+        this.form.get('toAnnounce').patchValue(false);
+      }
+
+    });
+
     this.form.get('toAnnounce').valueChanges.subscribe(
       value => {
         if (!value) {
