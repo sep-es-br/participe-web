@@ -2,8 +2,8 @@ import {Component, Inject, Injector, OnDestroy, OnInit} from '@angular/core';
 import {UntypedFormBuilder} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {MessageService, SelectItem} from 'primeng/api';
-import {faCheckCircle, faCircle} from '@fortawesome/free-regular-svg-icons';
-import {faQrcode, faTimes} from '@fortawesome/free-solid-svg-icons';
+import {faCheckCircle, faCircle, faIdBadge} from '@fortawesome/free-regular-svg-icons';
+import {faQrcode, faTimes, faUserTie} from '@fortawesome/free-solid-svg-icons';
 
 import {AttendanceModel, AuthTypeEnum} from '@app/shared/models/AttendanceModel';
 import {Locality} from '@app/shared/models/locality';
@@ -380,4 +380,6 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
 
   protected readonly upperCase = upperCase;
   protected readonly toUpper = toUpper;
+  protected readonly iconTeam = faIdBadge;
+  protected readonly iconAuthority = faUserTie;
 }
