@@ -1,5 +1,5 @@
 export interface IAttendeeAuthority {
-  
+
   idPerson: number;
   idCheckIn: number;
   idLocality: number;
@@ -9,5 +9,6 @@ export interface IAttendeeAuthority {
   name: string;
   role: string;
   organization: string;
-  
+  isTeam: boolean;
+
 }

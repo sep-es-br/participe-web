@@ -10,6 +10,13 @@
           <div class="how-long-ago d-lg-none">
             {{ attendee.announced ? 'Anunciado' : 'Anunciar' }}
           </div>
+          <div class="icon-wrapper">
+          <fa-icon *ngIf="!attendee.isTeam; else iconTeam" [ngStyle]="{color: '#34495e'}" [icon]="iconAuthority"
+                   class="authority-icon"></fa-icon>
+          <ng-template #iconTeam>
+            <img src="assets/layout/images/icons/EquipeGov.svg" class="team-icon h-100" >
+          </ng-template>
+        </div>
           <div class="d-flex flex-column col-12 col-lg-5">
             <div class="name text-center font-bold text-lg-start d-flex justify-content-center justify-content-lg-start">
               <span>{{ attendee.name | uppercase }}</span>

@@ -11,6 +11,26 @@
 
   .result {
     padding: 1.5rem !important;
+    display: flex;
+
+    .icon-wrapper {
+
+      min-width: 64px !important;
+      max-width: 64px !important;
+      display: flex;
+      justify-content: center;
+
+      .authority-icon {
+        font-size: 55px !important;
+        width: 64px !important;
+      }
+
+      .team-icon {
+        display: block;
+        height: 55px !important;
+        object-fit: contain;
+      }
+    }
 
     &.announced {
       background-color: lightgray !important;
@@ -73,3 +93,4 @@
     }
   }
 }
+
