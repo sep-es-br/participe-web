@@ -14,7 +14,7 @@ import { ConferenceService } from '@app/shared/services/conference.service';
 import * as moment from 'moment';
 import { IConferenceWithMeetings } from '@app/shared/interface/IConferenceWithMeetings';
 import { Meeting } from '@app/shared/models/Meeting';
-import { concat } from 'lodash';
+import {concat, toUpper, upperCase} from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
 import { ActionBarService } from '@app/core/actionbar/app.actionbar.actions.service';
 import { BreadcrumbService } from '@app/core/breadcrumb/breadcrumb.service';
@@ -377,4 +377,7 @@ export class AuthorityListComponent extends AttendanceModel implements OnInit, O
     const customName = names.length > 2 ? `${names[0]} ${names[names.length - 1]}` : names.join(' ');
     return this.translate.instant('attendance.tooltipLabelUnchecking') + customName;
   }
+
+  protected readonly upperCase = upperCase;
+  protected readonly toUpper = toUpper;
 }

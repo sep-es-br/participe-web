@@ -9,7 +9,7 @@ import {
   faComments,
   faCrown,
   faEdit,
-  faMapMarkedAlt,
+  faMapMarkedAlt, faMicrophoneAlt,
   faPortrait,
   faSitemap,
   faTachometerAlt,
@@ -79,7 +79,7 @@ export class AppMenuComponent implements OnInit {
       const items = confs.length === 0 ? [] : [
         {label: 'attendance.registerAttendance', icon: faUserPlus, routerLink: ['/attendance/register']},
         {label: 'attendance.edit', icon: faEdit, routerLink: ['/attendance/edit']},
-        {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+        {label: 'attendance.authorities', icon: faMicrophoneAlt, routerLink: ['/attendance/authority-list']}
       ];
 
       if (window.location.href.endsWith('#/attendance')) {
@@ -116,14 +116,14 @@ export class AppMenuComponent implements OnInit {
         this.model.push(
           {
             label: 'attendance.label', icon: faUserCheck, items: [
-              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+              {label: 'attendance.authorities', icon: faMicrophoneAlt, routerLink: ['/attendance/authority-list']}
             ]
           });
       } else {
         this.model.push(
           {
             label: 'attendance.label', icon: faUserCheck, routerLink: ['/attendance'], items: [
-              {label: 'attendance.authorities', icon: faUserTie, routerLink: ['/attendance/authority-list']}
+              {label: 'attendance.authorities', icon: faMicrophoneAlt, routerLink: ['/attendance/authority-list']}
             ]
           });
       }

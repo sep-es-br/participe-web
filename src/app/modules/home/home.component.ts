@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
           }
         ).finally(() => {
           this.SetStartPage(user);
-        })
+        });
     }
 
   }
@@ -86,66 +86,16 @@ export class HomeComponent implements OnInit {
 
     } else if (sessionStorage.getItem('evaluatorOrgGuid')) {
       this.router.navigate(['/proposal-evaluation']);
-    } else if (user.roles.find(r => (r === 'Recepcionist' || r === 'Support'))) {
-      if (await this.HaveMeetingsForReceptionist()) {
-        this.breadcrumbService.setItems([
-          { label: 'attendance', routerLink: ['/attendance'] }
-        ]);
-        this.router.navigate(['/attendance']);
-      } else {
-        alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
-      }
+    } else if (user.roles.find(r => ['Recepcionist', 'Support', 'Presenter'].includes(r))) {
+      this.breadcrumbService.setItems([
+        { label: 'attendance', routerLink: ['/attendance'] }
+      ]);
+      this.router.navigate(['/attendance']);
     } else {
       alert('Acesso negado. Suas permissões são insuficientes para acessar este recurso.');
     }
   }
 
-  private async HaveMeetingsForReceptionist() {
-    const date = moment().format('DD/MM/YYYY HH:mm:ss');
-    const allConfs = await this.conferenceService.getConferencesWithPresentialMeetings(date);
-
-    return ((allConfs.length > 0) && (this.IsAMeetingRunning(allConfs)));
-  }
-
-
-  IsAMeetingRunning(confs: IConferenceWithMeetings[]): boolean {
-    const meetingFound =
-      confs.find((conf) => (
-        conf.meeting.find((meet) => (this.IsRunningToday(meet)))
-      ));
-    return (meetingFound !== undefined) ? true : false;
-  }
-
-  ToIntlDateFormat(date: string): string {
-    const parts = date.split('/');
-    return (parts.length === 3) ? parts[1] + '/' + parts[0] + '/' + parts[2] : date;
-  }
-
-  IsRunningNow(meeting: Meeting): boolean {
-    const now = new Date();
-    return ((new Date(this.ToIntlDateFormat(meeting.beginDate.toString())) < now)
-         && (new Date(this.ToIntlDateFormat(meeting.endDate.toString())) > now))
-  }
-
-  IsRunningToday(meeting: Meeting): boolean {
-    const now = new Date();
-    let day = new Date(this.ToIntlDateFormat(meeting.beginDate.toString()));
-    let startTime = new Date(
-      day.getFullYear(),
-      day.getMonth(),
-      day.getDate(),
-      0, 0, 0, 0);
-
-    day = new Date(this.ToIntlDateFormat(meeting.endDate.toString()));
-    let endTime = new Date(
-      day.getFullYear(),
-      day.getMonth(),
-      day.getDate(),
-      23, 59, 59, 999);
-
-    return (startTime < now)
-         && (endTime > now)
-  }
 
 
 
