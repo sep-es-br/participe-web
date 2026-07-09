@@ -121,7 +121,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       role,
       keepConfirmation
     } = this.form.value as {
-      organization: IOptionOrganization,
+      organization: IOptionOrganization | string,
       name: PersonsListItems,
       role: string,
       keepConfirmation: boolean
@@ -136,7 +136,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
           name.name,
           undefined,
           this.idMeeting,
-          organization,
+          (typeof(organization) === 'string') ? {name: organization} as IOptionOrganization : organization,
           role,
           name.sub,
           true
