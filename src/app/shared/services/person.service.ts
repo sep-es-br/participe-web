@@ -5,6 +5,7 @@ import Common from '../util/Common';
 import {expand, switchMap, tap, last, takeUntil} from 'rxjs/operators';
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {EMPTY, Observable, of, Subject, throwError} from 'rxjs';
+import {result} from 'lodash';
 
 type PapeisBySubType = {
   role: string,
@@ -55,8 +56,8 @@ export class PersonService extends BaseService<any> {
     return this.http.get<PersonsListItems[]>(`${this.urlBase}/personsByOrganization/${guid}`).toPromise();
   }
 
-  findPersonsOrganizationV2(guid: string): Observable<PersonsListItems[]> {
-    if (!guid) return of([]);
+  findPersonsOrganizationV2(guid: string): Observable<{result: PersonsListItems[], loading: boolean}> {
+    if (!guid) return of({result: [], loading: false});
     const chamada$ = () =>
       this.http.get<PersonsListItems[]>(
         `${this.urlBase}/V2/personsByOrganization/${guid}`,
@@ -67,7 +68,7 @@ export class PersonService extends BaseService<any> {
               expand(resp => resp.status === 202 ? chamada$() : EMPTY),
               switchMap(resp => {
                 if (resp.status === 200 || resp.status === 202)
-                  return of(resp.body);
+                  return of({result: resp.body, loading: !(resp.status === 200 || resp.body.length > 0)});
 
                 return throwError(() => new HttpErrorResponse({error: resp.body, headers: resp.headers, status: resp.status}));
               })
