@@ -10,19 +10,18 @@
           <form
             class="row form-edit-account"
             [formGroup]="form"
-            (submit)="filterNames(autoComplete)"
           >
             <div class="col-12">
               <label for="organization">{{ 'citizen.organization' | translate }}*</label>
 
-                <p-autoComplete
+                <p-autoComplete #inOrganizacao
                   (completeMethod)="filterOrganization($event)"
                   formControlName="organization"
                   [suggestions]="filteredOrganizations()"
                   optionLabel="label"
                   placeholder="Digite o órgão ou entidade"
-                  (onSelect)="loadNames($event)"
-                  (keydown.enter)="filterNames(autoComplete)"
+                  (onSelect)="loadNames($event.value)"
+                  (keydown.enter)="handleEnterOrg(event, inOrganizacao, inName);"
                 ></p-autoComplete>
 
 
@@ -33,12 +32,13 @@
                   "name" | translate
                 }}</label>
               <div class="d-flex gap-1">
-                <p-autoComplete
+                <p-autoComplete #inName
                   #autoComplete
                   formControlName="name"
                   [suggestions]="filteredNames()"
                   (completeMethod)="filterNames(autoComplete)"
                   (onSelect)="applyValue($event.value, btnSalvar);"
+                  (keydown.enter)="handleEnterName($event, inName, inRole)"
                   optionLabel="name"
                   placeholder="Digite o nome do agente"
                 ></p-autoComplete>
@@ -48,14 +48,14 @@
             </div>
             <ng-container *ngIf="idPrecredential">
               <div class="d-flex flex-column ml-5 gap-2">
-                <p-radioButton [value]="true" name="keepConfirmation" formControlName="keepConfirmation" label="Manter Confirmação" />
+                <p-radioButton [value]="true" #inRadioKeepTrue name="keepConfirmation" formControlName="keepConfirmation" label="Manter Confirmação" />
                 <p-radioButton [value]="false" name="keepConfirmation" formControlName="keepConfirmation" label="Retirar Confirmação" />
               </div>
             </ng-container>
             <div class="col-12">
               <label for="role">{{ 'citizen.role' | translate }}*</label>
-              <input type="text" id="role" class="form-control"
-                     formControlName="role"
+              <input type="text" id="role" class="form-control" (keydown.enter)="saveEdit()"
+                     formControlName="role" #inRole
               >
               <tt-input-message [form]="form" field="role"></tt-input-message>
             </div>
@@ -73,9 +73,9 @@
                 ></button>
                 <button
                   pButton
-                  icon="pi pi-ban"
+                  icon="pi pi-arrow-left"
                   type="button"
-                  [label]="'cancel' | translate"
+                  [label]="'back' | translate"
                   (click)="toggleSelectedAttendee()"
                 ></button>
               </div>

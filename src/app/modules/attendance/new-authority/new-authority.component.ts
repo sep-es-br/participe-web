@@ -1,4 +1,16 @@
-import { AfterViewInit, Component, ElementRef, Inject, Injector, OnDestroy, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  signal,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { FormControl, UntypedFormBuilder } from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
 import { MessageService, SelectItem } from 'primeng/api';
@@ -27,6 +39,7 @@ import { PersonsListItems } from '@app/shared/services/person.service';
 import { PreRegistrationService } from '@app/shared/services/pre-registration.service';
 import { RequestStatus } from '@app/shared/interface/IRequestStataus';
 import {takeUntil} from 'rxjs/operators';
+import {RadioButton} from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-edit',
@@ -34,6 +47,9 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['./new-authority.component.scss']
 })
 export class NewAuthorityComponent extends AttendanceModel implements OnInit, OnDestroy, AfterViewInit {
+
+  @ViewChild('inOrganizacao') inOrganizacao: AutoComplete;
+  @ViewChild('inRadioKeepTrue') inRadioKeepTrue: RadioButton;
 
   iconSearch = faSearch;
   private destroy$: Subject<void> = new Subject<void>();
@@ -82,6 +98,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.personSrv.findPersonBySub(this.form.controls.name.value.sub).then(
       async person => {
         this.idPrecredential = (await this.preRegistrationSrv.preRegistrationConfirmed(this.idMeeting, person.id))?.id
+        if(this.idPrecredential) this.inRadioKeepTrue.focus();
       }
     ).catch(e => this.idPrecredential = undefined);
   }
@@ -93,6 +110,8 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     });
 
     this.searchByName();
+
+    this.inOrganizacao.inputEL.nativeElement.focus();
   }
 
   override async setCurrentMeeting(): Promise<void> {
@@ -174,26 +193,60 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
 
   }
 
+  handleEnterOrg(event: any, inOrg: AutoComplete, inName: AutoComplete) {
+    const suggestions = this.filteredOrganizations();
 
+    if (suggestions && suggestions.length > 0) {
+      const firstItem = suggestions[0];
 
-  toStandardText(str: string) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      // Atualiza o valor do formControl
+      this.form.patchValue({ organization: firstItem });
+
+      // Dispara a lógica de carga
+      this.loadNames(firstItem);
+
+      // Opcional: esconde o painel de sugestões
+      inOrg.hide();
+
+      inName.inputEL.nativeElement.focus();
+
+      event.preventDefault();
+    }
   }
 
+  handleEnterName(event: any, inName: AutoComplete, inRole: HTMLInputElement) {
+    const suggestions = this.filteredNames();
 
-  loadNames(evt: AutoCompleteSelectEvent) {
-    const { value } = evt as { value: IOptionOrganization };
+    if (suggestions && suggestions.length > 0) {
+      const firstItem = suggestions[0];
+
+      // Atualiza o valor do formControl
+      this.form.patchValue({ name: firstItem });
+
+      // Dispara a lógica de carga
+      this.applyValue(firstItem);
+
+      // Opcional: esconde o painel de sugestões
+      inName.hide();
+
+      inRole.focus();
+
+      event.preventDefault();
+    }
+  }
+
+  loadNames(value: IOptionOrganization) {
     this.isLoadingNames = true;
 
     this.personSrv.findPersonsOrganizationV2(value.guid)
       .pipe(takeUntil(this.destroy$))
       .subscribe( names => {
-        this.personSrv.allNames = names;
+        this.personSrv.allNames = names.result;
         this.selectedName = undefined;
         this.form.controls.name.patchValue(undefined);
         this.form.controls.name.markAsPristine();
         this.form.controls.name.markAsUntouched();
-        this.isLoadingNames = false;
+        this.isLoadingNames = names.loading;
       }, (error) => {
         this.selectedName = undefined;
         this.form.controls.name.patchValue(undefined);
@@ -232,10 +285,10 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     }
   }
   override toggleSelectedAttendee() {
-    super.toggleSelectedAttendee();
     this.selectedName = undefined;
     this.idPrecredential = undefined;
-    this.router.navigate(['..'], { relativeTo: this.thisRoute })
+    this.form.controls.role.patchValue(undefined);
+    this.inOrganizacao.inputEL.nativeElement.focus();
   }
 
   enterKey(autoComplete?: AutoComplete) {
@@ -272,6 +325,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     }, 200);
   }
 
+  protected readonly event = event;
 }
 
 function escapeRegExp(str: string) {
