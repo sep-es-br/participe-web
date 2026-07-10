@@ -479,10 +479,11 @@ export class AttendanceModel {
 
     } else {
       // aplica o proximo meeting como se fosse aberto
-      this.openListMeetings = [this.getNextMeeting(this.closedListMeetings)];
-      this.closedListMeetings = this.closedListMeetings.filter(m => m !== this.openListMeetings[0]);
+      const nextMeeting = this.getNextMeeting(this.closedListMeetings);
+      this.openListMeetings = nextMeeting && [nextMeeting];
+      this.closedListMeetings = this.closedListMeetings.filter(m => m !== this.openListMeetings?.[0]);
 
-      this.optionsMeeting = this.optionsMeeting = concat(this.openListMeetings, this.closedListMeetings);
+      this.optionsMeeting = [...(this.openListMeetings ?? []), ...this.closedListMeetings];
       this.selectedMeeting = this.optionsMeeting[0];
     }
   }

@@ -77,7 +77,7 @@
             </ng-container>
             <div class="col-12 d-flex flex-column">
               <div class="form-actions">
-                <button pButton icon="pi pi-check" class="me-3" type="submit" [label]="'save' | translate"></button>
+                <button pButton [disabled]="selectedAttende.checkingIn" icon="pi pi-check" class="me-3" type="submit" [label]="'save' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                   (click)="toggleSelectedAttendee()"></button>
               </div>

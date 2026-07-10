@@ -68,7 +68,7 @@
                   type="button"
                   (click)="saveEdit()"
                   #btnSalvar
-
+                  [disabled]="selectedAttende.checkingIn"
                   [label]="'save' | translate"
                 ></button>
                 <button
