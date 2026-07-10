@@ -63,13 +63,13 @@
           <div class="col-12">
             <div class="form-actions">
               <ng-container *ngIf="isNew; else attendeeSelected">
-                <button pButton icon="pi pi-check" [disabled]="form.invalid" type="submit"
+                <button pButton icon="pi pi-check" [disabled]="form.invalid || selectedAttende.checkingIn" type="submit"
                   [label]="'attendance.saveAndRegister' | translate" class="me-2"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                   (click)="toggleNewAccount()"></button>
               </ng-container>
               <ng-template #attendeeSelected>
-                <button pButton icon="pi pi-check" type="button" [disabled]="form.invalid" class="me-2"
+                <button pButton icon="pi pi-check" type="button" [disabled]="form.invalid || selectedAttende.checkingIn" class="me-2"
                   (click)="checkIn(selectedAttende)" [label]="'attendance.registerAttendance' | translate"></button>
                 <button pButton icon="pi pi-ban" type="button" [label]="'cancel' | translate"
                   (click)="toggleSelectedAttendee()"></button>

@@ -145,9 +145,9 @@ export class RegisterComponent extends AttendanceModel implements OnInit, OnDest
   }
 
   async checkIn(attendee: IAttendee, fromSaveAccount: boolean = false, skipSaveAccount = false) {
-    this.form.markAllAsTouched();
 
     attendee.checkingIn = true;
+    this.form.markAllAsTouched();
 
     if (!fromSaveAccount) {
       const { isAuthority, organization, role, isTeam } = this.form.controls;
