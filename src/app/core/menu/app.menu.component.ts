@@ -56,7 +56,11 @@ export class AppMenuComponent implements OnInit {
 
     this.model = [];
 
-    if (this.person.roles.includes('Moderator') || this.person.roles.includes('Administrator')) {
+    if (
+      this.person.roles.includes('Moderator') ||
+      this.person.roles.includes('Administrator' ||
+        sessionStorage.getItem("evaluatorOrgGuid"))
+    ) {
       this.model.push(
         {label: this.translateSrv.instant('control-panel'), icon: faTachometerAlt, routerLink: ['/home']}
       );
