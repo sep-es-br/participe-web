@@ -147,7 +147,7 @@ export class AttendanceModel {
     });
 
 
-    const search = JSON.parse(localStorage.getItem('filter'));
+    const search = JSON.parse(localStorage.getItem('filter.' + (this.editing ? 'edit' : 'register')));
 
     if (search) {
       this.nameSearch = search.name;
@@ -682,7 +682,7 @@ export class AttendanceModel {
 
     };
 
-    localStorage.setItem('filter', JSON.stringify(search));
+    localStorage.setItem('filter.' + (this.editing ? 'edit' : 'register') , JSON.stringify(search));
 
     return { search };
   }
