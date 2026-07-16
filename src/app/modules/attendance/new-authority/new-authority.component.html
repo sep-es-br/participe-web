@@ -21,7 +21,7 @@
                   optionLabel="label"
                   placeholder="Digite o órgão ou entidade"
                   (onSelect)="loadNames($event.value)"
-                  (keydown.enter)="handleEnterOrg(event, inOrganizacao, inName);"
+                  (keydown.enter)="handleEnterOrg($event, inOrganizacao, inName);"
                 ></p-autoComplete>
 
 
@@ -38,7 +38,7 @@
                   [suggestions]="filteredNames()"
                   (completeMethod)="filterNames(autoComplete)"
                   (onSelect)="applyValue($event.value, btnSalvar);"
-                  (keydown.enter)="handleEnterName($event, inName, inRole)"
+                  (keydown.enter)="handleEnterName($event, inName, inRole, btnSalvar)"
                   optionLabel="name"
                   placeholder="Digite o nome do agente"
                 ></p-autoComplete>
@@ -76,7 +76,7 @@
                   icon="pi pi-arrow-left"
                   type="button"
                   [label]="'back' | translate"
-                  (click)="toggleSelectedAttendee()"
+                  (click)="toggleSelectedAttendee(); voltar()"
                 ></button>
               </div>
             </div>

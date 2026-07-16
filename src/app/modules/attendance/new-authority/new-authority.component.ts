@@ -214,7 +214,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     }
   }
 
-  handleEnterName(event: any, inName: AutoComplete, inRole: HTMLInputElement) {
+  handleEnterName(event: any, inName: AutoComplete, inRole: HTMLInputElement, inSalvar: HTMLButtonElement) {
     const suggestions = this.filteredNames();
 
     if (suggestions && suggestions.length > 0) {
@@ -224,7 +224,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       this.form.patchValue({ name: firstItem });
 
       // Dispara a lógica de carga
-      this.applyValue(firstItem);
+      this.applyValue(firstItem, inSalvar);
 
       // Opcional: esconde o painel de sugestões
       inName.hide();
@@ -284,11 +284,18 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       });
     }
   }
+
   override toggleSelectedAttendee() {
     this.selectedName = undefined;
     this.idPrecredential = undefined;
     this.form.controls.role.patchValue(undefined);
+    this.form.controls.name.patchValue(undefined);
+    this.form.controls.name.markAsPristine();
+    this.form.controls.name.markAsUntouched();
     this.inOrganizacao.inputEL.nativeElement.focus();
+  }
+
+  voltar() {
     this.router.navigate(['..'], {relativeTo: this.thisRoute});
   }
 
