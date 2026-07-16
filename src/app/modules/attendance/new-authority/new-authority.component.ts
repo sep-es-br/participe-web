@@ -284,11 +284,15 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
       });
     }
   }
+
   override toggleSelectedAttendee() {
     this.selectedName = undefined;
     this.idPrecredential = undefined;
     this.form.controls.role.patchValue(undefined);
     this.inOrganizacao.inputEL.nativeElement.focus();
+  }
+
+  voltar() {
     this.router.navigate(['..'], {relativeTo: this.thisRoute});
   }
 
