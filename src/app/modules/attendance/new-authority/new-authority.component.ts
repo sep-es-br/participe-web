@@ -289,6 +289,7 @@ export class NewAuthorityComponent extends AttendanceModel implements OnInit, On
     this.idPrecredential = undefined;
     this.form.controls.role.patchValue(undefined);
     this.inOrganizacao.inputEL.nativeElement.focus();
+    this.router.navigate(['..'], {relativeTo: this.thisRoute});
   }
 
   enterKey(autoComplete?: AutoComplete) {
