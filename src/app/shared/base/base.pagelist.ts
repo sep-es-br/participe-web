@@ -24,7 +24,7 @@ export abstract class BasePageList<T> {
     first: 0,
     page: 0,
     rows: 10,
-  }
+  };
 
   protected constructor(
     @Inject(BaseService) service: BaseService<T>
@@ -33,10 +33,10 @@ export abstract class BasePageList<T> {
   }
 
   async loadData( paginator?: PaginatorState) {
-    if(paginator){
-      this.pageState = paginator
+    if (paginator){
+      this.pageState = paginator;
     }
-    
+
     const response = await this.service.GetAllPaginated({
       page: this.pageState.page,
       pageSize: this.pageState.rows,
@@ -81,7 +81,7 @@ export abstract class BasePageList<T> {
       total = total - remainingRecods;
     }
 
-    
+
     return total;
   }
 }

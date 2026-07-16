@@ -109,18 +109,7 @@
 
               <!-- Filter Tags -->
               <div class="filter-tags d-flex flex-nowrap gap-2 align-items-center" [class.is-sticky]="isScrolled">
-                <!-- Search bar inside the row for direct use -->
-                <!-- <div class="search-input-wrapper" style="min-width: 200px;">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="search-name" placeholder="Buscar por nome..."
-                      [(ngModel)]="nameSearch" (keydown.enter)="searchByName()" />
-                    <label class="input-group-text cursor-pointer" (click)="searchByName()" for="search-name">
-                      <i class="fa fa-search"></i>
-                    </label>
-                  </div>
-                </div> -->
-
-                <div *ngFor="let tag of activeFilters; let i = index" class="filter-tag h-100 d-flex align-items-center gap-1"
+                                <div *ngFor="let tag of activeFilters; let i = index" class="filter-tag h-100 d-flex align-items-center gap-1"
                   [class.is-sticky]="isScrolled">
                   <div class="filter-tag-inner" [ngClass]="{ 'invisible-tag': showFilters }">
                     <div class="d-flex flex-column align-items-start text-start">

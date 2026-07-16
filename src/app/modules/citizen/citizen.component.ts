@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LazyLoadEvent, MessageService, SelectItem } from 'primeng/api';
 
@@ -58,10 +58,29 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   showSelectConference: boolean = false;
   conferencesActives: Conference[] = [];
   conferenceSelect: Conference = new Conference();
-  sort: string = "apoc.text.clean(name)";
-  search: any = { status: '', autentication: ''};
-  dataSearch: any = { status: '', autentication: ''};
-  selectedLocalities: [];
+  sort: string = 'apoc.text.clean(name)';
+  search: any = {
+    name: undefined,
+    email: undefined,
+    status: '',
+    autentication: ''
+  };
+  tmpDataSearch: any = {
+    name: undefined,
+    email: undefined,
+    status: '',
+    autentication: '',
+    selectedLocalities: []
+  };
+  dataSearch: any = {
+    name: undefined,
+    email: undefined,
+    status: '',
+    autentication: '',
+    selectedLocalities: []
+  };
+  isScrolled = false;
+  showFilters = false;
   typeAuthentication: string = 'mail';
   passwordValidators = [Validators.required, CustomValidators.AttendeeCitizenPassword];
   mailValidators = [ Validators.required, Validators.email ];
@@ -107,9 +126,123 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       first: 0,
       page: 0,
       rows: 10,
-   }
+   };
     this.allConference.id = null;
     this.allConference.name = 'Todas as Audiências Públicas';
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+  }
+
+  prepareFilter() {
+    this.tmpDataSearch = {...this.dataSearch};
+  }
+
+  closeFilterModal() {
+    this.showFilters = false;
+  }
+
+  removeFilter(key: string) {
+    switch (key) {
+      case 'name':
+        this.tmpDataSearch.name = undefined;
+        break;
+      case 'email':
+        this.tmpDataSearch.email = undefined;
+        break;
+      case 'status':
+        this.tmpDataSearch.status = undefined;
+        break;
+    }
+
+    // if (key === 'name') {
+    //   this.selectedParticipante = 'all';
+    //   this.tempParticipante = 'all';
+    // } else if (key === 'filterBy') {
+    //   this.selectedFilterBy = 'all';
+    //   this.tempFilterBy = 'all';
+    // } else if (key === 'filterByStatus') {
+    //   this.selectedFilterByStatus = 'all';
+    //   this.tempFilterByStatus = 'all';
+    // } else if (key === 'organization') {
+    //   this.selectedOrganization = undefined;
+    //   this.tempOrganization = undefined;
+    // } else if (key === 'nameSearch') {
+    //   this.nameSearch = '';
+    //   this.tempNameSearch = '';
+    // } else if (key === 'county') {
+    //   this.selectedCounty = undefined;
+    //   this.tempCounty = undefined;
+    // }
+    this.searchHandle();
+  }
+
+  get activeFilters(): any[] {
+    const tags: any[] = [];
+
+    if (this.dataSearch.name && this.dataSearch.name !== '') {
+
+      tags.push({
+        key: 'name',
+        label: 'Nome',
+        displayValue: [{ name: this.dataSearch.name }]
+      });
+    }
+
+    if (this.dataSearch.email && this.dataSearch.email !== '') {
+      tags.push({
+        key: 'email',
+        label: 'Email',
+        displayValue: [{ name: this.dataSearch.email }]
+      });
+    }
+
+    if (this.dataSearch.status !== undefined &&  this.dataSearch.status !== '') {
+      tags.push({
+        key: 'status',
+        label: 'Status',
+        displayValue: [{ name: this.dataSearch.status ? 'Ativo' : 'Inativo' }]
+      });
+    }
+    //
+    // if (this.selectedFilterByStatus && this.selectedFilterByStatus !== 'all') {
+    //   const found = this.optionsFilterByStatus.find(opt => opt.value === this.selectedFilterByStatus);
+    //   if (found) {
+    //     tags.push({
+    //       key: 'filterByStatus',
+    //       label: 'Nominata',
+    //       displayValue: [{ name: found.label }]
+    //     });
+    //   }
+    // }
+    //
+    // if (this.selectedOrganization && this.selectedOrganization.name?.trim().length > 0) {
+    //   tags.push({
+    //     key: 'organization',
+    //     label: 'Organização',
+    //     displayValue: [{ name: this.selectedOrganization.name }]
+    //   });
+    // }
+    //
+    // if (this.nameSearch && this.nameSearch.trim().length > 0) {
+    //   tags.push({
+    //     key: 'nameSearch',
+    //     label: 'Busca',
+    //     displayValue: [{ name: this.nameSearch }]
+    //   });
+    // }
+    //
+    // if (this.selectedCounty) {
+    //   tags.push({
+    //     key: 'county',
+    //     label: 'Município',
+    //     displayValue: [{ name: this.selectedCounty.name }]
+    //   });
+    // }
+
+    return tags;
   }
 
   ngOnDestroy(): void {
@@ -119,7 +252,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async ngOnInit() {
     this.setForm({});
     this.authentications = this.authSrv.providers.map(p => ({label: p.label, value: p.tag}));
-    this.authentications.unshift({label: 'Todos', value: '' })
+    this.authentications.unshift({label: 'Todos', value: '' });
     await this.prepareScreen();
   }
 
@@ -146,7 +279,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       first: 0,
       page: 0,
       rows: 10,
-    }
+    };
     await this.loadData(this.pageState);
     this.buildBreadcrumb();
     await this.loadLocalitiesOptions();
@@ -155,18 +288,19 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async searchHandle() {
 
+    this.dataSearch = {...this.tmpDataSearch};
 
-    this.search.name = this.dataSearch.name
-    this.search.email = this.dataSearch.email
-    this.search.autentication = this.dataSearch.autentication
-    this.search.status = this.dataSearch.status
-    this.search.locality = this.dataSearch.locality
+    this.search.name = this.dataSearch.name;
+    this.search.email = this.dataSearch.email;
+    this.search.autentication = this.dataSearch.autentication;
+    this.search.status = this.dataSearch.status;
+    this.search.locality = this.dataSearch.locality;
 
     this.pageState = {
       first: 0,
       page: 0,
       rows: 10,
-    }
+    };
 
     await this.loadData(this.pageState);
 
@@ -180,7 +314,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
       first: 0,
       page: 0,
       rows: 10,
-    }
+    };
     await this.prepareScreen(this.pageState);
   }
 
@@ -188,13 +322,18 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
   async citizenLoadData(event?: PaginatorState){
 
 
-    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
+    if ((
+      this.conferenceSelect?.id == null ||
+      this.conferenceSelect?.id === 0
+    ) && !(
+      this.conferenceSelect.name === this.allConference.name
+    )) {
       await this.loadConferencesActives();
     }
 
     this.search.conferenceId = this.conferenceSelect.id;
 
-      await this.loadData(event);
+    await this.loadData(event);
 
     this.buildBreadcrumb();
     this.configureActionBar();
@@ -202,7 +341,12 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async prepareScreen(event?: PaginatorState) {
 
-    if ((this.conferenceSelect?.id == null || this.conferenceSelect?.id === 0) && !(this.conferenceSelect.name == this.allConference.name)) {
+    if ((
+      this.conferenceSelect?.id == null ||
+      this.conferenceSelect?.id === 0
+    ) && !(
+      this.conferenceSelect.name === this.allConference.name
+    )) {
       await this.loadConferencesActives();
     }
     this.search.conferenceId = this.conferenceSelect.id;
@@ -299,7 +443,7 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   async save(formData) {
     try {
-      if(!this.conferenceSelect.id){
+      if (!this.conferenceSelect.id){
         const data = await this.moderationSrv.getConferencesActive(false);
         this.conferencesActives = data;
         if (data.length > 0) {
@@ -421,14 +565,18 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
     if (!query) {
       return this.filteredLocalities = this.localities;
     }
-    this.filteredLocalities = this.localities.map(item => item).filter( value => this.replaceSpecialChars(value.label).includes(this.replaceSpecialChars(query)));
+    this.filteredLocalities = this.localities
+                                .map(item => item)
+                                .filter( value =>
+                                  this.replaceSpecialChars(value.label).includes(this.replaceSpecialChars(query))
+                                );
   }
 
   replaceSpecialChars(str)	{
 		if (!str) return '';
 		str = str.toLowerCase();
     str = str.trim();
-    str = str.replace(/\s/g, '')
+    str = str.replace(/\s/g, '');
 		str = str.replace(/[aáàãäâ]/,'a');
 		str = str.replace(/[eéèëê]/,'e');
 		str = str.replace(/[iíìïî]/,'i');
@@ -448,17 +596,17 @@ export class CitizenComponent extends BasePageList<CitizenModel> implements OnIn
 
   onInput($event) {
     this.citizenForm.patchValue(
-      {'name': $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
+      {name: $event.target.value.replace(/^\s+/gm, '').replace(/\s+(?=[^\s])/gm, ' ')},
       {emitEvent: false}
     );
   }
 
   onBlur($event) {
     this.citizenForm.patchValue(
-      {'name': $event.target.value.replace(/\s+$/gm, '')},
+      {name: $event.target.value.replace(/\s+$/gm, '')},
       {emitEvent: false});
   }
   setSearchLocality(){
-    this.dataSearch.locality = this.selectedLocalities.map(item => item['value'] );
+    this.dataSearch.locality = this.dataSearch.selectedLocalities.map(item => item.value );
   }
 }
