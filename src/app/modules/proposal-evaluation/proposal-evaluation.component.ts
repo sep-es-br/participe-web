@@ -46,6 +46,7 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
   public organizationOptions: SelectItem[] = [];
   public transformedOptions: SelectItem[] = [];
   public approvedOptions: SelectItem[] = [];
+  private planItemOptionsRequestId = 0;
 
   public pageState: PaginatorState = {
     first: 0,
@@ -151,6 +152,11 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
     for (const key in this.proposalEvaluationSearchForm.controls) {
       this.proposalEvaluationSearchForm.controls[key].patchValue(null);
     }
+  }
+
+  public async changePlanItemArea(planItemAreaId: number | null) {
+    this.proposalEvaluationSearchForm.get("planItemId").setValue(null);
+    await this.getPlanItemOptions(planItemAreaId);
   }
 
   public async downloadProposalEvaluation(){
@@ -317,18 +323,24 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
       });
   }
 
-  private async getPlanItemOptions() {
-    await this.proposalEvaluationService
-      .getPlanItemOptions(this.conferenceSelect.id)
-      .then((response) => {
-        this.planItemOptions = response.map((planItem) => {
-          return { label: planItem.name, value: planItem.id };
-        }).reverse();
-        this.planItemOptions.unshift({
-          label: this.translateService.instant("all"),
-          value: null,
-        });
-      });
+  private async getPlanItemOptions(planItemAreaId: number | null = null) {
+    const requestId = ++this.planItemOptionsRequestId;
+    const response = await this.proposalEvaluationService.getPlanItemOptions(
+      this.conferenceSelect.id,
+      planItemAreaId
+    );
+
+    if (requestId !== this.planItemOptionsRequestId) {
+      return;
+    }
+
+    this.planItemOptions = response.map((planItem) => {
+      return { label: planItem.name, value: planItem.id };
+    }).reverse();
+    this.planItemOptions.unshift({
+      label: this.translateService.instant("all"),
+      value: null,
+    });
   }
 
   private async getPlanItemAreaOptions() {
@@ -347,7 +359,9 @@ export class ProposalEvaluationComponent implements OnInit, AfterViewInit, OnDes
 
   private async populateSearchFilterOptions() {
     await this.getLocalityOptions();
-    await this.getPlanItemOptions();
+    await this.getPlanItemOptions(
+      this.propEvalSearchFilter?.planItemAreaId ?? null
+    );
     await this.getPlanItemAreaOptions();
     this.getEvaluationStatusOptions();
     this.getApprovedOptions();

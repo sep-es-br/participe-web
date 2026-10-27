@@ -108,11 +108,14 @@ export class ProposalEvaluationService {
   }
 
   public getPlanItemOptions(
-    conferenceId: number
+    conferenceId: number,
+    planItemAreaId: number | null = null
   ): Promise<Array<IResultPlanItemByConference>> {
+    const areaFilter =
+      planItemAreaId == null ? "" : `&planItemAreaId=${planItemAreaId}`;
     return this._http
       .get<Array<IResultPlanItemByConference>>(
-        `${this._optionsUrl}/planItem?conferenceId=${conferenceId}`,
+        `${this._optionsUrl}/planItem?conferenceId=${conferenceId}${areaFilter}`,
         { headers: Common.buildHeaders() }
       )
       .toPromise();
